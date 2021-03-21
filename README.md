@@ -4,7 +4,7 @@ __Author:__ Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
 Main repo for creation and assembly of content for the _Practical MongoDB Aggregations_ book by _Paul Done_.
 
-The published version of the book is available at: [www.mongo-agg-book.com](https://www.mongo-agg-book.com)
+The published version of the book is available at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 
 The book's content is written as a set of Markdown files which are then generated into a set of static HTML/PNG/CSS/JS files ready to be served via a static website at [GitHub Pages](https://pages.github.com/).
 
