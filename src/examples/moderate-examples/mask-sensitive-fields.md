@@ -10,10 +10,10 @@ A user wants to perform irreversible masking on the sensitive fields of a collec
 In this example, a collection of _credit card payment_ documents will be masked, to:
  * Partially obfuscate the carder holder's name
  * Obfuscate the first 12 digits of the card's number, retaining only the final 4 digits
- * Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 1 hour
+ * Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 30 days (~1 month)
  * Replace the card's 3 digit security code with a random set of 3 digits
  * Adjust the transaction's amount by adding or subtracting a random amount up to a maximum of 10% of the original amount
- * Replace the transaction's `reported` field with a new random boolean value (true or false)
+ * Change the transaction's `reported` field boolean value to the opposite value, for roughly 20% of the records
  * If the embedded `customer_info` sub-document's `category` field is set to _SENSITIVE_ exclude the whole `customer_info` sub-document
 
 ## Sample Data Population
@@ -79,10 +79,10 @@ var pipeline = [
                   {'$substrCP': ['$card_num', 12, 4]},
                 ]},                     
 
-    // Add/subtract a random time amount of a maximum of one hour each-way
+    // Add/subtract a random time amount of a maximum of 30 days (~1 month) each-way
     'card_expiry': {'$add': [
                      '$card_expiry',
-                     {'$floor': {'$multiply': [{'$subtract': [{'$rand': {}}, 0.5]}, 2*60*60*1000]}},
+                     {'$floor': {'$multiply': [{'$subtract': [{'$rand': {}}, 0.5]}, 2*30*24*60*60*1000]}},
                    ]},                     
 
     // Replace each digit with random digit, eg: '133' -> '472'
@@ -98,12 +98,12 @@ var pipeline = [
                             {'$multiply': [{'$subtract': [{'$rand': {}}, 0.5]}, 0.2, '$transaction_amount']},
                           ]},
                           
-    // Boolean random replacement, ie. a 50:50 chance of being true or false
+    // Retain field's bool value 80% of time on average, setting to the opposite value 20% of time
     'reported': {'$cond': {
-                   'if':   {'$gte': [{'$rand': {}}, 0.5]},
-                   'then': true,
-                   'else': false,
-                }},                                         
+                   'if':   {'$lte': [{'$rand': {}}, 0.8]},
+                   'then': '$reported',
+                   'else': {'$not': ['$reported']},
+                }},      
 
     // Exclude sub-doc if the sub-doc's category field's value is 'SENSITIVE'
     'customer_info': {'$cond': {
