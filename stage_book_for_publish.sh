@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 printf "\nBuilding book\n"
 mdbook build
 printf "Removing old staged area copy of book\n"
