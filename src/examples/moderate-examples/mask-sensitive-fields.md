@@ -1,6 +1,6 @@
 # Mask Sensitive Fields
 
-__Minimum MongoDB Version:__ 4.2
+__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$rand](https://docs.mongodb.com/manual/reference/operator/aggregation/rand/) operator)_
 
 
 ## Scenario
