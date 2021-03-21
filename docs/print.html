@@ -1,0 +1,2440 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Practical MongoDB Aggregations</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="cover-page.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="credits.html">Credits</a></li><li class="chapter-item expanded "><a href="intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="intro/history.html"><strong aria-hidden="true">1.1.</strong> History</a></li></ol></li><li class="chapter-item expanded "><a href="guides/00-guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips &amp; Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="guides/getting-started.html"><strong aria-hidden="true">2.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="guides/getting-help.html"><strong aria-hidden="true">2.2.</strong> Getting Help</a></li><li class="chapter-item expanded "><a href="guides/composibility.html"><strong aria-hidden="true">2.3.</strong> Embrace Composibility For Increased Productivity</a></li><li class="chapter-item expanded "><a href="guides/project.html"><strong aria-hidden="true">2.4.</strong> To Project Or Not To Project, That Is The Question</a></li><li class="chapter-item expanded "><a href="guides/explain.html"><strong aria-hidden="true">2.5.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="guides/performance.html"><strong aria-hidden="true">2.6.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="guides/expressions.html"><strong aria-hidden="true">2.7.</strong> Can Expressions By Used Everywhere?</a></li></ol></li><li class="chapter-item expanded "><a href="examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="examples/simple-examples/00-simple-examples.html"><strong aria-hidden="true">3.1.</strong> Simple Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="examples/simple-examples/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="examples/simple-examples/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group &amp; Total</a></li><li class="chapter-item expanded "><a href="examples/simple-examples/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays &amp; Group Differently</a></li><li class="chapter-item expanded "><a href="examples/simple-examples/one-to-one-join.html"><strong aria-hidden="true">3.1.4.</strong> One-to-One Join</a></li></ol></li><li class="chapter-item expanded "><a href="examples/moderate-examples/00-moderate-examples.html"><strong aria-hidden="true">3.2.</strong> Moderate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="examples/moderate-examples/multi-one-to-many.html"><strong aria-hidden="true">3.2.1.</strong> Multi-Field Join &amp; One-to-Many</a></li><li class="chapter-item expanded "><a href="examples/moderate-examples/mask-sensitive-fields.html"><strong aria-hidden="true">3.2.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="examples/moderate-examples/largest-graph-network.html"><strong aria-hidden="true">3.2.3.</strong> Largest Graph Network</a></li></ol></li><li class="chapter-item expanded "><a href="examples/intricate-examples/00-intricate-examples.html"><strong aria-hidden="true">3.3.</strong> Intricate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="examples/intricate-examples/restricted-view.html"><strong aria-hidden="true">3.3.1.</strong> Restricted View</a></li><li class="chapter-item expanded "><a href="examples/intricate-examples/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Practical MongoDB Aggregations</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p><img src="./pics/cover.png" alt="Practical MongoDB Aggregations" /></p>
+<p> </p>
+<p><strong>Practical MongoDB Aggregations, by Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</strong></p>
+<p>Version: 0.88</p>
+<hr />
+<p>Content created &amp; assembled at: <a href="https://github.com/pkdone/practical-mongodb-aggregations-book">https://github.com/pkdone/practical-mongodb-aggregations-book</a></p>
+<hr />
+<p>Copyright © 2021 Paul Done</p>
+<p><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg" alt="CC BY-NC-SA 4.0" /></a></p>
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a></p>
+<p><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" alt="CC BY-NC-SA 4.0" /></a></p>
+<hr />
+<p>Front cover image adapted from a <a href="https://www.pexels.com/photo/red-steel-pipe-2420294/">Photo by Henry &amp; Co. from Pexels</a> under the <a href="https://www.pexels.com/license/">Pexels License</a> (free to use &amp; modify)</p>
+<hr />
+<p>Acknowledgements</p>
+<ul>
+<li>Jake McInteer: many thanks for extensive review and valuable feedback</li>
+</ul>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<h2 id="who-is-this-book-for"><a class="header" href="#who-is-this-book-for">Who Is This Book For?</a></h2>
+<p>This book is for developers, architects, data analysts and data scientists who have some familiarity with MongoDB, and who have already acquired at least a small amount of basic experience using the MongoDB Aggregation Framework. For those who don't yet have this 'entry level' knowledge, it is recommended to start with one or more of the following resources, before using this book:</p>
+<ul>
+<li>The <a href="https://docs.mongodb.com/manual/">MongoDB Manual</a>, and specifically its <a href="https://docs.mongodb.com/manual/aggregation/">Aggregation</a> section</li>
+<li>The <a href="https://university.mongodb.com/">MongoDB University</a> free online courses, and specifically <a href="https://university.mongodb.com/courses/M121/about">The MongoDB Aggregation Framework (M121)</a> introduction course</li>
+<li>The <a href="https://www.oreilly.com/library/view/mongodb-the-definitive/9781491954454/">MongoDB: The Definitive Guide</a> book by Bradshaw, Brazil &amp; Chodorow, and specifically its section <em>7. Introduction to the Aggregation Framework</em></li>
+</ul>
+<p>This is neither a book for complete novices, explaining how to get started on your first MongoDB aggregation pipeline, nor is it a comprehensive programming language guide, detailing every nuance of the Aggregation Framework and its syntax. Instead, this book is intended to assist with two key aspects:</p>
+<ol>
+<li>Providing a set of opinionated yet easy to digest principles and approaches for increasingly your effectiveness in using the Aggregation Framework</li>
+<li>Providing a set of examples for using the Aggregation Framework to solve common data manipulation challenges, with varying degrees of complexity</li>
+</ol>
+<h2 id="what-is-the-aggregation-framework"><a class="header" href="#what-is-the-aggregation-framework">What Is The Aggregation Framework?</a></h2>
+<p>MongoDB's aggregations language is somewhat of a paradox. It can appear daunting yet it is straight-forward. It can seem verbose yet it is lean and to the point. It is probably close to being <a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing complete</a> to be able to solve any business problem <strong>*</strong>, yet it is a strongly opinionated <a href="https://en.wikipedia.org/wiki/Domain-specific_language">Domain Specific Language (DSL)</a>, where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.</p>
+<blockquote>
+<p><strong>*</strong> <em>As <a href="http://ilearnasigoalong.blogspot.com/">John Page</a> once showed, you can even code a <a href="https://github.com/johnlpage/MongoAggMiner">Bitcoin miner</a> using MongoDB aggregations, not that he would ever recommend you do this for real, for both the sake of your bank balance and the environment!</em></p>
+</blockquote>
+<p>Invariably, for beginners, the Aggregation Framework seems difficult to understand and comes with an initial steep learning curve which must be overcome to become productive. In some programming languages, only mastering the rudimentary elements of the language can result in being mostly productive in that language. With MongoDB aggregations, the level of initial investment required by an individual is usually a little greater. However, once mastered, users generally find it provides an elegant, natural and efficient solution to breaking down a complex set of data manipulations into a series of simple easy to understand steps. This is when users achieve the Zen of MongoDB aggregations and it is a lovely place to be.</p>
+<p>MongoDB Aggregations is a programming language that is focussed on data-oriented problem solving rather than business process problem solving. It is essentially a <a href="https://en.wikipedia.org/wiki/Declarative_programming">declarative programming language</a>, rather than an <a href="https://en.wikipedia.org/wiki/Imperative_programming">imperative programming language</a>. Also, depending on how you squint, it can be regarded as a <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming language</a> rather than a <a href="https://en.wikipedia.org/wiki/Procedural_programming">procedural programming language</a>. Why? Well an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side-effects. This is probably the main reason why the Aggregation Framework is regarded as having a steeper learning curve compared with some programming languages. Not because it is inherently more difficult to understand but just because most developers come from a procedural programming background and not a functional one. They have to learn how to think like a functional programmer in addition to leaning the Aggregation Framework.</p>
+<p>It is the declarative and functional characteristics of MongoDB's Aggregation Framework which ultimately make it so powerful for processing massive data sets. Users focus on defining 'the what' in terms of the required outcome, in a declarative way, more than 'the how' of specifying the exact logic to apply to achieve each transformation. Each stage in a pipeline is forced to only have one specific clear advertised purpose. At runtime, the database engine is then able to understand the exact intent of each stage. For example, the database engine can get clear answers to the questions it asks, like, is this stage for performing a filter or is this stage for grouping on some fields?. Armed with this knowledge, the database engine is afforded the opportunity to optimise the pipeline at runtime, as illustrated in the diagram below. For example, it may decide to re-order stages to optimally leverage an index whilst being sure that output isn't changed. Or, it may decide to execute some stages in parallel against subsets of the data, reducing response time, whilst again ensuring the output is never changed.</p>
+<p><img src="intro/./pics/optimise.png" alt="DB Engine Aggregations Optimisations" /></p>
+<p>Last and by far least in terms of importance is a discussion about syntax. So far MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, what is the syntax on which MongoDB's aggregations are based on? The answer is it depends and the answer is mostly irrelevant. In this book, the examples will be highlighted using the Mongo Shell and the JavaScript interpreter it runs in, with an aggregation pipeline being expressed using a <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> based syntax. However, if you are using one of the many <a href="https://docs.mongodb.com/drivers/">programming language drivers</a> that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON.</p>
+<h2 id="whats-in-a-name"><a class="header" href="#whats-in-a-name">What's In A Name?</a></h2>
+<p>You might have realised by now, there doesn't seem to be one single name for the subject of this book. You will often hear:</p>
+<ul>
+<li>Aggregation</li>
+<li>Aggregations</li>
+<li>Aggregation Framework</li>
+<li>Aggregation Pipeline</li>
+<li>Aggregation Pipelines</li>
+<li>Aggregation Language</li>
+<li><em>...and so on</em></li>
+</ul>
+<p>The reality is any of these names is fine and it doesn't really matter which you use. In this book, each and all of these terms are probably used. Just take it as a positive sign that this MongoDB capability, and its title, was not born in a marketing boardroom. It was built by database engineers, for data engineers, where the branding was an afterthought at best! 😆</p>
+<h2 id="what-do-people-use-the-aggregation-framework-for"><a class="header" href="#what-do-people-use-the-aggregation-framework-for">What Do People Use The Aggregation Framework For?</a></h2>
+<p>The Aggregation Framework is versatile and used for many different types of data processing and manipulation tasks. Some common example uses are for:</p>
+<ul>
+<li>Realtime analytics</li>
+<li>Report generation with roll-ups, sums &amp; averages</li>
+<li>Realtime dashboards</li>
+<li>Redacting data for dynamic views</li>
+<li>Joining data together from different collections on the 'server-side'</li>
+<li>Data science, including data discovery and data wrangling</li>
+<li>Mass data analysis at scale (a la '<a href="https://en.wikipedia.org/wiki/Big_data">big data</a>')</li>
+<li>Realtime queries where deeper database-side data post-processing is required than provided by the MongoDB Query Language (<a href="https://docs.mongodb.com/manual/crud/">MQL</a>)</li>
+<li>Copying and transforming subsets of data from one collection to another</li>
+<li>Navigating relationships between records, looking for patterns</li>
+<li>Data masking to redact &amp; obfuscate sensitive data</li>
+<li>Data cleansing</li>
+<li>Updating a materialized view with the results of the most recent source data changes</li>
+<li>Supporting machine learning frameworks for efficient data analysis (e.g. via MongoDB's Spark Connector)</li>
+<li><em>...and many more</em></li>
+</ul>
+<h1 id="history"><a class="header" href="#history">History</a></h1>
+<h2 id="the-emergence-of-aggregations"><a class="header" href="#the-emergence-of-aggregations">The Emergence Of Aggregations</a></h2>
+<p>The MongoDB database was first released in February 2009 (version 1.0). Back then, both users and the predominant company engineering the database, <a href="https://en.wikipedia.org/wiki/MongoDB_Inc.">MongoDB Inc.</a> (called <em>10gen</em> back then), were still establishing the sort of use cases that the database would excel at, and where the gaps and paper-cuts were. Within half a year of this first major release, MongoDB's engineering team had determined that users were needing a native way to process large amounts of data, to group the data into results containing totals and averages for example. A quick engineering solution was introduced, in time for the next release (1.2) in December 2009. This involved embedding a JavaScript engine in the database, allowing client applications to submit some JavaScript logic to be executed, 'server-side', adhering to a simple <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce</a> API provided by the database.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/MapReduce">Map-Reduce</a> workload essentially does two things. Firstly it scans the full data-set looking for the matching subset of records required for the given scenario (the 'map' action). Secondly, it then condenses the subset of matched data down into grouped, totalled and averaged result summaries (the 'reduce' action). Functionally, MongoDB's <em>Map-Reduce</em> capability provided a solution to users' common data processing requirements in MongoDB, but it came with the following drawbacks:</p>
+<ol>
+<li>Users have to provide two sets of JavaScript logic, a map (or matching) function and a reduce (or grouping/summing) function, and neither are very intuitive to develop, lacking a strong data-oriented bias</li>
+<li>At runtime, the lack of ability to explicitly associate a specific intent to an arbitrary piece of logic means that the database engine has no opportunity to identify and apply optimisations (e.g. targetting indexes or parallelising some steps); the database has to be conservative, executing the workload with minimal concurrency and employing locks at various stages to prevent the risk of race conditions, corruptions and inconsistencies in results</li>
+<li>Lack of scalability across Sharded clusters by virtue of the way Map-Reduce is implemented in the codebase</li>
+</ol>
+<p>Over the subsequent couple of years, as user behaviour with and without Map-Reduce became more understood, engineers within MongoDB Inc. were able to envision and then build a more targeted and data-oriented Domain Specific Language (DSL). They saw how to deliver a framework with strong developer composability characteristics, where each stage has clear advertised intent thus allowing the realisation of optimisations by the database engine. In August 2012, this solution, called the Aggregation Framework, was introduced in the 2.2 release version of MongoDB. MongoDB's Aggregation Framework provided a far more powerful, scalable and easy to use replacement to Map-Reduce.</p>
+<p>Within its first year the Aggregation Framework rapidly become the go to tool for processing large volumes of data in MongoDB. Now, nearly a decade on, to many users it is like the Aggregation Framework has always been part of MongoDB. It feels like part of the database's core DNA. Map-Reduce is still supported in MongoDB but it is rarely used nowadays. MongoDB aggregations is always the right answer for processing data in the database!</p>
+<h2 id="key-releases--capabilities"><a class="header" href="#key-releases--capabilities">Key Releases &amp; Capabilities</a></h2>
+<p>Below is a summary of how the Aggregation Framework has evolved over its lifetime and the additional capabilities added in each major release:</p>
+<ul>
+<li><strong>MongoDB 2.2 (August 2012)</strong>: Initial Release</li>
+<li><strong>MongoDB 2.4 (March 2013)</strong>: Efficiency improvements especially for sorts, concat operator</li>
+<li><strong>MongoDB 2.6 (April 2014)</strong>: Unlimited size result sets, explain plans, spill to disk for large sorts, option to output to a new collection, redact stage</li>
+<li><strong>MongoDB 3.0 (March 2015)</strong>: Date-to-string operators</li>
+<li><strong>MongoDB 3.2 (December 2015)</strong>: Sharded cluster optimisations, lookup (join) &amp; sample stages, many new arithmetic &amp; array operators</li>
+<li><strong>MongoDB 3.4 (November 2016)</strong>: Graph-lookup, bucketing &amp; facets stages, many new array &amp; string operators </li>
+<li><strong>MongoDB 3.6 (November 2017)</strong>: Array to/from object operators, more extensive date to/from string operators, REMOVE variable</li>
+<li><strong>MongoDB 4.0 (July 2018)</strong>: Number to/from string operators, string trimming operators</li>
+<li><strong>MongoDB 4.2 (August 2019)</strong>: Merge stage to insert/update/replace records in existing non-sharded &amp; sharded collections, set &amp; unset stages to address the verbosity/rigidity of project stages, trigonometry operators, regular expression operators, random number operator</li>
+<li><strong>MongoDB 4.4 (July 2020)</strong>: Union stage, custom JavaScript expression operators (function &amp; accumulator), first &amp; last array element operators, string replacement operators</li>
+</ul>
+<h1 id="guiding-tips--principles"><a class="header" href="#guiding-tips--principles">Guiding Tips &amp; Principles</a></h1>
+<p>First major part of the book, providing a small set of opinionated yet easy to digest principles and approaches for increasing effectiveness and productivity when developing aggregation pipelines.</p>
+<h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<p>To try the examples in the second half of this book you need the following two elements:</p>
+<ol>
+<li>A <strong>MongoDB database</strong>, <strong>version 4.2 or greater</strong>, running somewhere which is network accessible from your workstation</li>
+<li>A <strong>MongoDB client tool</strong> running on your workstation with which to submit aggregation execution requests and to then view the results</li>
+</ol>
+<p>Note, each example is marked with the minimum version of MongoDB it will successfully execute on, but from a minimum of version 4.2 onwards. For MongoDB versions 4.0 and earlier, some examples may work unchanged, some examples may work with minor alterations and some may not work at all due to fundamental dependencies on stages or operations which were added in MongoDB versions 4.2 or greater.</p>
+<h2 id="database"><a class="header" href="#database">Database</a></h2>
+<p>The database to connect to could be a MongoDB version 4.2+ deployment which is single-server, a replica-set or a sharded cluster running locally on your workstation or remotely on-prem or in the cloud. It doesn't matter which. You just need to know the MongoDB URL for connecting to the database (including any authentication credentials required for full read and write access).</p>
+<p>If you don't already have access to a MongoDB database, the two easiest options for running one, for free, are:</p>
+<ol>
+<li><a href="https://docs.mongodb.com/guides/server/install/">Install and run a MongoDB single server</a> locally on your workstation</li>
+<li><a href="https://docs.atlas.mongodb.com/tutorial/deploy-free-tier-cluster/">Provision a Free Tier MongoDB Cluster</a> in MongoDB Atlas which is MongoDB Inc.'s cloud-based Database-as-a-Service (once deployed, in the Atlas Console there is button you can click to copy the URL of the cluster)</li>
+</ol>
+<h2 id="client-tool"><a class="header" href="#client-tool">Client Tool</a></h2>
+<p>There are many options the the client tool, four of which are:</p>
+<ol>
+<li><strong><em>Modern</em> Shell</strong>. Install the modern version of MongoDB's command line tool, the <a href="https://www.mongodb.com/try/download/shell">Mongo Shell</a>: <code>mongosh</code></li>
+<li><strong><em>Legacy</em> Shell</strong>. Use the legacy version of MongoDB's command line tool, the <a href="https://docs.mongodb.com/manual/mongo/">Mongo Shell</a>: <code>mongo</code> (this binary is bundled with a MongoDB database installation or can be downloaded from the Atlas console)</li>
+<li><strong>Compass</strong>. Install the <em>official</em> MongoDB Inc. provided graphical user interface (GUI) tool, <a href="https://www.mongodb.com/products/compass">MongoDB Compass</a></li>
+<li><strong>Studio 3T</strong>. Install the <em>3rd party</em> 3T Software Labs provided graphical user interface (GUI) tool, <a href="https://studio3t.com/download/">Studio 3T</a></li>
+</ol>
+<p>The examples provided in this book are presented in such a way to make it easy to cut and paste the code into the Mongo Shell (<code>mongosh</code> or <code>mongo</code>) to be executed. All subsequent instructions in this book will assume you are using the Shell. However, you should find it straight-forward to use one of the mentioned GUI tools instead, to consume the code examples provided. Of the two Shell versions, you will be likely to find the <em>modern</em> Shell easier to use and view results with.</p>
+<h3 id="mongo-shell-with-local-database"><a class="header" href="#mongo-shell-with-local-database">Mongo Shell With Local Database</a></h3>
+<p>Here is an example of starting the <em>modern</em> Mongo Shell to connect to a MongoDB single-server database if you've installed one locally on your workstation (change the text <code>mongosh</code> to <code>mongo</code> if you are using the <em>legacy</em> Shell):</p>
+<pre><code class="language-bash">mongosh &quot;mongodb://localhost:27017&quot;
+</code></pre>
+<h3 id="mongo-shell-with-atlas-database"><a class="header" href="#mongo-shell-with-atlas-database">Mongo Shell With Atlas Database</a></h3>
+<p>Here is an example of starting the <em>modern</em> Mongo Shell to connect to a Atlas Free Tier MongoDB Cluster (change the text <code>mongosh</code> to <code>mongo</code> if you are using the <em>legacy</em> Shell):</p>
+<pre><code class="language-bash">mongosh &quot;mongodb+srv://mycluster.a123b.mongodb.net/test&quot; --username myuser
+</code></pre>
+<p>Note, before running the command above, ensure</p>
+<ol>
+<li>You have <a href="https://docs.atlas.mongodb.com/security/add-ip-address-to-list/">added your workstation's IP address</a> to the Atlas Access List</li>
+<li>You have <a href="https://docs.atlas.mongodb.com/tutorial/create-mongodb-user-for-cluster/">created a database user</a> for the deployed Atlas cluster, with rights to create, read and write to any database</li>
+<li>You have changed the dummy URL and username text, shown in the above example command, to match your real cluster's details, which are accessible via the <code>Connect</code> button in the Atlas Console</li>
+</ol>
+<h3 id="mongodb-compass-gui"><a class="header" href="#mongodb-compass-gui">MongoDB Compass GUI</a></h3>
+<p>MongoDB Compass provides an <em>Aggregation Pipeline Builder</em> tool to assist users to prototype and debug aggregation pipelines and then export them for use in different programming languages. Below is a screenshot of this tool in Compass:</p>
+<p><img src="guides/./pics/compass.png" alt="DB Engine Aggregations Optimisations" /></p>
+<h3 id="studio-3t-gui"><a class="header" href="#studio-3t-gui">Studio 3T GUI</a></h3>
+<p>Studio 3T provides an <em>Aggregation Editor</em> tool to help users to prototype and debug aggregation pipelines and then translate them for use in different programming languages. Below is a screenshot of this tool in Studio 3T:</p>
+<p><img src="guides/./pics/studio3t.png" alt="DB Engine Aggregations Optimisations" /></p>
+<h1 id="getting-help"><a class="header" href="#getting-help">Getting Help</a></h1>
+<p>No one can hold in their heads, the names of all the different stages and operators available in the MongoDB Aggregation Framework, and their specific syntax. I'd bet even <em>MongoDB Aggregations Royalty</em> (<a href="http://www.kamsky.org/stupid-tricks-with-mongodb">Asya Kamsky</a>) couldn't, although I'm sure she would give it a good go! 😆</p>
+<p>The good news is there is no need to try to remember all the stages &amp; operators. The MongoDB online documentation provides a set of excellent <em>references</em> for these, here:</p>
+<ul>
+<li>MongoDB Aggregation Pipeline <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">Stages reference</a></li>
+<li>MongoDB Aggregation Pipeline <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/">Operators reference</a></li>
+</ul>
+<p>Additionally, if you are getting stuck with an aggregation pipeline and want some help, there is an active online community out there who will invariably have the answer. So just pose your questions at either:</p>
+<ul>
+<li>The MongoDB Developer Hub - <a href="https://developer.mongodb.com/community/forums/">Community Forums</a></li>
+<li>Stack Overflow - <a href="https://stackoverflow.com/questions/tagged/mongodb">MongoDB Questions</a></li>
+</ul>
+<p>You may be asking for just general advice. However, if you are asking for help on a specific aggregation pipeline that you are currently prototyping, it is highly recommanded to provide a sample input document and a copy of your current pipeline code (in its JSON syntax format, and not a programming language specific format). This helps maximise the likelihood of you receiving a timely and optimal response.</p>
+<h1 id="embrace-composibility-for-increased-productivity"><a class="header" href="#embrace-composibility-for-increased-productivity">Embrace Composibility For Increased Productivity</a></h1>
+<p>As described in this book's introduction, an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side-effects. Pipelines exhibit high <a href="https://en.wikipedia.org/wiki/Composability">composability</a> where stages are stateless self-contained components that can be selected and assembled in various combinations (pipelines) to satisfy specific requirements. This composability helps to promote iterative prototyping, allowing uncomplicated testing after each increment.</p>
+<p>With MongoDB's aggregations, a complex problem requiring a complex aggregation pipeline can simply be broken down in to individual straightforward stages, where each stage can be developed and tested in isolation first. To better comprehend this composability, it can help to internalise the following visual model. </p>
+<p><img src="guides/./pics/pipeline-equivalence.png" alt="Pipelines Equivalence" /></p>
+<p>Essentially, if you have two pipelines with one stage in each and you run the second pipeline after successfully completing the first pipeline, the final output result set is exactly the same as if you have just run a single pipeline containing both stages serially. There no difference between the two. By understanding how a problem can be broken down in this way when building aggregation pipelines, it helps to reduce the <a href="https://en.wikipedia.org/wiki/Cognitive_load">cognitive load</a> on you as a developer. Aggregation pipelines enable you to break down a big problem into lots of small problems and by embracing this approach of first developing each stage separately, then even the most complex challenges become surmountable. </p>
+<h2 id="specific-tips-to-promote-composability"><a class="header" href="#specific-tips-to-promote-composability">Specific Tips To Promote Composability</a></h2>
+<p>Now in reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage, although it is still a valid development approach if you prefer it. Instead, seasoned aggregation pipelines developers typically just comment out one or more stages of an aggregation pipeline when using the Mongo Shell (or use the 'disable stage' capability provided by the <a href="guides/./getting-started.html">GUI tools</a> for MongoDB).</p>
+<p>Some of the principles to strive for, to encourage composability and hence productivity, are:</p>
+<ul>
+<li>Easy disabling of subsets of stages, whilst prototyping</li>
+<li>Easy addition of new fields to a stage or new stages to a pipeline by performing a copy, a paste and then a modification, without hitting cryptic error messages which result from issues like missing out a comma before the newly added item</li>
+<li>Easy appreciation, at a glance, of each distinct stage its purpose</li>
+</ul>
+<p>With these principles in mind, the following is an opinionated list of guidelines for the way you should textually craft your pipelines in JavaScript, to improve your pace of pipeline development.</p>
+<ol>
+<li>Don't start or end a stage on the same line as another stage</li>
+<li>For every field in a stage, and for every stage in a pipeline, include a trailing comma even if it is currently the last item</li>
+<li>Include an empty newline between every stage</li>
+<li>For complex stages include a <code>//</code> comment with an explanation, on a newline, before the stage</li>
+<li>To 'disable' some stages of a pipeline whilst prototyping another stage, just use the multi-line comment <code>/*</code> prefix and <code>*/</code> suffix</li>
+</ol>
+<p>Below is an example of a poor pipeline layout, where none of the guiding principles have been followed:</p>
+<pre><code class="language-javascript">// BAD
+
+var pipeline = [
+  {'$unset': [
+    '_id',
+    'address'
+  ]}, {'$match': {
+    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')}
+  }}//, {'$sort': {
+  //  'dateofbirth': -1
+  //}}, {'$limit': 2} */
+];
+</code></pre>
+<p>Whereas the following is an example of far better pipeline layout, where all of the guiding principles have been followed:</p>
+<pre><code class="language-javascript">// GOOD
+
+var pipeline = [
+  {'$unset': [
+    '_id',
+    'address',
+  ]},    
+    
+  // Only match people born on or after 1st Janurary 1970
+  {'$match': {
+    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')},
+  }},
+  
+  /*
+  {'$sort': {
+    'dateofbirth': -1,
+  }},      
+    
+  {'$limit': 2},  
+  */
+];
+</code></pre>
+<p>Notice trailing commas are included above, at both the end of stage and end of field levels.</p>
+<p>It is also worth mentioning that some (but not all) developers take a slightly different but equally valid approach to constructing a pipeline. They decompose each stage in the pipeline into different JavaScript variables, where each stage variable is defined separately, as show in the example below:</p>
+<pre><code class="language-javascript">// GOOD
+
+var unsetStage = {
+  '$unset': [
+    '_id',
+    'address',
+  ]};    
+
+var matchStage = {
+  '$match': {
+    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')},
+  }};
+
+var sortStage = {
+   '$sort': {
+    'dateofbirth': -1,
+  }}; 
+
+
+var limitStage = {'$limit': 2};
+    
+var pipeline = [
+  unsetStage,
+  matchStage,
+  sortStage,
+  limitStage,
+];
+</code></pre>
+<p>This book is not advocating this 'multi-variable' approach over a 'single-variable' approach to defining a pipeline. It is just highlighting another highly composable option. Ultimately it is a personal choice about which you find most comfortable and productive. Indeed, some developers will go a step further, if not intending to transfer the prototyped pipeline to another programming language in their target application code. They will factor out complex boilerplate parts of their pipeline into separate JavaScript functions, which can be re-used from multiple places in their main JavaScript based pipeline.</p>
+<h1 id="to-project-or-not-to-project-that-is-the-question"><a class="header" href="#to-project-or-not-to-project-that-is-the-question">To Project Or Not To Project, That Is The Question</a></h1>
+<p>The quintessential tool in MongoDB's Query Language (MQL) to specify or restrict fields to return in a query result set is a <em>projection</em>. In the MongoDB Aggregation Framework, the analogous facility for specifying fields to include or exclude in a result is the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> stage. For many earlier versions of MongoDB, this was the only tool to define which fields to include and exclude, however it comes with a few usability challenges:</p>
+<ol>
+<li>
+<p><strong><em>$project</em> is confusing and non-intuitive</strong>. In a single stage you can only choose to include fields or to exclude fields, but not both, with the exception of being able to define the <code>_id</code> field to exclude yet define other fields to include. It's as if <code>$project</code> has an identity crisis.</p>
+</li>
+<li>
+<p><strong><em>$project</em> is verbose and inflexible</strong>. If you want to include a new field into each result record (e.g. concatenating values from two other fields together) or include a new value for an existing named field (e.g. convert text to a date), you are then forced to name all other fields in the projection for inclusion. If each record has 100 fields, and you then need to use a <code>$project</code> stage for the first time, to include a new 101st field, you also have to name all the 100 fields in the <code>$project</code> stage too. This irritation is further compounded if you have an evolving data model, where additional new fields appear in some records over time. Using <code>$project</code> for inclusion means each time a new field appears in the data-set, a developer has to go back to the old aggregation pipeline, modifying it to name the new field explicitly for inclusion in the results.</p>
+</li>
+</ol>
+<p>In MongoDB version 4.2, the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a> stages were introduced, which, in most cases, are preferable to using <code>$project</code> for declaring field inclusion and exclusion respectively. They make the intent of the code far clearer, they lead to less verbose pipelines and, criticality, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use <code>$set</code> &amp; <code>$unset</code> stages is described in section 'When To Use $set &amp; $unset', below.</p>
+<p>Despite the challenges however, there are some specific situations where using <code>$project</code> is advantageous over <code>$set</code>/<code>$unset</code>. This is described in section 'When To Use $project', below. </p>
+<p>To add to the confusion, in MongoDB 3.4, a first attempt at addressing some of the disadvantages of <code>$project</code>_ was made by introducing a new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a> stage, which has the exact behaviour as <code>$set</code> (<code>$set</code> actually came later than <code>$addFields</code>). No direct equivalent to <code>$unset</code> was provided back then. Now that both <code>$set</code> and <code>$unest</code> stages are available in modern versions of MongoDB, and because their counter purposes are so obvious to deduce by their names (<code>$set</code> Vs <code>$unset</code>), <strong>it is recommended to not use <em>$addFields</em></strong>. This helps with consistency and to avoid any confusion of intent. If you have come to MongoDB only recently, just pretend <code>$addFields</code> never existed!__ 😆</p>
+<h2 id="when-to-use-set--unset"><a class="header" href="#when-to-use-set--unset">When To Use Set &amp; Unset</a></h2>
+<p><code>$set</code> &amp; <code>$unset</code> stages should be used when most of the fields in the input records should be retained and only a minority subset of fields need to be added, modified or removed. This is the case for the majority of uses of aggregation pipelines.</p>
+<p>For example, imagine there is a collection of credit card payment records as documents similar to the following:</p>
+<pre><code class="language-javascript">// INPUT  (a record from the source collection to be operated on by an aggregation)
+{
+  _id: ObjectId(&quot;6044faa70b2c21f8705d8954&quot;),
+  card_name: 'Mrs. Jane A. Doe',
+  card_num: '1234567890123456',
+  card_expiry: '2023-08-31T23:59:59.736Z',
+  card_sec_code: '123',
+  card_provider_name: 'Credit MasterCard Gold',
+  transaction_id: 'eb1bd77836e8713656d9bf2debba8900',
+  transaction_date: 2021-01-13T09:32:07.000Z,
+  transaction_curncy_code: 'GBP',
+  transaction_amount: Decimal128(&quot;501.98&quot;),
+  reported: true
+}
+</code></pre>
+<p>Then imagine an aggregation pipeline is required, to produce modified versions of the documents, as shown below:</p>
+<pre><code class="language-javascript">// OUTPUT  (a record in the results of the executed aggregation)
+{
+  card_name: 'Mrs. Jane A. Doe',
+  card_num: '1234567890123456',
+  card_expiry: 2023-08-31T23:59:59.736Z,  // Field type converted from text to date
+  card_sec_code: '123',
+  card_provider_name: 'Credit MasterCard Gold',
+  transaction_id: 'eb1bd77836e8713656d9bf2debba8900',
+  transaction_date: 2021-01-13T09:32:07.000Z,
+  transaction_curncy_code: 'GBP',
+  transaction_amount: Decimal128(&quot;501.98&quot;),
+  reported: true,
+  card_type: 'CREDIT'                     // New field added using a literal value
+}
+</code></pre>
+<p>Here, shown by the <code>//</code> comments, there was a requirement to slightly modify the structure of each document, converting the <code>card_expiry</code> text field into a proper date field, and adding a new field <code>card_type</code> field, set to a value of 'CREDIT', for every record.</p>
+<p>Naively you might decide to build an aggregation pipeline using a <code>$project</code> stage, to achieve this transformation, which would probably look similar to the following:</p>
+<pre><code class="language-javascript">// BAD
+[
+  {'$project': {
+    // Modify a field + add a new field
+    'card_expiry': {'$dateFromString': {'dateString': '$card_expiry'}},
+    'card_type': 'CREDIT',        
+
+    // Must now name all the other fields for those fields to be retained
+    'card_name': 1,
+    'card_num': 1,
+    'card_sec_code': 1,
+    'card_provider_name': 1,
+    'transaction_id': 1,
+    'transaction_date': 1,
+    'transaction_curncy_code': 1,
+    'transaction_amount': 1,
+    'reported': 1,                
+    
+    // Remove _id field
+    '_id': 0,
+  }},
+]
+</code></pre>
+<p>As you can see, the pipeline's stage is quite verbose and because a <code>$project</code> stage is being used to modify/add two fields, you are forced to also explicitly name each other existing field of the source records, for inclusion, otherwise that information will be lost during the transformation. Imagine if each payment document has hundreds of possible fields, rather than just ten! </p>
+<p>A better approach to building the aggregation pipeline, to achieve the exact same results, would be to use <code>$set</code> and <code>$unset</code> instead, as shown below:</p>
+<pre><code class="language-javascript">// GOOD
+[
+  {'$set': {
+    // Modified + new field
+    'card_expiry': {'$dateFromString': {'dateString': '$card_expiry'}},
+    'card_type': 'CREDIT',        
+  }},
+  
+  {'$unset': [
+    // Remove _id field
+    '_id',
+  ]},
+]
+</code></pre>
+<p>This time, if some new documents are subsequently added to the existing payments collection, which include additional new fields, e.g. <code>settlement_date</code> &amp; <code>settlement_curncy_code'</code>, then no changes are required to the aggregation pipeline to allow these new fields to automatically appear in the existing aggregation pipeline's results. However, when using <code>$project</code>, each time the possibility of a new field arises, a developer has to first refactor the pipeline to incorporate an additional inclusion declaration (e.g. <code>'settlement_date': 1, 'settlement_curncy_code': 1</code>)</p>
+<h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use Project</a></h2>
+<p>A <code>$project</code> stage should be used when the required output shape of result documents is very different than the shape of input documents, where most of the original fields are not to be included in the output.</p>
+<p>This time for the same input payments collection, lets imagine a different aggregation pipeline was required to produce result documents, where each document's structure is required to be very different than the input structure, with far fewer field values need to be pulled through from the original input documents, similar to the following:</p>
+<pre><code class="language-javascript">// OUTPUT  (a record in the results of the executed aggregation)
+{
+  transaction_info: { 
+    date: 2021-01-13T09:32:07.000Z,
+    amount: Decimal128(&quot;501.98&quot;)
+  },
+  status: 'REPORTED'
+}
+</code></pre>
+<p>Now, using <code>$set</code>/<code>$unset</code> in the pipeline to achieve the above output structure would be verbose and would require naming all the fields (for exclusion this time). as shown below:</p>
+<pre><code class="language-javascript">// BAD
+[
+  {'$set': {
+    'transaction_info.date': '$transaction_date',
+    'transaction_info.amount': '$transaction_amount',
+    'status': {'$cond': {'if': '$reported', 'then': 'REPORTED', 'else': 'UNREPORTED'}},
+  }},
+  
+  {'$unset': [
+    // Remove _id field
+    '_id',
+
+    // Must name all existing fields to be omitted
+    'card_name',
+    'card_num',
+    'card_expiry',
+    'card_sec_code',
+    'card_provider_name',
+    'transaction_id',
+    'transaction_date',
+    'transaction_curncy_code',
+    'transaction_amount',
+    'reported',         
+  ]}, 
+]
+</code></pre>
+<p>However, by using <code>$project</code> for this specific aggregation, as shown below, to achieve the exact same results, the pipeline would be less verbose and have the flexibility of not requiring modification if subsequent additions are ever made to the data model, with new previously unknown fields:</p>
+<pre><code class="language-javascript">// GOOD
+[
+  {'$project': {
+    'transaction_info.date': '$transaction_date',
+    'transaction_info.amount': '$transaction_amount',
+    'status': {'$cond': {'if': '$reported', 'then': 'REPORTED', 'else': 'UNREPORTED'}},
+    
+    // Remove _id field
+    '_id': 0,
+  }},
+]
+</code></pre>
+<h2 id="main-takeaway"><a class="header" href="#main-takeaway">Main Takeaway</a></h2>
+<p>In summary, always look to use <code>$set</code> &amp; <code>$unset</code> for field inclusion and exclusion, rather than <code>$project</code>, unless it is very clear that a complete new structure is required for result documents, with very few of the input fields required. Don't bother using <code>$addFields</code> nowadays because it adds no value and may just cause confusion.</p>
+<h1 id="using-explain-plans"><a class="header" href="#using-explain-plans">Using Explain Plans</a></h1>
+<p>Often, when using the MongoDB Query Language (MQL) to develop queries, it is useful to view the <a href="https://docs.mongodb.com/manual/reference/method/db.collection.explain/">explain plan</a> for the query to determine whether the right indexes were used and whether other aspects of the query are fully optimised. An explain plan allows you to better understand the performance implications of the query you have created.</p>
+<p>The same applies to aggregation pipelines and the ability to view an <em>explain plan</em> for the executed pipeline. However, with aggregations, an explain plan tends to be even more critical because much more complex logic can be assembled and then executed in the database. Consequently, there are more potential areas for performance bottlenecks to occur, requiring optimisation. As discussed earlier in this book, the MongoDB database engine will do its best to apply its own <a href="https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/">aggregation pipeline optimisations</a> at runtime but there will always be some types of optimisations that only the developer can make. This is because a database engine should never optimise a pipeline in such a way that it risks changing the functional behaviour and outcome of the pipeline. The database engine doesn't have the extra context that a developer's brain has, relating to the actual business problem at hand, and is thus unable to make some types of judgement calls about what pipeline changes to apply to make it run faster. This is where the explain plan for aggregations comes in useful for developers. It allows the developer to understand what optimisations the database engine has made and to then spot further potential optimisations that can be manually made to the pipeline (in addition to just identifying missing indexes).</p>
+<h2 id="viewing-an-explain-plan"><a class="header" href="#viewing-an-explain-plan">Viewing An Explain Plan</a></h2>
+<p>To view the explain plan for an aggregation pipeline, a developer can execute statements such as the following:</p>
+<pre><code class="language-javascript">db.coll.explain().aggregate([{'$match': {'name': 'Jo'}}]);
+</code></pre>
+<p>However, in this book you will already have seen the convention being used to, firstly, define a separate variable for the pipeline, followed by the call to the <code>aggregate()</code> function, passing in the pipeline argument, as shown here:</p>
+<pre><code class="language-javascript">db.coll.aggregate(pipeline);
+</code></pre>
+<p>By using this approach, it easier to use the same defined pipeline variable interchangeably, with different commands. For example, whilst prototyping and debugging a pipeline it is handy to be able to quickly switch from executing the pipeline to instead generating the explain plan, for the same defined pipeline, as follows:</p>
+<pre><code class="language-javascript">db.coll.explain().aggregate(pipeline);
+</code></pre>
+<p>As with MQL, there are three different verbosity modes that an aggregation's explain plan can be generated with, as shown below:</p>
+<pre><code class="language-javascript">// QueryPlanner verbosity  (default if no verbosity parameter provided)
+db.coll.explain('queryPlanner').aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">// ExecutionStats verbosity
+db.coll.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">// AllPlansExecution verbosity 
+db.coll.explain('allPlansExecution').aggregate(pipeline);
+</code></pre>
+<p>In most cases, running the <code>executionStats</code> variant is the most useful to developers because, rather than showing just the query planner's 'thinking', it also provides real statistics on the 'winning' executed plan (e.g. the total keys examined, the total docs examined, etc.). However, this isn't the default because it actually executes the aggregation too, in addition to formulating the query plan, which, if the source collection is large and/or the pipeline is sub-optimal, could take a while to return with the explain plan result.</p>
+<p>Note, the <a href="https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/">aggregate()</a> function also provides a vestigial <code>explain</code> parameter option to enable an explain plan to be generated and returned. However this is more limited and cumbersome to use, and so nowadays is best avoided.</p>
+<h2 id="understanding-the-explain-plan"><a class="header" href="#understanding-the-explain-plan">Understanding The Explain Plan</a></h2>
+<p>As an example, let's assume there is a data-set of information on people (e.g. a collection called <em>persons</em> with a <em>descending</em> index defined on a <em>date of birth</em> field). The following aggregation pipeline may have then been built to show the three youngest people in the collection, only for people born on or after 1970 (so there may be less than 3 records in the result if nearly all people were born before 1970):</p>
+<pre><code class="language-javascript">var pipeline = [
+  {'$unset' : [
+      '_id',
+      'address',
+      'person_id'
+  ]},
+  
+  {'$sort' : {
+      'dateofbirth' : -1
+  }},
+  
+  {'$match' : {
+      'dateofbirth' : {'$gte' : ISODate('1970-01-01T00:00:00Z')}
+  }},
+  
+  {'$limit' : 3}
+]
+</code></pre>
+<p>Then the <em>query planner</em> part of the explain plan might be required:</p>
+<pre><code class="language-javascript">db.persons.explain('queryPlanner').aggregate(pipeline);
+</code></pre>
+<p>The query plan results for this pipeline shows the following (some less relevant information has been edited out for brevity)</p>
+<pre><code class="language-javascript">&quot;stages&quot; : [
+  {&quot;$cursor&quot; : {
+    &quot;queryPlanner&quot; : {
+      &quot;parsedQuery&quot; : {
+        &quot;dateofbirth&quot; : {
+          &quot;$gte&quot; : ISODate(&quot;1970-01-01T00:00:00Z&quot;)
+        }
+      },
+      &quot;winningPlan&quot; : {
+        &quot;stage&quot; : &quot;FETCH&quot;,
+        &quot;inputStage&quot; : {
+          &quot;stage&quot; : &quot;IXSCAN&quot;,
+          &quot;keyPattern&quot; : {
+            &quot;dateofbirth&quot; : -1
+          },
+          &quot;indexName&quot; : &quot;dateofbirth_-1&quot;,
+          &quot;direction&quot; : &quot;forward&quot;,
+          &quot;indexBounds&quot; : {
+            &quot;dateofbirth&quot; : [
+              &quot;[new Date(9223372036854775807), new Date(0)]&quot;
+            ]
+          }
+        }
+      }
+    }
+  }},
+  
+  {&quot;$project&quot; : {
+      &quot;_id&quot; : false,
+      &quot;person_id&quot; : false,
+      &quot;address&quot; : false
+    }
+  },
+  {&quot;$sort&quot; : {
+      &quot;sortKey&quot; : {
+        &quot;dateofbirth&quot; : -1
+      },
+      &quot;limit&quot; : NumberLong(3)
+    }
+  }
+]
+</code></pre>
+<p>There are some interesting insights that can be deduced from this query plan:</p>
+<ul>
+<li>
+<p>To optimise the aggregation, the database engine has reordered the pipeline and moved the filter from the <code>$match</code> to the top of the pipeline, without changing the functional behaviour or outcome of the pipeline.</p>
+</li>
+<li>
+<p>To optimise the aggregation, the database engine has been able to collapse the <code>$sort</code> and <code>$limit</code> into a single <em>special internal</em> stage which can perform both actions in one go In this case, the aggregation engine only has to track in memory the 3 currently known youngest person records at any point in time, during the sorting process, rather than holding the whole data set being sorted in memory, which may otherwise be resource prohibitive.</p>
+</li>
+<li>
+<p>The first stage of the executed <em>internal runtime</em> version of the pipeline, regardless of what ordered stages were placed in the pipeline by the developer, is always an <em>internal</em> <code>$cusror</code> stage. The <code>$cursor</code> <em>runtime</em> stage is the first thing that happens for any executing aggregation. The aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, optionally including a filter based on the contents of the aggregation's <code>$match</code>, if a <code>$match</code> was defined and occurs early in the optimised pipeline. The aggregation runtime uses the resulting query cursor to pull batches of records at a time, just like a client application using a MongoDB driver would do when remotely invoking an MQL query against a database collection. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense (which it does in this case, as is visible in the embedded  <code>$queryPlanner</code> metadata, showing the <code>&quot;stage&quot; : &quot;IXSCAN&quot;,</code> element and the index used, <code>&quot;indexName&quot; : &quot;dateofbirth_-1&quot;</code>). </p>
+</li>
+</ul>
+<p>Then the <em>execution stats</em> part of the explain plan might then be asked for:</p>
+<pre><code class="language-javascript">db.persons.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<p>Below is a redacted example of the resulting execution statistics in the explain plan, highlighting some of the most important metadata elements that developers should typically focus on.</p>
+<pre><code class="language-javascript">&quot;executionStats&quot; : {
+  &quot;nReturned&quot; : 333333,
+  &quot;totalKeysExamined&quot; : 333333,
+  &quot;totalDocsExamined&quot; : 333333,
+  ...
+  &quot;executionStages&quot; : {
+    &quot;stage&quot; : &quot;FETCH&quot;,
+    &quot;nReturned&quot; : 333333,
+    &quot;docsExamined&quot; : 333333,
+    ...
+    &quot;inputStage&quot; : {
+      &quot;stage&quot; : &quot;IXSCAN&quot;,
+      &quot;nReturned&quot; : 333333,
+      &quot;indexName&quot; : &quot;dateofbirth_-1&quot;,
+      &quot;direction&quot; : &quot;forward&quot;,
+      &quot;keysExamined&quot; : 333333,
+      ...
+}
+</code></pre>
+<p>Here the plan shows that an index was used, and because 'index keys examined' and 'documents examined' match, this indicates that the index was fully leveraged to completely identify the required records, which is good news. This doesn't necessarily mean the aggregation is fully optimal though. For example, if there was the need to reduce latency further, some analysis could be done to determine if the the index can completely <a href="https://docs.mongodb.com/manual/core/query-optimization/#covered-query">cover the query</a>. If the <em>cursor query</em> part of the the aggregation is satisfied entirely using the index and does not have to examine any documents, you would see <code>totalDocsExamined = 0</code> in the resulting explain plan. </p>
+<p>The critical information shown in <code>executionStats</code> is similar to the <a href="https://docs.mongodb.com/manual/tutorial/analyze-query-plan/">normal MQL explain plan</a> returned for a regular <code>find()</code> operation, and similar principles apply for spotting things like has the optimum index been used, and does the data model lend itself to efficiently processing the query?</p>
+<h1 id="pipeline-performance-considerations"><a class="header" href="#pipeline-performance-considerations">Pipeline Performance Considerations</a></h1>
+<p>As with any programming language, premature optimisation when prototyping an aggregation pipeline will often lead to an over-complicated solution which doesn't actually address the specific performance challenges that manifest. As described in the previous chapter, <a href="guides/./explain.html">Using Explain Plans</a>, the tool of choice to identify opportunities for effective optimisation is the aggregation's <em>explain plan</em>. This is typically used during the final stages of a pipeline's development, once the pipeline is functionally correct and producing the right data results.</p>
+<p>However, being aware of some guiding principles regarding performance can still be useful whilst prototyping a pipeline. Importantly, such guiding principles are likely to be invaluable once the aggregation's explain plan is analysed and if it shows that the current pipeline is sub-optimal.</p>
+<p>With this in mind, this chapter outlines three potentially 'big-ticket' considerations to make when creating or tuning an aggregation pipeline, which, when aggregating very large source data-sets, can often be the difference between an aggregation returning in milliseconds or a few seconds, versus returning in minutes, hours or even longer.</p>
+<h2 id="be-cognizant-of-streaming-vs-blocking-stages-ordering"><a class="header" href="#be-cognizant-of-streaming-vs-blocking-stages-ordering">Be Cognizant Of Streaming Vs Blocking Stages Ordering</a></h2>
+<p>When executing an aggregation pipeline, the database engine pulls batches of records at a time from the initial query cursor that has been generated against the source collection. The database engine then attempts to stream each batch through the stages of the aggregation pipeline. For most types of pipeline stages, refereed to as <em>streaming stages</em>, a batch of records processed by a stage will then be streamed on to the next stage, without the stage trying to wait for all the other record batches to first arrive. However, two types of stages do have to block and wait for all batches of records outputted from a previous stage to arrive and accumulate together at that stage. These are referred to as <em>blocking stages</em> and specifically the two types of stages that block are:</p>
+<ul>
+<li><code>$sort</code></li>
+<li><code>$group</code> *</li>
+</ul>
+<blockquote>
+<p>* <em>actually when stating <code>$group</code>, this also includes other less frequently used 'grouping' stages too, specifically:</em><code>$bucket</code>, <code>$bucketAuto</code>, <code>$count</code> &amp; <code>$sortByCount</code></p>
+</blockquote>
+<p>The diagram below highlights the nature of streaming and blocking stages, where streaming stages allow batches to be processed and then passed through without waiting, whereas blocking stages wait for the whole of its input data set to arrive and accumulate before the stage then processes all this data together.</p>
+<p><img src="guides/./pics/streaming-blocking.png" alt="Streaming Vs Blocking" /></p>
+<p>It is of course necessary for both <code>$sort</code> and <code>$group</code> to be blocking stages, as illustrated by the following examples:</p>
+<ol>
+<li>
+<p><strong>$sort blocking requirement example</strong>: Take an example of a pipeline needing to sort <em>people</em> in ascending order of <em>age</em>. There would be a problem if the stage didn't wait to see the whole input data-set, and instead just sorted the <em>people</em> in one batch at a time before passing that sorted batch of <em>people</em> on to the next stage or final result, without waiting. The next batch of people records to arrive at the <code>$sort</code> stage could well contain one or more people who are younger than the sorted ones already passed through. In the final result, these records should have appeared earlier in the final result set, but it would be too late.</p>
+</li>
+<li>
+<p><strong>$group blocking requirement example</strong>: Take an example of a pipeline needing to group <em>employees</em> by one of the two <em>work departments</em> they belong to (either <em>sales</em> or <em>manufacturing</em>), and in the first batch of records arriving at the <code>$group</code> stage, each of the two departments groups and embeds a few employees each. There would be a problem if the <code>$group</code> stage didn't wait to see the other batches and instead immediately streamed the current processed departments memberships on to the next stage or final result. The grouped department memberships output by the pipeline to the client application would be incomplete because later batches of people records are yet to still to arrive at the earlier <code>$group</code> stage.</p>
+</li>
+</ol>
+<p>These necessary blocking stages don't just reduce aggregation execution time directly, by virtue of the fact that streaming is blocked. There is also another dimension to the performance impact incurred, related to memory consumption, which can ultimately reduce throughput and increase latency dramatically:</p>
+<ol>
+<li>
+<p><strong>$sort memory consumption</strong>: For a <code>$sort</code> stage to see all the input records at once, the host server must typically have enough capacity to hold the whole input data set in memory, which will be heavily dependent on the nature of the source data-set and how much the earlier stages of the pipeline have first reduced the data-set size. Also, multiple instances of the aggregation pipeline may be in-flight at any one time, in addition to other types of executing aggregations and database workloads, all competing for the same memory resources. If the source data-set is many gigabytes or even terabytes in size and it has not been possible for earlier stages to significantly reduce this size, it is unlikely that the host machines will have sufficient memory to support the pipeline and its blocking <code>$sort</code> stage. As a result, MongoDB enforces a <code>$stage</code> has a limit of 100 MB of consumed RAM and throws an error if exceeded. For handling large data-sets the <code>allowDiskUse=true</code> option for the overall aggregation can be defined which results in <em>sort</em> operations spilling to disk where required, to not be constrained the 100 MB limit. However, the sacrifice here is significantly higher latency, and the aggregation execution time is likely to increase by orders or magnitude. There is one situation where this can be mitigated, if the <code>$sort</code> is not preceded by a <code>$project</code>, <code>$unwind</code> or <code>$group</code> stage it can take advantage of an index for sorting, meaning it doesn't have to manifest the whole data set in memory (or overspill to disk).</p>
+</li>
+<li>
+<p><strong>$group memory consumption</strong>: The <code>$group</code> stage has the potential to consume even more memory than a <code>$sort</code> operation, if it attempting to group all records in the source data-set and retain all the data for each grouped record. This means that the output of the <code>$group</code> stage would contain a larger size of data than the original input, because new groupings 'metadata' would be required too, and, for a period of time this would have all had to be held in memory by the <code>$group</code> blocking stage. Taking the example before of <em>people</em> records, the <code>$group</code> stage's output size would be the size of all the people records in the data-set, plus the size of the new <em>departments</em> grouping metadata. Like <code>$sort</code> stage there is a 100 MB RAM limit for the <code>$group</code> stage, and the aggregation's <code>allowDiskUse=true</code> option can enable the group operation to overspill to disk to avoid this limit, but with the similar higher latency consequences. However, in practicality, many types of grouping operations are primarily used to generate grouped summary data, not grouped itemised data. Therefore, in many situation where <code>$group</code> stages are used, considerably reduced summary data-sets are produced, requiring far less memory than a <code>$sort</code> stage.  For example, rather then the each <em>department</em> group holding a list of its <em>employees</em>, each group might just hold a <em>count</em> of employees in the department by using an <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/#accumulators-group">accumulator operators</a>. So, in reality, unlike sort operations, in many cases grouping operations will only require a fraction of the RAM, due only summary statistics being needed for each group.</p>
+</li>
+</ol>
+<p>In summary, try to move <code>$sort</code> &amp; <code>$group</code> blocking stages to as late in the pipeline as possible. Then, hopefully due to earlier stages that first significantly reduce the number of records being streamed, these blocking stages have less records to process and hence have less thirst for RAM, resulting in an aggregation that completes quickly.</p>
+<h2 id="avoid-unwinding--regrouping-documents-just-to-process-each-arrays-elements"><a class="header" href="#avoid-unwinding--regrouping-documents-just-to-process-each-arrays-elements">Avoid Unwinding &amp; Regrouping Documents Just To Process Each Array's Elements</a></h2>
+<p>Sometimes it is necessary to transform documents from a source collection that each include an array field, where the main purpose of the aggregation pipeline is just to reduce the content of each array, in isolation, but in the same way. For example, the aggregation may just need to add together all the values of the array into a total, or retain the first or last element of the array only, or retain only one field from the sub-document that is in each array element, or any one of numerous other array <em>reduction</em> scenarios.</p>
+<p>Bringing this to life more, imagine there is a <code>product_orders</code> collection where each document in the collection represents a product, and the list of orders is an array of elements against each product, as shown in the example below:</p>
+<pre><code class="language-javascript">[
+  {
+    name: 'Asus Laptop',
+    orders: [
+      {
+        customer_id: 'elise_smith@myemail.com',
+        orderdate: 2020-05-30T08:35:52.000Z,
+        value: Decimal128(&quot;431.43&quot;)
+      },
+      {
+        customer_id: 'jjones@tepidmail.com',
+        orderdate: 2020-12-26T08:55:46.000Z,
+        value: Decimal128(&quot;429.65&quot;)
+      }
+    ]
+  },
+  {
+    name: 'Morphy Richards Food Mixer',
+    orders: [
+      {
+        customer_id: 'oranieri@warmmail.com',
+        orderdate: 2020-01-01T08:25:37.000Z,
+        value: Decimal128(&quot;63.13&quot;)
+      }
+    ]
+  }
+]
+</code></pre>
+<p>Let's say that an aggregation is required to transform these documents to only include the <code>customer_id</code> in each order for each product, and to exclude the <code>orderdate</code> and <code>value</code> fields because they are surplus to requirements. The desired aggregation output might be:</p>
+<pre><code class="language-javascript">[
+  {
+    name: 'Asus Laptop',
+    orders: [ 'elise_smith@myemail.com', 'jjones@tepidmail.com' ]
+  },
+  {
+    name: 'Morphy Richards Food Mixer',
+    orders: [ 'oranieri@warmmail.com' ]
+  }
+]
+</code></pre>
+<p>One obvious way of achieving this transformation in an aggregation pipeline is to <em>unwind</em> the <em>orders</em> array for each record, producing an intermediate set of individual order records, and then <em>group</em> together again the orders records by product <code>$name</code> but only pushing the <code>customer_id</code> field back into the <code>orders</code> array and ignoring the <code>orderdate</code> and <code>value</code> fields. The required pipeline to achieve this is shown below:</p>
+<pre><code class="language-javascript">// SUBOPTIMAL
+
+var pipeline = [
+  {'$unwind': {
+    'path': '$orders',
+  }},
+
+  {'$group': {
+    '_id': '$name',
+    'orders': {'$push': '$orders.customer_id'},
+  }},
+];
+
+</code></pre>
+<p>However, the pipeline is suboptimal because a <code>$group</code> stage has been introduced, which, as outlined earlier in this chapter, is a blocking stage. This will potentially increase memory consumption  significantly and hence the execution time dramatically, if run against a large data-set. There is a far better alternative, which is to use one of the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators">Array Operators</a> instead. Array Operators are sometimes less intuitive to code, but critically, they avoid requiring the need to introduce a blocking stage into the pipeline. As a consequence they are significantly more optimal, especially for large data-sets. Shown below is a far more efficient pipeline, using the <code>$map</code> array operator, rather then the <code>$unwind/$group</code> combination, to produce the same outcome:</p>
+<pre><code class="language-javascript">// OPTIMAL
+
+var pipeline = [
+  {'$set': {
+    'orders': {
+      '$map': {
+        'input': '$orders',
+        'as': 'order',
+        'in': '$$order.customer_id',
+      }
+    },    
+  }},
+];
+</code></pre>
+<p>There should never be the need to use an <code>$unwind/$group</code> combination in an aggregation pipeline just to transform an array of elements contained in each document. Instead, use <em>Array Operators</em> to avoid introducing a blocking stage, which, when a pipeline is handling more than 100MB of in-flight data will result in magnitudes of reduction in execution time. It may even mean the difference between being able to achieve the required business outcome, using an aggregation, versus having to abandon the whole task as being unachievable.</p>
+<p>In summary, the primary use of an <code>$unwind/$group</code> combination is to correlate patterns across many records, rather than transform the content inside each input record in isolation. An example of an appropriate use of <code>$unwind/$group</code> is shown in this book's <a href="guides/../simple-examples/unpack-array-group-differently.html">Unpack Array &amp; Group Differently</a> example.</p>
+<h2 id="encourage-match-filters-to-appear-early-in-a-pipeline"><a class="header" href="#encourage-match-filters-to-appear-early-in-a-pipeline">Encourage Match Filters To Appear Early In A Pipeline</a></h2>
+<p>As discussed in this book's <a href="guides/./explain.html">Using Explain Plans</a> chapter, the database engine will do its best to optimise the aggregation pipeline at runtime, with a particular focus on moving the <code>$match</code> stage contents to the top of the pipeline, if possible, to form part of the filters that are first executed as a query by the aggregation. This helps to maximise the opportunity for an index to be optimally leveraged at the start of the aggregation. However, it may not always be possible to promote <code>$match</code> filters in such a way without changing the meaning and resulting output of an aggregation.</p>
+<p>Sometimes there are situations where <code>$match</code> stage is defined later in a pipeline and is performing a filter on a field which was only manifested part way into the pipeline and therefore wasn't present in the source collection that the aggregation operated on. For example, perhaps a <code>$group</code> stages creates a new <code>total</code> field based on an accumulator and the <code>$match</code> stage then looks for records where the <code>total</code> is greater than <code>1000</code>. Or perhaps a <code>$set</code>stage computes a new  <code>total</code> field value based on adding up all the elements of an array field in the same document, and the <code>$match</code> then looks for records where the <code>total</code> is less than <code>50</code>.</p>
+<p>At first glance, it may seem like nothing can be further done to optimise the pipeline by promoting the position of a specific <code>$match</code> stage, and sometimes that will be the reality. In other situations though, there may be a missed opportunity where a refactoring is indeed possible to enable such an optimisation.</p>
+<p>Take the following trivial example of a collection of <em>customer orders</em> documents:</p>
+<pre><code class="language-javascript">[
+  {
+    customer_id: 'elise_smith@myemail.com',
+    orderdate: 2020-05-30T08:35:52.000Z,
+    value: Decimal128(&quot;9999&quot;)
+  },
+  {
+    customer_id: 'elise_smith@myemail.com',
+    orderdate: 2020-01-13T09:32:07.000Z,
+    value: Decimal128(&quot;10101&quot;)
+  }
+]
+</code></pre>
+<p>Let's assume the orders are based on a <em>Dollars</em> currency, and each <code>value</code> field shows the order's value in <em>cents</em>. A pipeline may have been built to show all orders where the value is greater than 100 dollars:</p>
+<pre><code class="language-javascript">// SUBOPTIMAL
+
+var pipeline = [
+  {'$set': {
+    'value_dollars': {'$multiply': [0.01, '$value']},
+  }},
+  
+  {'$unset': [
+    '_id',
+    'value',
+  ]},         
+
+  {'$match': {
+    'value_dollars': {'$gte': 100},  // Peforms a dollar check
+  }},    
+];
+</code></pre>
+<p>Although the collection has an index defined for the <code>value</code> field (which is in <em>cents</em>), the <code>$match</code> filter for this pipeline is based on a computed field, <code>value_dollars</code> and hence, if you run the explain plan for the this aggregation, you will see that the <code>$match</code> filter has not been pushed to the top of the pipeline and an index has not been leveraged. The <code>$match</code> stage filtering on <code>value_dollars</code> can at best only by pushed upwards at runtime by the aggregation engine to just after the <code>$set</code> stage, and not to the start of the pipeline. MongoDB's aggregation engine is clever enough to track dependencies for a particular field referenced in multiple stages in a pipeline. Hence it is able to establish how far up the pipeline it can promote fields without risking a change in the external behaviour and outcome of the aggregation. In this case it knows that the <code>$match</code> stage cannot be pushed ahead of the <code>set</code> stage which it depends on.</p>
+<p>By now it is probably obvious that in this example, as a developer, you can easily make a pipeline modification that will enable this pipeline to be optimised without changing the intended outcome of the pipeline. For this pipeline, simply by changing the <code>$match</code> filter to be based on the source field <code>value</code> being greater than <code>10000</code> cents, rather than being based on the computed field <code>value_dollars</code> greater then <code>100</code> dollars, and ensuring the <code>$match</code> stage appears before the <code>$unset</code> stage (which removes the <code>value</code> field) it is enough to allow the pipeline run efficiently. Below is the pipeline after being optimised by the developer:</p>
+<pre><code class="language-javascript">// OPTIMAL
+
+var pipeline = [
+  {'$set': {
+    'value_dollars': {'$multiply': [0.01, '$value']},
+  }},
+  
+  {'$match': {                // Moved to before the $unset
+    'value': {'$gte': 10000},   // Changed to not perform a cents check
+  }},    
+
+  {'$unset': [
+    '_id',
+    'value',
+  ]},         
+];
+</code></pre>
+<p>This pipeline produces the exact same results but if you were to look at its explain plan you now would see that the <code>$match</code> filter has been pushed to the top of the pipeline, when executed, and the index on <code>value</code> is now being leveraged. For completeness, in this case, the developer might as well move the modified <code>$match</code> stage to be the first stage in the pipeline explicitly, but this wasn't mandatory, as can be seen by the explain plan. The aggregation runtime has now been able to perform that optimisation itself because the <code>$match</code> stage is no longer 'blocked' by a dependency on computed field dependency.</p>
+<p>There may be some cases, where it isn't possible to unravel a computed value in such a way entirely. However, it may still be possible to include an additional <code>$match</code> stage, to perform a <em>partial match</em>, earlier in the pipeline. For example, lets say a computed field masks a sensitive <code>date_of_birth</code> field into a new <code>masked date</code> field by adding a random few days to the date, up to a maximum of 7 days. An existing <code>$match</code> stage's filter in the pipeline might already have been defined to only include records where <code>masked date</code> is greater than <code>01-Jan-2020</code>. At this point, as a manual refactoring optimisation, an additional (not replacement) <code>$match</code> can be added, right at the start of the pipeline, with the filter <code>date_of_birth &gt; 25-Dec-2020</code> (7 days before the previously existing <code>$match</code> filter). This doesn't mean that the output of the overall aggregation has changed with potentially more records being output. This is because the original <code>$match</code> stage still exists in the pipeline to catch any <em>stragglers</em>, but now, early in pipeline, there is <em>partially effective</em> filter, which is leveraging an index, and which won't necessarily filter out all undesired records, but it will quickly filter out the vast majority of them, leaving any records from the remaining 7 days window of time to be filtered out as normal later in the pipeline.</p>
+<p>In summary, if you have a pipeline leveraging <code>$match</code> stages and the explain plan shows the pipeline is not being optimised to promote the <code>$match</code> filter to be at the start of the pipeline (and leveraging an index), explore whether the match filter is based on a computed field, from say a <code>$group</code> or <code>$set</code> stage, and whether instead, it can be fully or partly <em>unravelled</em> and based on a source field's value. </p>
+<h1 id="can-expressions-by-used-everywhere"><a class="header" href="#can-expressions-by-used-everywhere">Can Expressions By Used Everywhere?</a></h1>
+<h2 id="what-are-aggregation-expressions"><a class="header" href="#what-are-aggregation-expressions">What Are Aggregation Expressions?</a></h2>
+<p>Expressions are one of key things that gives aggregation pipelines their data manipulation power and expressiveness. However, they tend to be something that developers start using by just copying examples from the MongoDB Manual and then refactoring these examples, without thinking too much about what they really are. To enable developers to become more proficient with aggregation pipelines, expressions need to be demystified a little.</p>
+<p>Expressions come in the following three main flavours:</p>
+<ul>
+<li>
+<p><strong>Field Paths.</strong> Accessed with a <code>$</code> prefix followed by the path of the field in each record being processed.  Examples: <code>'$account.sortcode'</code>, <code>'$addresses.address.city'</code></p>
+</li>
+<li>
+<p><strong>Operators.</strong> Accessed with a <code>$</code>prefix followed by the operator function name.  Examples:  <code>$arrayElemAt</code>, <code>$cond</code>, <code>$dateToString</code></p>
+</li>
+<li>
+<p><strong>Variables.</strong> Accessed with  <code>$$</code> prefix followed by the fixed name, falling into two categories:</p>
+<ul>
+<li>
+<p><strong>Context variables.</strong> With values coming from the system environment rather than the each input record being processed.  Examples:  <code>$$NOW</code>, <code>$$CLUSTER_TIME</code></p>
+</li>
+<li>
+<p><strong>Marker flag variables.</strong> To indicate desired behaviour to pass back to the pipeline runtime.  Examples: <code>$$ROOT</code>, <code>$$REMOVE</code>, <code>$$PRUNE</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>It is the ability to combine these three categories of expressions together when operating on input records, that enables complex comparisons and transformations of data to be achieved. To highlight this, the following in an excerpt from the <a href="guides/../examples/moderate-examples/mask-sensitive-fields.html">Mask Sensitive Fields</a> example in this book, which combines all three to optionally use an embedded document to be the value of a computed field (<code>customer_info</code>) or not include the computed field at all in the output.</p>
+<pre><code class="language-javascript">'customer_info': {'$cond': {
+                    'if':   {'$eq': ['$customer_info.category', 'SENSITIVE']}, 
+                    'then': '$$REMOVE',     
+                    'else': '$customer_info',
+                 }}
+</code></pre>
+<p><code>$cond</code> is one of the operator expressions used here (a 'conditional' expression operator which takes three arguments: <code>if</code>, <code>then</code> &amp; <code>else</code>). <code>$eq</code> is another expression operator (a 'comparison' expression operator). <code>$$REMOVE</code> is a 'marker flag' variable expression indicating to exclude the field. Both <code>$customer_info.category</code> and <code>$customer_info</code> are field path expressions referencing fields in each incoming record.</p>
+<h2 id="where-they-expressions-used"><a class="header" href="#where-they-expressions-used">Where They Expressions Used?</a></h2>
+<p>The following question is something that aggregation developers may not have asked themselves before, but asking this question and considering why the answer is what it is can help reveal more about what expressions really are and why they are used.</p>
+<p><strong>Question:</strong> Can expressions be used within any type of pipeline stage?</p>
+<p><strong>Answer:</strong> No</p>
+<p>There are actually a number of types of stages in the Aggregation Framework which don't allow expressions to be embedded (or don't support embedded pipelines which indirectly allow expressions). Below is an example of these types of stages, notably omitting some of 'system-level' stages, like <code>$collStats</code>, from the list which don't relate to aggregating data:</p>
+<ul>
+<li><code>$match</code></li>
+<li><code>$geoNear</code></li>
+<li><code>$out</code></li>
+<li><code>$limit</code></li>
+<li><code>$skip</code></li>
+<li><code>$sort</code></li>
+<li><code>$sample</code></li>
+<li><code>$count</code></li>
+</ul>
+<p>Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider <code>$match</code> to be the most surprising item in this list. The content of a <code>$match</code> stage is just a set of query conditions,book with exactly the same syntax as MQL. There is a good reason for this. As described in the book section <a href="guides/./explain.html">Using Explain Plans</a>, if the <code>$match</code> is the first stage of the pipeline (or can be optimised at runtime to become the first stage), the aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, using the query conditions taken as-is from this first <code>$match</code> stage. </p>
+<p>Actually, in more recent versions of MongoDB the statement that <code>$match</code> is no longer entirely true. MongoDB version 3.6 introduced the new <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/#op._S_expr">$expr operator</a> and the ability to use this <code>$expr</code> operator instead of the normal MQL query conditions for the content of a <code>$match</code> stage. Inside the <code>$expr</code>, if used in a <code>$match</code>, any set of expressions can be used, composed of the <code>$</code> operator functions, <code>$</code> field paths and <code>$$</code> variables described earlier. Critically though, the query expressions in a <code>$expr</code> of <code>$match</code> cannot be used by the MQL query engine to leverage indexes. Therefore, it is only recommended to use <code>$expr</code> in a <code>$match</code> if there is no other way of assembling the query conditions required using the default MQL syntax. What can also be confusing when comparing the 'normal' MQL query condition syntax of a <code>$match</code> with aggregation expression syntax is that both sometimes have similarly named operators, e.g. <code>$gt</code>, with similar behaviour and both may reference field paths, but in subtly different ways, e.g. a <code>field.nestedfield</code> field reference in a <code>$match</code>/<code>find()</code>query condition versus a <code>$field.nestedfield</code> field path in an aggregation expression or <code>$expr</code>.</p>
+<p>In most of the stages which don't leverage expressions, listed above, it doesn't usually make sense to try to make the stages' behaviour more 'dynamic'. For example, rather than providing a constant value of <code>20</code> to a <code>$limit</code> stage or a constant value of <code>80</code> to a <code>$skip</code> stage, it doesn't really make sense to somehow enable the value used to be manifested at runtime, based on values from the input records. The one stage that does need to be more expressive is the <code>$match</code> stage, but as discussed, this stage is already very expressive by virtue of being based on MQL query conditions, and if more dynamic behaviour is required, an <code>$expr</code> operator can be used.</p>
+<h1 id="aggregations-by-example"><a class="header" href="#aggregations-by-example">Aggregations By Example</a></h1>
+<p>Second major part of the book, providing a set of examples to solve common data manipulation challenges, with varying degrees of complexity. The best way to use these examples is to try them out yourself (see <a href="examples/../guides/getting-started.html">Getting Started</a>)</p>
+<h1 id="simple-examples"><a class="header" href="#simple-examples">Simple Examples</a></h1>
+<p>This section provides a set of examples for using the Aggregation Framework to solve common data manipulation challenges, where the examples are not particularly difficult, but they do reproduce typical combinations of stages that form aggregation pipelines to solve common transformations.</p>
+<h1 id="filtered-top-subset"><a class="header" href="#filtered-top-subset">Filtered Top Subset</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
+<p>A user wants to query a collection and return only a subset of matching records, sorted and limited to just a few records, with only some of the attributes for each record included.</p>
+<p>In this example, a collection of <em>person</em> documents will be queried, where only people born in 1970 or later are returned, sorted by youngest person first and only returning the two youngest people. </p>
+<p>This is the only example in the book that can also be completely achieved using just MQL instead, and serves as a useful comparison between MQL and Aggregations. </p>
+<h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate a new <code>persons</code> collection with 5 person documents, where each person has a different date of birth:</p>
+<pre><code class="language-javascript">use filtered-top-subset;
+db.dropDatabase();
+
+// Create an index for a persons collection
+db.persons.createIndex({'dateofbirth': -1});
+
+// Insert 5 records into the persons collection
+db.persons.insertMany([
+  {
+    'person_id': '6392529400',
+    'firstname': 'Elise',
+    'lastname': 'Smith',
+    'dateofbirth': ISODate('1972-01-13T09:32:07Z'),
+    'address': { 
+        'number': 5625,
+        'street': 'Tipa Circle',
+        'city': 'Wojzinmoj',
+    },
+  },
+  {
+    'person_id': '1723338115',
+    'firstname': 'Olive',
+    'lastname': 'Ranieri',
+    'dateofbirth': ISODate('1985-05-12T23:14:30Z'),    
+    'gender': 'FEMALE',
+    'address': {
+        'number': 9303,
+        'street': 'Mele Circle',
+        'city': 'Tobihbo',
+    },
+  },
+  {
+    'person_id': '8732762874',
+    'firstname': 'Toni',
+    'lastname': 'Jones',
+    'dateofbirth': ISODate('1991-11-23T16:53:56Z'),    
+    'address': {
+        'number': 1,
+        'street': 'High Street',
+        'city': 'Upper Abbeywoodington',
+    },
+  },
+  {
+    'person_id': '7363629563',
+    'firstname': 'Bert',
+    'lastname': 'Gooding',
+    'dateofbirth': ISODate('1941-04-07T22:11:52Z'),    
+    'address': {
+        'number': 13,
+        'street': 'Upper Bold Road',
+        'city': 'Redringtonville',
+    },
+  },
+  {
+    'person_id': '1029648329',
+    'firstname': 'Sophie',
+    'lastname': 'Celements',
+    'dateofbirth': ISODate('1959-07-06T17:35:45Z'),    
+    'address': {
+        'number': 5,
+        'street': 'Innings Close',
+        'city': 'Basilbridge',
+    },
+  },
+]);
+</code></pre>
+<h2 id="aggregation-pipelines"><a class="header" href="#aggregation-pipelines">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Match people born in 1970 or later only
+  {'$match': {
+    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')},
+  }},
+    
+  // Exclude 2 unnecessary fields from each person record
+  {'$unset': [
+    '_id',
+    'address',
+  ]},    
+    
+  // Sort by youngest person first
+  {'$sort': {
+    'dateofbirth': -1,
+  }},      
+    
+  // Only include the first 2 records (the 2 youngest people)
+  {'$limit': 2},  
+];
+</code></pre>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.persons.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.persons.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
+<p>Only two documents should be returned, representing the two youngest people born on or after 1970 (ordered by youngest first), omitting the <code>_id</code> or <code>address</code> attributes of each person, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    person_id: '8732762874',
+    firstname: 'Toni',
+    lastname: 'Jones',
+    dateofbirth: 1991-11-23T16:53:56.000Z
+  },
+  {
+    person_id: '1723338115',
+    firstname: 'Olive',
+    lastname: 'Ranieri',
+    dateofbirth: 1985-05-12T23:14:30.000Z,
+    gender: 'FEMALE'
+  }
+]
+</code></pre>
+<h2 id="observations--comments"><a class="header" href="#observations--comments">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Index Use.</strong> A basic aggregation pipeline, where, if many records belong to the collection, it is important that the <code>dateofbirth</code> index exists to enable the database engine to optimise the execution of the <code>$match</code> stage.</p>
+</li>
+<li>
+<p><strong>Unset Use.</strong> An <code>$unset</code> stage is used rather than a <code>$project</code> stage, so the pipeline is less verbose, and, more importantly, so the pipeline doesn't have to be modified each time a new field appears in some of the documents in the collection (for example, see the <code>gender</code> field that appears in only <em>Olive's</em> record at this point).</p>
+</li>
+<li>
+<p><strong>MQL Similarity.</strong> For reference, the MQL equivalent to achieve the same result as the aggregation pipeline, is shown below:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">db.persons.find(
+    {'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')}},
+    {'_id': 0, 'address': 0}
+  ).sort(
+    {'dateofbirth': -1}
+  ).limit(2);
+</code></pre>
+<h1 id="group--total"><a class="header" href="#group--total">Group &amp; Total</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario-1"><a class="header" href="#scenario-1">Scenario</a></h2>
+<p>A user wants to scan through a collection, filtering only records within a specific date range, and then grouping the records by a recurring field's value, accumulating counts, totals and the array of details from each record in the group.</p>
+<p>In this example, a collection of <em>orders</em>, from shop purchases for the year 2020 only will be searched for. The records will then be grouped by customer ID, capturing, for 2020, each customer's first purchase date, the number of orders they made, the total value of all their orders added together and a list of their individual order items. Essentially what is produced is a report of orders made by each customer in 2020.</p>
+<h2 id="sample-data-population-1"><a class="header" href="#sample-data-population-1">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate a new <code>orders</code> collection with 9 order documents spanning 2019-2021, for 3 different unique customers:</p>
+<pre><code class="language-javascript">use group-and-total;
+db.dropDatabase();
+
+// Create index for a orders collection
+db.orders.createIndex({'orderdate': -1});
+
+// Insert 9 records into the orders collection
+db.orders.insertMany([
+  {
+    'customer_id': 'elise_smith@myemail.com',
+    'orderdate': ISODate('2020-05-30T08:35:52Z'),
+    'value': NumberDecimal('231.43'),
+  },
+  {
+    'customer_id': 'elise_smith@myemail.com',
+    'orderdate': ISODate('2020-01-13T09:32:07Z'),
+    'value': NumberDecimal('99.99'),
+  },
+  {
+    'customer_id': 'oranieri@warmmail.com',
+    'orderdate': ISODate('2020-01-01T08:25:37Z'),
+    'value': NumberDecimal('63.13'),
+  },
+  {
+    'customer_id': 'tj@wheresmyemail.com',
+    'orderdate': ISODate('2019-05-28T19:13:32Z'),
+    'value': NumberDecimal('2.01'),
+  },  
+  {
+    'customer_id': 'tj@wheresmyemail.com',
+    'orderdate': ISODate('2020-11-23T22:56:53Z'),
+    'value': NumberDecimal('187.99'),
+  },
+  {
+    'customer_id': 'tj@wheresmyemail.com',
+    'orderdate': ISODate('2020-08-18T23:04:48Z'),
+    'value': NumberDecimal('4.59'),
+  },
+  {
+    'customer_id': 'elise_smith@myemail.com',
+    'orderdate': ISODate('2020-12-26T08:55:46Z'),
+    'value': NumberDecimal('48.50'),
+  },
+  {
+    'customer_id': 'tj@wheresmyemail.com',
+    'orderdate': ISODate('2021-02-29T07:49:32Z'),
+    'value': NumberDecimal('1024.89'),
+  },
+  {
+    'customer_id': 'elise_smith@myemail.com',
+    'orderdate': ISODate('2020-10-03T13:49:44Z'),
+    'value': NumberDecimal('102.24'),
+  },
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-1"><a class="header" href="#aggregation-pipelines-1">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Match only orders made in 2020
+  {'$match': {
+    'orderdate': {
+      '$gte': ISODate('2020-01-01T00:00:00Z'),
+      '$lt': ISODate('2021-01-01T00:00:00Z'),
+    }
+  }},
+  
+  // Sort by order date ascending (required to pick out 'first_purchase_date' below)
+  {'$sort': {
+    'orderdate': 1,
+  }},      
+
+  // Group by customer
+  {'$group': {
+    '_id': '$customer_id',
+    'first_purchase_date': {'$first': '$orderdate'},
+    'total_value': {'$sum': '$value'},
+    'total_orders': {'$sum': 1},
+    'orders': {'$push': {'orderdate': '$orderdate', 'value': '$value'}},
+  }},
+  
+  // Sort by each customer's first purchase date
+  {'$sort': {
+    'first_purchase_date': 1,
+  }},    
+  
+  // Set customer's ID to be value of the field that was grouped on
+  {'$set': {
+    'customer_id': '$_id',
+  }},
+  
+  // Omit unwanted field
+  {'$unset': [
+    '_id',
+  ]},   
+];
+</code></pre>
+<h2 id="execution-1"><a class="header" href="#execution-1">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.orders.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.orders.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results-1"><a class="header" href="#expected-results-1">Expected Results</a></h2>
+<p>Three documents should be returned, representing the three customers, each showing the customer's first purchase date, the total value of all their orders, the number of orders they made and a list of each order's detail, for orders placed in 2020 only, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    customer_id: 'oranieri@warmmail.com',
+    first_purchase_date: 2020-01-01T08:25:37.000Z,
+    total_value: Decimal128(&quot;63.13&quot;),
+    total_orders: 1,
+    orders: [
+      {orderdate: 2020-01-01T08:25:37.000Z, value: Decimal128(&quot;63.13&quot;)}
+    ]
+  },
+  {
+    customer_id: 'elise_smith@myemail.com',
+    first_purchase_date: 2020-01-13T09:32:07.000Z,
+    total_value: Decimal128(&quot;482.16&quot;),
+    total_orders: 4,
+    orders: [
+      {orderdate: 2020-01-13T09:32:07.000Z, value: Decimal128(&quot;99.99&quot;)},
+      {orderdate: 2020-05-30T08:35:52.000Z, value: Decimal128(&quot;231.43&quot;)},
+      {orderdate: 2020-10-03T13:49:44.000Z, value: Decimal128(&quot;102.24&quot;)},
+      {orderdate: 2020-12-26T08:55:46.000Z, value: Decimal128(&quot;48.50&quot;)}
+    ]
+  },
+  {
+    customer_id: 'tj@wheresmyemail.com',
+    first_purchase_date: 2020-08-18T23:04:48.000Z,
+    total_value: Decimal128(&quot;192.58&quot;),
+    total_orders: 2,
+    orders: [
+      {orderdate: 2020-08-18T23:04:48.000Z, value: Decimal128(&quot;4.59&quot;)},
+      {orderdate: 2020-11-23T22:56:53.000Z, value: Decimal128(&quot;187.99&quot;)
+      }
+    ]
+  }
+]
+</code></pre>
+<h2 id="observations--comments-1"><a class="header" href="#observations--comments-1">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Double Sort Use.</strong> It is necessary to perform a sort on the order date both before and after the group stage. The sort before the group is required because the group stage uses a <code>$first</code> group accumulator to capture just the first order's <code>orderdate</code> value for each customer being grouped. The sort after the group is required because the act of having just grouped on customer ID will mean that the records are no longer sorted by purchase date for the records coming out of the group stage.</p>
+</li>
+<li>
+<p><strong>Renaming Group.</strong> Towards the end of the pipeline you will see what is a common pattern for pipelines that use <code>$group</code>, consisting of a combination of <code>$set</code>+<code>$unset</code> stages, to essentially take the group's key (which is always called <code>_id</code>) and substitute it with a more meaningful name in the result (<code>customer_id</code> in this case).</p>
+</li>
+<li>
+<p><strong>Lossless Decimals.</strong> You may notice that a <code>Decimal()</code> function has been used to ensure the order amounts in the inserted records are using a lossless decimal type, <a href="https://docs.mongodb.com/manual/tutorial/model-monetary-data/">IEEE 754 decimal128</a>. In this example, if a JSON <em>float</em> or <em>double</em> type is used instead, the result order totals will suffer from loss of precision. For example, for the customer <code>elise_smith@myemail.com</code> the <code>total_value</code> result will have the value shown in the second line below, rather than the first line, if a <em>double</em> type was used:</p>
+</li>
+</ul>
+<pre><code class="language-javascript">// Desired result (achieved by using decimal128 types)
+total_value: Decimal128(&quot;482.16&quot;)
+
+// Result that occurs if using float or double types instead
+total_value: 482.15999999999997
+</code></pre>
+<h1 id="unpack-arrays--group-differently"><a class="header" href="#unpack-arrays--group-differently">Unpack Arrays &amp; Group Differently</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario-2"><a class="header" href="#scenario-2">Scenario</a></h2>
+<p>A user wants to scan through a collection (where each record contains an array of sub-documents), unpacking these array elements as new individual records and then grouping these unpacked records by a common attribute, providing totals and counts.</p>
+<p>In this example, a collection of <em>customer orders</em>, from shop purchases for the year 2020 only will be searched for. The one or more orders occurring for each customer will be unpacked into separate order records and then these resulting records will be grouped by product type (e.g. <em>ELECTRONICS</em>, <em>BOOKS</em>) with a total value and count of all orders for each of these product types. Essentially what is produced is a report of how many orders were made for each product in 2020.</p>
+<h2 id="sample-data-population-2"><a class="header" href="#sample-data-population-2">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate a new <code>customer_orders</code> collection with customer related documents spanning 2019-2021, with each customer having an array of 1 or more orders:</p>
+<pre><code class="language-javascript">use unpack-array-group-differently;
+db.dropDatabase();
+
+// Insert 3 records into the customer_orders collection each with 1+ orders
+db.customer_orders.insertMany([
+  {
+    'customer_id': 'tj@wheresmyemail.com',
+    'orders': [
+      {
+        'orderdate': ISODate('2019-05-28T19:13:32Z'),
+        'product_type': 'STATIONARY',
+        'value': NumberDecimal('2.01'),
+      },
+      {
+        'orderdate': ISODate('2020-08-18T23:04:48Z'),
+        'product_type': 'BOOKS',
+        'value': NumberDecimal('4.59'),
+      },
+      {
+        'orderdate': ISODate('2020-11-23T22:56:53Z'),
+        'product_type': 'ELECTRONICS',
+        'value': NumberDecimal('187.99'),
+      },
+      {
+        'orderdate': ISODate('2021-03-01T07:49:32Z'),
+        'product_type': 'ELECTRONICS',
+        'value': NumberDecimal('1024.89'),
+      },
+    ],
+  },
+  {
+    'customer_id': 'oranieri@warmmail.com',
+    'orders': [
+      {
+        'orderdate': ISODate('2020-01-01T08:25:37Z'),
+        'product_type': 'GARDEN',
+        'value': NumberDecimal('63.13'),
+      },
+    ],
+  },
+  {
+    'customer_id': 'elise_smith@myemail.com',
+    'orders': [
+      {
+        'orderdate': ISODate('2020-01-13T09:32:07Z'),
+        'product_type': 'GARDEN',
+        'value': NumberDecimal('99.99'),
+      },
+      {
+        'orderdate': ISODate('2020-05-30T08:35:52Z'),
+        'product_type': 'ELECTRONICS',
+        'value': NumberDecimal('231.43'),
+      },
+      {
+        'orderdate': ISODate('2020-10-03T13:49:44Z'),
+        'product_type': 'GARDEN',
+        'value': NumberDecimal('102.24'),
+      },
+      {
+        'orderdate': ISODate('2020-12-26T08:55:46Z'),
+        'product_type': 'KITCHENWARE',
+        'value': NumberDecimal('48.50'),
+      },
+    ],
+  },
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-2"><a class="header" href="#aggregation-pipelines-2">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Unpack each order from the customer orders array as a new separate record
+  {'$unwind': {
+    'path': '$orders',
+  }},
+
+  // Match only orders made in 2020
+  {'$match': {
+    'orders.orderdate': {
+      '$gte': ISODate('2020-01-01T00:00:00Z'),
+      '$lt': ISODate('2021-01-01T00:00:00Z'),
+    }
+  }},
+  
+  // Group by product type
+  {'$group': {
+    '_id': '$orders.product_type',
+    'total_value': {'$sum': '$orders.value'},
+    'total_orders': {'$sum': 1},
+  }},
+  
+  // Set product type to be the value of the field that was grouped on
+  {'$set': {
+    'product_type': '$_id',
+  }},
+  
+  // Omit unwanted field
+  {'$unset': [
+    '_id',
+  ]},   
+];
+</code></pre>
+<h2 id="execution-2"><a class="header" href="#execution-2">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.customer_orders.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.customer_orders.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results-2"><a class="header" href="#expected-results-2">Expected Results</a></h2>
+<p>Four documents should be returned, representing the four products that kept reoccurring in the customer orders arrays, each showing the product's total order value and orders count, for orders placed in 2020 only, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    product_type: 'KITCHENWARE',
+    total_value: Decimal128(&quot;48.50&quot;),
+    total_orders: 1,
+  },
+  {
+    product_type: 'ELECTRONICS',
+    total_value: Decimal128(&quot;419.42&quot;),
+    total_orders: 2,
+  },
+  {
+    product_type: 'GARDEN',
+    total_value: Decimal128(&quot;265.36&quot;),
+    total_orders: 3,
+  },
+  {
+    product_type: 'BOOKS',
+    total_value: Decimal128(&quot;4.59&quot;),
+    total_orders: 1,
+  },
+]
+</code></pre>
+<h2 id="observations--comments-2"><a class="header" href="#observations--comments-2">Observations &amp; Comments</a></h2>
+<ul>
+<li><strong>Unwinding Arrays.</strong> The <code>$unwind</code> stage is a powerful but often initially unfamiliar concept to many developers. Distilled down it does one simple thing: it generates a new record for each element in an array field for every input document. If the input collection has 3 records, and each record has an array field containing 4 elements, then performing an <code>$unwind</code> on the array fields will result in 12 output records (3 x 4).</li>
+</ul>
+<h1 id="one-to-one-join"><a class="header" href="#one-to-one-join">One-to-One Join</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/">$first</a> array operator)</em></p>
+<h2 id="scenario-3"><a class="header" href="#scenario-3">Scenario</a></h2>
+<p>A user wants to join each document in one collection to a corresponding document in another collection to produce combined summary records, where there is a 1:1 relationship between  both collections. Also, in this case, the join is based on a single field match between both sides.</p>
+<p>In this example, a collection of <em>customer orders</em>, from shop purchases for the year 2020 only will be searched for, where each order will then be joined, by <em>product id</em>, to a matching record in the collection of <em>products</em>, to be able to include the product's name and category against each order in the results.</p>
+<h2 id="sample-data-population-3"><a class="header" href="#sample-data-population-3">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021:</p>
+<pre><code class="language-javascript">use one-to-one-join;
+db.dropDatabase();
+
+// Create index for a products collection
+db.products.createIndex({'id': 1});
+
+// Insert 4 records into the products collection
+db.products.insertMany([
+  {
+    'id': 'a1b2c3d4',
+    'name': 'Asus Laptop',
+    'category': 'ELECTRONICS',
+    'description': 'Good value laptop for students',
+  },
+  {
+    'id': 'z9y8x7w6',
+    'name': 'The Day Of The Triffids',
+    'category': 'BOOKS',
+    'description': 'Classic post-apocalyptic novel',
+  },
+  {
+    'id': 'ff11gg22hh33',
+    'name': 'Morphy Richardds Food Mixer',
+    'category': 'KITCHENWARE',
+    'description': 'Luxury mixer turning good cakes into great',
+  },
+  {
+    'id': 'pqr678st',
+    'name': 'Karcher Hose Set',
+    'category': 'GARDEN',
+    'description': 'Hose + nosels + winder for tidy storage',
+  },
+]); 
+
+// Create index for a orders collection
+db.orders.createIndex({'orderdate': -1});
+
+// Insert 4 records into the orders collection
+db.orders.insertMany([
+  {
+    'customer_id': 'elise_smith@myemail.com',
+    'orderdate': ISODate('2020-05-30T08:35:52Z'),
+    'product_id': 'a1b2c3d4',
+    'value': NumberDecimal('431.43'),
+  },
+  {
+    'customer_id': 'tj@wheresmyemail.com',
+    'orderdate': ISODate('2019-05-28T19:13:32Z'),
+    'product_id': 'z9y8x7w6',
+    'value': NumberDecimal('5.01'),
+  },  
+  {
+    'customer_id': 'oranieri@warmmail.com',
+    'orderdate': ISODate('2020-01-01T08:25:37Z'),
+    'product_id': 'ff11gg22hh33',
+    'value': NumberDecimal('63.13'),
+  },
+  {
+    'customer_id': 'jjones@tepidmail.com',
+    'orderdate': ISODate('2020-12-26T08:55:46Z'),
+    'product_id': 'a1b2c3d4',
+    'value': NumberDecimal('429.65'),
+  },
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-3"><a class="header" href="#aggregation-pipelines-3">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Match only orders made in 2020
+  {'$match': {
+    'orderdate': {
+      '$gte': ISODate('2020-01-01T00:00:00Z'),
+      '$lt': ISODate('2021-01-01T00:00:00Z'),
+    }
+  }},
+
+  // Join 'product_id' in orders collection to 'id' in products' collection
+  {'$lookup': {
+    'from': 'products',
+    'localField': 'product_id',
+    'foreignField': 'id',
+    'as': 'product_mapping',
+  }},
+
+  // Should only be 1 record in right-side of join so take 1st joined array element
+  {'$set': {
+    'product_mapping': {'$first': '$product_mapping'},
+  }},
+  
+  // Extract the joined embeded fields into top level fields
+  {'$set': {
+    'product_name': '$product_mapping.name',
+    'product_category': '$product_mapping.category',
+  }},
+  
+  // Omit unwanted fields
+  {'$unset': [
+    '_id',
+    'product_id',
+    'product_mapping',
+  ]},     
+];
+</code></pre>
+<h2 id="execution-3"><a class="header" href="#execution-3">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.orders.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.orders.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results-3"><a class="header" href="#expected-results-3">Expected Results</a></h2>
+<p>Three documents should be returned, representing the three customers orders that occurred in 2020, but with each orders <code>product_id</code> field replaced by two new looked up fields, <code>product_name</code> and <code>product_category</code>, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    customer_id: 'elise_smith@myemail.com',
+    orderdate: 2020-05-30T08:35:52.000Z,
+    value: Decimal128(&quot;431.43&quot;),
+    product_name: 'Asus Laptop',
+    product_category: 'ELECTRONICS'
+  },
+  {
+    customer_id: 'oranieri@warmmail.com',
+    orderdate: 2020-01-01T08:25:37.000Z,
+    value: Decimal128(&quot;63.13&quot;),
+    product_name: 'Morphy Richardds Food Mixer',
+    product_category: 'KITCHENWARE'
+  },
+  {
+    customer_id: 'jjones@tepidmail.com',
+    orderdate: 2020-12-26T08:55:46.000Z,
+    value: Decimal128(&quot;429.65&quot;),
+    product_name: 'Asus Laptop',
+    product_category: 'ELECTRONICS'
+  }
+]
+</code></pre>
+<h2 id="observations--comments-3"><a class="header" href="#observations--comments-3">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Single Field Match.</strong> The pipeline includes a <code>$lookup</code> join between a single field between a record in each of the two collections. For an example of performing a join based on 2 or more matching fields in the lookup, see the example <a href="examples/simple-examples/../moderate-examples/multi-one-to-many.html">Multi-Field Join &amp; One-to-Many</a></p>
+</li>
+<li>
+<p><strong>First Element Assumption.</strong> The pipeline assumes that the relationship between the two collections is one:one and so for the returned array of joined elements following the <code>$lookup</code> stage, the pipeline assumes the number of joined elements in the array is exactly one (and not more) and hence just extracts the values from this the first array element only, using the <code>$first</code> operator. For an example of performing a one:many join, see the example <a href="examples/simple-examples/../moderate-examples/multi-one-to-many.html">Multi-Field Join &amp; One-to-Many</a></p>
+</li>
+</ul>
+<h1 id="moderate-examples"><a class="header" href="#moderate-examples">Moderate Examples</a></h1>
+<p>This section provides a set of examples for using the Aggregation Framework to solve common data manipulation challenges, where the examples are a little more challenging, but they still do address commonly encountered data transformation requirements.</p>
+<h1 id="multi-field-join--one-to-many"><a class="header" href="#multi-field-join--one-to-many">Multi-Field Join &amp; One-to-Many</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario-4"><a class="header" href="#scenario-4">Scenario</a></h2>
+<p>A user wants to join each document in a 'left-side' collection to zero or more corresponding documents in a 'right-side' collection, where the joined 'right-side' documents are embedded in a array field of the 'left-side' document. Additionally, for this scenario, the join is based on compound fields (two fields on the left-side matching to two fields on the right-side of the join).</p>
+<p>In this example, a collection of <em>shop products</em> is joined to a collection of <em>orders</em> to enable the results to show each product containing a list its orders made in 2020. In this case, rather than there being a single field on each side to join (e.g. <code>product_id</code>), there are two corresponding fields on each side of the join that have to be matched (<code>product_name</code> and <code>product_variation</code>).</p>
+<p>Note, the requirement to perform a 1:many join does not of course mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed useful to show both of these aspects in one place.</p>
+<h2 id="sample-data-population-4"><a class="header" href="#sample-data-population-4">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021:</p>
+<pre><code class="language-javascript">use multi-one-to-many;
+db.dropDatabase();
+
+// Insert 6 records into the products collection
+db.products.insertMany([
+  {
+    'name': 'Asus Laptop',
+    'variation': 'Ultra HD',
+    'category': 'ELECTRONICS',
+    'description': 'Great for watching movies',
+  },
+  {
+    'name': 'Asus Laptop',
+    'variation': 'Normal Display',
+    'category': 'ELECTRONICS',
+    'description': 'Good value laptop for students',
+  },
+  {
+    'name': 'The Day Of The Triffids',
+    'variation': '1st Edition',
+    'category': 'BOOKS',
+    'description': 'Classic post-apocalyptic novel',
+  },
+  {
+    'name': 'The Day Of The Triffids',
+    'variation': '2nd Edition',
+    'category': 'BOOKS',
+    'description': 'Classic post-apocalyptic novel',
+  },
+  {
+    'name': 'Morphy Richards Food Mixer',
+    'variation': 'Deluxe',
+    'category': 'KITCHENWARE',
+    'description': 'Luxury mixer turning good cakes into great',
+  },
+  {
+    'name': 'Karcher Hose Set',
+    'variation': 'Full Monty',
+    'category': 'GARDEN',
+    'description': 'Hose + nosels + winder for tidy storage',
+  },
+]); 
+
+// Create index for a orders collection
+db.orders.createIndex({'product_name': 1, 'product_variation': 1});
+
+// Insert 4 records into the orders collection
+db.orders.insertMany([
+  {
+    'customer_id': 'elise_smith@myemail.com',
+    'orderdate': ISODate('2020-05-30T08:35:52Z'),
+    'product_name': 'Asus Laptop',
+    'product_variation': 'Normal Display',
+    'value': NumberDecimal('431.43'),
+  },
+  {
+    'customer_id': 'tj@wheresmyemail.com',
+    'orderdate': ISODate('2019-05-28T19:13:32Z'),
+    'product_name': 'The Day Of The Triffids',
+    'product_variation': '2nd Edition',
+    'value': NumberDecimal('5.01'),
+  },  
+  {
+    'customer_id': 'oranieri@warmmail.com',
+    'orderdate': ISODate('2020-01-01T08:25:37Z'),
+    'product_name': 'Morphy Richards Food Mixer',
+    'product_variation': 'Deluxe',
+    'value': NumberDecimal('63.13'),
+  },
+  {
+    'customer_id': 'jjones@tepidmail.com',
+    'orderdate': ISODate('2020-12-26T08:55:46Z'),
+    'product_name': 'Asus Laptop',
+    'product_variation': 'Normal Display',
+    'value': NumberDecimal('429.65'),
+  },
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-4"><a class="header" href="#aggregation-pipelines-4">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Join by 2 fields in in products collection to 2 fields in orders collection
+  {'$lookup': {
+    'from': 'orders',
+    'let': {
+      'prdname': '$name',
+      'prdvartn': '$variation',
+    },
+    // Embedded pipeline to control how the join is matched
+    'pipeline': [
+      // Join by two fields in each side
+      {'$match':
+        {'$expr':
+          {'$and': [
+            {'$eq': ['$product_name',  '$$prdname']},
+            {'$eq': ['$product_variation',  '$$prdvartn']},            
+          ]},
+        },
+      },
+
+      // Match only orders made in 2020
+      {'$match': {
+        'orderdate': {
+          '$gte': ISODate('2020-01-01T00:00:00Z'),
+          '$lt': ISODate('2021-01-01T00:00:00Z'),
+        }
+      }},
+      
+      // Exclude some unwanted fields from the right side of the join
+      {'$project': { 
+        '_id': 0,
+        'product_name': 0,
+        'product_variation': 0,
+      }},
+    ],
+    as: 'orders',
+  }},
+
+  // Only show products that have at least one order
+  {'$match': {
+    orders: {$not: {$size: 0}},
+  }},
+
+  // Omit unwanted fields
+  {'$unset': [
+    '_id',
+  ]}, 
+];
+</code></pre>
+<h2 id="execution-4"><a class="header" href="#execution-4">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.products.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.products.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results-4"><a class="header" href="#expected-results-4">Expected Results</a></h2>
+<p>Two documents should be returned, representing the two products that had one or more orders in 2020, with the orders embedded in an array against each product, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    name: 'Asus Laptop',
+    variation: 'Normal Display',
+    category: 'ELECTRONICS',
+    description: 'Good value laptop for students',
+    orders: [
+      {
+        customer_id: 'elise_smith@myemail.com',
+        orderdate: 2020-05-30T08:35:52.000Z,
+        value: Decimal128(&quot;431.43&quot;)
+      },
+      {
+        customer_id: 'jjones@tepidmail.com',
+        orderdate: 2020-12-26T08:55:46.000Z,
+        value: Decimal128(&quot;429.65&quot;)
+      }
+    ]
+  },
+  {
+    name: 'Morphy Richards Food Mixer',
+    variation: 'Deluxe',
+    category: 'KITCHENWARE',
+    description: 'Luxury mixer turning good cakes into great',
+    orders: [
+      {
+        customer_id: 'oranieri@warmmail.com',
+        orderdate: 2020-01-01T08:25:37.000Z,
+        value: Decimal128(&quot;63.13&quot;)
+      }
+    ]
+  }
+]
+</code></pre>
+<h2 id="observations--comments-4"><a class="header" href="#observations--comments-4">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Multiple Join Fields.</strong> When a join needs to be made using two or more fields, rather than providing <code>localField</code> and <code>foreignField</code> parameters for <code>$lookup</code>, a more 'open ended' <code>let</code> parameter is required to bind fields from the left side of the join into variables ready to be used in the joining process. Then the <code>$lookup</code>'s embedded <code>$pipeline</code> is used to define how to perform the join, which basically constitutes a <code>$match</code> stage using the bind variables to test for equality with the corresponding fields of the right side collection.</p>
+</li>
+<li>
+<p><strong>Reducing Array Content.</strong> As a consequence of having an embedded pipeline in the <code>$lookup</code> stage, in this example, an opportunity is taken to filter out unwanted fields from the right side of the join, rather than filtering these out when they appear as array elements later in the main top-level aggregation pipeline. If this filtering was left to afterwards, in the main pipeline, it would require either:</p>
+<ol>
+<li>An extra stage to unwind the joined array elements, followed by an extra stage to unset the fields to be excluded, followed by an extra stage to then re-group the unpacked records back up again.</li>
+<li>Use of one of the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators">Array Operators</a>, such as <code>$map</code>, which can seem a little more complicated at first, but is more optimal than the <code>$unwind\$unset\$group</code> option, as discussed in the <a href="examples/moderate-examples/../guides/performance.html">Pipeline Performance Considerations</a> chapter of this book.</li>
+</ol>
+</li>
+</ul>
+<h1 id="mask-sensitive-fields"><a class="header" href="#mask-sensitive-fields">Mask Sensitive Fields</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario-5"><a class="header" href="#scenario-5">Scenario</a></h2>
+<p>A user wants to perform irreversible masking on the sensitive fields of a collection of documents, in some cases obfuscating part of a field's value, in other cases adjusting a field's value by a small random amount, in some cases substituting the field's value with a completely random value and in some cases excluding a field from the result completely, depending on a certain field's value.</p>
+<p>In this example, a collection of <em>credit card payment</em> documents will be masked, to:</p>
+<ul>
+<li>Partially obfuscate the carder holder's name</li>
+<li>Obfuscate the first 12 digits of the card's number, retaining only the final 4 digits</li>
+<li>Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 1 hour</li>
+<li>Replace the card's 3 digit security code with a random set of 3 digits</li>
+<li>Adjust the transaction's amount by adding or subtracting a random amount up to a maximum of 10% of the original amount</li>
+<li>Replace the transaction's <code>reported</code> field with a new random boolean value (true or false)</li>
+<li>If the embedded <code>customer_info</code> sub-document's <code>category</code> field is set to <em>SENSITIVE</em> exclude the whole <code>customer_info</code> sub-document</li>
+</ul>
+<h2 id="sample-data-population-5"><a class="header" href="#sample-data-population-5">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate a new <code>payments</code> collection with 2 credit card payment documents, containing sensitive data:</p>
+<pre><code class="language-javascript">use mask-sensitive-fields;
+db.dropDatabase();
+
+// Insert 2 records into the payments collection
+db.payments.insertMany([
+    {
+        'card_name': 'Mrs. Jane A. Doe',
+        'card_num': '1234567890123456',
+        'card_expiry': ISODate('2023-08-31T23:59:59Z'),
+        'card_sec_code': '123',
+        'card_type': 'CREDIT',        
+        'transaction_id': 'eb1bd77836e8713656d9bf2debba8900',
+        'transaction_date': ISODate('2021-01-13T09:32:07Z'),
+        'transaction_amount': NumberDecimal('501.98'),
+        'reported': false,
+        'customer_info': {
+            'category': 'SENSITIVE',
+            'rating': 89,
+            'risk': 3,
+        },
+    },
+    {
+        'card_name': 'Jim Smith',
+        'card_num': '9876543210987654',
+        'card_expiry': ISODate('2022-12-31T23:59:59Z'),
+        'card_sec_code': '987',
+        'card_type': 'DEBIT',        
+        'transaction_id': '634c416a6fbcf060bb0ba90c4ad94f60',
+        'transaction_date': ISODate('2020-11-24T19:25:57Z'),
+        'transaction_amount': NumberDecimal('64.01'),
+        'reported': true,
+        'customer_info': {
+            'category': 'NORMAL',
+            'rating': 78,
+            'risk': 55,
+        },
+    },
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-5"><a class="header" href="#aggregation-pipelines-5">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Replace a subset of fields with new values
+  {'$set': {
+    // Extract the last word from the name , eg: 'Doe' from 'Mrs. Jane A. Doe'
+    'card_name': {'$regexFind': {'input': '$card_name', 'regex': /(\S+)$/}},
+          
+    // Mask card num 1st part retaining last 4 chars, eg: '1234567890123456' -&gt; 'XXXXXXXXXXXX3456'
+    'card_num': {'$concat': [
+                  'XXXXXXXXXXXX',
+                  {'$substrCP': ['$card_num', 12, 4]},
+                ]},                     
+
+    // Add/subtract a random time amount of a maximum of one hour each-way
+    'card_expiry': {'$add': [
+                     '$card_expiry',
+                     {'$floor': {'$multiply': [{'$subtract': [{'$rand': {}}, 0.5]}, 2*60*60*1000]}},
+                   ]},                     
+
+    // Replace each digit with random digit, eg: '133' -&gt; '472'
+    'card_sec_code': {'$concat': [
+                       {'$toString': {'$floor': {'$multiply': [{'$rand': {}}, 10]}}},
+                       {'$toString': {'$floor': {'$multiply': [{'$rand': {}}, 10]}}},
+                       {'$toString': {'$floor': {'$multiply': [{'$rand': {}}, 10]}}},
+                     ]},
+                     
+    // Add/subtract a random percent of the amount's value up to 10% maximum each-way
+    'transaction_amount': {'$add': [
+                            '$transaction_amount',
+                            {'$multiply': [{'$subtract': [{'$rand': {}}, 0.5]}, 0.2, '$transaction_amount']},
+                          ]},
+                          
+    // Boolean random replacement, ie. a 50:50 chance of being true or false
+    'reported': {'$cond': {
+                   'if':   {'$gte': [{'$rand': {}}, 0.5]},
+                   'then': true,
+                   'else': false,
+                }},                                         
+
+    // Exclude sub-doc if the sub-doc's category field's value is 'SENSITIVE'
+    'customer_info': {'$cond': {
+                        'if':   {'$eq': ['$customer_info.category', 'SENSITIVE']}, 
+                        'then': '$$REMOVE',     
+                        'else': '$customer_info',
+                     }},                                         
+                
+    // Mark _id field to excluded from results
+    '_id': '$$REMOVE',                
+  }},
+  
+  // Take regex matched last word from the card name and prefix it with hardcoded value
+  {'$set': {
+    'card_name': {'$concat': ['Mx. Xxx ', {'$ifNull': ['$card_name.match', 'Anonymous']}]},                       
+  }},
+];
+</code></pre>
+<h2 id="execution-5"><a class="header" href="#execution-5">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.payments.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.payments.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results-5"><a class="header" href="#expected-results-5">Expected Results</a></h2>
+<p>Two documents should be returned, corresponding to the original two source documents, but this time with many of their fields redacted and obfuscated, plus the <code>customer_info</code> embedded document omitted for one record due to it having been marked as <code>sensitive</code>, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    card_name: 'Mx. Xxx Doe',
+    card_num: 'XXXXXXXXXXXX3456',
+    card_expiry: 2023-08-31T23:29:46.460Z,
+    card_sec_code: '295',
+    card_type: 'CREDIT',
+    transaction_id: 'eb1bd77836e8713656d9bf2debba8900',
+    transaction_date: 2021-01-13T09:32:07.000Z,
+    transaction_amount: Decimal128(&quot;492.4016988351474881660000000000000&quot;),
+    reported: false
+  },
+  {
+    card_name: 'Mx. Xxx Smith',
+    card_num: 'XXXXXXXXXXXX7654',
+    card_expiry: 2023-01-01T00:34:49.330Z,
+    card_sec_code: '437',
+    card_type: 'DEBIT',
+    transaction_id: '634c416a6fbcf060bb0ba90c4ad94f60',
+    transaction_date: 2020-11-24T19:25:57.000Z,
+    transaction_amount: Decimal128(&quot;58.36081337486762223600000000000000&quot;),
+    reported: false,
+    customer_info: { category: 'NORMAL', rating: 78, risk: 55 }
+  }
+]
+</code></pre>
+<h2 id="observations--comments-5"><a class="header" href="#observations--comments-5">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Better Redaction.</strong> For excluding the <code>customer_info</code> sub-document where its <code>category</code> field is marked as <em>sensitive</em>, there is an alternative to using a <code>$cond</code> operator to check the value of the <code>category</code> field and returning the <code>$$REMOVE</code> variable to indicate for the sub-document to be excluded. The alternative is to instead use a <code>$redact</code> stage to achieve the same thing. However, a <code>$redact</code> stage typically requires more database processing effort, and so, when only one specific sub-document is to be optionally redacted out per record, it is generally optimal to adopt the approach shown in this example.</p>
+</li>
+<li>
+<p><strong>Regular Expression.</strong> For masking the <code>card_name</code> field, a regular expression operator is used to extract the last word in the field's original value, which returns metadata indicating if the match succeeded and what the matched value was. Therefore, an additional <code>$set</code> stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hardcoded text.</p>
+</li>
+<li>
+<p><strong>Unset Alternative.</strong> If this example was being consistent with the other examples in this book, an additional <code>$unset</code> stage would have been included in the pipeline to mark the <code>_id</code> field for exclusion. However, in this case, chiefly just to show there is another way, the <code>_id</code> field is actually marked for exclusion in the <code>$set</code> stage, by being assigned the <code>$$REMOVE</code> variable.</p>
+</li>
+<li>
+<p><strong>Further Reading.</strong> This example is actually based on the output of two blog posts: 1) <a href="https://pauldone.blogspot.com/2021/02/mongdb-data-masking.html">MongoDB Irreversible Data Masking</a>, and 2) <a href="https://pauldone.blogspot.com/2021/02/mongdb-reversible-data-masking.html">MongoDB Reversible Data Masking</a></p>
+</li>
+</ul>
+<h1 id="largest-graph-network"><a class="header" href="#largest-graph-network">Largest Graph Network</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario-6"><a class="header" href="#scenario-6">Scenario</a></h2>
+<p>A user wants to query a network of connections across a collection of records where each record may link to zero or more other records, which in turn may link to zero or more other records and so on. The user wants to analyse which specific records have the most extended graph of connections.</p>
+<p>In this example, a social network database will be simulated (think <em>Twitter</em>) where each record is a social network user holding their name and the names of other people who follow them. An aggregation pipeline will be executed, which walks each record's <code>followed_by</code> array of links to determine which person has the largest <em>network reach</em>. This information might be useful for a marketing organisation to know who best to target a new marketing campaign at, for example.</p>
+<h2 id="sample-data-population-6"><a class="header" href="#sample-data-population-6">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate a new <code>users</code> collection with 10 social network users documents, plus an index to help optimise the <em>graph traversal</em>:</p>
+<pre><code class="language-javascript">use largest-graph-network;
+db.dropDatabase();
+
+// Create index on field which for each graph traversal hop will connect to
+db.users.createIndex({name: 1})
+
+// Insert 2 records into the users collection
+db.users.insertMany([
+  {'name': 'Paul', 'followed_by': []},
+  {'name': 'Toni', 'followed_by': ['Paul']},
+  {'name': 'Janet', 'followed_by': ['Paul', 'Toni']},
+  {'name': 'David', 'followed_by': ['Janet', 'Paul', 'Toni']},
+  {'name': 'Fiona', 'followed_by': ['David', 'Paul']},
+  {'name': 'Bob', 'followed_by': ['Janet']},
+  {'name': 'Carl', 'followed_by': ['Fiona']},
+  {'name': 'Sarah', 'followed_by': ['Carl', 'Paul']},
+  {'name': 'Carol', 'followed_by': ['Helen', 'Sarah']},
+  {'name': 'Helen', 'followed_by': ['Paul']},
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-6"><a class="header" href="#aggregation-pipelines-6">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // For each social network user, graph traverse their 'followed_by' list of people
+  {'$graphLookup': {
+    'from': 'users',
+    'startWith': '$followed_by',
+    'connectFromField': 'followed_by',
+    'connectToField': 'name',
+    'depthField': 'depth',
+    'as': 'extended_network',
+  }},
+
+  // Add new accumulating fields
+  {'$set': {
+    // Count the extended connection reach
+    'network_reach': {
+      '$size': '$extended_network'
+    },
+
+    // Gather the list of the extended connections' names
+    'extended_connections': {
+      '$map': {
+        'input': '$extended_network',
+        'as': 'connection',
+        'in': '$$connection.name',
+      }
+    },    
+  }},
+    
+  // Omit unwanted fields
+  {'$unset': [
+    '_id',
+    'followed_by',
+    'extended_network',
+  ]},   
+  
+  // Sort by person with greatest network reach first, in descending order
+  {'$sort': {
+    'network_reach': -1,
+  }},   
+];
+</code></pre>
+<h2 id="execution-6"><a class="header" href="#execution-6">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.users.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.users.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results-6"><a class="header" href="#expected-results-6">Expected Results</a></h2>
+<p>Ten documents should be returned, corresponding to the original ten source social network users, with each one including a count of the user's <em>network reach</em> and the names of their <em>extended connections</em>, ordered by the user with the largest network reach first, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    name: 'Carol',
+    network_reach: 8,
+    extended_connections: [ 'David', 'Toni', 'Fiona', 'Sarah', 'Helen', 'Carl', 'Paul',  'Janet' ]
+  },
+  {
+    name: 'Sarah',
+    network_reach: 6,
+    extended_connections: [ 'David', 'Toni', 'Fiona', 'Carl', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Carl',
+    network_reach: 5,
+    extended_connections: [ 'David', 'Toni', 'Fiona', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Fiona',
+    network_reach: 4,
+    extended_connections: [ 'David', 'Toni', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'David',
+    network_reach: 3,
+    extended_connections: [ 'Toni', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Bob',
+    network_reach: 3,
+    extended_connections: [ 'Toni', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Janet',
+    network_reach: 2,
+    extended_connections: [ 'Toni', 'Paul' ]
+  },
+  {
+    name: 'Toni',
+    network_reach: 1, 
+    extended_connections: [ 'Paul']
+  },
+  { 
+    name: 'Helen',
+    network_reach: 1, 
+    extended_connections: [ 'Paul' ] 
+  },
+  { name: 'Paul', 
+    network_reach: 0, 
+    extended_connections: [] 
+  }
+]
+</code></pre>
+<h2 id="observations--comments-6"><a class="header" href="#observations--comments-6">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Following Graphs.</strong> Such a pipeline, using a <code>$graphLookup</code> stage, is useful to be able to traverse relationships between records, looking for patterns for each specific record, where these patterns aren't necessarily evident from just looking at each record in isolation. In this example, it is actually obvious that <em>Paul</em> has no <em>friends</em> and thus the lowest network reach just by looking at <em>Paul's</em> record in isolation. However, it is not obvious that <em>Carol</em> has the largest network reach just by looking at the number of people <em>Carol</em> is directly followed by, which is 2. <em>David</em>, for example, is followed by 3 people, which is more than <em>Carol</em>. However, the executed aggregation pipeline was able to deduce that <em>Carol</em> actually has the largest network reach.</p>
+</li>
+<li>
+<p><strong>Index Use.</strong> The <code>$graphLookup</code> stage is able to leverage the index on the field <code>name</code> for each of its <code>connectToField</code> hops.</p>
+</li>
+<li>
+<p><strong>Larger Data-Sets.</strong> The real insights from using <code>$graphLookup</code> comes from analysing far more records than just ten of course, but only a few sample records were used here to enable the example to be easy to follow and reproduce, without first having to source a large data set from somewhere. </p>
+</li>
+</ul>
+<h1 id="intricate-examples"><a class="header" href="#intricate-examples">Intricate Examples</a></h1>
+<p>This section provides a set of examples for using the Aggregation Framework to solve data manipulation challenges which aren't necessarily common to most business requirements, but which help show what is possible when a more creative and elaborate solution is actually required.</p>
+<h1 id="restricted-view"><a class="header" href="#restricted-view">Restricted View</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario-7"><a class="header" href="#scenario-7">Scenario</a></h2>
+<p>Users with different roles will need to query the same data-set, but one of the roles specifically should be provided with read-only access only and be restricted to only be able to view a filtered subset of records in a collection and only a subset of fields in each of these records. Essentially this is an example of 'record-level' Role Based Access Control (RBAC).</p>
+<p>In this example, a collection of <em>persons</em>, each containing personal information, will have a read-only <em>adults</em> view created for it, based on an aggregation pipeline, which restricts the <em>persons</em> data that can be queried, in two ways:</p>
+<ol>
+<li>Only return records for people who are aged 18 over over (by checking each person's <code>dateofbirth</code> field)</li>
+<li>For each record in the result, exclude the <code>dateofbirth</code> field because this information is sensitive</li>
+</ol>
+<p>In a real deployment, MongoDB's <a href="https://docs.mongodb.com/manual/core/authorization/">Role-Based Access Control</a> rules would be used to enforce that the restricted user is only able to access the <code>adults</code> view and is not able to access the underlying <code>persons</code> collection.</p>
+<h2 id="sample-data-population-7"><a class="header" href="#sample-data-population-7">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists), create an index and populate the new <code>persons</code> collections with 5 records:</p>
+<pre><code class="language-javascript">use restricted-view;
+db.dropDatabase();
+
+// Create 2 indexes for a persons collection
+db.persons.createIndex({'gender': 1});
+db.persons.createIndex({'dateofbirth': -1});
+
+// Insert 5 records into the persons collection
+db.persons.insertMany([
+  {
+    'person_id': '6392529400',
+    'firstname': 'Elise',
+    'lastname': 'Smith',
+    'dateofbirth': ISODate('1972-01-13T09:32:07Z'),
+    'gender': 'FEMALE',
+    'email': 'elise_smith@myemail.com',
+    'address': { 
+        'number': 5625,
+        'street': 'Tipa Circle',
+        'city': 'Wojzinmoj',
+    },
+  },
+  {
+    'person_id': '1723338115',
+    'firstname': 'Olive',
+    'lastname': 'Ranieri',
+    'dateofbirth': ISODate('1985-05-12T23:14:30Z'),    
+    'gender': 'FEMALE',
+    'email': 'oranieri@warmmail.com',
+    'address': {
+        'number': 9303,
+        'street': 'Mele Circle',
+        'city': 'Tobihbo',
+    },
+  },
+  {
+    'person_id': '8732762874',
+    'firstname': 'Toni',
+    'lastname': 'Jones',
+    'dateofbirth': ISODate('2014-11-23T16:53:56Z'),    
+    'gender': 'FEMALE',
+    'email': 'tj@wheresmyemail.com',
+    'address': {
+        'number': 1,
+        'street': 'High Street',
+        'city': 'Upper Abbeywoodington',
+    },
+  },
+  {
+    'person_id': '7363629563',
+    'firstname': 'Bert',
+    'lastname': 'Gooding',
+    'dateofbirth': ISODate('1941-04-07T22:11:52Z'),    
+    'gender': 'MALE',
+    'email': 'bgooding@tepidmail.com',
+    'address': {
+        'number': 13,
+        'street': 'Upper Bold Road',
+        'city': 'Redringtonville',
+    },
+  },
+  {
+    'person_id': '1029648329',
+    'firstname': 'Sophie',
+    'lastname': 'Celements',
+    'dateofbirth': ISODate('2013-07-06T17:35:45Z'),    
+    'gender': 'FEMALE',
+    'email': 'sophe@celements.net',
+    'address': {
+        'number': 5,
+        'street': 'Innings Close',
+        'city': 'Basilbridge',
+    },
+  },
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-7"><a class="header" href="#aggregation-pipelines-7">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Filter out any persons aged under 18 ($expr required to reference '$$NOW'
+  {'$match':
+    {'$expr':{
+      '$lt': ['$dateofbirth', {'$subtract': ['$$NOW', 18*365.25*24*60*60*1000]}]
+    }},
+  },
+
+  // Exclude fields to be filtered out by the view
+  {'$unset': [
+    '_id',
+    'dateofbirth',
+  ]},    
+];
+</code></pre>
+<h2 id="execution-7"><a class="header" href="#execution-7">Execution</a></h2>
+<p>First to test the defined aggregation pipeline (before using it to define a view), execute the aggregation for the pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.persons.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.persons.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<p>Now create the new <em>adults</em> view which will automatically apply the pipeline whenever the view is subsequently queried: </p>
+<pre><code class="language-javascript">db.createView('adults', 'persons', pipeline);
+</code></pre>
+<p>Execute a normal MQL query against the view, without any filter criteria, and also view its explain plan:</p>
+<pre><code class="language-javascript">db.adults.find();
+</code></pre>
+<pre><code class="language-javascript">db.adults.explain('executionStats').find();
+</code></pre>
+<p>Execute a normal MQL query against the view, but this time with a filter to return only adults who are female, and again view its explain plan to see how the <code>gender</code> filter affects the plan:</p>
+<pre><code class="language-javascript">db.adults.find({'gender': 'FEMALE'});
+</code></pre>
+<pre><code class="language-javascript">db.adults.explain('executionStats').find({'gender': 'FEMALE'});
+</code></pre>
+<h2 id="expected-results-7"><a class="header" href="#expected-results-7">Expected Results</a></h2>
+<p>The result for both the <code>aggregate()</code> command and the <code>find()</code> executed on the <em>view</em> should be exactly the same, with three documents returned, representing the three persons who are over 18 but not showing their actual dates of birth, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    person_id: '6392529400',
+    firstname: 'Elise',
+    lastname: 'Smith',
+    gender: 'FEMALE',
+    email: 'elise_smith@myemail.com',
+    address: { number: 5625, street: 'Tipa Circle', city: 'Wojzinmoj' }
+  },
+  {
+    person_id: '1723338115',
+    firstname: 'Olive',
+    lastname: 'Ranieri',
+    gender: 'FEMALE',
+    email: 'oranieri@warmmail.com',
+    address: { number: 9303, street: 'Mele Circle', city: 'Tobihbo' }
+  },
+  {
+    person_id: '7363629563',
+    firstname: 'Bert',
+    lastname: 'Gooding',
+    gender: 'MALE',
+    email: 'bgooding@tepidmail.com',
+    address: { number: 13, street: 'Upper Bold Road', city: 'Redringtonville' }
+  }
+]
+</code></pre>
+<p>The result of running the <code>find()</code> against the <em>view</em> with the filter <code>'gender': 'FEMALE'</code> should result in only two females' record being return because the male record has been excluded, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    person_id: '1723338115',
+    firstname: 'Olive',
+    lastname: 'Ranieri',
+    gender: 'FEMALE',
+    email: 'oranieri@warmmail.com',
+    address: { number: 9303, street: 'Mele Circle', city: 'Tobihbo' }
+  },
+  {
+    person_id: '6392529400',
+    firstname: 'Elise',
+    lastname: 'Smith',
+    gender: 'FEMALE',
+    email: 'elise_smith@myemail.com',
+    address: { number: 5625, street: 'Tipa Circle', city: 'Wojzinmoj' }
+  }
+]
+</code></pre>
+<h2 id="observations--comments-7"><a class="header" href="#observations--comments-7">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Expr &amp; Indexes.</strong> The <a href="https://docs.mongodb.com/manual/reference/aggregation-variables/">NOW system variable</a> which returns the current system date-time, has been used but this can only be accessed via an <a href="https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions">aggregation expression</a> and not directly via the normal MongoDB query syntax used by both MQL and <code>$match</code>. Therefore, the use of the <code>$$NOW</code> variable has to be wrapped in an <code>$expr</code> operator. The <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr query operator</a> allows the use of aggregation expressions from within MongoDB's query language, which is otherwise not normally possible. Consequently, as you can inspect in the explain plan for the pipeline, the executed aggregation cannot leverage the defined <code>dateofbirth</code> index meaning that a <em>full collection scan</em> is performed rather than an <em>index scan</em>. For clarity, the following is a direct quote from the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/#definition">MongoDB Manual for $match</a> which details the restriction:</p>
+<ul>
+<li>&quot;<em>$match takes a document that specifies the query conditions. The query syntax is identical to the read operation query syntax; i.e. $match does not accept raw aggregation expressions. Instead, use a $expr query expression to include aggregation expression in $match</em>&quot;</li>
+</ul>
+</li>
+<li>
+<p><strong>Views Finds &amp; Indexes.</strong> If you view the explain plan for running the <code>find()</code> against the <em>view</em> with the <code>'gender'</code> filter however, you will notice that an index has been used (the index defined on the <code>'gender'</code> field). This is because, just as the database engine performs <a href="https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/">aggregation pipeline optimisations</a> for regular aggregations, including attempting to move <em>match</em> filters to the top of the pipeline, if possible, it can apply these same optimisations on a view. At runtime a view is essentially just an aggregation pipeline that was defined 'ahead of time'. So when <code>db.adults.find({'gender': 'FEMALE'})</code> is executed, the database engine adds a new dynamically generated <code>$match</code> to the end of the pipeline and then the database engine is able to optimise the pipeline and move the new <code>$match</code> stage up to the start of the pipeline, merged, in this case, in with the existing <code>$match</code> (<code>$expr</code>) stage. At runtime the query engine can then target the <code>gender</code> index. Two excerpts from the explain plan are shown below showing how the filter on <code>gender</code> and the filter on <code>dateofbirth</code> have been combined at runtime and then how the existing index for <code>gender</code> is leveraged, resulting in the benefit of the final aggregation performing just a 'partial table scan' rather than a 'full table scan'.</p>
+</li>
+</ul>
+<pre><code class="language-javascript">&quot;$cursor&quot; : {
+  &quot;queryPlanner&quot; : {
+		&quot;parsedQuery&quot; : {
+			&quot;$and&quot; : [
+				{
+					&quot;gender&quot; : {
+						&quot;$eq&quot; : &quot;FEMALE&quot;
+					}
+				},
+				{
+					&quot;$expr&quot; : {
+						&quot;$lt&quot; : [
+							&quot;$dateofbirth&quot;,
+							{
+								&quot;$subtract&quot; : [
+									&quot;$$NOW&quot;,
+</code></pre>
+<pre><code class="language-javascript">&quot;inputStage&quot; : {
+	&quot;stage&quot; : &quot;IXSCAN&quot;,
+	&quot;keyPattern&quot; : {
+		&quot;gender&quot; : 1
+	},
+	&quot;indexName&quot; : &quot;gender_1&quot;,
+	&quot;direction&quot; : &quot;forward&quot;,
+	&quot;indexBounds&quot; : {
+		&quot;gender&quot; : [
+			&quot;[\&quot;FEMALE\&quot;, \&quot;FEMALE\&quot;]&quot;
+		]
+	}
+}
+</code></pre>
+<ul>
+<li><strong>Further Reading.</strong> This ability for query (<code>find()</code>) operations on a view to automatically have filters pushed into the view's aggregation pipeline as a new <code>$match</code> stage, at runtime, and where possible then be moved to the top of the pipeline by the database engine's optimiser, is described further in the blog post: <a href="https://pauldone.blogspot.com/2020/11/mongdb-views-optimisations.html">Is Querying A MongoDB View Optimised?</a></li>
+</ul>
+<h1 id="convert-incomplete-date-strings"><a class="header" href="#convert-incomplete-date-strings">Convert Incomplete Date Strings</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario-8"><a class="header" href="#scenario-8">Scenario</a></h2>
+<p>A user wants to transform some text fields that contain some date-time related information to into date typed fields. It is always desirable to convert such text fields to date fields to subsequently be able to easily perform date range queries and date sorted ordering. Usually this conversion would be achieved using MongoDB's rich set of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators">Date Expression Operators</a>. However, the specific date-time text values provided are incomplete and don't contain all the information required to determine things like which century the date is for, and which time zone it is for. As a result, MongoDB's <em>out-of-the-box</em> date expression operators cannot be used.</p>
+<p>In this example, a collection of <em>payments</em> documents exists, each with a <code>payment_date</code> text field which contains strings that look vaguely like date-times, such as <code>01-JAN-20 01.01.01.123000000</code> for example, and which need to be converted to proper dates. However as you can see, the field's value doesn't contain all the information required to accurately know the exact date-time this corresponds to (these values may have originated from a baldy exported dump from a relational database, for example, and have then just been imported into MongoDB as-is). The missing date-time information in these text fields is:</p>
+<ul>
+<li>The specific <strong>century</strong> (1900s?, 2000s, other?)</li>
+<li>The specific <strong>time-zone</strong> (GMT?, IST?, PST?, other?) </li>
+<li>The specific <strong>language</strong> that the three letter month abbreviation is in (is 'JAN' in French? in English? other?)</li>
+</ul>
+<p>For this example, the developer is armed with additional context that the database and data-set does not have. The developer is told that all the records are for the <strong>21st century</strong> only, the time-zone used when the data was exported was <strong>UTC</strong> and the language used when exported was <strong>English</strong>. Armed with this additional information, the developer is able to build and execute an aggregation pipeline to transform each of the date-related text fields to become fully-formed date types.</p>
+<h2 id="sample-data-population-8"><a class="header" href="#sample-data-population-8">Sample Data Population</a></h2>
+<p>Drop the old version of the database (if it exists) and then populate a new <em>payments</em> collection with 12 sample payments documents to test, providing coverage across all 12 months for the year 2020, with random time elements.</p>
+<pre><code class="language-javascript">use convert-incomplete-dates;
+db.dropDatabase();
+
+// Insert 12 records into the payments collection
+db.payments.insert([
+  {'account': '010101', 'payment_date': '01-JAN-20 01.01.01.123000000', 'amount': 1.01},
+  {'account': '020202', 'payment_date': '02-FEB-20 02.02.02.456000000', 'amount': 2.02},
+  {'account': '030303', 'payment_date': '03-MAR-20 03.03.03.789000000', 'amount': 3.03},
+  {'account': '040404', 'payment_date': '04-APR-20 04.04.04.012000000', 'amount': 4.04},
+  {'account': '050505', 'payment_date': '05-MAY-20 05.05.05.345000000', 'amount': 5.05},
+  {'account': '060606', 'payment_date': '06-JUN-20 06.06.06.678000000', 'amount': 6.06},
+  {'account': '070707', 'payment_date': '07-JUL-20 07.07.07.901000000', 'amount': 7.07},
+  {'account': '080808', 'payment_date': '08-AUG-20 08.08.08.234000000', 'amount': 8.08},
+  {'account': '090909', 'payment_date': '09-SEP-20 09.09.09.567000000', 'amount': 9.09},
+  {'account': '101010', 'payment_date': '10-OCT-20 10.10.10.890000000', 'amount': 10.10},
+  {'account': '111111', 'payment_date': '11-NOV-20 11.11.11.111000000', 'amount': 11.11},
+  {'account': '121212', 'payment_date': '12-DEC-20 12.12.12.999000000', 'amount': 12.12}
+]);
+</code></pre>
+<h2 id="aggregation-pipelines-8"><a class="header" href="#aggregation-pipelines-8">Aggregation Pipeline(s)</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Change field from a string to a date, filling in the missing gaps
+  {'$set': {
+    'payment_date': {    
+      '$let': {
+        'vars': {
+          'txt': '$payment_date',  // Assign 'payment_date' field to variable 'txt'
+        },
+        'in': { 
+          '$dateFromString': {'format': '%d-%m-%Y %H.%M.%S.%L', 'dateString':
+            {'$concat': [
+              {'$substrCP': ['$$txt', 0, 3]},  // Use 1st 3 chars in string
+              {'$switch': {'branches': [  // Replace month 3 chars with month number
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'JAN']}, 'then': '01'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'FEB']}, 'then': '02'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'MAR']}, 'then': '03'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'APR']}, 'then': '04'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'MAY']}, 'then': '05'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'JUN']}, 'then': '06'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'JUL']}, 'then': '07'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'AUG']}, 'then': '08'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'SEP']}, 'then': '09'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'OCT']}, 'then': '10'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'NOV']}, 'then': '11'},
+                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'DEC']}, 'then': '12'},
+               ], 'default': 'ERROR'}},
+              '-20',  // Add hyphen + hardcoded century 2 digits
+              {'$substrCP': ['$$txt', 7, 15]}  // Use remaining 3 millis (ignore last 6 nanosecs)
+            ]
+          }}                  
+        }
+      }        
+    },             
+  }},
+
+  // Omit unwanted fields
+  {'$unset': [
+    '_id',
+  ]},         
+];
+</code></pre>
+<h2 id="execution-8"><a class="header" href="#execution-8">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.payments.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.payments.explain('executionStats').aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results-8"><a class="header" href="#expected-results-8">Expected Results</a></h2>
+<p>Twelve documents should be returned, corresponding to the original twelve source documents, but this time with the <code>payment_date</code> field converted from text values to proper date typed values, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    account: '010101',
+    payment_date: 2020-01-01T01:01:01.123Z,
+    amount: 1.01
+  },
+  {
+    account: '020202',
+    payment_date: 2020-02-02T02:02:02.456Z,
+    amount: 2.02
+  },
+  {
+    account: '030303',
+    payment_date: 2020-03-03T03:03:03.789Z,
+    amount: 3.03
+  },
+  {
+    account: '040404',
+    payment_date: 2020-04-04T04:04:04.012Z,
+    amount: 4.04
+  },
+  {
+    account: '050505',
+    payment_date: 2020-05-05T05:05:05.345Z,
+    amount: 5.05
+  },
+  {
+    account: '060606',
+    payment_date: 2020-06-06T06:06:06.678Z,
+    amount: 6.06
+  },
+  {
+    account: '070707',
+    payment_date: 2020-07-07T07:07:07.901Z,
+    amount: 7.07
+  },
+  {
+    account: '080808',
+    payment_date: 2020-08-08T08:08:08.234Z,
+    amount: 8.08
+  },
+  {
+    account: '090909',
+    payment_date: 2020-09-09T09:09:09.567Z,
+    amount: 9.09
+  },
+  {
+    account: '101010',
+    payment_date: 2020-10-10T10:10:10.890Z,
+    amount: 10.1
+  },
+  {
+    account: '111111',
+    payment_date: 2020-11-11T11:11:11.111Z,
+    amount: 11.11
+  },
+  {
+    account: '121212',
+    payment_date: 2020-12-12T12:12:12.999Z,
+    amount: 12.12
+  }
+]
+</code></pre>
+<h2 id="observations--comments-8"><a class="header" href="#observations--comments-8">Observations &amp; Comments</a></h2>
+<ul>
+<li>
+<p><strong>Concatenation Explanation.</strong> In this pipeline, the text fields (e.g. <code>12-DEC-20 12.12.12.999000000</code>) are each converted to date fields (e.g. <code>2020-12-12T12:12:12.999Z</code>) by concatenating together the following four elements extracted from the text field, before passing it to the <code>$dateFromString</code> operator to convert to a date type:</p>
+<ul>
+<li><code>'12-'</code> <em>(day of month from the input string)</em></li>
+<li><code>'12'</code> <em>(replacing 'DEC')</em></li>
+<li><code>'-20'</code> <em>(hard-coded hyphen + century)</em></li>
+<li><code>'20 12.12.12.999'</code> <em>(the rest of input string apart from the last 6 nanosecond digits)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Further Reading.</strong> This example is actually based on the output of the blog post: <a href="https://pauldone.blogspot.com/2020/05/aggregation-convert-nasty-date-strings.html">Converting Gnarly Date Strings to Proper Date Types Using a MongoDB Aggregation Pipeline</a></p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

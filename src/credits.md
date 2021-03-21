@@ -2,7 +2,7 @@
 
 __Practical MongoDB Aggregations, by Paul Done ([@TheDonester](https://twitter.com/TheDonester))__
  
-Version: 0.87
+Version: 0.88
 
 ---
 
