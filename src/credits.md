@@ -1,10 +1,10 @@
 &nbsp;
 
-__Practical MongoDB Aggregations, by Paul Done ([@TheDonester](https://twitter.com/TheDonester))__
+Book: __Practical MongoDB Aggregations__
  
-Version: 0.88
+Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
----
+Version: 0.88
 
 Content created & assembled at: [https://github.com/pkdone/practical-mongodb-aggregations-book](https://github.com/pkdone/practical-mongodb-aggregations-book)
 
@@ -28,7 +28,7 @@ Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.
 
 ---
 
-Acknowledgements
+Acknowledgements:
 
- * Jake McInteer: many thanks for extensive review and valuable feedback
+ * Jake McInteer - many thanks for the extensive review & valuable feedback
 
