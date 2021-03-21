@@ -25,6 +25,7 @@ To install the Rust and mdBook required build tools on your local workstation:
  * Via a terminal/shell/command-line, for the base folder of this GitHub repo:
  * Run the following script to rebuild the latest version of the book, and copy it to /docs directory: `./stage_book_for_publish.sh`
  * Via usual GitHub commands, in main branch: Add changes, Commit changes, Push to main in GitHub
+ * The published new version of the book will be accessible at: https://pkdone.github.io/practical-mongodb-aggregations-book/
 
 
 ## Guidelines For Authoring Book Content
