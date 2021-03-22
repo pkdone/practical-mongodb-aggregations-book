@@ -1,6 +1,6 @@
 # Embrace Composibility For Increased Productivity
 
-As described in this book's introduction, an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side-effects. Pipelines exhibit high [composability](https://en.wikipedia.org/wiki/Composability) where stages are stateless self-contained components that can be selected and assembled in various combinations (pipelines) to satisfy specific requirements. This composability helps to promote iterative prototyping, allowing uncomplicated testing after each increment.
+As described in this book's introduction, an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side-effects. Pipelines exhibit high [composability](https://en.wikipedia.org/wiki/Composability) where stages are stateless self-contained components that can be selected and assembled in various combinations (pipelines) to satisfy specific requirements. This composability helps to promote iterative prototyping, with painless testing after each increment.
 
 With MongoDB's aggregations, a complex problem requiring a complex aggregation pipeline can simply be broken down in to individual straightforward stages, where each stage can be developed and tested in isolation first. To better comprehend this composability, it can help to internalise the following visual model. 
 
@@ -12,11 +12,11 @@ Essentially, if you have two pipelines with one stage in each and you run the se
 
 Now in reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage, although it is still a valid development approach if you prefer it. Instead, seasoned aggregation pipelines developers typically just comment out one or more stages of an aggregation pipeline when using the Mongo Shell (or use the 'disable stage' capability provided by the [GUI tools](./getting-started.html) for MongoDB).
 
-Some of the principles to strive for, to encourage composability and hence productivity, are:
+To encourage composability and hence productivity, some of the principles to strive for are:
 
  * Easy disabling of subsets of stages, whilst prototyping
  * Easy addition of new fields to a stage or new stages to a pipeline by performing a copy, a paste and then a modification, without hitting cryptic error messages which result from issues like missing out a comma before the newly added item
- * Easy appreciation, at a glance, of each distinct stage its purpose
+ * Easy appreciation, at a glance, of each distinct stage's purpose
 
 With these principles in mind, the following is an opinionated list of guidelines for the way you should textually craft your pipelines in JavaScript, to improve your pace of pipeline development.
  1. Don't start or end a stage on the same line as another stage
@@ -42,7 +42,7 @@ var pipeline = [
 ];
 ```
 
-Whereas the following is an example of far better pipeline layout, where all of the guiding principles have been followed:
+Whereas the following is an example of far better pipeline layout, where all of the guiding principles are met:
 
 ```javascript
 // GOOD
@@ -102,5 +102,5 @@ var pipeline = [
 ];
 ```
 
-This book is not advocating this 'multi-variable' approach over a 'single-variable' approach to defining a pipeline. It is just highlighting another highly composable option. Ultimately it is a personal choice about which you find most comfortable and productive. Indeed, some developers will go a step further, if not intending to transfer the prototyped pipeline to another programming language in their target application code. They will factor out complex boilerplate parts of their pipeline into separate JavaScript functions, which can be re-used from multiple places in their main JavaScript based pipeline.
+This book is not advocating this 'multi-variable' approach over a 'single-variable' approach to defining a pipeline. It is just highlighting another highly composable option. Ultimately it is a personal choice about which you find most comfortable and productive. Indeed, some developers will go a step further, if not intending to transfer the prototyped pipeline to another programming language. They will factor out complex boilerplate parts of their pipeline into separate JavaScript functions, which can be re-used from multiple places within their main JavaScript based pipeline.
 

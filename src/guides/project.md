@@ -4,13 +4,13 @@ The quintessential tool in MongoDB's Query Language (MQL) to specify or restrict
 
  1. __*$project* is confusing and non-intuitive__. In a single stage you can only choose to include fields or to exclude fields, but not both, with the exception of being able to define the `_id` field to exclude yet define other fields to include. It's as if `$project` has an identity crisis.
  
- 2. __*$project* is verbose and inflexible__. If you want to include a new field into each result record (e.g. concatenating values from two other fields together) or include a new value for an existing named field (e.g. convert text to a date), you are then forced to name all other fields in the projection for inclusion. If each record has 100 fields, and you then need to use a `$project` stage for the first time, to include a new 101st field, you also have to name all the 100 fields in the `$project` stage too. This irritation is further compounded if you have an evolving data model, where additional new fields appear in some records over time. Using `$project` for inclusion means each time a new field appears in the data-set, a developer has to go back to the old aggregation pipeline, modifying it to name the new field explicitly for inclusion in the results.
+ 2. __*$project* is verbose and inflexible__. If you want to include a new field into each result record (e.g. concatenating values from two other fields together) or include a new value for an existing named field (e.g. convert text to a date), you are then forced to name all other fields in the projection for inclusion. If each record has 100 fields, and you then need to use a `$project` stage for the first time, to include a new 101st field, you also have to name all the 100 fields in the `$project` stage too. This irritation is further compounded if you have an evolving data model, where additional new fields appear in some records over time. Using `$project` for inclusion means each time a new field appears in the data-set, a developer has to go back to the old aggregation pipeline, to modify it to name the new field explicitly for inclusion in the results.
 
-In MongoDB version 4.2, the [$set](https://docs.mongodb.com/manual/reference/operator/aggregation/set/) and [$unset](https://docs.mongodb.com/manual/reference/operator/aggregation/unset/) stages were introduced, which, in most cases, are preferable to using `$project` for declaring field inclusion and exclusion respectively. They make the intent of the code far clearer, they lead to less verbose pipelines and, criticality, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use `$set` & `$unset` stages is described in section 'When To Use $set & $unset', below.
+In MongoDB version 4.2, the [$set](https://docs.mongodb.com/manual/reference/operator/aggregation/set/) and [$unset](https://docs.mongodb.com/manual/reference/operator/aggregation/unset/) stages were introduced, which, in most cases, are preferable to using `$project` for declaring field inclusion and exclusion respectively. They make the intent of the code far clearer, they lead to less verbose pipelines and, criticality, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use `$set` & `$unset` stages is described in the section 'When To Use $set & $unset', below.
 
-Despite the challenges however, there are some specific situations where using `$project` is advantageous over `$set`/`$unset`. This is described in section 'When To Use $project', below. 
+Despite the challenges however, there are some specific situations where using `$project` is advantageous over `$set`/`$unset`. This is described in the section 'When To Use $project', below. 
 
-To add to the confusion, in MongoDB 3.4, a first attempt at addressing some of the disadvantages of `$project`_ was made by introducing a new [$addFields](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/) stage, which has the exact behaviour as `$set` (`$set` actually came later than `$addFields`). No direct equivalent to `$unset` was provided back then. Now that both `$set` and `$unest` stages are available in modern versions of MongoDB, and because their counter purposes are so obvious to deduce by their names (`$set` Vs `$unset`), __it is recommended to not use *$addFields*__. This helps with consistency and to avoid any confusion of intent. If you have come to MongoDB only recently, just pretend `$addFields` never existed!__ &#128518;
+To add to the confusion, in MongoDB 3.4, a first attempt at addressing some of the disadvantages of `$project`_ was made by introducing a new [$addFields](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/) stage, which has the same exact behaviour as `$set` (`$set` actually came later than `$addFields`). No direct equivalent to `$unset` was provided back then. Now that both `$set` and `$unest` stages are available in modern versions of MongoDB, and because their counter purposes are so obvious to deduce by their names (`$set` Vs `$unset`), __it is recommended to not use *$addFields*__. This helps with consistency and to avoid any confusion of intent. If you have come to MongoDB only recently, just pretend `$addFields` never existed! &#128518;
 
 
 ## When To Use Set & Unset
@@ -84,7 +84,7 @@ Naively you might decide to build an aggregation pipeline using a `$project` sta
 ]
 ```
 
-As you can see, the pipeline's stage is quite verbose and because a `$project` stage is being used to modify/add two fields, you are forced to also explicitly name each other existing field of the source records, for inclusion, otherwise that information will be lost during the transformation. Imagine if each payment document has hundreds of possible fields, rather than just ten! 
+As you can see, the pipeline's stage is quite verbose and because a `$project` stage is being used to modify/add two fields, you are forced to also explicitly name each other existing field of the source records, for inclusion, otherwise those fields will be lost during the transformation. Imagine if each payment document has hundreds of possible fields, rather than just ten! 
 
 A better approach to building the aggregation pipeline, to achieve the exact same results, would be to use `$set` and `$unset` instead, as shown below:
 
@@ -104,14 +104,14 @@ A better approach to building the aggregation pipeline, to achieve the exact sam
 ]
 ```
 
-This time, if some new documents are subsequently added to the existing payments collection, which include additional new fields, e.g. `settlement_date` & `settlement_curncy_code'`, then no changes are required to the aggregation pipeline to allow these new fields to automatically appear in the existing aggregation pipeline's results. However, when using `$project`, each time the possibility of a new field arises, a developer has to first refactor the pipeline to incorporate an additional inclusion declaration (e.g. `'settlement_date': 1, 'settlement_curncy_code': 1`)
+This time, if some new documents are subsequently added to the existing payments collection, which include additional new fields, e.g. `settlement_date` & `settlement_curncy_code'`, then no changes are required to the aggregation pipeline to allow these new fields to automatically appear in the results of existing aggregation pipelines. However, when using `$project`, each time the possibility of a new field arises, a developer has to first refactor the pipeline to incorporate an additional inclusion declaration (e.g. `'settlement_date': 1`, or `'settlement_curncy_code': 1`)
 
 
 ## When To Use Project
 
-A `$project` stage should be used when the required output shape of result documents is very different than the shape of input documents, where most of the original fields are not to be included in the output.
+A `$project` stage should be used when the required output shape of result documents is very different than the shape of the input documents, where most of the original fields are not to be included in the output.
 
-This time for the same input payments collection, lets imagine a different aggregation pipeline was required to produce result documents, where each document's structure is required to be very different than the input structure, with far fewer field values need to be pulled through from the original input documents, similar to the following:
+This time for the same input payments collection, lets imagine a different aggregation pipeline was required to produce result documents, where each document's structure is required to be very different than the input structure, with far fewer field values needing to be pulled through from the original input documents, similar to the following:
 
 ```javascript
 // OUTPUT  (a record in the results of the executed aggregation)
@@ -154,7 +154,7 @@ Now, using `$set`/`$unset` in the pipeline to achieve the above output structure
 ]
 ```
 
-However, by using `$project` for this specific aggregation, as shown below, to achieve the exact same results, the pipeline would be less verbose and have the flexibility of not requiring modification if subsequent additions are ever made to the data model, with new previously unknown fields:
+However, by using `$project` for this specific aggregation, as shown below, to achieve the exact same results, the pipeline would be less verbose. The pipeline would have the flexibility of not requiring modification if subsequent additions are ever made to the data model, with new previously unknown fields:
 
 ```javascript
 // GOOD
@@ -173,5 +173,5 @@ However, by using `$project` for this specific aggregation, as shown below, to a
 
 ## Main Takeaway
 
-In summary, always look to use `$set` & `$unset` for field inclusion and exclusion, rather than `$project`, unless it is very clear that a complete new structure is required for result documents, with very few of the input fields required. Don't bother using `$addFields` nowadays because it adds no value and may just cause confusion.
+In summary, always look to use `$set` & `$unset` for field inclusion and exclusion, rather than `$project`, unless it is very clear that a very different structure is required for result documents, with only a small sub-set of the input fields needing to be retained. Don't bother using `$addFields` nowadays because it adds no value and may just cause confusion.
 
