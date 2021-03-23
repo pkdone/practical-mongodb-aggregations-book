@@ -171,7 +171,7 @@ Three documents should be returned, representing the three customers orders that
 
 ## Observations & Comments
 
- * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field between a record in each of the two collections. For an example of performing a join based on 2 or more matching fields in the lookup, see the example [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html)
+ * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field of a record in one collection and a single field of a record in another collection. For an illustration of performing a join based on 2 or more matching fields in the lookup, see the example [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html)
  
- * __First Element Assumption.__ The pipeline assumes that the relationship between the two collections is one:one and so for the returned array of joined elements following the `$lookup` stage, the pipeline assumes the number of joined elements in the array is exactly one (and not more) and hence just extracts the values from this the first array element only, using the `$first` operator. For an example of performing a one:many join, see the example [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html)
+ * __First Element Assumption.__ The pipeline assumes that the relationship between the two collections is 1:1 and so for the returned array of joined elements following the `$lookup` stage, the pipeline assumes the number of elements in the array is exactly one (and not more). As a result the pipeline then just extracts the date from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join, see the example [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html)
 

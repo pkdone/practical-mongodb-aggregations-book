@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$rand](https://do
 
 ## Scenario
 
-A user wants to perform irreversible masking on the sensitive fields of a collection of documents, in some cases obfuscating part of a field's value, in other cases adjusting a field's value by a small random amount, in some cases substituting the field's value with a completely random value and in some cases excluding a field from the result completely, depending on a certain field's value.
+A user wants to perform irreversible masking on the sensitive fields of a collection of documents, in some cases obfuscating part of a field's value, in other cases adjusting a field's value by a small random amount, in some cases substituting the field's value with a completely random value and in some cases excluding a field from the result completely, depending on a field's value.
 
 In this example, a collection of _credit card payment_ documents will be masked, to:
  * Partially obfuscate the carder holder's name
@@ -14,7 +14,7 @@ In this example, a collection of _credit card payment_ documents will be masked,
  * Replace the card's 3 digit security code with a random set of 3 digits
  * Adjust the transaction's amount by adding or subtracting a random amount up to a maximum of 10% of the original amount
  * Change the transaction's `reported` field boolean value to the opposite value, for roughly 20% of the records
- * If the embedded `customer_info` sub-document's `category` field is set to _SENSITIVE_ exclude the whole `customer_info` sub-document
+ * If the embedded `customer_info` sub-document's `category` field is set to _SENSITIVE_, exclude the whole `customer_info` sub-document
 
 ## Sample Data Population
 
@@ -172,9 +172,9 @@ Two documents should be returned, corresponding to the original two source docum
 
 ## Observations & Comments
 
- * __Better Redaction.__ For excluding the `customer_info` sub-document where its `category` field is marked as _sensitive_, a `$cond` operator is used to check the value of the `category` field, returning the `$$REMOVE` variable to indicate for the sub-document to be excluded. There is an alternative approach that can be used instead, using a `$redact` stage to achieve the same thing. However, a `$redact` stage typically requires more database processing effort by needing to check every field in the document, and so, when only one specific sub-document is to be optionally redacted out per record, it is generally optimal to adopt the approach shown in this example.
+ * __Targeted Redaction.__ For excluding the `customer_info` sub-document where its `category` field is marked as _sensitive_, a `$cond` operator is used to check the value of the `category` field, returning the `$$REMOVE` variable to indicate for the sub-document to be excluded. There is an alternative approach that can be used instead, using a `$redact` stage to achieve the same thing. However, a `$redact` stage typically requires more database processing effort by needing to check every field in the document. Therefore, when only one specific sub-document is to be optionally redacted out per record, it is generally optimal to adopt the approach shown in this example.
  
- * __Regular Expression.__ For masking the `card_name` field, a regular expression operator is used to extract the last word in the field's original value, which returns metadata indicating if the match succeeded and what the matched value was. Therefore, an additional `$set` stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hardcoded text.
+ * __Regular Expression.__ For masking the `card_name` field, a regular expression operator is used to extract the last word in the field's original value. The `$regexFind` returns metadata into the stage's outputted records, indicating if the match succeeded and what the matched value was. Therefore, an additional `$set` stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hardcoded text.
  
  * __Unset Alternative.__ If this example was being consistent with the other examples in this book, an additional `$unset` stage would have been included in the pipeline to mark the `_id` field for exclusion. However, in this case, chiefly just to show there is another way, the `_id` field is actually marked for exclusion in the `$set` stage, by being assigned the `$$REMOVE` variable.
  

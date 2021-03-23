@@ -5,9 +5,9 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to scan through a collection (where each record contains an array of sub-documents), unpacking these array elements as new individual records and then grouping these unpacked records by a common attribute, providing totals and counts.
+A user wants to scan through a collection, where each record contains an array of sub-documents, unpacking these array elements as new individual records and then grouping these unpacked records by a common attribute, providing totals and counts.
 
-In this example, a collection of _customer orders_, from shop purchases for the year 2020 only will be searched for. The one or more orders occurring for each customer will be unpacked into separate order records and then these resulting records will be grouped by product type (e.g. _ELECTRONICS_, _BOOKS_) with a total value and count of all orders for each of these product types. Essentially what is produced is a report of how many orders were made for each product in 2020.
+In this example, a collection of _customer orders_, from shop purchases for the year 2020 only will be searched for. The one or more orders occurring for each customer will be unpacked into separate order records and then these resulting records will be grouped by product type (e.g. _ELECTRONICS_, _BOOKS_) with a total value and count of all orders for each of these product types. Essentially what is produced is a report of how many shop orders were made for each product in 2020.
 
 
 ## Sample Data Population
@@ -168,5 +168,5 @@ Four documents should be returned, representing the four products that kept reoc
 
 ## Observations & Comments
 
- * __Unwinding Arrays.__ The `$unwind` stage is a powerful but often initially unfamiliar concept to many developers. Distilled down it does one simple thing: it generates a new record for each element in an array field for every input document. If the input collection has 3 records, and each record has an array field containing 4 elements, then performing an `$unwind` on the array fields will result in 12 output records (3 x 4).
+ * __Unwinding Arrays.__ The `$unwind` stage is a powerful but often initially unfamiliar concept to many developers. Distilled down, it does one simple thing: it generates a new record for each element in an array field for every input document. If the input collection has 3 records, and each record has an array field containing 4 elements, then performing an `$unwind` on the array fields will result in 12 output records (3 x 4).
 

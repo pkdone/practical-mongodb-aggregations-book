@@ -5,13 +5,13 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-Users with different roles will need to query the same data-set, but one of the roles specifically should be provided with read-only access only and be restricted to only be able to view a filtered subset of records in a collection and only a subset of fields in each of these records. Essentially this is an example of 'record-level' Role Based Access Control (RBAC).
+Users with different roles will need to query the same data-set, but one of the roles specifically should have a read-only view of a subset of data only. This restricted view should only allow accessing a filtered subset of records in a collection and only a subset of fields in each of record of the collection. Essentially, this is an illustration of 'record-level' Role Based Access Control (RBAC).
 
-In this example, a collection of _persons_, each containing personal information, will have a read-only _adults_ view created for it, based on an aggregation pipeline, which restricts the _persons_ data that can be queried, in two ways:
- 1. Only return records for people who are aged 18 over over (by checking each person's `dateofbirth` field)
- 2. For each record in the result, exclude the `dateofbirth` field because this information is sensitive
+In this example, a collection of _persons_, each containing personal information, will have a read-only _adults_ view created for it. The view will be based on an aggregation pipeline which restricts the _persons_ data that can be queried, in two ways:
+ 1. Only return records for people who are aged 18 and over (by checking each person's `dateofbirth` field)
+ 2. For each record in the results, exclude the `dateofbirth` field because this information is sensitive
 
-In a real deployment, MongoDB's [Role-Based Access Control](https://docs.mongodb.com/manual/core/authorization/) rules would be used to enforce that the restricted user is only able to access the `adults` view and is not able to access the underlying `persons` collection.
+In a real deployment, MongoDB's [Role-Based Access Control](https://docs.mongodb.com/manual/core/authorization/) rules would then be configured to enforce that the restricted user is only able to access the `adults` view and is not able to access the underlying `persons` collection.
 
 
 ## Sample Data Population
@@ -120,7 +120,7 @@ var pipeline = [
 
 ## Execution
 
-First to test the defined aggregation pipeline (before using it to define a view), execute the aggregation for the pipeline and also view its explain plan:
+Firstly, to test the defined aggregation pipeline (before using it to define a view), execute the aggregation for the pipeline and also observe its explain plan:
 
 ```javascript
 db.persons.aggregate(pipeline);
@@ -136,7 +136,7 @@ Now create the new _adults_ view which will automatically apply the pipeline whe
 db.createView('adults', 'persons', pipeline);
 ```
 
-Execute a normal MQL query against the view, without any filter criteria, and also view its explain plan:
+Execute a normal MQL query against the view, without any filter criteria, and also observe its explain plan:
 
 ```javascript
 db.adults.find();
@@ -146,7 +146,7 @@ db.adults.find();
 db.adults.explain('executionStats').find();
 ```
 
-Execute a normal MQL query against the view, but this time with a filter to return only adults who are female, and again view its explain plan to see how the `gender` filter affects the plan:
+Execute a normal MQL query against the view, but this time with a filter to return only adults who are female, and again observe its explain plan to see how the `gender` filter affects the plan:
 
 ```javascript
 db.adults.find({'gender': 'FEMALE'});
@@ -189,7 +189,7 @@ The result for both the `aggregate()` command and the `find()` executed on the _
 ]
 ```
 
-The result of running the `find()` against the _view_ with the filter `'gender': 'FEMALE'` should result in only two females' record being return because the male record has been excluded, as shown below:
+The result of running the `find()` against the _view_ with the filter `'gender': 'FEMALE'` should result in only two females' records being return because the male record has been excluded, as shown below:
 
 ```javascript
 [
@@ -215,10 +215,10 @@ The result of running the `find()` against the _view_ with the filter `'gender':
 
 ## Observations & Comments
 
- * __Expr & Indexes.__ The [NOW system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/) which returns the current system date-time, has been used but this can only be accessed via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by both MQL and `$match`. Therefore, the use of the `$$NOW` variable has to be wrapped in an `$expr` operator. The [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) allows the use of aggregation expressions from within MongoDB's query language, which is otherwise not normally possible. Consequently, as you can inspect in the explain plan for the pipeline, the executed aggregation cannot leverage the defined `dateofbirth` index meaning that a _full collection scan_ is performed rather than an _index scan_. For clarity, the following is a direct quote from the [MongoDB Manual for $match](https://docs.mongodb.com/manual/reference/operator/aggregation/match/#definition) which details the restriction:
+ * __Expr & Indexes.__ The [NOW system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/), which returns the current system date-time, has been used but this can only be accessed via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by both MQL and `$match`. Therefore, the use of the `$$NOW` variable has to be wrapped in an `$expr` operator. The [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) allows the use of aggregation expressions from within MongoDB's query language, which is otherwise not normally possible. Consequently, as you can inspect in the explain plan for the pipeline, the executed aggregation cannot leverage the defined `dateofbirth` index meaning that a _full collection scan_ is performed rather than an _index scan_. For clarity, the following is a direct quote from the [MongoDB Manual for $match](https://docs.mongodb.com/manual/reference/operator/aggregation/match/#definition) which details the restriction:
    - "_$match takes a document that specifies the query conditions. The query syntax is identical to the read operation query syntax; i.e. $match does not accept raw aggregation expressions. Instead, use a $expr query expression to include aggregation expression in $match_"
    
- * __Views Finds & Indexes.__ If you view the explain plan for running the `find()` against the _view_ with the `'gender'` filter however, you will notice that an index has been used (the index defined on the `'gender'` field). This is because, just as the database engine performs [aggregation pipeline optimisations](https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/) for regular aggregations, including attempting to move _match_ filters to the top of the pipeline, if possible, it can apply these same optimisations on a view. At runtime a view is essentially just an aggregation pipeline that was defined 'ahead of time'. So when `db.adults.find({'gender': 'FEMALE'})` is executed, the database engine adds a new dynamically generated `$match` to the end of the pipeline and then the database engine is able to optimise the pipeline and move the new `$match` stage up to the start of the pipeline, merged, in this case, in with the existing `$match` (`$expr`) stage. At runtime the query engine can then target the `gender` index. Two excerpts from the explain plan are shown below showing how the filter on `gender` and the filter on `dateofbirth` have been combined at runtime and then how the existing index for `gender` is leveraged, resulting in the benefit of the final aggregation performing just a 'partial table scan' rather than a 'full table scan'.
+ * __View Finds & Indexes.__ If you view the explain plan for running the `find()` against the _view_ with the `'gender'` filter, you will notice that an index has actually been used (the index defined on the `'gender'` field). This is because, just as the database engine performs [aggregation pipeline optimisations](https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/) for regular aggregations, including attempting to move _match_ filters to the top of the pipeline, if possible, it can apply these same optimisations on a view. At runtime a view is essentially just an aggregation pipeline that was defined 'ahead of time'. So when `db.adults.find({'gender': 'FEMALE'})` is executed, the database engine adds a new dynamically generated `$match` stage to the end of the pipeline and then the database engine is able to optimise the pipeline and move the new `$match` stage up to the start of the pipeline, merged, in this case, in with the existing `$match` (`$expr`) stage. At runtime the query engine can then target the `gender` index. Two excerpts from the explain plan are shown below showing how the filter on `gender` and the filter on `dateofbirth` have been combined at runtime and then how the existing index for `gender` is leveraged, resulting in the benefit of the optimised aggregation performing just a 'partial table scan' rather than a 'full table scan'.
 ```javascript  
 "$cursor" : {
   "queryPlanner" : {

@@ -5,9 +5,9 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to transform some text fields that contain some date-time related information to into date typed fields. It is always desirable to convert such text fields to date fields to subsequently be able to easily perform date range queries and date sorted ordering. Usually this conversion would be achieved using MongoDB's rich set of [Date Expression Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators). However, the specific date-time text values provided are incomplete and don't contain all the information required to determine things like which century the date is for, and which time zone it is for. As a result, MongoDB's _out-of-the-box_ date expression operators cannot be used.
+A user wants to transform some text fields that contain some date-time related information into date typed fields. It is always desirable to convert such text fields to date fields to subsequently be able to perform date range queries and date sorted ordering easily. Usually this conversion would be achieved using MongoDB's rich set of [Date Expression Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators) directly. However, for this scenario, the specific date-time text values provided are incomplete and don't contain all the information required to determine things like which century the date is for, and which time zone it is for. As a result, MongoDB's _out-of-the-box_ date expression operators cannot be used on their own.
 
-In this example, a collection of _payments_ documents exists, each with a `payment_date` text field which contains strings that look vaguely like date-times, such as `01-JAN-20 01.01.01.123000000` for example, and which need to be converted to proper dates. However as you can see, the field's value doesn't contain all the information required to accurately know the exact date-time this corresponds to (these values may have originated from a baldy exported dump from a relational database, for example, and have then just been imported into MongoDB as-is). The missing date-time information in these text fields is:
+In this example, a collection of _payments_ documents exists, each with a `payment_date` text field which contains strings that look vaguely like date-times, such as `01-JAN-20 01.01.01.123000000` for example. These need to be converted to proper dates. However as you can see, the field's value doesn't contain all the information required to accurately know the exact date-time this corresponds to (these values may have originated from a baldy exported dump from a relational database, for example, and have then just been imported into MongoDB as-is). The missing date-time information in these text fields is:
  * The specific __century__ (1900s?, 2000s, other?)
  * The specific __time-zone__ (GMT?, IST?, PST?, other?) 
  * The specific __language__ that the three letter month abbreviation is in (is 'JAN' in French? in English? other?)
@@ -174,7 +174,7 @@ Twelve documents should be returned, corresponding to the original twelve source
 
 ## Observations & Comments
 
- * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `12-DEC-20 12.12.12.999000000`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`) by concatenating together the following four elements extracted from the text field, before passing it to the `$dateFromString` operator to convert to a date type:
+ * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `12-DEC-20 12.12.12.999000000`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`) by concatenating together the following four elements , three of which are dervied from the text field, before passing it to the `$dateFromString` operator to convert to a date type:
    - `'12-'` _(day of month from the input string)_
    - `'12'` _(replacing 'DEC')_
    - `'-20'` _(hard-coded hyphen + century)_

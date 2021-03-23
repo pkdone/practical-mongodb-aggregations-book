@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 A user wants to scan through a collection, filtering only records within a specific date range, and then grouping the records by a recurring field's value, accumulating counts, totals and the array of details from each record in the group.
 
-In this example, a collection of _orders_, from shop purchases for the year 2020 only will be searched for. The records will then be grouped by customer ID, capturing, for 2020, each customer's first purchase date, the number of orders they made, the total value of all their orders added together and a list of their individual order items. Essentially what is produced is a report of orders made by each customer in 2020.
+In this example, a collection of _orders_, from shop purchases for the year 2020 only will be searched for. The records will then be grouped by customer ID, capturing each customer's first purchase date, the number of orders they made, the total value of all their orders added together and a list of their individual order items. Essentially what is produced is a report of shop orders made by each customer in 2020.
 
 
 ## Sample Data Population
@@ -175,7 +175,7 @@ Three documents should be returned, representing the three customers, each showi
 
 ## Observations & Comments
 
- * __Double Sort Use.__ It is necessary to perform a sort on the order date both before and after the group stage. The sort before the group is required because the group stage uses a `$first` group accumulator to capture just the first order's `orderdate` value for each customer being grouped. The sort after the group is required because the act of having just grouped on customer ID will mean that the records are no longer sorted by purchase date for the records coming out of the group stage.
+ * __Double Sort Use.__ It is necessary to perform a `$sort` on the order date both before and after the `$group` stage. The `$sort` before the `$group` is required because the `$group` stage uses a `$first` group accumulator to capture just the first order's `orderdate` value for each customer being grouped. The `$sort` after the `$group` is required because the act of having just grouped on customer ID will mean that the records are no longer sorted by purchase date for the records coming out of the `$group` stage.
  
  * __Renaming Group.__ Towards the end of the pipeline you will see what is a common pattern for pipelines that use `$group`, consisting of a combination of `$set`+`$unset` stages, to essentially take the group's key (which is always called `_id`) and substitute it with a more meaningful name in the result (`customer_id` in this case).
  
