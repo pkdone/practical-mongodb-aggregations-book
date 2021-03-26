@@ -12,7 +12,7 @@ Expressions come in the following three main flavours:
  
  * __Variables.__ Accessed with a `$$` prefix followed by the fixed name, and falling into two sub-categories:
  
-   - __Context variables.__ With values coming from the system environment rather than the each input record being processed. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
+   - __Context variables.__ With values coming from the system environment rather than each input record being processed. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
    
    - __Marker flag variables.__ To indicate desired behaviour to pass back to the pipeline runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
 
@@ -55,9 +55,9 @@ In most of the stages which don't leverage expressions, it doesn't usually make 
 
 ## What Is The Option To Use $expr Inside $match All About?
 
-MongoDB version 3.6 introduced the new [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/#op._S_expr) and the ability to use this `$expr` operator instead of the normal MQL query conditions for the content of a `$match` stage. Inside a `$expr`, if used in a `$match`, any composite expression can be used, made up of the `$` operator functions, the `$` field paths and the `$$` variables described earlier.
+MongoDB version 3.6 introduced the new [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) and the ability to use this `$expr` operator instead of the normal MQL query conditions for the content of a `$match` stage. Inside a `$expr`, if used in a `$match`, any composite expression can be leveraged, made up of the `$` operator functions, the `$` field paths and the `$$` variables described earlier.
 
-There a few situations that demand having to use `$expr` from inside a `$match` stage. Sometimes there may be a requirement to compare two fields of a record to determine whether to keep the record in the results based on the the outcome of this comparison. Another common situation is where there is a need to compute a value based on some existing fields and then compare the computed value with some specific criteria using a comparison operator. This is something that is impossible to achieve using normal `$match`/`find()`query conditions.
+There are a few situations that demand having to use `$expr` from inside a `$match` stage, if the MQL `$where` operator is to be ignored (`$where` comes with various downsides and so should be avoided). Sometimes there may be a requirement to compare two fields of a record to determine whether to keep the record in the results based on the the outcome of that comparison. Another common situation is where there is a need to compute a value based on some existing fields and then compare the computed value with some specific criteria using a comparison operator. This is something that is impossible to achieve using normal `$match`/`find()`query conditions.
 
 Take the example of a `rectangles` collection holding data on different instances of rectangles and specifically their width and height, similar to the following: 
 
@@ -69,7 +69,7 @@ Take the example of a `rectangles` collection holding data on different instance
 ]
 ```
 
-Now what if you wanted to run an aggregation pipeline to only return rectangles which have an `area` greater than `12`. This isn't possible using a regular `$match`/`find()` query condition. However, using aggregation expressions, different fields can be analysed together, in-situ. Therefore, by using a `$expr` inside a `$match` this requirement can be achieved, by using the following pipeline, for example:
+Now what if you wanted to run an aggregation pipeline to only return rectangles which have an `area` greater than `12`. This isn't possible using a regular `$match`/`find()` query condition. However, using aggregation expressions, different fields can be analysed in combination, in-situ. By using a `$expr` inside a `$match` this requirement can be achieved with the following pipeline for example:
 
 ```javascript
 var pipeline = [
@@ -88,9 +88,9 @@ The result of executing an aggregation with this pipeline is:
 ]
 ```
 
-As you can see, the 2nd shape was not included in the results because its area is only `12` (`3 x 4`).
+As you can see, the 2<sup>nd</sup> shape was not included in the results because its area is only `12` (`3 x 4`).
 
-It is important to be aware though that in many cases, a query expressions in a `$expr` for a `$match` cannot be used by the MQL query engine to leverage an index. Specifically, 'range' comparison operators like `$gt`, `$gte`, `$lt` and `$lte` will not result in an index being employed. As a result, it is only recommended to use `$expr` in a `$match` if there is no other way of assembling the required query conditions using the default MQL syntax.
+It is important to be aware though that in many cases, a query expressions in a `$expr` for a `$match` cannot be used by the MQL query engine to leverage an index. Specifically, 'range' comparison operators, like `$gt`, `$gte`, `$lt` and `$lte`, will not result in an index being employed. As a result, it is only recommended to use `$expr` in a `$match` if there is no other way of assembling the required query conditions using the default MQL syntax.
 
 What can also be confusing, when comparing the 'normal' MQL query condition syntax of a `$match` with aggregation expression syntax, is that both sometimes have similarly named operators, e.g. `$gt`. Also, both may reference field paths, but in subtly different ways. For example, a `attr.nestedattr` field reference in a `$match`/`find()`query condition versus a `$attr.nestedattr` field path in an aggregation expression. Lastly, as we've just seen, for query conditions a field can only be compared with a literal value, whereas for expressions a field can be compared with another field.
 

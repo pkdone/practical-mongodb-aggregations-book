@@ -12,7 +12,7 @@ In this example, a collection of _payments_ documents exists, each with a `payme
  * The specific __time-zone__ (GMT?, IST?, PST?, other?) 
  * The specific __language__ that the three letter month abbreviation is in (is 'JAN' in French? in English? other?)
  
-For this example, the developer is armed with additional context that the database and data-set does not have. The developer is told that all the records are for the __21st century__ only, the time-zone used when the data was exported was __UTC__ and the language used when exported was __English__. Armed with this additional information, the developer is able to build and execute an aggregation pipeline to transform each of the date-related text fields to become fully-formed date types.
+For this example, the developer is armed with additional context that the database and data-set does not have. The developer is told that all the records are for the __21<sup>st</sup> century__ only, the time-zone used when the data was exported was __UTC__ and the language used when exported was __English__. Armed with this additional information, the developer is able to build and execute an aggregation pipeline to transform each of the date-related text fields to become fully-formed date types.
 
 
 ## Sample Data Population

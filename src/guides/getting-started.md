@@ -24,7 +24,7 @@ There are many options for the client tool, four of which are:
  1. __*Modern* Shell__. Install the modern version of MongoDB's command line tool, the [Mongo Shell](https://www.mongodb.com/try/download/shell): `mongosh`
  2. __*Legacy* Shell__. Use the legacy version of MongoDB's command line tool, the [Mongo Shell](https://docs.mongodb.com/manual/mongo/): `mongo` (this binary is bundled with a MongoDB database installation or can be downloaded from the Atlas console)
  3. __Compass__. Install the _official_ MongoDB Inc. provided graphical user interface (GUI) tool, [MongoDB Compass](https://www.mongodb.com/products/compass)
- 4. __Studio 3T__. Install the _3rd party_ 3T Software Labs provided graphical user interface (GUI) tool, [Studio 3T](https://studio3t.com/download/)
+ 4. __Studio 3T__. Install the _3<sup>rd</sup> party_ 3T Software Labs provided graphical user interface (GUI) tool, [Studio 3T](https://studio3t.com/download/)
  
 The examples provided in this book are presented in such a way as to make it easy to cut and paste the code into the Mongo Shell (`mongosh` or `mongo`) to be executed. All subsequent instructions in this book will assume you are using the Shell. However, you should find it straight-forward to use one of the mentioned GUI tools instead, to consume the code examples provided. Of the two Shell versions, you will most likely find the _modern_ Shell easier to use and view results with.
 
