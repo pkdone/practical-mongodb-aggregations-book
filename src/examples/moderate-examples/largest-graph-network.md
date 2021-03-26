@@ -9,6 +9,8 @@ A user wants to query a network of connections across a collection of records wh
 
 In this example, a social network database will be simulated (think _Twitter_) where each record is a social network user holding their name and the names of other people who follow them. An aggregation pipeline will be executed, which walks each record's `followed_by` array of links to determine which person has the largest _network reach_. This information might be useful for a marketing organisation to know who best to target a new marketing campaign at, for example.
 
+Note, this example uses a simple data model for brevity, however this is unlikely to be an optimum data model for using `$graphLookup` at scale, for users with a massive amount of followers and/or when running in a Sharded environment. For more guidance on such matters, see this reference applicaiton: [Socialite](https://github.com/mongodb-labs/socialite)
+
 
 ## Sample Data Population
 
@@ -162,6 +164,4 @@ Ten documents should be returned, corresponding to the original ten source socia
  * __Following Graphs.__ Such a pipeline, using a `$graphLookup` stage, is useful to be able to traverse relationships between records, looking for patterns for each specific record, where these patterns aren't necessarily evident from just looking at each record in isolation. In this example, it is actually obvious that _Paul_ has no _friends_ and thus the lowest network reach just by looking at _Paul's_ record in isolation. However, it is not obvious that _Carol_ has the largest network reach just by looking at the number of people _Carol_ is directly followed by, which is 2. _David_, for example, is followed by 3 people, which is more than _Carol_. However, the executed aggregation pipeline was able to deduce that _Carol_ actually has the largest network reach.
  
  * __Index Use.__ The `$graphLookup` stage is able to leverage the index on the field `name` for each of its `connectToField` hops.
- 
- * __Larger Data-Sets.__ The real insights from using `$graphLookup` comes from analysing far more records than just ten of course, but only a few sample records were used here to enable the example to be easy to follow and reproduce, without first having to source a large data set from somewhere. 
  
