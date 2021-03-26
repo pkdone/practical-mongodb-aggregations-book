@@ -57,6 +57,14 @@ To create and then submit a new chapter for review and acceptance:
  * Create and submit a GitHub pull request capturing your additions and the reason why you feel the new chapter would add value to the book
 
 
+## Future Released Versions Of The Book
+
+Future versions of the book may include the following additional topics, yet to be written (not an exclusive list):
+
+ * Aggregations Considerations When Sharding
+ * Further example chapters at each of the 3 complexity levels
+
+
 ----
 
 Copyright &copy; 2021 Paul Done
