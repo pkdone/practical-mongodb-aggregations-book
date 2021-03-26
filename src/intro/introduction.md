@@ -61,6 +61,7 @@ The Aggregation Framework is versatile and used for many different types of data
 * Copying and transforming subsets of data from one collection to another
 * Navigating relationships between records, looking for patterns
 * Data masking to redact & obfuscate sensitive data
+* Peforming the Transform (T) part of an Extract-Load-Transform ([ELT](https://en.wikipedia.org/wiki/Extract,_load,_transform)) workload
 * Data quality reporting and cleansing
 * Updating a materialized view with the results of the most recent source data changes
 * Supporting machine learning frameworks for efficient data analysis (e.g. via MongoDB's Spark Connector)

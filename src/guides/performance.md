@@ -13,7 +13,7 @@ When executing an aggregation pipeline, the database engine pulls batches of rec
  * `$sort`
  * `$group` *
  
-> \* _actually when stating `$group`, this also includes other less frequently used 'grouping' stages too, specifically:_`$bucket`, `$bucketAuto`, `$count` & `$sortByCount`
+> \* _actually when stating `$group`, this also includes other less frequently used 'grouping' stages too, specifically:_`$bucket`, `$bucketAuto`, `$facet`, `$count` & `$sortByCount`
 
 The diagram below highlights the nature of streaming and blocking stages, where streaming stages allow batches to be processed and then passed through without waiting, whereas blocking stages wait for the whole of its input data set to arrive and accumulate before the stage then processes all this data together.
 

@@ -15,7 +15,7 @@
     - [To Project Or Not To Project, That Is The Question](guides/project.md)
     - [Using Explain Plans](guides/explain.md)
     - [Pipeline Performance Considerations](guides/performance.md)
-    - [Can Expressions By Used Everywhere?](guides/expressions.md)
+    - [Can Expressions Be Used Everywhere?](guides/expressions.md)
 
 ## Aggregations By Example
 - [Aggregations By Example](examples/examples.md)    
