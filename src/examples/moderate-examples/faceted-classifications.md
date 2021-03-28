@@ -1,4 +1,4 @@
-# Faced Classifications
+# Faceted Classification
 
 __Minimum MongoDB Version:__ 4.2
 
