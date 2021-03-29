@@ -15,7 +15,7 @@ In this example, a collection of _customer orders_, from shop purchases for the 
 Drop the old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021:
 
 ```javascript
-use one-to-one-join;
+use book-one-to-one-join;
 db.dropDatabase();
 
 // Create index for a products collection

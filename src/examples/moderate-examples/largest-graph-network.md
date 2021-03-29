@@ -17,7 +17,7 @@ Note, this example uses a simple data model for brevity, however this is unlikel
 Drop the old version of the database (if it exists) and then populate a new `users` collection with 10 social network users documents, plus an index to help optimise the _graph traversal_:
 
 ```javascript
-use largest-graph-network;
+use book-largest-graph-network;
 db.dropDatabase();
 
 // Create index on field which for each graph traversal hop will connect to

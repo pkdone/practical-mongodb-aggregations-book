@@ -15,7 +15,7 @@ In this example, a collection of _orders_, from shop purchases for the year 2020
 Drop the old version of the database (if it exists) and then populate a new `orders` collection with 9 order documents spanning 2019-2021, for 3 different unique customers:
 
 ```javascript
-use group-and-total;
+use book-group-and-total;
 db.dropDatabase();
 
 // Create index for a orders collection

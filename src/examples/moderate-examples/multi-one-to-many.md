@@ -17,7 +17,7 @@ Note, the requirement to perform a 1:many join does not of course mandate the ne
 Drop the old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021:
 
 ```javascript
-use multi-one-to-many;
+use book-multi-one-to-many;
 db.dropDatabase();
 
 // Insert 6 records into the products collection

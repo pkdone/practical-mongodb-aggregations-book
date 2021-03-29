@@ -27,10 +27,10 @@
     - [Moderate Examples](examples/moderate-examples/00-moderate-examples.md)
         - [Multi-Field Join & One-to-Many](examples/moderate-examples/multi-one-to-many.md)
         - [Faceted Classification](examples/moderate-examples/faceted-classifications.md)    
-        - [Incremental Analytics](examples/moderate-examples/incremental-analytics.md)    
         - [Largest Graph Network](examples/moderate-examples/largest-graph-network.md)    
     - [Intricate Examples](examples/intricate-examples/00-intricate-examples.md)
         - [Restricted View](examples/intricate-examples/restricted-view.md)
+        - [Incremental Analytics](examples/intricate-examples/incremental-analytics.md)    
         - [Mask Sensitive Fields](examples/intricate-examples/mask-sensitive-fields.md)
         - [Convert Incomplete Date Strings](examples/intricate-examples/convert-incomplete-dates.md)
 

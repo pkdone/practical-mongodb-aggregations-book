@@ -19,7 +19,7 @@ In a real deployment, MongoDB's [Role-Based Access Control](https://docs.mongodb
 Drop the old version of the database (if it exists), create an index and populate the new `persons` collections with 5 records:
 
 ```javascript
-use restricted-view;
+use book-restricted-view;
 db.dropDatabase();
 
 // Create 2 indexes for a persons collection

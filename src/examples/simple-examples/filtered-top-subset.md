@@ -17,7 +17,7 @@ This is the only example in the book that can also be completely achieved using 
 Drop the old version of the database (if it exists) and then populate a new `persons` collection with 5 person documents, where each person has a different date of birth:
 
 ```javascript
-use filtered-top-subset;
+use book-filtered-top-subset;
 db.dropDatabase();
 
 // Create an index for a persons collection

@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to periodically generate a summary report to understand the state of their business, where this report draws from both the most recently captured business data plus all the existing order which have occurred over the last year, to spot trends. Additionally, even though the data-set will increase in size over time, the user does not want to have to wait an increasing amount of time, whenever they need the most up to date version of the report. If report generation time increases as the historic data set size increases, this would gradually slow down the organisation's ability to make decisions based on business insight.
+A user wants to periodically generate a summary report to understand the state of their business, where this report draws from both the most recently captured business data plus all the existing order which have occurred over the last year, to spot trends. Additionally, even though the data-set will increase in size over time, the user does not want to have to wait an increasing amount of time, whenever they need the most up to date version of the report. If report generation time increases as the historic data-set size increases, this would gradually slow down the organisation's ability to make decisions based on business insight.
 
 In this example, a retailer has a collection of all shop orders made since they began trading and new order records are continuously added to the collection, as they occur, throughout each day. To simulate this, 5 shop orders are captured on 01-Feb-2021 and at the end of the day an aggregation is run just to generate an order summary for that day (count of orders, total order value) with the output placed as a new summary record in a summary collection The next day 4 shop orders are captured on 02-Feb-2021 and again an aggregation is run at end of day for just that day's orders generating a day summary record in the summary collection. TODO: simulate retrospective order. TODO: instead of producing an output to return, writes to a collection instead.
 
@@ -15,7 +15,7 @@ In this example, a retailer has a collection of all shop orders made since they 
 Drop the old version of the database (if it exists) and then add 9 documents to the `orders` collection representing 5 orders on 01-Feb-2021 and 4 orders on 02-Feb-2021:
 
 ```javascript
-use incremental-analytics;
+use book-incremental-analytics;
 db.dropDatabase();
 
 // Create index for a daily_orders_summary collection

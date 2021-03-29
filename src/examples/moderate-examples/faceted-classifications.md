@@ -15,7 +15,7 @@ In this example, an eCommerce retailer wants to provide a [faceted search](https
 Drop the old version of the database (if it exists) and then populate a new `products` collection:
 
 ```javascript
-use faceted-classfctn;
+use book-faceted-classfctn;
 db.dropDatabase();
 
 db.products.insertMany([

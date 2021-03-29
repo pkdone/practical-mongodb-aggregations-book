@@ -20,7 +20,7 @@ For this example, the developer is armed with additional context that the databa
 Drop the old version of the database (if it exists) and then populate a new _payments_ collection with 12 sample payments documents to test, providing coverage across all 12 months for the year 2020, with random time elements.
 
 ```javascript
-use convert-incomplete-dates;
+use book-convert-incomplete-dates;
 db.dropDatabase();
 
 // Insert 12 records into the payments collection

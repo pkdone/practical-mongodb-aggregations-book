@@ -21,7 +21,7 @@ In this example, a collection of _credit card payment_ documents will be masked,
 Drop the old version of the database (if it exists) and then populate a new `payments` collection with 2 credit card payment documents, containing sensitive data:
 
 ```javascript
-use mask-sensitive-fields;
+use book-mask-sensitive-fields;
 db.dropDatabase();
 
 // Insert 2 records into the payments collection

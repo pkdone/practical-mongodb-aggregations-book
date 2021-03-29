@@ -15,7 +15,7 @@ In this example, a collection of _customer orders_, from shop purchases for the 
 Drop the old version of the database (if it exists) and then populate a new `customer_orders` collection with customer related documents spanning 2019-2021, with each customer having an array of 1 or more orders:
 
 ```javascript
-use unpack-array-group-differently;
+use book-unpack-array-group-differently;
 db.dropDatabase();
 
 // Insert 3 records into the customer_orders collection each with 1+ orders
