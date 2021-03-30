@@ -23,14 +23,14 @@ For example, imagine there is a collection of credit card payment records as doc
 // INPUT  (a record from the source collection to be operated on by an aggregation)
 {
   _id: ObjectId("6044faa70b2c21f8705d8954"),
-  card_name: 'Mrs. Jane A. Doe',
-  card_num: '1234567890123456',
-  card_expiry: '2023-08-31T23:59:59.736Z',
-  card_sec_code: '123',
-  card_provider_name: 'Credit MasterCard Gold',
-  transaction_id: 'eb1bd77836e8713656d9bf2debba8900',
+  card_name: "Mrs. Jane A. Doe",
+  card_num: "1234567890123456",
+  card_expiry: "2023-08-31T23:59:59.736Z",
+  card_sec_code: "123",
+  card_provider_name: "Credit MasterCard Gold",
+  transaction_id: "eb1bd77836e8713656d9bf2debba8900",
   transaction_date: 2021-01-13T09:32:07.000Z,
-  transaction_curncy_code: 'GBP',
+  transaction_curncy_code: "GBP",
   transaction_amount: Decimal128("501.98"),
   reported: true
 }
@@ -41,17 +41,17 @@ Then imagine an aggregation pipeline is required, to produce modified versions o
 ```javascript
 // OUTPUT  (a record in the results of the executed aggregation)
 {
-  card_name: 'Mrs. Jane A. Doe',
-  card_num: '1234567890123456',
+  card_name: "Mrs. Jane A. Doe",
+  card_num: "1234567890123456",
   card_expiry: 2023-08-31T23:59:59.736Z,  // Field type converted from text to date
-  card_sec_code: '123',
-  card_provider_name: 'Credit MasterCard Gold',
-  transaction_id: 'eb1bd77836e8713656d9bf2debba8900',
+  card_sec_code: "123",
+  card_provider_name: "Credit MasterCard Gold",
+  transaction_id: "eb1bd77836e8713656d9bf2debba8900",
   transaction_date: 2021-01-13T09:32:07.000Z,
-  transaction_curncy_code: 'GBP',
+  transaction_curncy_code: "GBP",
   transaction_amount: Decimal128("501.98"),
   reported: true,
-  card_type: 'CREDIT'                     // New field added using a literal value
+  card_type: "CREDIT"                     // New field added using a literal value
 }
 ```
 
@@ -62,24 +62,24 @@ Naively you might decide to build an aggregation pipeline using a `$project` sta
 ```javascript
 // BAD
 [
-  {'$project': {
+  {"$project": {
     // Modify a field + add a new field
-    'card_expiry': {'$dateFromString': {'dateString': '$card_expiry'}},
-    'card_type': 'CREDIT',        
+    "card_expiry": {"$dateFromString": {"dateString": "$card_expiry"}},
+    "card_type": "CREDIT",        
 
     // Must now name all the other fields for those fields to be retained
-    'card_name': 1,
-    'card_num': 1,
-    'card_sec_code': 1,
-    'card_provider_name': 1,
-    'transaction_id': 1,
-    'transaction_date': 1,
-    'transaction_curncy_code': 1,
-    'transaction_amount': 1,
-    'reported': 1,                
+    "card_name": 1,
+    "card_num": 1,
+    "card_sec_code": 1,
+    "card_provider_name": 1,
+    "transaction_id": 1,
+    "transaction_date": 1,
+    "transaction_curncy_code": 1,
+    "transaction_amount": 1,
+    "reported": 1,                
     
     // Remove _id field
-    '_id': 0,
+    "_id": 0,
   }},
 ]
 ```
@@ -91,20 +91,20 @@ A better approach to building the aggregation pipeline, to achieve the exact sam
 ```javascript
 // GOOD
 [
-  {'$set': {
+  {"$set": {
     // Modified + new field
-    'card_expiry': {'$dateFromString': {'dateString': '$card_expiry'}},
-    'card_type': 'CREDIT',        
+    "card_expiry": {"$dateFromString": {"dateString": "$card_expiry"}},
+    "card_type": "CREDIT",        
   }},
   
-  {'$unset': [
+  {"$unset": [
     // Remove _id field
-    '_id',
+    "_id",
   ]},
 ]
 ```
 
-This time, if some new documents are subsequently added to the existing payments collection, which include additional new fields, e.g. `settlement_date` & `settlement_curncy_code'`, then no changes are required to the aggregation pipeline to allow these new fields to automatically appear in the results of existing aggregation pipelines. However, when using `$project`, each time the possibility of a new field arises, a developer has to first refactor the pipeline to incorporate an additional inclusion declaration (e.g. `'settlement_date': 1`, or `'settlement_curncy_code': 1`)
+This time, if some new documents are subsequently added to the existing payments collection, which include additional new fields, e.g. `settlement_date` & `settlement_curncy_code`, then no changes are required to the aggregation pipeline to allow these new fields to automatically appear in the results of existing aggregation pipelines. However, when using `$project`, each time the possibility of a new field arises, a developer has to first refactor the pipeline to incorporate an additional inclusion declaration (e.g. `"settlement_date": 1`, or `"settlement_curncy_code": 1`)
 
 
 ## When To Use Project
@@ -120,7 +120,7 @@ This time for the same input payments collection, lets imagine a different aggre
     date: 2021-01-13T09:32:07.000Z,
     amount: Decimal128("501.98")
   },
-  status: 'REPORTED'
+  status: "REPORTED"
 }
 ```
 
@@ -129,27 +129,28 @@ Now, using `$set`/`$unset` in the pipeline to achieve the above output structure
 ```javascript
 // BAD
 [
-  {'$set': {
-    'transaction_info.date': '$transaction_date',
-    'transaction_info.amount': '$transaction_amount',
-    'status': {'$cond': {'if': '$reported', 'then': 'REPORTED', 'else': 'UNREPORTED'}},
+  {"$set": {
+    // Add some field  
+    "transaction_info.date": "$transaction_date",
+    "transaction_info.amount": "$transaction_amount",
+    "status": {"$cond": {"if": "$reported", "then": "REPORTED", "else": "UNREPORTED"}},
   }},
   
-  {'$unset': [
+  {"$unset": [
     // Remove _id field
-    '_id',
+    "_id",
 
     // Must name all existing fields to be omitted
-    'card_name',
-    'card_num',
-    'card_expiry',
-    'card_sec_code',
-    'card_provider_name',
-    'transaction_id',
-    'transaction_date',
-    'transaction_curncy_code',
-    'transaction_amount',
-    'reported',         
+    "card_name",
+    "card_num",
+    "card_expiry",
+    "card_sec_code",
+    "card_provider_name",
+    "transaction_id",
+    "transaction_date",
+    "transaction_curncy_code",
+    "transaction_amount",
+    "reported",         
   ]}, 
 ]
 ```
@@ -159,13 +160,14 @@ However, by using `$project` for this specific aggregation, as shown below, to a
 ```javascript
 // GOOD
 [
-  {'$project': {
-    'transaction_info.date': '$transaction_date',
-    'transaction_info.amount': '$transaction_amount',
-    'status': {'$cond': {'if': '$reported', 'then': 'REPORTED', 'else': 'UNREPORTED'}},
+  {"$project": {
+    // Add some field  
+    "transaction_info.date": "$transaction_date",
+    "transaction_info.amount": "$transaction_amount",
+    "status": {"$cond": {"if": "$reported", "then": "REPORTED", "else": "UNREPORTED"}},
     
     // Remove _id field
-    '_id': 0,
+    "_id": 0,
   }},
 ]
 ```

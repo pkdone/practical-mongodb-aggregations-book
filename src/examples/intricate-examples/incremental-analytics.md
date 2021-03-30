@@ -19,49 +19,49 @@ use book-incremental-analytics;
 db.dropDatabase();
 
 // Create index for a daily_orders_summary collection
-db.daily_orders_summary.createIndex({'day': 1}, {'unique': true});
+db.daily_orders_summary.createIndex({"day": 1}, {"unique": true});
 
 // Create index for a orders collection
-db.orders.createIndex({'orderdate': 1});
+db.orders.createIndex({"orderdate": 1});
 
 // Insert 9 records into the orders collection
 // (5 orders for 1st Feb, 4 orders for 2nd Feb)
 db.orders.insertMany([
   {
-    'orderdate': ISODate('2021-02-01T08:35:52Z'),
-    'value': NumberDecimal('231.43'),
+    "orderdate": ISODate("2021-02-01T08:35:52Z"),
+    "value": NumberDecimal("231.43"),
   },
   {
-    'orderdate': ISODate('2021-02-01T09:32:07Z'),
-    'value': NumberDecimal('99.99'),
+    "orderdate": ISODate("2021-02-01T09:32:07Z"),
+    "value": NumberDecimal("99.99"),
   },
   {
-    'orderdate': ISODate('2021-02-01T08:25:37Z'),
-    'value': NumberDecimal('63.13'),
+    "orderdate": ISODate("2021-02-01T08:25:37Z"),
+    "value": NumberDecimal("63.13"),
   },
   {
-    'orderdate': ISODate('2021-02-01T19:13:32Z'),
-    'value': NumberDecimal('2.01'),
+    "orderdate": ISODate("2021-02-01T19:13:32Z"),
+    "value": NumberDecimal("2.01"),
   },  
   {
-    'orderdate': ISODate('2021-02-01T22:56:53Z'),
-    'value': NumberDecimal('187.99'),
+    "orderdate": ISODate("2021-02-01T22:56:53Z"),
+    "value": NumberDecimal("187.99"),
   },
   {
-    'orderdate': ISODate('2021-02-02T23:04:48Z'),
-    'value': NumberDecimal('4.59'),
+    "orderdate": ISODate("2021-02-02T23:04:48Z"),
+    "value": NumberDecimal("4.59"),
   },
   {
-    'orderdate': ISODate('2021-02-02T08:55:46Z'),
-    'value': NumberDecimal('48.50'),
+    "orderdate": ISODate("2021-02-02T08:55:46Z"),
+    "value": NumberDecimal("48.50"),
   },
   {
-    'orderdate': ISODate('2021-02-02T07:49:32Z'),
-    'value': NumberDecimal('1024.89'),
+    "orderdate": ISODate("2021-02-02T07:49:32Z"),
+    "value": NumberDecimal("1024.89"),
   },
   {
-    'orderdate': ISODate('2021-02-02T13:49:44Z'),
-    'value': NumberDecimal('102.24'),
+    "orderdate": ISODate("2021-02-02T13:49:44Z"),
+    "value": NumberDecimal("102.24"),
   },
 ]);
 
@@ -75,44 +75,44 @@ Define a single pipeline ready to perform the aggregation (the use of `'START'` 
 ```javascript
 var pipeline = [
   // Match orders for one day only
-  {'$match': {
-    'orderdate': {
-      '$gte': 'START',
-      '$lt': 'END',
+  {"$match": {
+    "orderdate": {
+      "$gte": "START",
+      "$lt": "END",
     }
   }},
   
   // Group all orders together into one summary record for the day
-  {'$group': {
-    '_id': null,
-    'date_parts': {'$first': {'$dateToParts': {'date': '$orderdate'}}},
-    'total_value': {'$sum': '$value'},
-    'total_orders': {'$sum': 1},
+  {"$group": {
+    "_id": null,
+    "date_parts": {"$first": {"$dateToParts": {"date": "$orderdate"}}},
+    "total_value": {"$sum": "$value"},
+    "total_orders": {"$sum": 1},
   }},
     
   // Get date parts from 1 order (need year+month+day, for UTC)
-  {'$set': {
-    'day': {
-      '$dateFromParts': {
-        'year': '$date_parts.year', 
-        'month': '$date_parts.month',
-        'day':'$date_parts.day'
+  {"$set": {
+    "day": {
+      "$dateFromParts": {
+        "year": "$date_parts.year", 
+        "month": "$date_parts.month",
+        "day":"$date_parts.day"
      }
    },
   }},
       
   // Omit unwanted field
-  {'$unset': [
-    '_id',
-    'date_parts',
+  {"$unset": [
+    "_id",
+    "date_parts",
   ]},
   
   // Add day summary to summary collection (overwrite if already exists)
-  {'$merge': {
-    'into': 'daily_orders_summary',
-    'on': 'day',
-    'whenMatched': 'replace',
-    'whenNotMatched': 'insert'
+  {"$merge": {
+    "into": "daily_orders_summary",
+    "on": "day",
+    "whenMatched": "replace",
+    "whenNotMatched": "insert"
   }},   
 ];
 ```
@@ -123,8 +123,8 @@ For 01-Feb-2021 orders only, execute the aggregation using the defined pipeline 
 
 ```javascript
 // Change the start and end date boundaries in the pipeline
-pipeline[0]['$match']['orderdate']['$gte'] = ISODate('2021-02-01T00:00:00Z');
-pipeline[0]['$match']['orderdate']['$lt'] = ISODate('2021-02-02T00:00:00Z');
+pipeline[0]["$match"]["orderdate"]["$gte"] = ISODate("2021-02-01T00:00:00Z");
+pipeline[0]["$match"]["orderdate"]["$lt"] = ISODate("2021-02-02T00:00:00Z");
 
 // Run aggregation for 01-Feb-2021 orders & put result in summary collection
 db.orders.aggregate(pipeline);
@@ -139,8 +139,8 @@ Now for the next day only (for 02-Feb-2021 orders), execute the aggregation agai
 
 ```javascript
 // Change the start and end date boundaries in the pipeline
-pipeline[0]['$match']['orderdate']['$gte'] = ISODate('2021-02-02T00:00:00Z');
-pipeline[0]['$match']['orderdate']['$lt'] = ISODate('2021-02-03T00:00:00Z');
+pipeline[0]["$match"]["orderdate"]["$gte"] = ISODate("2021-02-02T00:00:00Z");
+pipeline[0]["$match"]["orderdate"]["$lt"] = ISODate("2021-02-03T00:00:00Z");
 
 // Run aggregation for 02-Feb-2021 orders & put result in summary collection
 db.orders.aggregate(pipeline);
@@ -157,14 +157,14 @@ To simulate the occasional need for the organisation to retrospectively correct 
 // Restrospectively add an order to an older day (01-Feb-2021)
 db.orders.insertOne(
   {
-    'orderdate': ISODate('2021-02-01T09:32:07Z'),
-    'value': NumberDecimal('11111.11'),
+    "orderdate": ISODate("2021-02-01T09:32:07Z"),
+    "value": NumberDecimal("11111.11"),
   },
 )
 
 // Change the start and end date boundaries in the pipeline
-pipeline[0]['$match']['orderdate']['$gte'] = ISODate('2021-02-01T00:00:00Z');
-pipeline[0]['$match']['orderdate']['$lt'] = ISODate('2021-02-02T00:00:00Z');
+pipeline[0]["$match"]["orderdate"]["$gte"] = ISODate("2021-02-01T00:00:00Z");
+pipeline[0]["$match"]["orderdate"]["$lt"] = ISODate("2021-02-02T00:00:00Z");
 
 // Re-run aggregation for 01-Feb-2021 overwriting 1st record in summary collections
 db.orders.aggregate(pipeline);
@@ -178,7 +178,7 @@ From the results you can now see that two order summaries still exist, one for e
 For completeness, also view the explain plan for the aggregation pipeline:
 
 ```javascript
-db.products.explain('executionStats').aggregate(pipeline);
+db.products.explain("executionStats").aggregate(pipeline);
 ```
 
 

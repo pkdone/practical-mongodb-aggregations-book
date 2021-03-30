@@ -21,20 +21,20 @@ use book-largest-graph-network;
 db.dropDatabase();
 
 // Create index on field which for each graph traversal hop will connect to
-db.users.createIndex({name: 1})
+db.users.createIndex({"name": 1})
 
 // Insert 2 records into the users collection
 db.users.insertMany([
-  {'name': 'Paul', 'followed_by': []},
-  {'name': 'Toni', 'followed_by': ['Paul']},
-  {'name': 'Janet', 'followed_by': ['Paul', 'Toni']},
-  {'name': 'David', 'followed_by': ['Janet', 'Paul', 'Toni']},
-  {'name': 'Fiona', 'followed_by': ['David', 'Paul']},
-  {'name': 'Bob', 'followed_by': ['Janet']},
-  {'name': 'Carl', 'followed_by': ['Fiona']},
-  {'name': 'Sarah', 'followed_by': ['Carl', 'Paul']},
-  {'name': 'Carol', 'followed_by': ['Helen', 'Sarah']},
-  {'name': 'Helen', 'followed_by': ['Paul']},
+  {"name": "Paul", "followed_by": []},
+  {"name": "Toni", "followed_by": ["Paul"]},
+  {"name": "Janet", "followed_by": ["Paul", "Toni"]},
+  {"name": "David", "followed_by": ["Janet", "Paul", "Toni"]},
+  {"name": "Fiona", "followed_by": ["David", "Paul"]},
+  {"name": "Bob", "followed_by": ["Janet"]},
+  {"name": "Carl", "followed_by": ["Fiona"]},
+  {"name": "Sarah", "followed_by": ["Carl", "Paul"]},
+  {"name": "Carol", "followed_by": ["Helen", "Sarah"]},
+  {"name": "Helen", "followed_by": ["Paul"]},
 ]);
 ```
 
@@ -46,42 +46,42 @@ Define a single pipeline ready to perform the aggregation:
 ```javascript
 var pipeline = [
   // For each social network user, graph traverse their 'followed_by' list of people
-  {'$graphLookup': {
-    'from': 'users',
-    'startWith': '$followed_by',
-    'connectFromField': 'followed_by',
-    'connectToField': 'name',
-    'depthField': 'depth',
-    'as': 'extended_network',
+  {"$graphLookup": {
+    "from": "users",
+    "startWith": "$followed_by",
+    "connectFromField": "followed_by",
+    "connectToField": "name",
+    "depthField": "depth",
+    "as": "extended_network",
   }},
 
   // Add new accumulating fields
-  {'$set': {
+  {"$set": {
     // Count the extended connection reach
-    'network_reach': {
-      '$size': '$extended_network'
+    "network_reach": {
+      "$size": "$extended_network"
     },
 
-    // Gather the list of the extended connections' names
-    'extended_connections': {
-      '$map': {
-        'input': '$extended_network',
-        'as': 'connection',
-        'in': '$$connection.name',
+    // Gather the list of the extended connections" names
+    "extended_connections": {
+      "$map": {
+        "input": "$extended_network",
+        "as": "connection",
+        "in": "$$connection.name",
       }
     },    
   }},
     
   // Omit unwanted fields
-  {'$unset': [
-    '_id',
-    'followed_by',
-    'extended_network',
+  {"$unset": [
+    "_id",
+    "followed_by",
+    "extended_network",
   ]},   
   
   // Sort by person with greatest network reach first, in descending order
-  {'$sort': {
-    'network_reach': -1,
+  {"$sort": {
+    "network_reach": -1,
   }},   
 ];
 ```
@@ -96,7 +96,7 @@ db.users.aggregate(pipeline);
 ```
 
 ```javascript
-db.users.explain('executionStats').aggregate(pipeline);
+db.users.explain("executionStats").aggregate(pipeline);
 ```
 
 

@@ -21,64 +21,64 @@ use book-filtered-top-subset;
 db.dropDatabase();
 
 // Create an index for a persons collection
-db.persons.createIndex({'dateofbirth': -1});
+db.persons.createIndex({"dateofbirth": -1});
 
 // Insert 5 records into the persons collection
 db.persons.insertMany([
   {
-    'person_id': '6392529400',
-    'firstname': 'Elise',
-    'lastname': 'Smith',
-    'dateofbirth': ISODate('1972-01-13T09:32:07Z'),
-    'address': { 
-        'number': 5625,
-        'street': 'Tipa Circle',
-        'city': 'Wojzinmoj',
+    "person_id": "6392529400",
+    "firstname": "Elise",
+    "lastname": "Smith",
+    "dateofbirth": ISODate("1972-01-13T09:32:07Z"),
+    "address": { 
+        "number": 5625,
+        "street": "Tipa Circle",
+        "city": "Wojzinmoj",
     },
   },
   {
-    'person_id': '1723338115',
-    'firstname': 'Olive',
-    'lastname': 'Ranieri',
-    'dateofbirth': ISODate('1985-05-12T23:14:30Z'),    
-    'gender': 'FEMALE',
-    'address': {
-        'number': 9303,
-        'street': 'Mele Circle',
-        'city': 'Tobihbo',
+    "person_id": "1723338115",
+    "firstname": "Olive",
+    "lastname": "Ranieri",
+    "dateofbirth": ISODate("1985-05-12T23:14:30Z"),    
+    "gender": "FEMALE",
+    "address": {
+        "number": 9303,
+        "street": "Mele Circle",
+        "city": "Tobihbo",
     },
   },
   {
-    'person_id': '8732762874',
-    'firstname': 'Toni',
-    'lastname': 'Jones',
-    'dateofbirth': ISODate('1991-11-23T16:53:56Z'),    
-    'address': {
-        'number': 1,
-        'street': 'High Street',
-        'city': 'Upper Abbeywoodington',
+    "person_id": "8732762874",
+    "firstname": "Toni",
+    "lastname": "Jones",
+    "dateofbirth": ISODate("1991-11-23T16:53:56Z"),    
+    "address": {
+        "number": 1,
+        "street": "High Street",
+        "city": "Upper Abbeywoodington",
     },
   },
   {
-    'person_id': '7363629563',
-    'firstname': 'Bert',
-    'lastname': 'Gooding',
-    'dateofbirth': ISODate('1941-04-07T22:11:52Z'),    
-    'address': {
-        'number': 13,
-        'street': 'Upper Bold Road',
-        'city': 'Redringtonville',
+    "person_id": "7363629563",
+    "firstname": "Bert",
+    "lastname": "Gooding",
+    "dateofbirth": ISODate("1941-04-07T22:11:52Z"),    
+    "address": {
+        "number": 13,
+        "street": "Upper Bold Road",
+        "city": "Redringtonville",
     },
   },
   {
-    'person_id': '1029648329',
-    'firstname': 'Sophie',
-    'lastname': 'Celements',
-    'dateofbirth': ISODate('1959-07-06T17:35:45Z'),    
-    'address': {
-        'number': 5,
-        'street': 'Innings Close',
-        'city': 'Basilbridge',
+    "person_id": "1029648329",
+    "firstname": "Sophie",
+    "lastname": "Celements",
+    "dateofbirth": ISODate("1959-07-06T17:35:45Z"),    
+    "address": {
+        "number": 5,
+        "street": "Innings Close",
+        "city": "Basilbridge",
     },
   },
 ]);
@@ -92,23 +92,23 @@ Define a single pipeline ready to perform the aggregation:
 ```javascript
 var pipeline = [
   // Match people born in 1970 or later only
-  {'$match': {
-    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')},
+  {"$match": {
+    "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")},
   }},
     
   // Exclude 2 unnecessary fields from each person record
-  {'$unset': [
-    '_id',
-    'address',
+  {"$unset": [
+    "_id",
+    "address",
   ]},    
     
   // Sort by youngest person first
-  {'$sort': {
-    'dateofbirth': -1,
+  {"$sort": {
+    "dateofbirth": -1,
   }},      
     
   // Only include the first 2 records (the 2 youngest people)
-  {'$limit': 2},  
+  {"$limit": 2},  
 ];
 ```
 
@@ -122,7 +122,7 @@ db.persons.aggregate(pipeline);
 ```
 
 ```javascript
-db.persons.explain('executionStats').aggregate(pipeline);
+db.persons.explain("executionStats").aggregate(pipeline);
 ```
 
 
@@ -159,10 +159,10 @@ Only two documents should be returned, representing the two youngest people born
 
 ```javascript
 db.persons.find(
-    {'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')}},
-    {'_id': 0, 'address': 0}
+    {"dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")}},
+    {"_id": 0, "address": 0}
   ).sort(
-    {'dateofbirth': -1}
+    {"dateofbirth": -1}
   ).limit(2);
 ```
 

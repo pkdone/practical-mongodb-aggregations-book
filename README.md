@@ -40,8 +40,8 @@ For any changes or additions, the following principles must to be adhered to, fo
    - For every field in a stage, and for every stage in a pipeline, include a trailing comma even if it is currently the last item
    - Include an empty newline between every stage
    - Include a '//' comment with an explanation, on a newline, before every stage (remember this book is a teaching aid - even though you may not comment every stage for real-world pipelines, in this book you must do so)
-   - Use single quotes (not double quotes) for string values
-   - Always include quotes around field names, even though quotes are often optional for object key names in JavaScript (as a result it is easier to export the pipeline text to another programming language, especially Python, where Python's dictionaries represent structured data in a similar manner as JavaScript/JSON does, but where Python mandates that key names are surrounded by quotes)
+   - Use double (not single) quotes for string values to be consistent with the [JSON](https://en.wikipedia.org/wiki/JSON) specification
+   - Always include quotes around field names, even though quotes are often optional for object key names in JavaScript (as a result it is easier to export the pipeline text to another programming language, especially Python, where Python's dictionaries represent structured data in a similar manner as JavaScript/JSON does, but where Python mandates that key names are surrounded by quotes) - also as per the [JSON](https://en.wikipedia.org/wiki/JSON) specification use double quotes, not single quotes
    - Always terminate each Shell JavaScript example command with a semi-colon
 
 

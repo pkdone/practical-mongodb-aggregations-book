@@ -43,25 +43,25 @@ Bringing this to life more, imagine there is a `product_orders` collection where
 ```javascript
 [
   {
-    name: 'Asus Laptop',
+    name: "Asus Laptop",
     orders: [
       {
-        customer_id: 'elise_smith@myemail.com',
+        customer_id: "elise_smith@myemail.com",
         orderdate: 2020-05-30T08:35:52.000Z,
         value: Decimal128("431.43")
       },
       {
-        customer_id: 'jjones@tepidmail.com',
+        customer_id: "jjones@tepidmail.com",
         orderdate: 2020-12-26T08:55:46.000Z,
         value: Decimal128("429.65")
       }
     ]
   },
   {
-    name: 'Morphy Richards Food Mixer',
+    name: "Morphy Richards Food Mixer",
     orders: [
       {
-        customer_id: 'oranieri@warmmail.com',
+        customer_id: "oranieri@warmmail.com",
         orderdate: 2020-01-01T08:25:37.000Z,
         value: Decimal128("63.13")
       }
@@ -75,12 +75,12 @@ Let's say that an aggregation is required to transform these documents to only i
 ```javascript
 [
   {
-    name: 'Asus Laptop',
-    orders: [ 'elise_smith@myemail.com', 'jjones@tepidmail.com' ]
+    name: "Asus Laptop",
+    orders: ["elise_smith@myemail.com", "jjones@tepidmail.com"]
   },
   {
-    name: 'Morphy Richards Food Mixer',
-    orders: [ 'oranieri@warmmail.com' ]
+    name: "Morphy Richards Food Mixer",
+    orders: ["oranieri@warmmail.com"]
   }
 ]
 ```
@@ -91,13 +91,13 @@ One obvious way of achieving this transformation in an aggregation pipeline is t
 // SUBOPTIMAL
 
 var pipeline = [
-  {'$unwind': {
-    'path': '$orders',
+  {"$unwind": {
+    "path": "$orders",
   }},
 
-  {'$group': {
-    '_id': '$name',
-    'orders': {'$push': '$orders.customer_id'},
+  {"$group": {
+    "_id": "$name",
+    "orders": {"$push": "$orders.customer_id"},
   }},
 ];
 
@@ -109,12 +109,12 @@ This pipeline is suboptimal because a `$group` stage has been introduced, which,
 // OPTIMAL
 
 var pipeline = [
-  {'$set': {
-    'orders': {
-      '$map': {
-        'input': '$orders',
-        'as': 'order',
-        'in': '$$order.customer_id',
+  {"$set": {
+    "orders": {
+      "$map": {
+        "input": "$orders",
+        "as": "order",
+        "in": "$$order.customer_id",
       }
     },    
   }},
@@ -140,12 +140,12 @@ Take the following trivial example of a collection of _customer orders_ document
 ```javascript
 [
   {
-    customer_id: 'elise_smith@myemail.com',
+    customer_id: "elise_smith@myemail.com",
     orderdate: 2020-05-30T08:35:52.000Z,
     value: Decimal128("9999"),
   },
   {
-    customer_id: 'elise_smith@myemail.com',
+    customer_id: "elise_smith@myemail.com",
     orderdate: 2020-01-13T09:32:07.000Z,
     value: Decimal128("10101"),
   },
@@ -158,17 +158,17 @@ Let's assume the orders are based on a _Dollars_ currency, and each `value` fiel
 // SUBOPTIMAL
 
 var pipeline = [
-  {'$set': {
-    'value_dollars': {'$multiply': [0.01, '$value']}, // Converts cents to dollars
+  {"$set": {
+    "value_dollars": {"$multiply": [0.01, "$value"]}, // Converts cents to dollars
   }},
   
-  {'$unset': [
-    '_id',
-    'value',
+  {"$unset": [
+    "_id",
+    "value",
   ]},         
 
-  {'$match': {
-    'value_dollars': {'$gte': 100},  // Peforms a dollar check
+  {"$match": {
+    "value_dollars": {"$gte": 100},  // Peforms a dollar check
   }},    
 ];
 ```
@@ -181,17 +181,17 @@ By now for this example, it is probably obvious that as a developer you can easi
 // OPTIMAL
 
 var pipeline = [
-  {'$set': {
-    'value_dollars': {'$multiply': [0.01, '$value']},
+  {"$set": {
+    "value_dollars": {"$multiply": [0.01, "$value"]},
   }},
   
-  {'$match': {                // Moved to before the $unset
-    'value': {'$gte': 10000},   // Changed to not perform a cents check
+  {"$match": {                // Moved to before the $unset
+    "value": {"$gte": 10000},   // Changed to not perform a cents check
   }},    
 
-  {'$unset': [
-    '_id',
-    'value',
+  {"$unset": [
+    "_id",
+    "value",
   ]},         
 ];
 ```

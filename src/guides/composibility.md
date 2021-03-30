@@ -31,14 +31,14 @@ Below is an example of a poor pipeline layout, where none of the guiding princip
 // BAD
 
 var pipeline = [
-  {'$unset': [
-    '_id',
-    'address'
-  ]}, {'$match': {
-    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')}
-  }}//, {'$sort': {
-  //  'dateofbirth': -1
-  //}}, {'$limit': 2} */
+  {"$unset": [
+    "_id",
+    "address"
+  ]}, {"$match": {
+    "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")}
+  }}//, {"$sort": {
+  //  "dateofbirth": -1
+  //}}, {"$limit": 2} */
 ];
 ```
 
@@ -48,22 +48,22 @@ Whereas the following is an example of far better pipeline layout, where all of 
 // GOOD
 
 var pipeline = [
-  {'$unset': [
-    '_id',
-    'address',
+  {"$unset": [
+    "_id",
+    "address",
   ]},    
     
   // Only match people born on or after 1st Janurary 1970
-  {'$match': {
-    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')},
+  {"$match": {
+    "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")},
   }},
   
   /*
-  {'$sort': {
-    'dateofbirth': -1,
+  {"$sort": {
+    "dateofbirth": -1,
   }},      
     
-  {'$limit': 2},  
+  {"$limit": 2},  
   */
 ];
 ```
@@ -76,23 +76,23 @@ It is also worth mentioning that some (but not all) developers take a slightly d
 // GOOD
 
 var unsetStage = {
-  '$unset': [
-    '_id',
-    'address',
+  "$unset": [
+    "_id",
+    "address",
   ]};    
 
 var matchStage = {
-  '$match': {
-    'dateofbirth': {'$gte': ISODate('1970-01-01T00:00:00Z')},
+  "$match": {
+    "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")},
   }};
 
 var sortStage = {
-   '$sort': {
-    'dateofbirth': -1,
+   "$sort": {
+    "dateofbirth": -1,
   }}; 
 
 
-var limitStage = {'$limit': 2};
+var limitStage = {"$limit": 2};
     
 var pipeline = [
   unsetStage,

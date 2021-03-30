@@ -6,7 +6,7 @@ Expressions are one of key things that gives aggregation pipelines their data ma
 
 Expressions come in the following three main flavours:
 
- * __Field Paths.__ Accessed with a `$` prefix followed by the path of the field in each record being processed. &nbsp;Examples: `'$account.sortcode'`, `'$addresses.address.city'`
+ * __Field Paths.__ Accessed with a `$` prefix followed by the path of the field in each record being processed. &nbsp;Examples: `$account.sortcode`, `$addresses.address.city`
  
  * __Operators.__ Accessed with a `$`prefix followed by the operator function name. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`  
  
@@ -19,10 +19,10 @@ Expressions come in the following three main flavours:
 It is the ability to combine these three categories of expressions together when operating on input records, that enables complex comparisons and transformations of data to be achieved. To highlight this, the following is an excerpt from the [Mask Sensitive Fields](../examples/moderate-examples/mask-sensitive-fields.html) example in this book, which combines all three expressions. The example effectively retains an embedded sub-document field (`customer_info`) in each result record, unless a field in the original sub-document has a specific value (`category=SENSITIVE`).
 
 ```javascript
-'customer_info': {'$cond': {
-                    'if':   {'$eq': ['$customer_info.category', 'SENSITIVE']}, 
-                    'then': '$$REMOVE',     
-                    'else': '$customer_info',
+"customer_info": {"$cond": {
+                    "if":   {"$eq": ["$customer_info.category", "SENSITIVE"]}, 
+                    "then": "$$REMOVE",     
+                    "else": "$customer_info",
                  }}
 ```
 
@@ -73,8 +73,8 @@ Now what if you wanted to run an aggregation pipeline to only return rectangles 
 
 ```javascript
 var pipeline = [
-  {'$match': {
-    '$expr': {'$gt': [{'$multiply': ['$width', '$height']}, 12]},
+  {"$match": {
+    "$expr": {"$gt": [{"$multiply": ["$width", "$height"]}, 12]},
   }},      
 ];
 ```

@@ -9,7 +9,7 @@ The same applies to aggregation pipelines and the ability to view an _explain pl
 To view the explain plan for an aggregation pipeline, a developer can execute commands such as the following:
 
 ```javascript
-db.coll.explain().aggregate([{'$match': {'name': 'Jo'}}]);
+db.coll.explain().aggregate([{"$match": {"name": "Jo"}}]);
 ```
 
 However, in this book you will already have seen the convention being used to firstly define a separate variable for the pipeline, followed by the call to the `aggregate()` function, passing in the pipeline argument, as shown here:
@@ -28,17 +28,17 @@ As with MQL, there are three different verbosity modes that an aggregation's exp
 
 ```javascript
 // QueryPlanner verbosity  (default if no verbosity parameter provided)
-db.coll.explain('queryPlanner').aggregate(pipeline);
+db.coll.explain("queryPlanner").aggregate(pipeline);
 ```
 
 ```javascript
 // ExecutionStats verbosity
-db.coll.explain('executionStats').aggregate(pipeline);
+db.coll.explain("executionStats").aggregate(pipeline);
 ```
 
 ```javascript
 // AllPlansExecution verbosity 
-db.coll.explain('allPlansExecution').aggregate(pipeline);
+db.coll.explain("allPlansExecution").aggregate(pipeline);
 ```
 
 In most cases, running the `executionStats` variant is the most useful to developers because, rather than showing just the query planner's 'thinking', it also provides real statistics on the 'winning' executed plan (e.g. the total keys examined, the total docs examined, etc.). However, this isn't the default because it actually executes the aggregation too, in addition to formulating the query plan, which, if the source collection is large and/or the pipeline is sub-optimal, could take a while to return with the explain plan result.
@@ -52,28 +52,28 @@ As an example, let's assume there is a data-set of information on people (e.g. a
 
 ```javascript
 var pipeline = [
-  {'$unset' : [
-      '_id',
-      'address',
-      'person_id'
+  {"$unset" : [
+      "_id",
+      "address",
+      "person_id"
   ]},
   
-  {'$sort' : {
-      'dateofbirth' : -1
+  {"$sort" : {
+      "dateofbirth" : -1
   }},
   
-  {'$match' : {
-      'dateofbirth' : {'$gte' : ISODate('1970-01-01T00:00:00Z')}
+  {"$match" : {
+      "dateofbirth" : {"$gte" : ISODate("1970-01-01T00:00:00Z")}
   }},
   
-  {'$limit' : 3}
+  {"$limit" : 3}
 ]
 ```
 
 The _query planner_ part of the explain plan might then be requested:
 
 ```javascript
-db.persons.explain('queryPlanner').aggregate(pipeline);
+db.persons.explain("queryPlanner").aggregate(pipeline);
 ```
 
 The query plan ouput for this pipeline shows the following (some less relevant information has been edited out for brevity)
@@ -128,12 +128,12 @@ There are some interesting insights that can be deduced from this query plan:
  
  * To optimise the aggregation, the database engine has been able to collapse the `$sort` and `$limit` into a single _special internal_ stage which can perform both actions in one go. In this case, the aggregation engine only has to track, in memory, the 3 currently known youngest person records at any point in time, during the sorting process, rather than holding the whole data-set being sorted in memory, which may otherwise be resource prohibitive.
  
- * The first stage of the executed _internal runtime_ version of the pipeline, regardless of what order stages were placed in the pipeline by the developer, is always an _internal_ `$cusror` stage. The `$cursor` _runtime_ stage is the first thing that happens for any executing aggregation. The aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, optionally including a filter based on the contents of the aggregation's `$match`, if a `$match` was defined and if it occurs early in the optimised pipeline. The aggregation runtime uses the resulting query cursor to pull batches of records at a time, just like a client application using a MongoDB driver would do when remotely invoking an MQL query against a database collection. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense (which it does in this case, as is visible in the embedded  `$queryPlanner` metadata, showing the `"stage" : "IXSCAN",` element and the index used, `"indexName" : "dateofbirth_-1"`). 
+ * The first stage of the executed _internal runtime_ version of the pipeline, regardless of what order stages were placed in the pipeline by the developer, is always an _internal_ `$cusror` stage. The `$cursor` _runtime_ stage is the first thing that happens for any executing aggregation. The aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, optionally including a filter based on the contents of the aggregation's `$match`, if a `$match` was defined and if it occurs early in the optimised pipeline. The aggregation runtime uses the resulting query cursor to pull batches of records at a time, just like a client application using a MongoDB driver would do when remotely invoking an MQL query against a database collection. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense (which it does in this case, as is visible in the embedded  `$queryPlanner` metadata, showing the `"stage" : "IXSCAN"` element and the index used, `"indexName" : "dateofbirth_-1"`). 
 
 The _execution stats_ part of the explain plan might then be asked for:
 
 ```javascript
-db.persons.explain('executionStats').aggregate(pipeline);
+db.persons.explain("executionStats").aggregate(pipeline);
 ```
 
 Below is a redacted example of the resulting execution statistics in the explain plan, highlighting some of the most important metadata elements that developers should typically focus on.

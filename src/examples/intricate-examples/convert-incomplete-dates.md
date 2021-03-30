@@ -25,18 +25,18 @@ db.dropDatabase();
 
 // Insert 12 records into the payments collection
 db.payments.insert([
-  {'account': '010101', 'payment_date': '01-JAN-20 01.01.01.123000000', 'amount': 1.01},
-  {'account': '020202', 'payment_date': '02-FEB-20 02.02.02.456000000', 'amount': 2.02},
-  {'account': '030303', 'payment_date': '03-MAR-20 03.03.03.789000000', 'amount': 3.03},
-  {'account': '040404', 'payment_date': '04-APR-20 04.04.04.012000000', 'amount': 4.04},
-  {'account': '050505', 'payment_date': '05-MAY-20 05.05.05.345000000', 'amount': 5.05},
-  {'account': '060606', 'payment_date': '06-JUN-20 06.06.06.678000000', 'amount': 6.06},
-  {'account': '070707', 'payment_date': '07-JUL-20 07.07.07.901000000', 'amount': 7.07},
-  {'account': '080808', 'payment_date': '08-AUG-20 08.08.08.234000000', 'amount': 8.08},
-  {'account': '090909', 'payment_date': '09-SEP-20 09.09.09.567000000', 'amount': 9.09},
-  {'account': '101010', 'payment_date': '10-OCT-20 10.10.10.890000000', 'amount': 10.10},
-  {'account': '111111', 'payment_date': '11-NOV-20 11.11.11.111000000', 'amount': 11.11},
-  {'account': '121212', 'payment_date': '12-DEC-20 12.12.12.999000000', 'amount': 12.12}
+  {"account": "010101", "payment_date": "01-JAN-20 01.01.01.123000000", "amount": 1.01},
+  {"account": "020202", "payment_date": "02-FEB-20 02.02.02.456000000", "amount": 2.02},
+  {"account": "030303", "payment_date": "03-MAR-20 03.03.03.789000000", "amount": 3.03},
+  {"account": "040404", "payment_date": "04-APR-20 04.04.04.012000000", "amount": 4.04},
+  {"account": "050505", "payment_date": "05-MAY-20 05.05.05.345000000", "amount": 5.05},
+  {"account": "060606", "payment_date": "06-JUN-20 06.06.06.678000000", "amount": 6.06},
+  {"account": "070707", "payment_date": "07-JUL-20 07.07.07.901000000", "amount": 7.07},
+  {"account": "080808", "payment_date": "08-AUG-20 08.08.08.234000000", "amount": 8.08},
+  {"account": "090909", "payment_date": "09-SEP-20 09.09.09.567000000", "amount": 9.09},
+  {"account": "101010", "payment_date": "10-OCT-20 10.10.10.890000000", "amount": 10.10},
+  {"account": "111111", "payment_date": "11-NOV-20 11.11.11.111000000", "amount": 11.11},
+  {"account": "121212", "payment_date": "12-DEC-20 12.12.12.999000000", "amount": 12.12}
 ]);
 ```
 
@@ -48,32 +48,32 @@ Define a single pipeline ready to perform the aggregation:
 ```javascript
 var pipeline = [
   // Change field from a string to a date, filling in the missing gaps
-  {'$set': {
-    'payment_date': {    
-      '$let': {
-        'vars': {
-          'txt': '$payment_date',  // Assign 'payment_date' field to variable 'txt'
+  {"$set": {
+    "payment_date": {    
+      "$let": {
+        "vars": {
+          "txt": "$payment_date",  // Assign "payment_date" field to variable "txt"
         },
-        'in': { 
-          '$dateFromString': {'format': '%d-%m-%Y %H.%M.%S.%L', 'dateString':
-            {'$concat': [
-              {'$substrCP': ['$$txt', 0, 3]},  // Use 1st 3 chars in string
-              {'$switch': {'branches': [  // Replace month 3 chars with month number
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'JAN']}, 'then': '01'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'FEB']}, 'then': '02'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'MAR']}, 'then': '03'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'APR']}, 'then': '04'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'MAY']}, 'then': '05'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'JUN']}, 'then': '06'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'JUL']}, 'then': '07'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'AUG']}, 'then': '08'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'SEP']}, 'then': '09'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'OCT']}, 'then': '10'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'NOV']}, 'then': '11'},
-                {'case': {'$eq': [{'$substrCP': ['$$txt', 3, 3]}, 'DEC']}, 'then': '12'},
-               ], 'default': 'ERROR'}},
-              '-20',  // Add hyphen + hardcoded century 2 digits
-              {'$substrCP': ['$$txt', 7, 15]}  // Use remaining 3 millis (ignore last 6 nanosecs)
+        "in": { 
+          "$dateFromString": {"format": "%d-%m-%Y %H.%M.%S.%L", "dateString":
+            {"$concat": [
+              {"$substrCP": ["$$txt", 0, 3]},  // Use 1st 3 chars in string
+              {"$switch": {"branches": [  // Replace month 3 chars with month number
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "JAN"]}, "then": "01"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "FEB"]}, "then": "02"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "MAR"]}, "then": "03"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "APR"]}, "then": "04"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "MAY"]}, "then": "05"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "JUN"]}, "then": "06"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "JUL"]}, "then": "07"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "AUG"]}, "then": "08"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "SEP"]}, "then": "09"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "OCT"]}, "then": "10"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "NOV"]}, "then": "11"},
+                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "DEC"]}, "then": "12"},
+               ], "default": "ERROR"}},
+              "-20",  // Add hyphen + hardcoded century 2 digits
+              {"$substrCP": ["$$txt", 7, 15]}  // Use remaining 3 millis (ignore last 6 nanosecs)
             ]
           }}                  
         }
@@ -82,8 +82,8 @@ var pipeline = [
   }},
 
   // Omit unwanted fields
-  {'$unset': [
-    '_id',
+  {"$unset": [
+    "_id",
   ]},         
 ];
 ```
@@ -98,7 +98,7 @@ db.payments.aggregate(pipeline);
 ```
 
 ```javascript
-db.payments.explain('executionStats').aggregate(pipeline);
+db.payments.explain("executionStats").aggregate(pipeline);
 ```
 
 

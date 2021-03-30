@@ -23,74 +23,74 @@ use book-restricted-view;
 db.dropDatabase();
 
 // Create 2 indexes for a persons collection
-db.persons.createIndex({'gender': 1});
-db.persons.createIndex({'dateofbirth': -1});
+db.persons.createIndex({"gender": 1});
+db.persons.createIndex({"dateofbirth": -1});
 
 // Insert 5 records into the persons collection
 db.persons.insertMany([
   {
-    'person_id': '6392529400',
-    'firstname': 'Elise',
-    'lastname': 'Smith',
-    'dateofbirth': ISODate('1972-01-13T09:32:07Z'),
-    'gender': 'FEMALE',
-    'email': 'elise_smith@myemail.com',
-    'address': { 
-        'number': 5625,
-        'street': 'Tipa Circle',
-        'city': 'Wojzinmoj',
+    "person_id": "6392529400",
+    "firstname": "Elise",
+    "lastname": "Smith",
+    "dateofbirth": ISODate("1972-01-13T09:32:07Z"),
+    "gender": "FEMALE",
+    "email": "elise_smith@myemail.com",
+    "address": { 
+        "number": 5625,
+        "street": "Tipa Circle",
+        "city": "Wojzinmoj",
     },
   },
   {
-    'person_id': '1723338115',
-    'firstname': 'Olive',
-    'lastname': 'Ranieri',
-    'dateofbirth': ISODate('1985-05-12T23:14:30Z'),    
-    'gender': 'FEMALE',
-    'email': 'oranieri@warmmail.com',
-    'address': {
-        'number': 9303,
-        'street': 'Mele Circle',
-        'city': 'Tobihbo',
+    "person_id": "1723338115",
+    "firstname": "Olive",
+    "lastname": "Ranieri",
+    "dateofbirth": ISODate("1985-05-12T23:14:30Z"),    
+    "gender": "FEMALE",
+    "email": "oranieri@warmmail.com",
+    "address": {
+        "number": 9303,
+        "street": "Mele Circle",
+        "city": "Tobihbo",
     },
   },
   {
-    'person_id': '8732762874',
-    'firstname': 'Toni',
-    'lastname': 'Jones',
-    'dateofbirth': ISODate('2014-11-23T16:53:56Z'),    
-    'gender': 'FEMALE',
-    'email': 'tj@wheresmyemail.com',
-    'address': {
-        'number': 1,
-        'street': 'High Street',
-        'city': 'Upper Abbeywoodington',
+    "person_id": "8732762874",
+    "firstname": "Toni",
+    "lastname": "Jones",
+    "dateofbirth": ISODate("2014-11-23T16:53:56Z"),    
+    "gender": "FEMALE",
+    "email": "tj@wheresmyemail.com",
+    "address": {
+        "number": 1,
+        "street": "High Street",
+        "city": "Upper Abbeywoodington",
     },
   },
   {
-    'person_id': '7363629563',
-    'firstname': 'Bert',
-    'lastname': 'Gooding',
-    'dateofbirth': ISODate('1941-04-07T22:11:52Z'),    
-    'gender': 'MALE',
-    'email': 'bgooding@tepidmail.com',
-    'address': {
-        'number': 13,
-        'street': 'Upper Bold Road',
-        'city': 'Redringtonville',
+    "person_id": "7363629563",
+    "firstname": "Bert",
+    "lastname": "Gooding",
+    "dateofbirth": ISODate("1941-04-07T22:11:52Z"),    
+    "gender": "MALE",
+    "email": "bgooding@tepidmail.com",
+    "address": {
+        "number": 13,
+        "street": "Upper Bold Road",
+        "city": "Redringtonville",
     },
   },
   {
-    'person_id': '1029648329',
-    'firstname': 'Sophie',
-    'lastname': 'Celements',
-    'dateofbirth': ISODate('2013-07-06T17:35:45Z'),    
-    'gender': 'FEMALE',
-    'email': 'sophe@celements.net',
-    'address': {
-        'number': 5,
-        'street': 'Innings Close',
-        'city': 'Basilbridge',
+    "person_id": "1029648329",
+    "firstname": "Sophie",
+    "lastname": "Celements",
+    "dateofbirth": ISODate("2013-07-06T17:35:45Z"),    
+    "gender": "FEMALE",
+    "email": "sophe@celements.net",
+    "address": {
+        "number": 5,
+        "street": "Innings Close",
+        "city": "Basilbridge",
     },
   },
 ]);
@@ -104,16 +104,16 @@ Define a single pipeline ready to perform the aggregation:
 ```javascript
 var pipeline = [
   // Filter out any persons aged under 18 ($expr required to reference '$$NOW'
-  {'$match':
-    {'$expr':{
-      '$lt': ['$dateofbirth', {'$subtract': ['$$NOW', 18*365.25*24*60*60*1000]}]
+  {"$match":
+    {"$expr":{
+      "$lt": ["$dateofbirth", {"$subtract": ["$$NOW", 18*365.25*24*60*60*1000]}]
     }},
   },
 
   // Exclude fields to be filtered out by the view
-  {'$unset': [
-    '_id',
-    'dateofbirth',
+  {"$unset": [
+    "_id",
+    "dateofbirth",
   ]},    
 ];
 ```
@@ -127,13 +127,13 @@ db.persons.aggregate(pipeline);
 ```
 
 ```javascript
-db.persons.explain('executionStats').aggregate(pipeline);
+db.persons.explain("executionStats").aggregate(pipeline);
 ```
 
 Now create the new _adults_ view which will automatically apply the pipeline whenever the view is subsequently queried: 
 
 ```javascript
-db.createView('adults', 'persons', pipeline);
+db.createView("adults", "persons", pipeline);
 ```
 
 Execute a normal MQL query against the view, without any filter criteria, and also observe its explain plan:
@@ -143,17 +143,17 @@ db.adults.find();
 ```
 
 ```javascript
-db.adults.explain('executionStats').find();
+db.adults.explain("executionStats").find();
 ```
 
 Execute a normal MQL query against the view, but this time with a filter to return only adults who are female, and again observe its explain plan to see how the `gender` filter affects the plan:
 
 ```javascript
-db.adults.find({'gender': 'FEMALE'});
+db.adults.find({"gender": "FEMALE"});
 ```
 
 ```javascript
-db.adults.explain('executionStats').find({'gender': 'FEMALE'});
+db.adults.explain("executionStats").find({"gender": "FEMALE"});
 ```
 
 ## Expected Results
@@ -189,7 +189,7 @@ The result for both the `aggregate()` command and the `find()` executed on the _
 ]
 ```
 
-The result of running the `find()` against the _view_ with the filter `'gender': 'FEMALE'` should result in only two females' records being return because the male record has been excluded, as shown below:
+The result of running the `find()` against the _view_ with the filter `"gender": "FEMALE"` should result in only two females' records being return because the male record has been excluded, as shown below:
 
 ```javascript
 [
@@ -217,7 +217,7 @@ The result of running the `find()` against the _view_ with the filter `'gender':
 
  * __Expr & Indexes.__ The [NOW system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/), which returns the current system date-time, has been used but this can only be accessed via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by both MQL and `$match`. Therefore, the use of the `$$NOW` variable has to be wrapped in an `$expr` operator. The [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) allows the use of aggregation expressions from within MongoDB's query language, which is otherwise not normally possible, but comes with restrictions on what indexes can be leveraged, as discussed in the chapter [Can Expressions Be Used Everywhere?](../../guides/expressions.md). Consequently, as you can inspect in the explain plan for the pipeline, the executed aggregation cannot leverage the defined `dateofbirth` index with the range comparison operator used, meaning that a _full collection scan_ is performed rather than an _index scan_. If the pipeline is not used to back a view, the current date-time can be passed into the aggregation pipeline dynamically, at the point it is being constructed, right before its execution. This would allow a normal `$match` query condition comparison, and thus an index, to be leveraged. For a view, the pipeline is 'statically' defined once, upfront, when creating the view, and so, in this example, the current date-time has to be obtained by other means.
    
- * __View Finds & Indexes.__ If you view the explain plan for running the `find()` against the _view_ with the `'gender'` filter, you will notice that an index has actually been used (the index defined on the `'gender'` field). This is because, just as the database engine performs [aggregation pipeline optimisations](https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/) for regular aggregations, including attempting to move _match_ filters to the top of the pipeline, if possible, it can apply these same optimisations on a view. At runtime a view is essentially just an aggregation pipeline that was defined 'ahead of time'. So when `db.adults.find({'gender': 'FEMALE'})` is executed, the database engine adds a new dynamically generated `$match` stage to the end of the pipeline and then the database engine is able to optimise the pipeline and move the new `$match` stage up to the start of the pipeline, merged, in this case, in with the existing `$match` (`$expr`) stage. At runtime the query engine can then target the `gender` index. Two excerpts from the explain plan are shown below showing how the filter on `gender` and the filter on `dateofbirth` have been combined at runtime and then how the existing index for `gender` is leveraged, resulting in the benefit of the optimised aggregation performing just a 'partial table scan' rather than a 'full table scan'.
+ * __View Finds & Indexes.__ If you view the explain plan for running the `find()` against the _view_ with the `gender` filter, you will notice that an index has actually been used (the index defined on the `gender` field). This is because, just as the database engine performs [aggregation pipeline optimisations](https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/) for regular aggregations, including attempting to move _match_ filters to the top of the pipeline, if possible, it can apply these same optimisations on a view. At runtime a view is essentially just an aggregation pipeline that was defined 'ahead of time'. So when `db.adults.find({"gender": "FEMALE"})` is executed, the database engine adds a new dynamically generated `$match` stage to the end of the pipeline and then the database engine is able to optimise the pipeline and move the new `$match` stage up to the start of the pipeline, merged, in this case, in with the existing `$match` (`$expr`) stage. At runtime the query engine can then target the `gender` index. Two excerpts from the explain plan are shown below showing how the filter on `gender` and the filter on `dateofbirth` have been combined at runtime and then how the existing index for `gender` is leveraged, resulting in the benefit of the optimised aggregation performing just a 'partial table scan' rather than a 'full table scan'.
 ```javascript  
 "$cursor" : {
   "queryPlanner" : {

@@ -21,62 +21,62 @@ db.dropDatabase();
 // Insert 3 records into the customer_orders collection each with 1+ orders
 db.customer_orders.insertMany([
   {
-    'customer_id': 'tj@wheresmyemail.com',
-    'orders': [
+    "customer_id": "tj@wheresmyemail.com",
+    "orders": [
       {
-        'orderdate': ISODate('2019-05-28T19:13:32Z'),
-        'product_type': 'STATIONARY',
-        'value': NumberDecimal('2.01'),
+        "orderdate": ISODate("2019-05-28T19:13:32Z"),
+        "product_type": "STATIONARY",
+        "value": NumberDecimal("2.01"),
       },
       {
-        'orderdate': ISODate('2020-08-18T23:04:48Z'),
-        'product_type': 'BOOKS',
-        'value': NumberDecimal('4.59'),
+        "orderdate": ISODate("2020-08-18T23:04:48Z"),
+        "product_type": "BOOKS",
+        "value": NumberDecimal("4.59"),
       },
       {
-        'orderdate': ISODate('2020-11-23T22:56:53Z'),
-        'product_type': 'ELECTRONICS',
-        'value': NumberDecimal('187.99'),
+        "orderdate": ISODate("2020-11-23T22:56:53Z"),
+        "product_type": "ELECTRONICS",
+        "value": NumberDecimal("187.99"),
       },
       {
-        'orderdate': ISODate('2021-03-01T07:49:32Z'),
-        'product_type': 'ELECTRONICS',
-        'value': NumberDecimal('1024.89'),
-      },
-    ],
-  },
-  {
-    'customer_id': 'oranieri@warmmail.com',
-    'orders': [
-      {
-        'orderdate': ISODate('2020-01-01T08:25:37Z'),
-        'product_type': 'GARDEN',
-        'value': NumberDecimal('63.13'),
+        "orderdate": ISODate("2021-03-01T07:49:32Z"),
+        "product_type": "ELECTRONICS",
+        "value": NumberDecimal("1024.89"),
       },
     ],
   },
   {
-    'customer_id': 'elise_smith@myemail.com',
-    'orders': [
+    "customer_id": "oranieri@warmmail.com",
+    "orders": [
       {
-        'orderdate': ISODate('2020-01-13T09:32:07Z'),
-        'product_type': 'GARDEN',
-        'value': NumberDecimal('99.99'),
+        "orderdate": ISODate("2020-01-01T08:25:37Z"),
+        "product_type": "GARDEN",
+        "value": NumberDecimal("63.13"),
+      },
+    ],
+  },
+  {
+    "customer_id": "elise_smith@myemail.com",
+    "orders": [
+      {
+        "orderdate": ISODate("2020-01-13T09:32:07Z"),
+        "product_type": "GARDEN",
+        "value": NumberDecimal("99.99"),
       },
       {
-        'orderdate': ISODate('2020-05-30T08:35:52Z'),
-        'product_type': 'ELECTRONICS',
-        'value': NumberDecimal('231.43'),
+        "orderdate": ISODate("2020-05-30T08:35:52Z"),
+        "product_type": "ELECTRONICS",
+        "value": NumberDecimal("231.43"),
       },
       {
-        'orderdate': ISODate('2020-10-03T13:49:44Z'),
-        'product_type': 'GARDEN',
-        'value': NumberDecimal('102.24'),
+        "orderdate": ISODate("2020-10-03T13:49:44Z"),
+        "product_type": "GARDEN",
+        "value": NumberDecimal("102.24"),
       },
       {
-        'orderdate': ISODate('2020-12-26T08:55:46Z'),
-        'product_type': 'KITCHENWARE',
-        'value': NumberDecimal('48.50'),
+        "orderdate": ISODate("2020-12-26T08:55:46Z"),
+        "product_type": "KITCHENWARE",
+        "value": NumberDecimal("48.50"),
       },
     ],
   },
@@ -91,33 +91,33 @@ Define a single pipeline ready to perform the aggregation:
 ```javascript
 var pipeline = [
   // Unpack each order from the customer orders array as a new separate record
-  {'$unwind': {
-    'path': '$orders',
+  {"$unwind": {
+    "path": "$orders",
   }},
 
   // Match only orders made in 2020
-  {'$match': {
-    'orders.orderdate': {
-      '$gte': ISODate('2020-01-01T00:00:00Z'),
-      '$lt': ISODate('2021-01-01T00:00:00Z'),
+  {"$match": {
+    "orders.orderdate": {
+      "$gte": ISODate("2020-01-01T00:00:00Z"),
+      "$lt": ISODate("2021-01-01T00:00:00Z"),
     }
   }},
   
   // Group by product type
-  {'$group': {
-    '_id': '$orders.product_type',
-    'total_value': {'$sum': '$orders.value'},
-    'total_orders': {'$sum': 1},
+  {"$group": {
+    "_id": "$orders.product_type",
+    "total_value": {"$sum": "$orders.value"},
+    "total_orders": {"$sum": 1},
   }},
   
   // Set product type to be the value of the field that was grouped on
-  {'$set': {
-    'product_type': '$_id',
+  {"$set": {
+    "product_type": "$_id",
   }},
   
   // Omit unwanted field
-  {'$unset': [
-    '_id',
+  {"$unset": [
+    "_id",
   ]},   
 ];
 ```
@@ -132,7 +132,7 @@ db.customer_orders.aggregate(pipeline);
 ```
 
 ```javascript
-db.customer_orders.explain('executionStats').aggregate(pipeline);
+db.customer_orders.explain("executionStats").aggregate(pipeline);
 ```
 
 
