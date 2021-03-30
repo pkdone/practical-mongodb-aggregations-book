@@ -21,6 +21,7 @@
 - [Aggregations By Example](examples/examples.md)    
     - [Simple Examples](examples/simple-examples/00-simple-examples.md)
         - [Filtered Top Subset](examples/simple-examples/filtered-top-subset.md)
+        - [Convert To Strongly Typed](examples/simple-examples/convert-to-strongly-typed.md)
         - [Group & Total](examples/simple-examples/group-and-total.md)
         - [Unpack Arrays & Group Differently](examples/simple-examples/unpack-array-group-differently.md)
         - [One-to-One Join](examples/simple-examples/one-to-one-join.md)    
