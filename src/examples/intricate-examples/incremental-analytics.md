@@ -5,14 +5,14 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to periodically generate a summary report to understand the state of their business, where this report draws from both the most recently captured business data plus all the existing order which have occurred over the last year, to spot trends. Additionally, even though the data-set will increase in size over time, the user does not want to have to wait an increasing amount of time, whenever they need the most up to date version of the report. If report generation time increases as the historic data-set size increases, this would gradually slow down the organisation's ability to make decisions based on business insight.
+A user wants to frequently generate a summary report to understand the state of their business, where the report draws from both the most recently captured business data plus all previous data which has been recorded over the last year. By having a frequently updated view of the last rolling year, the user is better equipped to spot business trends and respond to these accordingly. However, although the data-set will grow larger over time, the user does not want to have to wait an increasing amount of time for the analytics job to complete, whenever the most up to date version of the report is required.
 
-In this example, a retailer has a collection of all shop orders made since they began trading and new order records are continuously added to the collection, as they occur, throughout each day. To simulate this, 5 shop orders are captured on 01-Feb-2021 and at the end of the day an aggregation is run just to generate an order summary for that day (count of orders, total order value) with the output placed as a new summary record in a summary collection The next day 4 shop orders are captured on 02-Feb-2021 and again an aggregation is run at end of day for just that day's orders generating a day summary record in the summary collection. TODO: simulate retrospective order. TODO: instead of producing an output to return, writes to a collection instead.
+In this example, a retailer has a set of _shop orders_ collected over a number of years. New order records are continuously added to the collection throughout each trading day. To simulate the requirement in a much reduced and simplified way, in this example 5 shop orders are captured on 01-Feb-2021 and at the end of the day an aggregation is run to generate an order summary record for that day only. The order summary record created by the aggregation pipeline for the one day includes a count of orders for the day and the total order value for the day. The aggregation then places this record directly into a summary collection, which is different than 'normal' aggregations which would usually just return the aggregation's results to the client application. The next day, on 02-Feb-2021, 4 new shop orders are captured and again an aggregation is run at end of day for just that day's orders, generating a new day summary record into the summary collection. Additionally, the user is able to go back to a previous day, if some orders need to be retrospectively 'corrected' for that day, make those order changes and then reliably re-generate the results for that day.
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then add 9 documents to the `orders` collection representing 5 orders on 01-Feb-2021 and 4 orders on 02-Feb-2021:
+Drop the old version of the database (if it exists) and then add 9 documents to the `orders` collection representing 5 orders for 01-Feb-2021 and 4 orders for 02-Feb-2021:
 
 ```javascript
 use book-incremental-analytics;
@@ -70,7 +70,7 @@ db.orders.insertMany([
 
 ## Aggregation Pipeline(s)
 
-Define a single pipeline ready to perform the aggregation:
+Define a single pipeline ready to perform the aggregation (the use of `'START'` and `'END'` placeholder values is intentional):
 
 ```javascript
 var pipeline = [
@@ -119,7 +119,7 @@ var pipeline = [
 
 ## Execution
 
-For 01-Feb-2021 orders, execute the aggregation using the defined pipeline: 
+For 01-Feb-2021 orders only, execute the aggregation using the defined pipeline (first setting the one-day date range accordingly): 
 
 ```javascript
 // Change the start and end date boundaries in the pipeline
@@ -133,9 +133,9 @@ db.orders.aggregate(pipeline);
 db.daily_orders_summary.find()
 ```
 
-From the results you can see that only an order summary has been generated for 01-Feb-2021 only containing the total value and total number of orders for that day.
+From the results you can see that only a single order summary has been generated, for 01-Feb-2021, containing the total value and total number of orders for that day.
 
-Now for the next day, for 02-Feb-2021 orders, execute the aggregation again:
+Now for the next day only (for 02-Feb-2021 orders), execute the aggregation again (first setting the new one-day date range accordingly):
 
 ```javascript
 // Change the start and end date boundaries in the pipeline
@@ -149,9 +149,9 @@ db.orders.aggregate(pipeline);
 db.daily_orders_summary.find()
 ```
 
-From the results you can see now see that order summaries exist for both days now.
+From the results you can see see that order summaries exist for both days now.
 
-To simulate the company retrospectively having to correct some older orders, add a new 'high value' order for the first day in the source _orders_ collection, then run re-run the aggregation for the first day 01-Feb-2021 to see if this correctly recalculates the order summary for the old day:
+To simulate the occasional need for the organisation to retrospectively correct an old order, go back and add a new 'high value' order for the first day in the source _orders_ collection, then run re-run the aggregation for the first day only (01-Feb-2021) to show that the summary for just the one day can be safely and correctly recalculated:
 
 ```javascript
 // Restrospectively add an order to an older day (01-Feb-2021)
@@ -166,16 +166,16 @@ db.orders.insertOne(
 pipeline[0]['$match']['orderdate']['$gte'] = ISODate('2021-02-01T00:00:00Z');
 pipeline[0]['$match']['orderdate']['$lt'] = ISODate('2021-02-02T00:00:00Z');
 
-// Re-run aggregation for 01-Feb-2021 orders overwriting 1st record in summary collections
+// Re-run aggregation for 01-Feb-2021 overwriting 1st record in summary collections
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should still be 2 records but 1st changed)
 db.daily_orders_summary.find()
 ```
 
-From the results you can now see that order summaries still exist for the two days, but the total value and order count for the first day has been updated/
+From the results you can now see that two order summaries still exist, one for each of the two trading days, but the total value and order count for the first day has been changed.
 
-For completeness, view the explain plan for the aggregation pipeline:
+For completeness, also view the explain plan for the aggregation pipeline:
 
 ```javascript
 db.products.explain('executionStats').aggregate(pipeline);
@@ -184,7 +184,7 @@ db.products.explain('executionStats').aggregate(pipeline);
 
 ## Expected Results
 
-The content of the `daily_orders_summary` collection after just running the aggregation for the 1<sup>st</sup> day should be similar to below:
+The content of the `daily_orders_summary` collection after running the aggregation for just the 1<sup>st</sup> day should be similar to below:
 
 ```javascript
 [
@@ -216,7 +216,7 @@ The content of the `daily_orders_summary` collection after running the aggregati
 ]
 ```
 
-The content of the `daily_orders_summary` collection after re-running the aggregation for the 1<sup>st</sup> day again, following an addition of a missed order for the old day, should be similar to below (notices the first record now show a value for `total_orders` which is one greater than before, and the value for `total_value` is now significantly greater than before:
+After re-running the aggregation for the 1<sup>st</sup> day following the addition of the missed order, the content of the `daily_orders_summary` collection should be similar to below (notice the first record now shows a value of one greater than before for `total_orders`, and for `total_value` the value is now significantly higher):
 
 ```javascript
 [
@@ -238,11 +238,11 @@ The content of the `daily_orders_summary` collection after re-running the aggreg
 
 ## Observations & Comments
 
-  * __Merge Stage.__ The significant difference in this example's aggregation pipeline and any other examples in this book is that rather than the output of the aggreation pipeline being a stream of records passed back to the client application, the records are streamed into a collection which is different than the source collection. The key mechanism that makes this happen is the inclusion of a `$merge` stage as the very last stage in the pipeline. Rhe configuraiton of `$merge` used in this example is dictated to insert a new record in the output collection of a matching one doesn't exist, or if it does already exist, replace the previous version. This makes sense for this partcular use case. For other uses of `$merge` different behavour can be specified like failing if there is no match or if there is a match merging the results of the new record in with the results of the existing record, where the resulting record is the combination of fields from both th exisitng an dnew versions, with the new version's fields taking precedence where it exists in both.
+  * __Merge Stage.__ The significant difference for this example's aggregation pipeline, compared with the others in this book, is that the output of the aggregation pipeline's is not a stream of records passed back to the client application. Instead, the records are streamed into a different collection. The key mechanism that makes this happen is the inclusion of a `$merge` stage at the very end of the pipeline. The use of `$merge` in this example is to insert a new record in the destination collection if a matching one doesn't exist. If a matching record already exists, it instead replaces the previous version. This behaviour makes sense for this particular use case. There are other ways `$merge` can be used though, for different uses cases. `$merge` can be told to fail if there is no match. If there is a match, `$merge` can be told to blend the content of the new record into the existing record. The updated record is essentially the combination of fields from both the pre-existing record and the new record, with the new version's fields taking precedence, wherever there is a clash.
   
-  * __Incremental Updates.__ As shown with just two days of shop orders (albeit with only a few orders to keep the example brief), after each new period of additions to the source collection (orders added for the new day, in this case), an aggregation can be run to generate or re-generate that day's summary only. Even after the source collection increasing in size over days, months or years, the time taken to update the summary collection stays roughly constant. In a real business scenario, the business might generate a graphical chart showing the changing trend of order amounts and values over the last year and may also choose to run another aggregation, this time over the _summary_ collection to very quickly show the total number and value of all orders for the past rolling year, without having to incur the cost of re-generating each day's values first. This example only has a few orders per day, but for real retailers, especially large ones there may actually be tens or hundreds of orders per day, with each order having a lot more detail. As a result, depending on the host hardware and other factors, it may take seconds or minutes to calculate a daily order summary for each day. Without applying an _incremental analytics_ approach, all orders for previous days in addition to the current day would have to analysed each day, meaning that over time, the time to generate the busies report will increase from seconds to minutes to hours.
+  * __Incremental Updates.__ The example illustrates just two days of shop orders, albeit with only a few orders to keep the example simple. At the end of each new day of new orders captured, the aggregation pipeline can be re-run to generate that day's summary only. Even after the source collection has increased in size over many days, months or years, the time taken to update the summary collection stays roughly constant (the time taken to process just one day's worth of orders). In a real-world scenario, the business might generate a graphical chart showing the changing trend of daily orders over the last year, or it might choose to run a different aggregation over the _summary_ collection, to very quickly produce the total number and value of orders for the whole year. This process does not have to incur the cost of re-generating each day's values first. The example in this chapter only has a few orders per day, but for real retailers, especially large ones, there could actually be tens of thousands or hundreds of thousands of orders received per day. In such situations, it may take a tens of seconds to calculate a daily order summary for one day, which is fine. However, without applying an _incremental analytics_ approach, all orders for previous days would have to re-analysed each time too. Over the weeks and months the wait for a business report to generated would increase from seconds to minutes to hours without such an _incremental analytics_ approach.
 
- * __Idempotency.__ The larger the amount of orders per day (e.g. tens of thousands or more) and the granularity of orders summaries calculated (eg. maybe hourly summaries are generated for each day rather than just a daily summary, meaning that 24 summary records are inserted into the summary collection rather than just 1, for each run). Sometimes systems will failr (host machines may go down, whole data centres or regions may go down). If an aggregation workload which is generated symmary recorcs into the tagrrt collection fails half way through (e.g has only written 17 of 24 records so far), the summaries collection will be left in an indeterminate state which will show inccorrect results for at least one day. However, the aggregation pipeline above, especially via the way it uses `$merge` means that if an aggregatio nfails to complete it can just be run again to re-generate the results, replacing any exiesitng summary records and filling in the gaps. The same aggregation for the same time window can be run over and over again without changing any of the existing correct summery, meaning that the system overall is natuarrly self healing and tolerate of inadvertantly aborted aggreagtion jobs.
+ * __Idempotency.__ For real world situations, when aggregating tens of thousands of orders per day to produce a daily summary, the opportunity for a system failure to occur whilst an aggregation is in mid-flight, is far greater. Also, in such large scale solutions, rather than generating just a single summary for a day's worth of trading, the aggregation may be generating a set of 24 hourly summary records for that day, into a summary collection. If an in-flight aggregation is abnormally terminated, it may have only written 17 of 24 records to the summaries collection, for example. This will leave the summary collection in an indeterminate and incomplete state for one of its days. However, this isn't a problem due to the way the aggregation pipeline is structured, especially with respect to the way it uses `$merge`. When an aggregation fails to complete, aggregation can just be re-run. When run again, it will regenerate all the results for the one day, replacing any already existing summary records and filling in the missing ones. The aggregation pipeline is idempotent and the same aggregation can be run over and over again for the same time window, without damaging the summaries data-set. The overall solution is self-healing and naturally tolerant of inadvertently aborted aggregation jobs.
  
- * __Retrospective Changes.__ As highlighted by the example used here, sometimes an organiation may need to go back and correct some of data from previous time periods. For example, a bank may need to go back and correct a payment recorded for few days ago, due to some issue that was detected with the payment, days efter it was processed. Written the right way, sunular to the pipelien used in this example, it is simple to re-execute the aggreation pipeline for a prevuous time period, against the ypdated source collection and have the symmary collection just be ypdated for that afffected time period.
-
+ * __Retrospective Changes.__ Sometimes an organisation may need to go back and correct some of its data from previous time periods, as illustrated in the example used in this chapter. For example, a bank may need to go back and correct a payment processed and persisted a few days ago, due to issue that has only come to light days later. Constructed the right way, it is simple to re-execute the aggregation pipeline for a previous time period, against the now updated source collection, and have the summary collection be correctly updated for the affected time period (as this chapter's example showed).
+ 
