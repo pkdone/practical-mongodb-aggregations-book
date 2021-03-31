@@ -23,7 +23,7 @@
         - [Filtered Top Subset](examples/simple-examples/filtered-top-subset.md)
         - [Group & Total](examples/simple-examples/group-and-total.md)
         - [Unpack Arrays & Group Differently](examples/simple-examples/unpack-array-group-differently.md)
-        - [Convert To Strongly Typed](examples/simple-examples/convert-to-strongly-typed.md)
+        - [Strongly Typed Conversion](examples/simple-examples/convert-to-strongly-typed.md)
         - [One-to-One Join](examples/simple-examples/one-to-one-join.md)    
     - [Moderate Examples](examples/moderate-examples/00-moderate-examples.md)
         - [Multi-Field Join & One-to-Many](examples/moderate-examples/multi-one-to-many.md)

@@ -41,7 +41,7 @@ db.payments.insert([
 ```
 
 
-## Aggregation Pipeline(s)
+## Aggregation Pipeline
 
 Define a single pipeline ready to perform the aggregation:
 
@@ -174,7 +174,7 @@ Twelve documents should be returned, corresponding to the original twelve source
 
 ## Observations & Comments
 
- * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `12-DEC-20 12.12.12.999000000`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`) by concatenating together the following four elements , three of which are dervied from the text field, before passing it to the `$dateFromString` operator to convert to a date type:
+ * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `12-DEC-20 12.12.12.999000000`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`) by concatenating together the following four elements , three of which are derived from the text field, before passing it to the `$dateFromString` operator to convert to a date type:
    - `'12-'` _(day of month from the input string)_
    - `'12'` _(replacing 'DEC')_
    - `'-20'` _(hard-coded hyphen + century)_

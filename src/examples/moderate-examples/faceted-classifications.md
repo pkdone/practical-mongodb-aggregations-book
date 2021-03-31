@@ -135,7 +135,7 @@ db.products.insertMany([
 ```
 
 
-## Aggregation Pipeline(s)
+## Aggregation Pipeline
 
 Define a single pipeline ready to perform the aggregation:
 

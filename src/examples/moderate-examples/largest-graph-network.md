@@ -9,7 +9,7 @@ A user wants to query a network of connections across a collection of records wh
 
 In this example, a social network database will be simulated (think _Twitter_) where each record is a social network user holding their name and the names of other people who follow them. An aggregation pipeline will be executed, which walks each record's `followed_by` array of links to determine which person has the largest _network reach_. This information might be useful for a marketing organisation to know who best to target a new marketing campaign at, for example.
 
-Note, this example uses a simple data model for brevity, however this is unlikely to be an optimum data model for using `$graphLookup` at scale, for users with a massive amount of followers and/or when running in a Sharded environment. For more guidance on such matters, see this reference applicaiton: [Socialite](https://github.com/mongodb-labs/socialite)
+Note, this example uses a simple data model for brevity, however this is unlikely to be an optimum data model for using `$graphLookup` at scale, for users with a massive amount of followers and/or when running in a Sharded environment. For more guidance on such matters, see this reference application: [Socialite](https://github.com/mongodb-labs/socialite)
 
 
 ## Sample Data Population
@@ -39,7 +39,7 @@ db.users.insertMany([
 ```
 
 
-## Aggregation Pipeline(s)
+## Aggregation Pipeline
 
 Define a single pipeline ready to perform the aggregation:
 

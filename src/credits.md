@@ -4,7 +4,7 @@ Book: __Practical MongoDB Aggregations__
  
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 0.90
+Version: 0.91
 
 Content created & assembled at: [https://github.com/pkdone/practical-mongodb-aggregations-book](https://github.com/pkdone/practical-mongodb-aggregations-book)
 
