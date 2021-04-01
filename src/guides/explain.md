@@ -79,25 +79,25 @@ db.persons.explain("queryPlanner").aggregate(pipeline);
 The query plan ouput for this pipeline shows the following (some less relevant information has been edited out for brevity)
 
 ```javascript
-"stages" : [
-  {"$cursor" : {
-    "queryPlanner" : {
-      "parsedQuery" : {
-        "dateofbirth" : {
-          "$gte" : ISODate("1970-01-01T00:00:00Z")
+stages : [
+  {$cursor : {
+    queryPlanner : {
+      parsedQuery : {
+        dateofbirth : {
+          $gte : ISODate("1970-01-01T00:00:00Z")
         }
       },
-      "winningPlan" : {
-        "stage" : "FETCH",
-        "inputStage" : {
-          "stage" : "IXSCAN",
-          "keyPattern" : {
-            "dateofbirth" : -1
+      winningPlan : {
+        stage : "FETCH",
+        inputStage : {
+          stage : "IXSCAN",
+          keyPattern : {
+            dateofbirth : -1
           },
-          "indexName" : "dateofbirth_-1",
-          "direction" : "forward",
-          "indexBounds" : {
-            "dateofbirth" : [
+          indexName : "dateofbirth_-1",
+          direction : "forward",
+          indexBounds : {
+            dateofbirth : [
               "[new Date(9223372036854775807), new Date(0)]"
             ]
           }
@@ -106,17 +106,17 @@ The query plan ouput for this pipeline shows the following (some less relevant i
     }
   }},
   
-  {"$project" : {
-      "_id" : false,
-      "person_id" : false,
-      "address" : false
+  {$project : {
+      _id : false,
+      person_id : false,
+      address : false
     }
   },
-  {"$sort" : {
-      "sortKey" : {
-        "dateofbirth" : -1
+  {$sort : {
+      sortKey : {
+        dateofbirth : -1
       },
-      "limit" : NumberLong(3)
+      limit : NumberLong(3)
     }
   }
 ]
@@ -139,22 +139,22 @@ db.persons.explain("executionStats").aggregate(pipeline);
 Below is a redacted example of the resulting execution statistics in the explain plan, highlighting some of the most important metadata elements that developers should typically focus on.
 
 ```javascript
-"executionStats" : {
-  "nReturned" : 333333,
-  "totalKeysExamined" : 333333,
-  "totalDocsExamined" : 333333,
+executionStats : {
+  nReturned : 333333,
+  totalKeysExamined : 333333,
+  totalDocsExamined : 333333,
   ...
-  "executionStages" : {
-    "stage" : "FETCH",
-    "nReturned" : 333333,
-    "docsExamined" : 333333,
+  executionStages : {
+    stage : "FETCH",
+    nReturned : 333333,
+    docsExamined : 333333,
     ...
-    "inputStage" : {
-      "stage" : "IXSCAN",
-      "nReturned" : 333333,
-      "indexName" : "dateofbirth_-1",
-      "direction" : "forward",
-      "keysExamined" : 333333,
+    inputStage : {
+      stage : "IXSCAN",
+      nReturned : 333333,
+      indexName : "dateofbirth_-1",
+      direction : "forward",
+      keysExamined : 333333,
       ...
 }
 ```

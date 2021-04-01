@@ -72,7 +72,7 @@ var pipeline = [
     }},     
   }},     
   
-  // Output to a unsharded or sharded collection
+  // Output to an unsharded or sharded collection
   {"$merge": {
     "into": "orders_typed",
   }},    

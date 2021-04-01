@@ -1,6 +1,6 @@
 &nbsp;
 
-Book: __Practical MongoDB Aggregations__
+# Practical MongoDB Aggregations
  
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
