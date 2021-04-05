@@ -2,38 +2,38 @@
 
 ## Who Is This Book For? 
 
-This book is for developers, architects, data analysts, data engineers and data scientists who have some familiarity with MongoDB, and who have already acquired at least a small amount of basic experience using the MongoDB Aggregation Framework. For those who don't yet have this 'entry level' knowledge, it is recommended to start with one or more of the following resources, before using this book:
+This book is for developers, architects, data analysts, data engineers and data scientists who have some familiarity with MongoDB and have already acquired a small amount of rudimentary experience using the MongoDB Aggregation Framework. If you do not yet have this 'entry level' knowledge, don't worry because there are plenty of 'getting started' guides out there. If you've never used the Aggregation Framework before, you should start with one or more of the following resources before using this book:
 
  * The [MongoDB Manual](https://docs.mongodb.com/manual/), and specifically its [Aggregation](https://docs.mongodb.com/manual/aggregation/) section
  * The [MongoDB University](https://university.mongodb.com/) free online courses, and specifically [The MongoDB Aggregation Framework (M121)](https://university.mongodb.com/courses/M121/about) introduction course
  * The [MongoDB: The Definitive Guide](https://www.oreilly.com/library/view/mongodb-the-definitive/9781491954454/) book by Bradshaw, Brazil & Chodorow, and specifically its section _7. Introduction to the Aggregation Framework_
 
-This is neither a book for complete novices, explaining how to get started on your first MongoDB aggregation pipeline, nor is it a comprehensive programming language guide, detailing every nuance of the Aggregation Framework and its syntax. Instead, this book is intended to assist with two key aspects:
+This book is not for complete novices, explaining how you should get started on your first MongoDB aggregation pipeline. Neither is this book a comprehensive programming language guide detailing every nuance of the Aggregation Framework and its syntax. Instead, this book exists to assist you with two key aspects:
 
- 1. Providing a set of opinionated yet easy to digest principles and approaches for increasingly your effectiveness in using the Aggregation Framework
- 2. Providing a set of examples for using the Aggregation Framework to solve common data manipulation challenges, with varying degrees of complexity
+ 1. Providing a set of opinionated yet easy to digest principles and approaches for increasing your effectiveness in using the Aggregation Framework
+ 2. Providing a set of examples for using the Aggregation Framework to solve common data manipulation challenges with varying degrees of complexity
 
 
 ## What Is The Aggregation Framework?
 
-MongoDB's aggregations language is somewhat of a paradox. It can appear daunting yet it is straight-forward. It can seem verbose yet it is lean and to the point. It is probably close to being [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) to be able to solve any business problem __*__, yet it is a strongly opinionated [Domain Specific Language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language), where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.
+MongoDB's aggregation pipeline language is somewhat of a paradox. It can appear daunting, yet it is straightforward. It can seem verbose, yet it is lean and to the point. It is [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) and be able to solve any business problem __*__. Conversely, it is a strongly opinionated [Domain Specific Language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language), where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.
 
 > __*__ _As [John Page](http://ilearnasigoalong.blogspot.com/) once showed, you can even code a [Bitcoin miner](https://github.com/johnlpage/MongoAggMiner) using MongoDB aggregations, not that he (or hopefully anyone for that matter) would ever recommend you do this for real, for both the sake of your bank balance and the environment!_
 
-Invariably, for beginners, the Aggregation Framework seems difficult to understand and comes with an initial steep learning curve which must be overcome to become productive. In some programming languages, only mastering the rudimentary elements of the language can result in being mostly productive in that language. With MongoDB aggregations, the level of initial investment required by an individual is usually a little greater. However, once mastered, users generally find it provides an elegant, natural and efficient solution to breaking down a complex set of data manipulations into a series of simple easy to understand steps. This is when users achieve the Zen of MongoDB Aggregations and it is a lovely place to be.
+Invariably, for beginners, the Aggregation Framework seems difficult to understand and comes with an initial steep learning curve that you must overcome to become productive. In some programming languages, you only need to master a small set of the language's aspects to be largely effective. With MongoDB aggregations, the initial investment level you will require is usually a little more significant. However, once mastered, users generally find it provides an elegant, natural and efficient solution to breaking down a complex set of data manipulations into a series of simple easy to understand steps. This point is when users achieve the Zen of MongoDB Aggregations, and it is a lovely place to be.
 
-MongoDB Aggregations is a programming language that is focussed on data-oriented problem solving rather than business process problem solving. It is essentially a [declarative programming language](https://en.wikipedia.org/wiki/Declarative_programming), rather than an [imperative programming language](https://en.wikipedia.org/wiki/Imperative_programming). Also, depending on how you squint, it can be regarded as a [functional programming language](https://en.wikipedia.org/wiki/Functional_programming) rather than a [procedural programming language](https://en.wikipedia.org/wiki/Procedural_programming). Why? Well an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side-effects. This is probably the main reason why the Aggregation Framework is regarded as having a steeper learning curve compared with some programming languages. Not because it is inherently more difficult to understand but just because most developers come from a procedural programming background and not a functional one. They have to learn how to think like a functional programmer in addition to learning the Aggregation Framework.
+MongoDB Aggregations is a programming language focused on data-oriented problem-solving rather than business process problem-solving. It is essentially a [declarative programming language](https://en.wikipedia.org/wiki/Declarative_programming), rather than an [imperative programming language](https://en.wikipedia.org/wiki/Imperative_programming). Also, depending on how you squint, it can be regarded as a [functional programming language](https://en.wikipedia.org/wiki/Functional_programming) rather than a [procedural programming language](https://en.wikipedia.org/wiki/Procedural_programming). Why? Well, an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side effects. This functional nature is probably why many users regard the Aggregation Framework as having a steeper learning curve than many common programming languages. It is not because it is inherently more difficult to understand but because most developers come from a procedural programming background and not a functional one. Most developers have to learn how to think like a functional programmer and learn the Aggregation Framework.
 
-It is the declarative and functional characteristics of MongoDB's Aggregation Framework which ultimately make it so powerful for processing massive data-sets. Users focus on defining 'the what' in terms of the required outcome, in a declarative way, more than 'the how' of specifying the exact logic to apply to achieve each transformation. Each stage in a pipeline is forced to only have one specific clear advertised purpose. At runtime, the database engine is then able to understand the exact intent of each stage. For example, the database engine can get clear answers to the questions it asks, such as, "is this stage for performing a filter or is this stage for grouping on some fields?". Armed with this knowledge, the database engine is afforded the opportunity to optimise the pipeline at runtime, as illustrated in the diagram below. For example, it may decide to re-order stages to optimally leverage an index whilst being sure that output isn't changed. Or, it may decide to execute some stages in parallel against subsets of the data in different shards, reducing response time, whilst again ensuring the output is never changed.
+MongoDB's Aggregation Framework's declarative and functional characteristics ultimately make it remarkably powerful for processing massive data sets. Users focus more on defining 'the what' in terms of the required outcome in a declarative way. Users focus less on 'the how' of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, "is this stage for performing a filter or is this stage for grouping on some fields?". With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to re-order stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.
 
 ![DB Engine Aggregations Optimisations](./pics/optimise.png)
 
-Last and by far least in terms of importance is a discussion about syntax. So far MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, what is the syntax on which MongoDB's aggregations are based on? The answer is "it depends" and the answer is mostly irrelevant. In this book, the examples will be highlighted using the Mongo Shell and the JavaScript interpreter it runs in, with an aggregation pipeline being expressed using a [JSON](https://en.wikipedia.org/wiki/JSON) based syntax. However, if you are using one of the many [programming language drivers](https://docs.mongodb.com/drivers/) that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON.
+Last and by far least in terms of importance is a discussion about syntax. So far, MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, with what syntax is a MongoDB aggregation pipeline constructed? The answer is "it depends", and the answer is mostly irrelevant. This book will highlight pipeline examples using the Mongo Shell and the JavaScript interpreter it runs in. This book will express aggregation pipelines using a [JSON](https://en.wikipedia.org/wiki/JSON) based syntax. However, if you are using one of the many [programming language drivers](https://docs.mongodb.com/drivers/) that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON.
 
 
 ## What's In A Name?
 
-You might have realised by now, there doesn't seem to be one single name for the subject of this book. You will often hear:
+You might have realised by now that there doesn't seem to be one single name for the subject of this book. You will often hear:
 
 * Aggregation
 * Aggregations
@@ -43,12 +43,12 @@ You might have realised by now, there doesn't seem to be one single name for the
 * Aggregation Language
 * _...and so on_
 
-The reality is any of these names is fine and it doesn't really matter which you use. In this book, each and all of these terms are probably used. Just take it as a positive sign that this MongoDB capability (and its title), was not born in a marketing boardroom. It was built by database engineers, for data engineers, where the branding was an afterthought at best! &#128518;
+The reality is that any of these names are acceptable, and it doesn't matter which you use. This book will likely use each and all of these terms. Just take it as a positive sign that this MongoDB capability (and its title) was not born in a marketing boardroom. It was built by database engineers, for data engineers, where the branding was an afterthought at best! &#128518;
 
 
 ## What Do People Use The Aggregation Framework For?
 
-The Aggregation Framework is versatile and used for many different types of data processing and manipulation tasks. Some common example uses are for:
+The Aggregation Framework is versatile and used for many different data processing and manipulation tasks. Some typical example uses are for:
 
 * Real-time analytics
 * Report generation with roll-ups, sums & averages
@@ -61,9 +61,9 @@ The Aggregation Framework is versatile and used for many different types of data
 * Copying and transforming subsets of data from one collection to another
 * Navigating relationships between records, looking for patterns
 * Data masking to redact and obfuscate sensitive data
-* Peforming the Transform (T) part of an Extract-Load-Transform ([ELT](https://en.wikipedia.org/wiki/Extract,_load,_transform)) workload
+* Performing the Transform (T) part of an Extract-Load-Transform ([ELT](https://en.wikipedia.org/wiki/Extract,_load,_transform)) workload
 * Data quality reporting and cleansing
-* Updating a materialized view with the results of the most recent source data changes
+* Updating a materialised view with the results of the most recent source data changes
 * Representing data ready to be exposed via SQL/ODBC/JDBC (using MongoDB's [BI Connector](https://docs.mongodb.com/bi-connector/))
 * Supporting machine learning frameworks for efficient data analysis (e.g. via MongoDB's [Spark Connector](https://docs.mongodb.com/spark-connector))
 * _...and many more_
