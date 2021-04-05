@@ -4,7 +4,7 @@
  
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 0.91
+Version: 0.92
 
 Content created & assembled at: [https://github.com/pkdone/practical-mongodb-aggregations-book](https://github.com/pkdone/practical-mongodb-aggregations-book)
 
@@ -30,5 +30,8 @@ Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.
 
 Acknowledgements:
 
- * Jake McInteer - many thanks for the extensive review & valuable feedback
+&nbsp; Many thanks to the following people for feeding back on phrasing issues and/or catching inaccuracies and errors:
+
+ * Jake McInteer
+ * John Page
 
