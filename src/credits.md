@@ -1,6 +1,8 @@
 &nbsp;
 
 # Practical MongoDB Aggregations
+
+&nbsp;
  
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
@@ -28,9 +30,9 @@ Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.
 
 ---
 
-Acknowledgements:
+### Acknowledgements
 
-&nbsp; Many thanks to the following people for feeding back on phrasing issues and/or catching inaccuracies and errors:
+Many thanks to the following people for feeding back on phrasing issues and/or catching inaccuracies and errors:
 
  * Jake McInteer
  * John Page
