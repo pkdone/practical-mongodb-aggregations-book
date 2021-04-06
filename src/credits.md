@@ -6,7 +6,7 @@
  
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 0.92
+Version: 0.93
 
 Content created & assembled at: [https://github.com/pkdone/practical-mongodb-aggregations-book](https://github.com/pkdone/practical-mongodb-aggregations-book)
 

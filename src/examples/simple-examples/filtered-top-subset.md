@@ -5,11 +5,9 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to query a collection and return only a subset of matching records, sorted and limited to just a few records, with only some of the attributes for each record included.
+A user wants to query a collection of _persons_ for people born in 1970 or later, sorted by the youngest person first and limited to only the two youngest people.
 
-In this example, a collection of _persons_ documents will be queried, where only people born in 1970 or later are returned, sorted by youngest person first and only returning the two youngest people. 
-
-This is the only example in the book that can also be completely achieved using just MQL instead, and serves as a useful comparison between MQL and Aggregations. 
+This example is the only one in the book that can also be achieved entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines.
 
 
 ## Sample Data Population
@@ -151,12 +149,12 @@ Only two documents should be returned, representing the two youngest people born
 
 ## Observations & Comments
 
- * __Index Use.__ A basic aggregation pipeline, where if many records belong to the collection, it is important that the `dateofbirth` index exists to enable the database engine to optimise the execution of the `$match` stage.
+ * __Index Use.__ A basic aggregation pipeline, where if many records belong to the collection, an index for `dateofbirth` must exist to enable the database to optimise the execution of the `$match` stage.
  
- * __Unset Use.__ An `$unset` stage is used rather than a `$project` stage, so the pipeline is less verbose, and more importantly, so the pipeline doesn't have to be modified each time a new field appears in some of the documents in the collection (for example, see the `gender` field that appears in only _Olive's_ record at this point).
+ * __Unset Use.__ An `$unset` stage is used rather than a `$project` stage. This enables the pipeline to avoid being verbose. More importantly, it means the pipeline does not have to be modified if a new field appears in future added documents (for example, see the `gender` field that appears in only _Olive's_ record at this point).
  
- * __MQL Similarity.__ For reference, the MQL equivalent to achieve the same result as the aggregation pipeline, is shown below (feel free to try this in the _Shell_):
-
+ * __MQL Similarity.__ For reference, the MQL equivalent to achieve the same result is shown below (you can try this in the _Shell_):
+ 
 ```javascript
 db.persons.find(
     {"dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")}},
