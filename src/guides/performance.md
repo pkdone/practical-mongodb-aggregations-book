@@ -37,9 +37,14 @@ In summary, you should attempt to move `$sort` & `$group` blocking stages to as 
 
 ## 2. Avoid Unwinding & Regrouping Documents Just To Process Each Record's Array Elements
 
-Sometimes it is necessary to transform documents from a source collection that each include an array field, where the main purpose of the aggregation pipeline is just to reduce the content of each array in isolation. For example, for each record in isolation, the aggregation may just need to add together all the values of the array into a total, or retain the first and last elements of the array only, or retain only one field from the sub-document that is in each array element, or any other of numerous other array _reduction_ scenarios.
+Sometimes, you need an aggregation pipeline to mutate or reduce an array field's content for each record. For example:
 
-Bringing this to life more, imagine there is a `product_orders` collection where each document in the collection represents a product, and the list of orders is an array of elements against each product, as shown in the example below:
+ * You may need to add together all the values in the array into a total field
+ * You may need to retain the first and last elements of the array only
+ * You may need to retain only one field of each sub-document in the array 
+ * ..._or numerous other array 'reduction' scenarios_
+
+To bring this to life more, imagine a `product_orders` collection. Each document represents a product and contains an array of orders for that product, as shown in the example below:
 
 ```javascript
 [
@@ -71,7 +76,7 @@ Bringing this to life more, imagine there is a `product_orders` collection where
 ]
 ```
 
-Let's say that an aggregation is required to transform these documents to only include the `customer_id` in each order for each product, and to exclude the `orderdate` and `value` fields because they are surplus to requirements. The desired aggregation output might be:
+An aggregation is required to transform these documents to retain the `customer_id` in each order for each product but exclude the `orderdate` and `value` fields because they are surplus to requirements. The desired aggregation output might be:
 
 ```javascript
 [
@@ -86,7 +91,7 @@ Let's say that an aggregation is required to transform these documents to only i
 ]
 ```
 
-One obvious way of achieving this transformation in an aggregation pipeline is to _unwind_ the _orders_ array for each record, producing an intermediate set of individual order records, and then _grouping_ together again the orders records by the product's `$name` but only pushing the `customer_id` field back into the `orders` array and ignoring the `orderdate` and `value` fields. The required pipeline to achieve this is shown below:
+One obvious way of achieving this transformation is to _unwind_ the _orders_ array for each record. This produces an intermediate set of individual order records that are then _grouped_ together again by the product's `$name`. When re-grouping, only the `customer_id` field is pushed back into the `orders` array with the `orderdate` and `value` fields ignored.  The required pipeline to achieve this is below:
 
 ```javascript
 // SUBOPTIMAL
@@ -104,7 +109,7 @@ var pipeline = [
 
 ```
 
-This pipeline is suboptimal because a `$group` stage has been introduced, which, as outlined earlier in this chapter, is a blocking stage. This will potentially increase memory consumption and hence the execution time dramatically, if run against a large data-set. There is a far better alternative which is to use one of the [Array Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators) instead. Array Operators are sometimes less intuitive to code but critically they avoid requiring the need to introduce a blocking stage into the pipeline. As a consequence, they are significantly more optimal, especially for large data-sets. Shown below is a far more efficient pipeline, using the `$map` array operator, rather then the `$unwind/$group` combination, to produce the same outcome:
+This pipeline is suboptimal because a `$group` stage has been introduced, which is a blocking stage, as outlined earlier in this chapter. Both memory consumption and execution time will increase significantly, which could be fatal for a large input data set. There is a far better alternative by using one of the [Array Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators) instead. Array Operators are sometimes less intuitive to code, but they avoid introducing a blocking stage into the pipeline. Consequently, they are significantly more optimal, especially for large data sets. Shown below is a far more efficient pipeline, using the `$map` array operator, rather than the `$unwind/$group` combination, to produce the same outcome:
 
 ```javascript
 // OPTIMAL
@@ -122,9 +127,9 @@ var pipeline = [
 ];
 ```
 
-There should never be the need to use an `$unwind/$group` combination in an aggregation pipeline just to transform an array field's elements for retention within the same document. Instead, use _Array Operators_ to avoid introducing a blocking stage, which otherwise will result in magnitudes of reduction in execution time when a pipeline is handling more than 100MB of in-flight data. It may even mean the difference between being able to achieve the required business outcome, using an aggregation, versus having to abandon the whole task as being unachievable.
+There should never be the need to use an `$unwind/$group` combination in an aggregation pipeline to transform an array field's elements for each document in isolation. Instead, use _Array Operators_ to avoid introducing a blocking stage. Otherwise, you will suffer a magnitude of increase in execution time when your pipeline handles more than 100MB of in-flight data. Adopting this best practice may mean the difference between achieving the required business outcome and abandoning the whole task as unachievable.
 
-In summary, the primary use of an `$unwind/$group` combination is to correlate patterns across many records, rather than transform the content within each input record in isolation. Instead, an example of an appropriate use of `$unwind/$group` is shown in this book's [Unpack Array & Group Differently](../simple-examples/unpack-array-group-differently.md) example.
+In summary, the primary use of an `$unwind/$group` combination is to correlate patterns across many records rather than transform the content within each input record in isolation. For an illustration of an appropriate use of `$unwind/$group` refer to this book's [Unpack Array & Group Differently](../simple-examples/unpack-array-group-differently.md) example.
 
 
 ## 3. Encourage Match Filters To Appear Early In A Pipeline
