@@ -134,14 +134,16 @@ In summary, the primary use of an `$unwind/$group` combination is to correlate p
 
 ## 3. Encourage Match Filters To Appear Early In A Pipeline
 
-As discussed in this book's [Using Explain Plans](./explain.md) chapter, the database engine will do its best to optimise the aggregation pipeline at runtime, with a particular focus on moving the `$match` stage contents to the top of the pipeline, if possible, to form part of the filters that are first executed as a query by the aggregation. This helps to maximise the opportunity for an index to be optimally leveraged at the start of the aggregation. However, it may not always be possible to promote `$match` filters in such a way without changing the meaning and resulting output of an aggregation.
+As discussed, the database engine will do its best to optimise the aggregation pipeline at runtime, with a particular focus on attempting to move the `$match` stages to the top of the pipeline. Top-level `$match` stages' content will form part of the filter that the engine first executes as the initial query. The aggregation then has the best chance of leveraging an index. However, it may not always be possible to promote `$match` filters in such a way without changing the meaning and resulting output of an aggregation.
 
-Sometimes there are situations where a `$match` stage is defined later in a pipeline and is performing a filter on a field which was only computed part way into the pipeline and therefore wasn't present in the source collection that the aggregation operated on. For example, perhaps a `$group` stage creates a new `total` field based on an accumulator and then a `$match` stage looks for records where the `total` is greater than `1000`. Or perhaps a `$set`stage computes a new  `total` field value based on adding up all the elements of an array field in the same document, and the `$match` then looks for records where the `total` is less than `50`.
+Sometimes, a `$match` stage is defined later in a pipeline to perform a filter on a field that the pipeline computed in an earlier stage. The computed field isn't present in the pipeline's source collection. Some examples are:
 
-At first glance, it may seem like nothing can be further done to optimise the pipeline by promoting the position of a specific `$match` stage. Sometimes that will indeed be the reality. In other situations though, there may be a missed opportunity where a refactoring is actually possible to enable such an optimisation.
+ * A pipeline where a `$group` stage creates a new `total` field based on an [accumulator operator](https://docs.mongodb.com/manual/reference/operator/aggregation/group/#accumulators-group). Later in the pipeline, a `$match` stage filters group where each group's `total` is greater than `1000`. 
+ * A pipeline where a `$set` stage computes a new `total` field value based on adding up all the elements of an array field in each document. Later in the pipeline, a `$match` stage filters documents where the `total` is less than `50`.
+
+At first glance, it may seem like the match on the computed field is irreversibly trapped behind an earlier stage that computed the field's value. Indeed the aggregation engine cannot optimise this further. In some situations, though, there may be a missed opportunity where superior refactoring is possible by you, the developer.
 
 Take the following trivial example of a collection of _customer orders_ documents:
-
 
 ```javascript
 [
@@ -158,7 +160,7 @@ Take the following trivial example of a collection of _customer orders_ document
 ]
 ```
 
-Let's assume the orders are based on a _Dollars_ currency, and each `value` field shows the order's value in _cents_. A pipeline may have been built to show all orders where the value is greater than 100 dollars like below:
+Let's assume the orders are in a _Dollars_ currency, and each `value` field shows the order's value in _cents_. You may have built a pipeline to display all orders where the value is greater than 100 dollars like below:
 
 ```javascript
 // SUBOPTIMAL
@@ -179,9 +181,9 @@ var pipeline = [
 ];
 ```
 
-Although the collection has an index defined for the `value` field (which is in _cents_), the `$match` filter for this pipeline is based on a computed field, `value_dollars` and hence if you run the explain plan for the this aggregation you will see that the `$match` filter has not been pushed to the top of the pipeline and an index has not been leveraged. The `$match` stage's filtering on `value_dollars` can at best only by pushed upwards to just after the `$set` stage, at runtime by the aggregation engine. It can't be pushed to the start of the pipeline. MongoDB's aggregation engine is clever enough to track dependencies for a particular field which is referenced in multiple stages in a pipeline. Hence it is able to establish how far up the pipeline it can promote fields without risking a change in the external behaviour and outcome of the aggregation. In this case it knows that the `$match` stage cannot be pushed ahead of the `set` stage which it depends on.
+The collection has an index defined for the `value` field (in _cents_). However, the `$match` filter uses a computed field, `value_dollars`. When you view the explain plan, you will see the pipeline does not leverage the index. The `$match` is trapped behind the `$set` stage (which computes the field) and cannot be moved to the pipeline's start. MongoDB's aggregation engine is clever enough to track a field's dependencies across multiple stages in a pipeline. It can establish how far up the pipeline it can promote fields without risking a change in the aggregation's behaviour. In this case, it knows that if it moves the `$match` stage ahead of the `$set` stage, it depends on things will not work correctly.
 
-By now for this example, it is probably obvious that as a developer you can easily make a pipeline modification that will enable this pipeline to be optimised, without changing the intended outcome of the pipeline. For this pipeline, simply by changing the `$match` filter to be based on the source field `value` being greater than `10000` cents, rather than the computed field `value_dollars` being greater then `100` dollars, and ensuring the `$match` stage appears before the `$unset` stage (which would remove the `value` field) it is enough to allow the pipeline run efficiently. Below is the pipeline after being manually optimised by the developer:
+In this example, as a developer, you can easily make a pipeline modification that will enable this pipeline to be more optimal without changing the pipeline's intended outcome. Change the `$match` filter to be based on the source field `value` instead (greater than `10000` cents), rather than the computed field (greater than `100` dollars). Also, ensure the `$match` stage appears before the `$unset` stage (which removes the `value` field). This change is enough to allow the pipeline to run efficiently. Below is how the pipeline looks after you have made  this change:
 
 ```javascript
 // OPTIMAL
@@ -192,7 +194,7 @@ var pipeline = [
   }},
   
   {"$match": {                // Moved to before the $unset
-    "value": {"$gte": 10000},   // Changed to not perform a cents check
+    "value": {"$gte": 10000},   // Changed to perform a cents check
   }},    
 
   {"$unset": [
@@ -202,9 +204,9 @@ var pipeline = [
 ];
 ```
 
-This pipeline produces the exact same results but if you were to look at its explain plan you would now see that the `$match` filter has been pushed to the top of the pipeline, when executed, and the index on `value` is now being leveraged. For completeness, in this case, the developer might as well move the modified `$match` stage to be the first stage in the pipeline explicitly, but this wasn't mandatory, as can be seen by the explain plan. The aggregation runtime has now been able to perform that optimisation itself because the `$match` stage is no longer 'blocked' by a dependency on a computed field dependency.
+This pipeline produces the same data output. However, when you look at its explain plan, it shows the database engine has pushed the `$match` filter to the top of the pipeline and used the `value` field's index. The aggregation runtime has now optimised the pipeline because the `$match` stage is no longer 'blocked' by its dependency on the computed field.
 
-There may be some cases where it isn't possible to unravel a computed value in such a way entirely. However, it may still be possible to include an additional `$match` stage, to perform a _partial match_, earlier in the pipeline. For example, lets say a computed field masks a sensitive `date_of_birth` field into a new `masked date` field by adding a random few days to the date, up to a maximum of 7 days. An existing `$match` stage's filter in the pipeline might already have been defined to only include records where `masked date` is greater than `01-Jan-2020`. A manual refactoring optimisation could be made to include an additional `$match`. This extra `$match` would be placed right at the start of the pipeline, with the filter `date_of_birth > 25-Dec-2020`, 7 days before the existing `$match` filter present later in the pipeline. This doesn't mean that the output of the overall aggregation has changed, with potentially more records being output. The output will not change because the original `$match` stage still exists in the pipeline to catch any _stragglers_. Now, earlier in pipeline however, there is a new _partially effective_ filter, which is leveraging an index, and which won't necessarily filter out all undesired records, but will quickly filter out the vast majority of them, leaving any errant records from the remaining 7 days window of time to be filtered out as normal, later in the pipeline.
+There may be some cases where you can't unravel a computed value in such a manner. However, it may still be possible for you to include an additional `$match` stage, to perform a __partial match__ targeting the aggregation's query cursor. Suppose you have a pipeline that masks the values of sensitive `date_of_birth` fields (replaced with computed `masked_date` fields). The computed field adds a random number of days (one to seven) to each current date. The pipeline already contains a `$match` stage with the filter `masked_date > 01-Jan-2020`. The runtime cannot optimise this to the pipeline's top due to the dependency on a computed value. Nevertheless, you can manually add an extra `$match` stage at the top of the pipeline, with the filter `date_of_birth > 25-Dec-2020`. This new `$match` leverages an index and filters records seven days earlier than the existing `$match`, but the aggregation's final output is the same. The new `$match` may pass on a few more records than intended. However, later on, the pipeline applies the filter `masked_date > 01-Jan-2020` that will naturally remove surviving surplus records before it completes.
 
-In summary, if you have a pipeline leveraging a `$match` stage and the explain plan shows the pipeline is not being optimised to promote the `$match` filter to be at the start of the pipeline, explore whether the match filter is based on a computed field, from say a `$group` or `$set` stage. If it is, see if the filter of the `$match` can be fully or partly _unravelled_ and based on a source field's value instead.
+In summary, if you have a pipeline leveraging a `$match` stage and the explain plan shows this is not moving to the start of the pipeline, explore whether manually refactoring will help. If the `$match` filter depends on a computed value, examine if you can alter this or add an extra `$match` to yield a more efficient pipeline.
 
