@@ -160,9 +160,7 @@ executionStats : {
 }
 ```
 
-TODO: start here
+Here the plan shows the aggregation uses an index, and because 'index keys examined' and 'documents examined' match, this indicates it is fully leveraging the index to identify the required records, which is good news. The targeted index doesn't necessarily mean the aggregation is fully optimised. For example, if there is the need to reduce latency further, you can do some analysis to determine if the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). Suppose the _cursor query_ part of the aggregation is satisfied entirely using the index and does not have to examine any documents. In that case, you will see `totalDocsExamined = 0` in the resulting explain plan. 
 
-Here the plan shows that an index was used, and because 'index keys examined' and 'documents examined' match, this indicates that the index was fully leveraged to completely identify the required records, which is good news. This doesn't necessarily mean the aggregation is fully optimal though. For example, if there was the need to reduce latency further, some analysis could be done to determine if the the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). If the _cursor query_ part of the the aggregation is satisfied entirely using the index and does not have to examine any documents, you would see `totalDocsExamined = 0` in the resulting explain plan. 
-
-The specific new information shown in `executionStats`, versus the default of `queryPlanner`, is identical to the [normal MQL explain plan](https://docs.mongodb.com/manual/tutorial/analyze-query-plan/) returned for a regular `find()` operation. As a consequence, similar principles apply for spotting things like 'has the optimum index been used?', and 'does the data model lend itself to efficiently processing the query?'.
+The specific new information shown in `executionStats`, versus the default of `queryPlanner`, is identical to the [normal MQL explain plan](https://docs.mongodb.com/manual/tutorial/analyze-query-plan/) returned for a regular `find()` operation. Consequently, similar principles apply for spotting things like 'have I used the optimum index?' and 'does my data model lend itself to efficiently processing the query?'.
 
