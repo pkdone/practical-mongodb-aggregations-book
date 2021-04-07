@@ -5,16 +5,15 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$rand](https://do
 
 ## Scenario
 
-A user wants to perform irreversible masking on the sensitive fields of a collection of documents, in some cases obfuscating part of a field's value, in other cases adjusting a field's value by a small random amount, in some cases substituting the field's value with a completely random value and in some cases excluding a field from the result completely, depending on a field's value.
-
-In this example, a collection of _credit card payment_ documents will be masked, to:
+You want to perform irreversible masking on the sensitive fields of a collection of _credit card payments_, ready to provide the output data set to a 3<sup>rd</sup> party for analysis, without exposing sensitive information to the 3<sup>rd</sup> party. The specific changes that you need to make to the payments' fields are:
  * Partially obfuscate the carder holder's name
  * Obfuscate the first 12 digits of the card's number, retaining only the final 4 digits
  * Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 30 days (~1 month)
  * Replace the card's 3 digit security code with a random set of 3 digits
  * Adjust the transaction's amount by adding or subtracting a random amount up to a maximum of 10% of the original amount
- * Change the transaction's `reported` field boolean value to the opposite value, for roughly 20% of the records
+ * Change the transaction's `reported` field boolean value to the opposite value for roughly 20% of the records
  * If the embedded `customer_info` sub-document's `category` field is set to _SENSITIVE_, exclude the whole `customer_info` sub-document
+
 
 ## Sample Data Population
 
@@ -171,6 +170,8 @@ Two documents should be returned, corresponding to the original two source docum
 
 
 ## Observations & Comments
+
+TODO: check from here
 
  * __Targeted Redaction.__ For excluding the `customer_info` sub-document where its `category` field is marked as _sensitive_, a `$cond` operator is used to check the value of the `category` field, returning the `$$REMOVE` variable to indicate for the sub-document to be excluded. There is an alternative approach that can be used instead, using a `$redact` stage to achieve the same thing. However, a `$redact` stage typically requires more database processing effort by needing to check every field in the document. Therefore, when only one specific sub-document is to be optionally redacted out per record, it is generally optimal to adopt the approach shown in this example.
  
