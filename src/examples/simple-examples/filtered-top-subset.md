@@ -5,9 +5,9 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to query a collection of _persons_ for people born in 1970 or later, sorted by the youngest person first and limited to only the two youngest people.
+You want to query a collection of _persons_ for people born in 1970 or later, sorted by the youngest person first and limited to only the two youngest people.
 
-This example is the only one in the book that can also be achieved entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines.
+This example is the only one in the book that you can also achieve entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines.
 
 
 ## Sample Data Population
@@ -151,10 +151,10 @@ Only two documents should be returned, representing the two youngest people born
 
  * __Index Use.__ A basic aggregation pipeline, where if many records belong to the collection, an index for `dateofbirth` must exist to enable the database to optimise the execution of the `$match` stage.
  
- * __Unset Use.__ An `$unset` stage is used rather than a `$project` stage. This enables the pipeline to avoid being verbose. More importantly, it means the pipeline does not have to be modified if a new field appears in future added documents (for example, see the `gender` field that appears in only _Olive's_ record at this point).
+ * __Unset Use.__ An `$unset` stage is used rather than a `$project` stage. This enables the pipeline to avoid being verbose. More importantly, it means the pipeline does not have to be modified if a new field appears in future added documents (for example, see the `gender` field that appears in only _Olive's_ record).
  
- * __MQL Similarity.__ For reference, the MQL equivalent to achieve the same result is shown below (you can try this in the _Shell_):
- 
+ * __MQL Similarity.__ For reference, the MQL equivalent for you to achieve the same result is below (you can try this in the _Shell_):
+  
 ```javascript
 db.persons.find(
     {"dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")}},

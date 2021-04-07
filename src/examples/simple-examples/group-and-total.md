@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to scan through the collection of _orders_ for shop purchases recorded for 2020 only. The records need to grouped by customer, capturing each customer's first purchase date, the number of orders they made, the total value of all their orders and a list of their order items. In summary, the report should show what each customer shopped for in 2020.
+You want to scan through the collection of _orders_ for shop purchases recorded in 2020 only. You need to group the records by customer, capturing each customer's first purchase date, the number of orders they made, the total value of all their orders and a list of their order items. In summary, your generated report should show what each customer shopped for in 2020.
 
 
 ## Sample Data Population
@@ -173,14 +173,12 @@ Three documents should be returned, representing the three customers, each showi
 
 ## Observations & Comments
 
-TODO: to reviee
-
- * __Double Sort Use.__ It is necessary to perform a `$sort` on the order date both before and after the `$group` stage. The `$sort` before the `$group` is required because the `$group` stage uses a `$first` group accumulator to capture just the first order's `orderdate` value for each customer being grouped. The `$sort` after the `$group` is required because the act of having just grouped on customer ID will mean that the records are no longer sorted by purchase date for the records coming out of the `$group` stage.
+ * __Double Sort Use.__ It is necessary to perform a `$sort` on the order date both before and after the `$group` stage. The `$sort` before the `$group` is required because the `$group` stage uses a `$first` group accumulator to capture just the first order's `orderdate` value for each grouped customer. The `$sort` after the `$group` is required because the act of having just grouped on customer ID will mean that the records are no longer sorted by purchase date for the records coming out of the `$group` stage.
  
- * __Renaming Group.__ Towards the end of the pipeline you will see what is a common pattern for pipelines that use `$group`, consisting of a combination of `$set`+`$unset` stages, to essentially take the group's key (which is always called `_id`) and substitute it with a more meaningful name in the result (`customer_id` in this case).
+ * __Renaming Group.__ Towards the end of the pipeline, you will see what is a typical pattern for pipelines that use `$group`, consisting of a combination of `$set`+`$unset` stages, to essentially take the group's key (which is always called `_id`) and substitute it with a more meaningful name (`customer_id`).
  
- * __Lossless Decimals.__ You may notice that a `Decimal()` function has been used to ensure the order amounts in the inserted records are using a lossless decimal type, [IEEE 754 decimal128](https://docs.mongodb.com/manual/tutorial/model-monetary-data/). In this example, if a JSON _float_ or _double_ type is used instead, the result order totals will suffer from loss of precision. For example, for the customer `elise_smith@myemail.com` the `total_value` result will have the value shown in the second line below, rather than the first line, if a _double_ type was used:
-
+ * __Lossless Decimals.__ You may notice the pipeline uses a `Decimal()` function to ensure the order amounts in the inserted records are using a lossless decimal type, [IEEE 754 decimal128](https://docs.mongodb.com/manual/tutorial/model-monetary-data/). In this example, if you use a JSON _float_ or _double_ type instead, the order totals will suffer from a loss of precision. For instance, for the customer `elise_smith@myemail.com`, if you use a _double_ type, the `total_value` result will have the value shown in the second line below, rather than the first line:
+ 
 ```javascript
 // Desired result (achieved by using decimal128 types)
 total_value: Decimal128("482.16")

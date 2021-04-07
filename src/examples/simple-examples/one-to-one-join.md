@@ -5,9 +5,7 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$first](https://d
 
 ## Scenario
 
-A user wants to join each document in one collection to a corresponding document in another collection to produce combined summary records, where there is a 1:1 relationship between  both collections. Also, in this case, the join is based on a single field match between both sides.
-
-In this example, a collection of _customer orders_, from shop purchases for the year 2020 only will be searched for, where each order will then be joined, by _product id_, to a matching record in the collection of _products_, to be able to include the product's name and category against each order in the results.
+You want to take a shop's _customer orders_ collection and join each order record to the corresponding product record in the _products_ collection. There is a 1:1 relationship between both collections, based on a single field match between both sides, based on the product's id. The resulting report will show all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id.
 
 
 ## Sample Data Population
@@ -171,7 +169,7 @@ Three documents should be returned, representing the three customers orders that
 
 ## Observations & Comments
 
- * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field of a record in one collection and a single field of a record in another collection. For an illustration of performing a join based on 2 or more matching fields in the lookup, see the example [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html)
+ * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field from each collection. For an illustration of performing a join based on two or more matching fields, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
  
- * __First Element Assumption.__ The pipeline assumes that the relationship between the two collections is 1:1 and so for the returned array of joined elements following the `$lookup` stage, the pipeline assumes the number of elements in the array is exactly one (and not more). As a result the pipeline then just extracts the date from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join, see the example [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html)
+ * __First Element Assumption.__ The pipeline assumes that the relationship between the two collections is 1:1. Therefore the returned array of joined elements coming out of the `$lookup` stage should contain precisely one array element. As a result, the pipeline extracts the data from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join instead, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
 
