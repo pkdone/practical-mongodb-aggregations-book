@@ -5,13 +5,12 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-Users with different roles will need to query the same data-set, but one of the roles specifically should have a read-only view of a subset of data only. This restricted view should only allow accessing a filtered subset of records in a collection and only a subset of fields in each of record of the collection. Essentially, this is an illustration of 'record-level' Role Based Access Control (RBAC).
+You have a _persons_ collection, where a particular client application shouldn't be allowed to see sensitive information. Consequently, you will provide a read-only view of a filtered subset of peoples' data only. You will also use MongoDB's Role-Based Access Control (RBAC) to limit the client application to access the view and not the original collection. You will use the view (named _adults_) to restrict the personal data for the client application in two ways:
 
-In this example, a collection of _persons_, each containing personal information, will have a read-only _adults_ view created for it. The view will be based on an aggregation pipeline which restricts the _persons_ data that can be queried, in two ways:
- 1. Only return records for people who are aged 18 and over (by checking each person's `dateofbirth` field)
- 2. For each record in the results, exclude the `dateofbirth` field because this information is sensitive
+ 1. Only show people aged 18 and over (by checking each person's `dateofbirth` field)
+ 2. Exclude the `dateofbirth` field for each person in the results
 
-In a real deployment, MongoDB's [Role-Based Access Control](https://docs.mongodb.com/manual/core/authorization/) rules would then be configured to enforce that the restricted user is only able to access the `adults` view and is not able to access the underlying `persons` collection.
+Essentially, this is an illustration of 'record-level' access control.
 
 
 ## Sample Data Population
@@ -120,7 +119,7 @@ var pipeline = [
 
 ## Execution
 
-Firstly, to test the defined aggregation pipeline (before using it to define a view), execute the aggregation for the pipeline and also observe its explain plan:
+Firstly, to test the defined aggregation pipeline (before using it to create a view), execute the aggregation for the pipeline and also observe its explain plan:
 
 ```javascript
 db.persons.aggregate(pipeline);
@@ -130,13 +129,13 @@ db.persons.aggregate(pipeline);
 db.persons.explain("executionStats").aggregate(pipeline);
 ```
 
-Now create the new _adults_ view which will automatically apply the pipeline whenever the view is subsequently queried: 
+Now create the new _adults_ view, which will automatically apply the aggregation pipeline whenever anyone queries the view: 
 
 ```javascript
 db.createView("adults", "persons", pipeline);
 ```
 
-Execute a normal MQL query against the view, without any filter criteria, and also observe its explain plan:
+Execute a regular MQL query against the view, without any filter criteria, and also observe its explain plan:
 
 ```javascript
 db.adults.find();
@@ -146,7 +145,7 @@ db.adults.find();
 db.adults.explain("executionStats").find();
 ```
 
-Execute a normal MQL query against the view, but this time with a filter to return only adults who are female, and again observe its explain plan to see how the `gender` filter affects the plan:
+Execute a MQL query against the view, but this time with a filter to return only adults who are female, and again observe its explain plan to see how the `gender` filter affects the plan:
 
 ```javascript
 db.adults.find({"gender": "FEMALE"});
@@ -158,7 +157,7 @@ db.adults.explain("executionStats").find({"gender": "FEMALE"});
 
 ## Expected Results
 
-The result for both the `aggregate()` command and the `find()` executed on the _view_ should be exactly the same, with three documents returned, representing the three persons who are over 18 but not showing their actual dates of birth, as shown below:
+The result for both the `aggregate()` command and the `find()` executed on the _view_ should be the same, with three documents returned, representing the three persons who are over 18 but not showing their actual dates of birth, as shown below:
 
 ```javascript
 [
@@ -189,7 +188,7 @@ The result for both the `aggregate()` command and the `find()` executed on the _
 ]
 ```
 
-The result of running the `find()` against the _view_ with the filter `"gender": "FEMALE"` should result in only two females' records being return because the male record has been excluded, as shown below:
+The result of running the `find()` against the _view_ with the filter `"gender": "FEMALE"` should be two females records only because the male record has been excluded, as shown below:
 
 ```javascript
 [
@@ -215,9 +214,10 @@ The result of running the `find()` against the _view_ with the filter `"gender":
 
 ## Observations & Comments
 
- * __Expr & Indexes.__ The [NOW system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/), which returns the current system date-time, has been used but this can only be accessed via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by both MQL and `$match`. Therefore, the use of the `$$NOW` variable has to be wrapped in an `$expr` operator. The [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) allows the use of aggregation expressions from within MongoDB's query language, which is otherwise not normally possible, but comes with restrictions on what indexes can be leveraged, as discussed in the chapter [Can Expressions Be Used Everywhere?](../../guides/expressions.md). Consequently, as you can inspect in the explain plan for the pipeline, the executed aggregation cannot leverage the defined `dateofbirth` index with the range comparison operator used, meaning that a _full collection scan_ is performed rather than an _index scan_. If the pipeline is not used to back a view, the current date-time can be passed into the aggregation pipeline dynamically, at the point it is being constructed, right before its execution. This would allow a normal `$match` query condition comparison, and thus an index, to be leveraged. For a view, the pipeline is 'statically' defined once, upfront, when creating the view, and so, in this example, the current date-time has to be obtained by other means.
+ * __Expr & Indexes.__ The used [NOW system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/) returns the current system date-time. However, you can only access this system variable via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by MQL and `$match`. You must wrap an expression using `$$NOW` inside an `$expr` operator. As described in the chapter [Can Expressions Be Used Everywhere?](../../guides/expressions.md) if you use an [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) to perform a range comparison, you can't make use of an index (which is the case for `dateofbirth` here). For a view, because the pipeline is 'statically' defined when creating the view, you cannot obtain the current date-time at runtime by other means.
    
- * __View Finds & Indexes.__ If you view the explain plan for running the `find()` against the _view_ with the `gender` filter, you will notice that an index has actually been used (the index defined on the `gender` field). This is because, just as the database engine performs [aggregation pipeline optimisations](https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/) for regular aggregations, including attempting to move _match_ filters to the top of the pipeline, if possible, it can apply these same optimisations on a view. At runtime a view is essentially just an aggregation pipeline that was defined 'ahead of time'. So when `db.adults.find({"gender": "FEMALE"})` is executed, the database engine adds a new dynamically generated `$match` stage to the end of the pipeline and then the database engine is able to optimise the pipeline and move the new `$match` stage up to the start of the pipeline, merged, in this case, in with the existing `$match` (`$expr`) stage. At runtime the query engine can then target the `gender` index. Two excerpts from the explain plan are shown below showing how the filter on `gender` and the filter on `dateofbirth` have been combined at runtime and then how the existing index for `gender` is leveraged, resulting in the benefit of the optimised aggregation performing just a 'partial table scan' rather than a 'full table scan'.
+ * __View Finds & Indexes.__ The explain plan for the _gender query_ run against the _view_ shows an index has been used (the index defined for the `gender` field). At runtime, a view is essentially just an aggregation pipeline defined 'ahead of time'. When `db.adults.find({"gender": "FEMALE"})` is executed, the database engine dynamically adds a new `$match` stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the new `$match` stage to the pipeline's start. Finally, it adds the filter extracted from the new `$match` stage to the aggregation's initial query and hence utilises the `gender` index. The following two excerpts from the explain plan illustrate how the filter on `gender` and the filter on `dateofbirth` combine at runtime and how the index for `gender` is used to avoid a full collection scan:
+ 
 ```javascript  
 "$cursor" : {
   "queryPlanner" : {
@@ -252,5 +252,5 @@ The result of running the `find()` against the _view_ with the filter `"gender":
 }
 ```
 
- * __Further Reading.__ This ability for query (`find()`) operations on a view to automatically have filters pushed into the view's aggregation pipeline as a new `$match` stage, at runtime, and where possible then be moved to the top of the pipeline by the database engine's optimiser, is described further in the blog post: [Is Querying A MongoDB View Optimised?](https://pauldone.blogspot.com/2020/11/mongdb-views-optimisations.html)
-
+ * __Further Reading.__ The ability for _find_ operations on a view to automatically push filters into the view's aggregation pipeline, and then be further optimised, is described in the blog post: [Is Querying A MongoDB View Optimised?](https://pauldone.blogspot.com/2020/11/mongdb-views-optimisations.html)
+ 
