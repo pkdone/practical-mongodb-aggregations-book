@@ -35,7 +35,7 @@ These unavoidable blocking stages don't just increase aggregation execution time
 In summary, you should attempt to move `$sort` & `$group` blocking stages to as late as possible in your pipeline. Ideally, earlier stages will significantly reduce the number of records streaming into these blocking stages. The blocking stages will have fewer records to process and less thirst for RAM, and aggregation will complete quickly.
 
 
-## 2. Avoid Unwinding & Regrouping Documents Just To Process Each Record's Array Elements
+## 2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements
 
 Sometimes, you need an aggregation pipeline to mutate or reduce an array field's content for each record. For example:
 

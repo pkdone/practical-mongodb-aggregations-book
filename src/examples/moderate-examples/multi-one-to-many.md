@@ -5,11 +5,9 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A user wants to join each document in a 'left-side' collection to zero or more corresponding documents in a 'right-side' collection, where the joined 'right-side' documents are embedded in a array field of the 'left-side' document. Additionally, for this scenario, the join is based on compound fields (two fields on the left-side matching to two fields on the right-side of the join).
+You want to take a shop's _products_ collection and join each product record to all the product's orders stored in an _orders_ collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like `product_id` (which doesn't exist in this data set), you need to use two common fields to join (`product_name` and `product_variation`). The resulting report will show all the orders made for each product in 2020.
 
-In this example, a collection of _shop products_ is joined to a collection of _orders_ to enable the results to show each product containing a list its orders made in 2020. In this case, rather than there being a single field on each side to join (e.g. `product_id`), there are two corresponding fields on each side of the join that have to be matched (`product_name` and `product_variation`).
-
-Note, the requirement to perform a 1:many join does not of course mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed useful to show both of these aspects in one place.
+Note that the requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.
 
 
 ## Sample Data Population
@@ -208,9 +206,10 @@ Two documents should be returned, representing the two products that had one or 
 
 ## Observations & Comments
 
- * __Multiple Join Fields.__ When a join needs to be made using two or more fields, rather than providing `localField` and `foreignField` parameters for `$lookup`, a more 'open ended' `let` parameter is required to bind fields from the left side of the join into variables ready to be used in the joining process. Then the `$lookup`'s embedded `$pipeline` is used to define how to perform the join, which basically constitutes a `$match` stage using the bind variables to test for equality with the corresponding fields of the right side collection. To access the _bind_ variables the `$match` is required to use an `$expr` operator. For this particular use of `$expr` an index can be leveraged against the collection being looked up, where there are equality matches only.
+ * __Multiple Join Fields.__ To join two or more fields in a `$lookup` stage, you must use a `let` parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `$pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. To access the _bind_ variables, the `$match` must use an `$expr` operator. In this instance, the`$expr` can use an index because only equality matches are employed.
  
- * __Reducing Array Content.__ As a consequence of having an embedded pipeline in the `$lookup` stage, in this example, an opportunity is taken to filter out unwanted fields from the right side of the join, rather than filtering these out when they appear as array elements later in the main top-level aggregation pipeline. If this filtering was left to afterwards, in the main pipeline, it would require either:
-    1. An extra stage to unwind the joined array elements, followed by an extra stage to unset the fields to be excluded, followed by an extra stage to then re-group the unpacked records back up again.
-    2. Use of one of the [Array Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators), such as `$map`, which can seem a little more complicated at first, but is more optimal than the `$unwind\$unset\$group` combination, as discussed in the [Pipeline Performance Considerations](../guides/performance.md) chapter of this book.
-
+ * __Reducing Array Content.__ The presence of an embedded pipeline in the `$lookup` stage provided an opportunity to filter out three unwanted fields brought in from the second collection. If you wanted to filter out these fields in a later step instead, inside the main pipeline, you could use one of the following two:
+ 
+    1. Add an extra stage to unwind the joined array elements, followed by a stage to unset the fields to be excluded, followed by a stage to re-group the unpacked records.
+    2. Use of one of the [Array Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators), such as `$map`. This can seem a little more complicated at first, but it is more optimal than the `$unwind\$unset\$group` combination, as described in the [Pipeline Performance Considerations](../guides/performance.md) chapter.
+    
