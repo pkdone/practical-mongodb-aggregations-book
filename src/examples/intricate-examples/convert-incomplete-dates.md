@@ -179,5 +179,5 @@ Twelve documents should be returned, corresponding to the original twelve source
    - `'-20'` _(hard-coded hyphen + century)_
    - `'20 12.12.12.999'` _(the rest of input string apart from the last 6 nanosecond digits)_
    
- * __Further Reading.__ This example is based on the output of the blog post: [Converting Gnarly Date Strings to Proper Date Types Using a MongoDB Aggregation Pipeline](https://pauldone.blogspot.com/2020/05/aggregation-convert-nasty-date-strings.html)
+ * __Further Reading.__ This example is based on the output of the blog post: [Converting Gnarly Date Strings to Proper Date Types Using a MongoDB Aggregation Pipeline](https://pauldone.blogspot.com/2020/05/aggregation-convert-nasty-date-strings.html).
  

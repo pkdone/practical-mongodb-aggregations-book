@@ -23,7 +23,7 @@ If you don't already have access to a MongoDB database, the two most accessible 
 There are many options for the client tool, four of which are:
 
  1. __*Modern* Shell__. Install the modern version of MongoDB's command-line tool, the [Mongo Shell](https://www.mongodb.com/try/download/shell): `mongosh`
- 2. __*Legacy* Shell__. Install the legacy version of MongoDB's command-line tool, the [Mongo Shell](https://docs.mongodb.com/manual/mongo/): `mongo` (you will often find this binary bundled with a MongoDB database installation or you downloaded it from the Atlas console)
+ 2. __*Legacy* Shell__. Install the legacy version of MongoDB's command-line tool, the [Mongo Shell](https://docs.mongodb.com/manual/mongo/): `mongo` (you will often find this binary bundled with a MongoDB database installation or you can download it from the Atlas console)
  3. __Compass__. Install the _official_ MongoDB Inc. provided graphical user interface (GUI) tool, [MongoDB Compass](https://www.mongodb.com/products/compass)
  4. __Studio 3T__. Install the _3<sup>rd</sup> party_ 3T Software Labs provided graphical user interface (GUI) tool, [Studio 3T](https://studio3t.com/download/)
  

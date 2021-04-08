@@ -32,7 +32,7 @@ Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.
 
 ### Acknowledgements
 
-Many thanks to the following people for feeding back on phrasing issues and/or catching inaccuracies and errors:
+Many thanks to the following people for feedback on phrasing and/or catching inaccuracies:
 
  * Jake McInteer
  * John Page
