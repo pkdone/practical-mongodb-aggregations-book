@@ -12,9 +12,9 @@ Expressions come in one of three primary flavours:
  
  * __Variables.__ Accessed with a `$$` prefix followed by the fixed name and falling into two sub-categories:
  
-   - __Context variables.__ With values coming from the system environment rather than each input record, an aggregation stage is processing. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
+   - __Context variables.__ With values coming from the system environment rather than each input record an aggregation stage is processing. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
    
-   - __Marker flag variables.__ To indicate desired behaviour to pass back to the pipeline runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
+   - __Marker flag variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
 
 You can combine these three categories of expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/moderate-examples/mask-sensitive-fields.html) example, which combines all three expressions.
 
@@ -37,7 +37,7 @@ __Question:__ Can expressions be used within any type of pipeline stage?
 
 __Answer:__ No
 
-There are many types of stages in the Aggregation Framework that don't allow expressions to be embedded (or don't support embedded pipelines that indirectly allow expressions). They stages are:
+There are many types of stages in the Aggregation Framework that don't allow expressions to be embedded (or don't support embedded pipelines that indirectly allow expressions). These stages are:
 
  * `$match`
  * `$geoNear`
@@ -53,19 +53,21 @@ There are many types of stages in the Aggregation Framework that don't allow exp
 
 Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider `$match` to be the most surprising item in this list. The content of a `$match` stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the `$match` stage at the top of the pipeline. Therefore, the `$match` filter must use the same syntax as MQL. 
 
-In most of the stages that don't leverage expressions, it doesn't usually make sense for their behaviour to be more 'dynamic'. For example, you might provide a constant value of `20` to a `$limit` stage or a constant value of `80` to a `$skip` stage. It is hard to think of a scenario where a pipeline would need to calculate these values at runtime instead, based on the input data. Only one of the listed stages needs to be more expressive: the `$match` stage, but this stage is already sufficiently flexible by being based on MQL query conditions. 
+In most of the stages that don't leverage expressions, it doesn't usually make sense for their behaviour to be more 'dynamic'. For example, you might provide a constant value of `20` to a `$limit` stage or a constant value of `80` to a `$skip` stage. It is hard to think of a scenario where a pipeline would need to calculate these values at runtime instead, based on the input data. Only one of the listed stages needs to be more expressive: the `$match` stage, but this stage is already flexible by being based on MQL query conditions. 
 
 
 ## What Is Using $expr Inside $match All About?
 
-Complicating things a little, in more recent MongoDB versions, the statement about `$match` not supporting expressions is no longer entirely accurate. MongoDB version 3.6 introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) used in regular MQL queries and hence in `$match` stages too. Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables.
+Complicating things a little, in more recent MongoDB versions, the statement made earlier about `$match` not supporting expressions is not entirely accurate. MongoDB version 3.6 introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) used in regular MQL queries and hence in `$match` stages too. Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables.
 
 A few situations demand having to use `$expr` from inside a `$match` stage. Examples include:
 
  * A requirement to compare two fields from the same record to determine whether to keep the record based on the comparison's outcome
- * A requirement to perform a calculation based on value from existing fields in each record and then compare calculation result to criteria.
+ * A requirement to perform a calculation based on values from multiple existing fields in each record and then comparing the calculation result to a threshold
+ 
+These are impossible in an aggregation if you use regular `$match` query conditions.
 
-These are impossible in an aggregation if you use regular `$match` query conditions (if you ignore the legacy `$where` query operator, which has documented downsides and so should you should avoid)
+> _(let's ignore the possibility of using the legacy `$where` query operator here, which has documented downsides and should be avoided)_
 
 Take the example of a collection holding information on different instances of rectangles (their width and height), similar to the following: 
 

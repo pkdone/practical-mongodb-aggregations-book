@@ -19,7 +19,7 @@ In this book, you will already have seen the convention used to firstly define a
 db.coll.aggregate(pipeline);
 ```
 
-By adopting this approach, it easier for you to use the exact pipeline definition interchangeably with different commands. Whilst prototyping and debugging a pipeline, it is handy for you to be able to quickly switch from executing the pipeline to instead generating the explain plan for the same defined pipeline, as follows:
+By adopting this approach, it easier for you to use the same pipeline definition interchangeably with different commands. Whilst prototyping and debugging a pipeline, it is handy for you to be able to quickly switch from executing the pipeline to instead generating the explain plan for the same defined pipeline, as follows:
 
 ```javascript
 db.coll.explain().aggregate(pipeline);
@@ -71,7 +71,7 @@ var pipeline = [
 ]
 ```
 
-You then request the _query planner_ part of the explain plan:
+You might then request the _query planner_ part of the explain plan:
 
 ```javascript
 db.persons.explain("queryPlanner").aggregate(pipeline);
@@ -129,9 +129,9 @@ You can deduce some illuminating insights from this query plan:
  
  * To further optimise the aggregation, the database engine has collapsed the `$sort` and `$limit` into a single _special internal_ stage which can perform both actions in one go. In this circumstance, during the sorting process, the aggregation engine only has to track the three currently known youngest person records in memory. It does not have to hold the whole data set in memory when sorting, which may otherwise be resource prohibitive.
  
- * The first stage of the database optimised version of the pipeline is always an _internal_ `$cusror` stage, regardless of the order you placed the pipeline stages in. The `$cursor` _runtime_ stage is always the first internal action executed. Under the covers, the aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, with a filter based on the aggregation's `$match` contents. The aggregation runtime uses the resulting query cursor to pull batches of records, similar to how a client application with a MongoDB driver uses a query cursor when remotely invoking an MQL query. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense (which it does in this case, as is visible in the embedded  `$queryPlanner` metadata, showing the `"stage" : "IXSCAN"` element and the index used, `"indexName" : "dateofbirth_-1"`). 
+ * The first stage of the database optimised version of the pipeline is always an _internal_ `$cursor` stage, regardless of the order you placed the pipeline stages in. The `$cursor` _runtime_ stage is always the first action executed. Under the covers, the aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, with a filter based on the aggregation's `$match` contents. The aggregation runtime uses the resulting query cursor to pull batches of records. This is similar to how a client application with a MongoDB driver uses a query cursor when remotely invoking an MQL query. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense (which it does in this case, as is visible in the embedded  `$queryPlanner` metadata, showing the `"stage" : "IXSCAN"` element and the index used, `"indexName" : "dateofbirth_-1"`). 
 
-You then ask for the _execution stats_ part of the explain plan:
+You might then ask for the _execution stats_ part of the explain plan:
 
 ```javascript
 db.persons.explain("executionStats").aggregate(pipeline);
@@ -160,7 +160,7 @@ executionStats : {
 }
 ```
 
-Here the plan shows the aggregation uses an index, and because 'index keys examined' and 'documents examined' match, this indicates it is fully leveraging the index to identify the required records, which is good news. The targeted index doesn't necessarily mean the aggregation is fully optimised. For example, if there is the need to reduce latency further, you can do some analysis to determine if the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). Suppose the _cursor query_ part of the aggregation is satisfied entirely using the index and does not have to examine any documents. In that case, you will see `totalDocsExamined = 0` in the resulting explain plan. 
+Here the plan shows the aggregation uses an index, and because '_index keys examined_' and '_documents examined_' match, this indicates it is fully leveraging the index to identify the required records, which is good news. The targeted index doesn't necessarily mean the aggregation is fully optimised. For example, if there is the need to reduce latency further, you can do some analysis to determine if the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). Suppose the _cursor query_ part of the aggregation is satisfied entirely using the index and does not have to examine any documents. In that case, you will see `totalDocsExamined = 0` in the resulting explain plan. 
 
-The specific new information shown in `executionStats`, versus the default of `queryPlanner`, is identical to the [normal MQL explain plan](https://docs.mongodb.com/manual/tutorial/analyze-query-plan/) returned for a regular `find()` operation. Consequently, similar principles apply for spotting things like 'have I used the optimum index?' and 'does my data model lend itself to efficiently processing the query?'.
+The specific new information shown in `executionStats`, versus the default of `queryPlanner`, is identical to the [normal MQL explain plan](https://docs.mongodb.com/manual/tutorial/analyze-query-plan/) returned for a regular `find()` operation. Consequently, for aggregations similar principles to queries apply for spotting things like 'have I used the optimum index?' and 'does my data model lend itself to efficiently processing the query?'.
 

@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$rand](https://do
 
 ## Scenario
 
-You want to perform irreversible masking on the sensitive fields of a collection of _credit card payments_, ready to provide the output data set to a 3<sup>rd</sup> party for analysis, without exposing sensitive information to the 3<sup>rd</sup> party. The specific changes that you need to make to the payments' fields are:
+You want to perform irreversible masking on the sensitive fields of a collection of _credit card payments_, ready to provide the output data set to a 3rd party for analysis, without exposing sensitive information to the 3rd party. The specific changes that you need to make to the payments' fields are:
  * Partially obfuscate the carder holder's name
  * Obfuscate the first 12 digits of the card's number, retaining only the final 4 digits
  * Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 30 days (~1 month)
@@ -171,13 +171,13 @@ Two documents should be returned, corresponding to the original two source docum
 
 ## Observations & Comments
 
- * __Targeted Redaction.__ The pipeline uses a `$cond` operator to return the `$$REMOVE` marker variable if the `category` field is `SENSITIVE`. This informs the aggregation engine to exclude the whole `customer_info` sub-document from the stage's output for the record. Alternatively, the pipeline could have used a `$redact` stage to achieve the same. However, `$redact` typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.
+ * __Targeted Redaction.__ The pipeline uses a `$cond` operator to return the `$$REMOVE` marker variable if the `category` field is equal to `SENSITIVE`. This informs the aggregation engine to exclude the whole `customer_info` sub-document from the stage's output for the record. Alternatively, the pipeline could have used a `$redact` stage to achieve the same. However, `$redact` typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.
  
  * __Regular Expression.__ For masking the `card_name` field, a regular expression operator is used to extract the last word of the field's original value. `$regexFind` returns metadata into the stage's output records, indicating if the match succeeded and what the matched value is. Therefore, an additional `$set` stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hard-coded text.
  
- * __Unset Alternative.__ If this example is consistent with the other examples in this book, the pipeline will include an additional `$unset` stage to exclude the `_id` field. However, in this case, chiefly to show there is another way, the pipeline marks the `_id` field for exclusion in the `$set` stage by being assigned the `$$REMOVE` variable.
+ * __Unset Alternative.__ If this example was consistent with the other examples in this book, the pipeline would include an additional `$unset` stage to exclude the `_id` field. However, in this case, chiefly to show there is another way, the pipeline marks the `_id` field for exclusion in the `$set` stage by being assigned the `$$REMOVE` variable.
 
- * __Meaningful Insight.__ Even though the pipeline is irreversibly obfuscating fields, it doesn't mean that the masked data is useless for performing analytics to gain insight. The pipeline masks some fields by fluctuating the original values by a small random percentage (e.g. _card_expiry_, _transaction_amount_), rather than replacing them with random values (e.g. _card_sec_code_). In such cases, if the input data set is sufficiently large, then minor variances will be equalled out. Users can derive similar trends and patterns from analysing the masked data as they would the original data.
+ * __Meaningful Insight.__ Even though the pipeline is irreversibly obfuscating fields, it doesn't mean that the masked data is useless for performing analytics to gain insight. The pipeline masks some fields by fluctuating the original values by a small but limited random percentage (e.g. _card_expiry_, _transaction_amount_), rather than replacing them with completely random values (e.g. _card_sec_code_). In such cases, if the input data set is sufficiently large, then minor variances will be equalled out. For the fields that are only varied slightly, users can derive similar trends and patterns from analysing the masked data as they would the original data.
  
  * __Further Reading.__ This example is based on the output of two blog posts: 1) [MongoDB Irreversible Data Masking](https://pauldone.blogspot.com/2021/02/mongdb-data-masking.html), and 2) [MongoDB Reversible Data Masking](https://pauldone.blogspot.com/2021/02/mongdb-reversible-data-masking.html).
  

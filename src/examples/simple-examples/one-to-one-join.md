@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$first](https://d
 
 ## Scenario
 
-You want to take a shop's _customer orders_ collection and join each order record to the corresponding product record in the _products_ collection. There is a 1:1 relationship between both collections, based on a single field match between both sides, based on the product's id. The resulting report will show all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id.
+You want to take a shop's _customer orders_ collection and join each order record to the corresponding product record in the _products_ collection. There is a many:1 relationship between both collections, resulting in a 1:1 join when finding a product to match to the order. The join will use a single field comparison between both sides, based on the product's id. The resulting report will list all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id.
 
 
 ## Sample Data Population
@@ -171,5 +171,5 @@ Three documents should be returned, representing the three customers orders that
 
  * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field from each collection. For an illustration of performing a join based on two or more matching fields, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
  
- * __First Element Assumption.__ The pipeline assumes that the relationship between the two collections is 1:1. Therefore the returned array of joined elements coming out of the `$lookup` stage should contain precisely one array element. As a result, the pipeline extracts the data from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join instead, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
+ * __First Element Assumption.__ The pipeline assumes that the join between the two collections is 1:1. Therefore the returned array of joined elements coming out of the `$lookup` stage should contain precisely one array element. As a result, the pipeline extracts the data from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join instead, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
 

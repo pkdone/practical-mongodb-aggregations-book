@@ -166,5 +166,5 @@ Four documents should be returned, representing the four products that kept reoc
 
 ## Observations & Comments
 
- * __Unwinding Arrays.__ The `$unwind` stage is a powerful concept, although often unfamiliar to many developers initially. Distilled down, it does one simple thing: it generates a new record for each element in an array field of every input document. If a source collection has 3 documents and each document contains an array of 4 elements, then performing an `$unwind` on the array produces 12 records (3 x 4).
+ * __Unwinding Arrays.__ The `$unwind` stage is a powerful concept, although often unfamiliar to many developers initially. Distilled down, it does one simple thing: it generates a new record for each element in an array field of every input document. If a source collection has 3 documents and each document contains an array of 4 elements, then performing an `$unwind` on each record's array field produces 12 records (3 x 4).
 

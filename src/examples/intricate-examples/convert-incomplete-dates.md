@@ -5,13 +5,13 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-An application is ingesting _payments_ documents into a MongoDB collection where each document's _payment date_ field contains a string looking vaguely like a date-time, such as `01-JAN-20 01.01.01.123000000`. You want to convert the _payment date_ into valid BSON date types when aggregating the payments. However, the payment date fields do not contain all the information required for you to determine the exact date-time accurately. Therefore you cannot use just the MongoDB's [Date Expression Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators) directly to perform the text-to-date conversion. The missing information in each of these text fields is:
+An application is ingesting _payment_ documents into a MongoDB collection where each document's _payment date_ field contains a string looking vaguely like a date-time, such as `01-JAN-20 01.01.01.123000000`. You want to convert each _payment date_ into a valid BSON date type when aggregating the payments. However, the payment date fields do not contain all the information required for you to determine the exact date-time accurately. Therefore you cannot use just the MongoDB's [Date Expression Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators) directly to perform the text-to-date conversion. Each of these text fields is missing the following information:
 
  * The specific __century__ (1900s?, 2000s, other?)
  * The specific __time-zone__ (GMT?, IST?, PST?, other?) 
  * The specific __language__ that the three-letter month abbreviation represents (is 'JAN' in French? in English? other?)
 
-You subsequently learn that all the payment records are for the __21<sup>st</sup> century__ only, the time-zone used when ingesting the data is __UTC__, and the language used is__English__. Armed with this information, you build an aggregation pipeline to transform these text fields into date fields.
+You subsequently learn that all the payment records are for the __21st century__ only, the time-zone used when ingesting the data is __UTC__, and the language used is __English__. Armed with this information, you build an aggregation pipeline to transform these text fields into date fields.
 
 
 ## Sample Data Population
@@ -173,10 +173,10 @@ Twelve documents should be returned, corresponding to the original twelve source
 
 ## Observations & Comments
 
- * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `12-DEC-20 12.12.12.999000000`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`) by concatenating together the following four elements before passing it to the `$dateFromString` operator to convert to a date type:
-   - `'12-'` _(day of the month from the input string)_
+ * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `12-DEC-20 12.12.12.999000000`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`). This is achieved by concatenating together the following four example elements before passing them to the `$dateFromString` operator to convert to a date type:
+   - `'12-'` _(day of the month from the input string + the hyphen suffix already present in the text)_
    - `'12'` _(replacing 'DEC')_
-   - `'-20'` _(hard-coded hyphen + century)_
+   - `'-20'` _(hard-coded hyphen + hardcoded century)_
    - `'20 12.12.12.999'` _(the rest of input string apart from the last 6 nanosecond digits)_
    
  * __Further Reading.__ This example is based on the output of the blog post: [Converting Gnarly Date Strings to Proper Date Types Using a MongoDB Aggregation Pipeline](https://pauldone.blogspot.com/2020/05/aggregation-convert-nasty-date-strings.html).

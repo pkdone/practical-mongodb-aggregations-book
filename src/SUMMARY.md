@@ -11,7 +11,7 @@
 - [Guiding Tips & Principles](guides/00-guides.md)
     - [Getting Started](guides/getting-started.md)
     - [Getting Help](guides/getting-help.md)
-    - [Embrace Composibility For Increased Productivity](guides/composibility.md)
+    - [Embrace Composability For Increased Productivity](guides/composibility.md)
     - [To Project Or Not To Project, That Is The Question](guides/project.md)
     - [Using Explain Plans](guides/explain.md)
     - [Pipeline Performance Considerations](guides/performance.md)
