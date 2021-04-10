@@ -62,6 +62,7 @@ To create and then submit a new chapter for review and acceptance:
 Future versions of the book may include the following additional topics, yet to be written (not an exclusive list):
 
  * Aggregations Considerations When Sharding
+ * Better advice on positioning of $set/$unset/$project/$addFields to avoid blocking a sort/limit from being pushed to top of pipeline
  * Further example chapters at each of the 3 complexity levels
 
 
