@@ -94,12 +94,6 @@ var pipeline = [
     "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")},
   }},
     
-  // Exclude 2 unnecessary fields from each person record
-  {"$unset": [
-    "_id",
-    "address",
-  ]},    
-    
   // Sort by youngest person first
   {"$sort": {
     "dateofbirth": -1,
@@ -107,6 +101,12 @@ var pipeline = [
     
   // Only include the first 2 records (the 2 youngest people)
   {"$limit": 2},  
+
+  // Exclude 2 unnecessary fields from each person record
+  {"$unset": [
+    "_id",
+    "address",
+  ]},    
 ];
 ```
 

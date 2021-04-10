@@ -43,7 +43,7 @@ You might have realised by now that there doesn't seem to be one single name for
 * Aggregation Language
 * _...and so on_
 
-The reality is that any of these names are acceptable, and it doesn't matter which you use. This book will likely use each and all of these terms. Just take it as a positive sign that this MongoDB capability (and its title) was not born in a marketing boardroom. It was built by database engineers, for data engineers, where the branding was an afterthought at best! &#128518;
+The reality is that any of these names are acceptable, and it doesn't matter which you use. This book will likely use each and all of these terms. Just take it as a positive sign that this MongoDB capability (and its title) was not born in a marketing boardroom. It was built by database engineers, for data engineers, where the branding was an afterthought at best!
 
 
 ## What Do People Use The Aggregation Framework For?

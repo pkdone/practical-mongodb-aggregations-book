@@ -2,7 +2,7 @@
 
 ## What Are Aggregation Expressions?
 
-Expressions give aggregation pipelines their data manipulation power and expressiveness. However, they tend to be something that developers start using by just copying examples from the MongoDB Manual and then refactoring these without thinking enough about what they are. Proficiency in aggregation pipelines demands a deeper understanding of expressions.
+Expressions give aggregation pipelines their data manipulation power. However, they tend to be something that developers start using by just copying examples from the MongoDB Manual and then refactoring these without thinking enough about what they are. Proficiency in aggregation pipelines demands a deeper understanding of expressions.
 
 Expressions come in one of three primary flavours:
 
@@ -10,11 +10,13 @@ Expressions come in one of three primary flavours:
  
  * __Operators.__ Accessed with a `$`prefix followed by the operator function name. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`
  
- * __Variables.__ Accessed with a `$$` prefix followed by the fixed name and falling into two sub-categories:
+ * __Variables.__ Accessed with a `$$` prefix followed by the fixed name and falling into three sub-categories:
  
-   - __Context variables.__ With values coming from the system environment rather than each input record an aggregation stage is processing. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
+   - __Context system variables.__ With values coming from the system environment rather than each input record an aggregation stage is processing. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
    
-   - __Marker flag variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
+   - __Marker flag system variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
+
+   - __Bind user variables.__ For storing values you declare with a `$let` operator (or with the 'let' option of a `$lookup` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
 
 You can combine these three categories of expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/moderate-examples/mask-sensitive-fields.html) example, which combines all three expressions.
 
@@ -26,7 +28,7 @@ You can combine these three categories of expressions when operating on input re
                  }}
 ```
 
-The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `$cond` is one of the operator expressions used in the excerpt (a 'conditional' expression operator which takes three arguments: `if`, `then` & `else`). `$eq` is another expression operator (a 'comparison' expression operator). `$$REMOVE` is a 'marker flag' variable expression instructing the pipeline to exclude the field. Both `$customer_info.category` and `$customer_info` elements are field path expressions referencing incoming record's fields.
+The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `$cond` is one of the operator expressions used in the excerpt (a 'conditional' expression operator which takes three arguments: `if`, `then` & `else`). `$eq` is another expression operator (a 'comparison' expression operator). `$$REMOVE` is a 'marker flag' variable expression instructing the pipeline to exclude the field. Both `$customer_info.category` and `$customer_info` elements are field path expressions referencing each incoming record's fields.
 
 
 ## Can Expressions Be Used Everywhere?
@@ -48,7 +50,7 @@ There are many types of stages in the Aggregation Framework that don't allow exp
  * `$sample`
  * `$count`
 
-> _(irrelevant 'system-level' stages, like `$collStats`, are omitted because you don't use them for manipulating data)_
+> _(unnecessary 'system-level' stages, like `$collStats`, are omitted because you don't use them for manipulating data)_
 
 
 Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider `$match` to be the most surprising item in this list. The content of a `$match` stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the `$match` stage at the top of the pipeline. Therefore, the `$match` filter must use the same syntax as MQL. 
@@ -58,18 +60,18 @@ In most of the stages that don't leverage expressions, it doesn't usually make s
 
 ## What Is Using $expr Inside $match All About?
 
-Complicating things a little, in more recent MongoDB versions, the statement made earlier about `$match` not supporting expressions is not entirely accurate. MongoDB version 3.6 introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) used in regular MQL queries and hence in `$match` stages too. Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables.
+Complicating things a little, in more recent MongoDB versions, the statement about `$match` not supporting expressions is innaccurate. MongoDB version 3.6 introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) used in regular MQL queries and hence in `$match` stages too. Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables.
 
 A few situations demand having to use `$expr` from inside a `$match` stage. Examples include:
 
  * A requirement to compare two fields from the same record to determine whether to keep the record based on the comparison's outcome
- * A requirement to perform a calculation based on values from multiple existing fields in each record and then comparing the calculation result to a threshold
+ * A requirement to perform a calculation based on values from multiple existing fields in each record and then comparing the calculation to a constant
  
 These are impossible in an aggregation if you use regular `$match` query conditions.
 
 > _(let's ignore the possibility of using the legacy `$where` query operator here, which has documented downsides and should be avoided)_
 
-Take the example of a collection holding information on different instances of rectangles (their width and height), similar to the following: 
+Take the example of a collection holding information on different instances of rectangles (capturing their width and height), similar to the following: 
 
 ```javascript
 [
@@ -79,7 +81,7 @@ Take the example of a collection holding information on different instances of r
 ]
 ```
 
-What if you wanted to run an aggregation pipeline to only return rectangles with an `area` greater than `12`? This comparison isn't possible in a conventional aggregation`$match` query condition. However, with `$expr`, you can analyse a combination of fields in-situ using expressions. You can implement the example requirement with the following pipeline:
+What if you wanted to run an aggregation pipeline to only return rectangles with an `area` greater than `12`? This comparison isn't possible in a conventional aggregation`$match` query condition. However, with `$expr`, you can analyse a combination of fields in-situ using expressions. You can implement the requirement with the following pipeline:
 
 ```javascript
 var pipeline = [

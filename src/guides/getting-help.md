@@ -1,6 +1,6 @@
 # Getting Help
 
-No one can hold the names and syntax of all the different aggregation stages and operators in their heads. I'd bet even _MongoDB Aggregations Royalty_ ([Asya Kamsky](http://www.kamsky.org/stupid-tricks-with-mongodb)) couldn't, although I'm sure she would give it a good go! &#128518;
+No one can hold the names and syntax of all the different aggregation stages and operators in their heads. I'd bet even _MongoDB Aggregations Royalty_ ([Asya Kamsky](http://www.kamsky.org/stupid-tricks-with-mongodb)) couldn't, although I'm sure she would give it a good go!
 
 The good news is there is no need for you to try to remember all the stages & operators. The MongoDB online documentation provides you with a set of excellent _references_ here:
 
