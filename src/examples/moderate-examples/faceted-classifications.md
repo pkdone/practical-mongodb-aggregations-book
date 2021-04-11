@@ -10,13 +10,15 @@ You want to provide a [faceted search](https://en.wikipedia.org/wiki/Faceted_sea
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate a new `products` collection with 16 documents:
+Drop any old version of the database (if it exists) and then populate a new `products` collection with 16 documents (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):
+
+&nbsp;__-Part 1-__
 
 ```javascript
 use book-faceted-classfctn;
 db.dropDatabase();
 
-// Insert 16 records into the collection
+// Insert first 8 records into the collection
 db.products.insertMany([
   {
     "name": "Asus Laptop",
@@ -74,6 +76,14 @@ db.products.insertMany([
     "price": NumberDecimal("15.76"),
     "rating": NumberDecimal("3.9"),
   },
+]);   
+```
+
+&nbsp;__-Part 2-__
+
+```javascript
+// Insert second 8 records into the collection
+db.products.insertMany([  
   {
     "name": "Tiffany Gold Chain",
     "category": "JEWELERY",
@@ -291,9 +301,9 @@ A single document should be returned, which contains 2 facets (keyed off `by_pri
 ## Observations & Comments
 
 
- * __Multiple Pipelines.__ The `$facet` stage doesn't have to be employed for you to use the `$bucketAuto` stage. In most _faceted search_ scenarios, you will want to understand a collection by multiple dimensions at once (_price_ & _rating_ in this case). The `$facet` stage is convenient because it allows you to define various `$bucketAuto` dimensions in one go in a single pipeline. Otherwise, a client application must invoke an aggregation multiple times, each using a new `$bucketAuto` stage to process a different field. In fact, each section of a `$facet` stage is just a regular aggregation [sub-]pipeline, able to contain any type of stage (with a few specific documented exceptions) and may not even contain `$bucketAuto` or `$bucket` stages at all. 
+ * __Multiple Pipelines.__ The `$facet` stage doesn't have to be employed for you to use the `$bucketAuto` stage. In most _faceted search_ scenarios, you will want to understand a collection by multiple dimensions at once (_price_ & _rating_ in this case). The `$facet` stage is convenient because it allows you to define various `$bucketAuto` dimensions in one go in a single pipeline. Otherwise, a client application must invoke an aggregation multiple times, each using a new `$bucketAuto` stage to process a different field. In fact, each section of a `$facet` stage is just a regular aggregation [sub-]pipeline, able to contain any type of stage (with a few specific [documented exceptions](https://docs.mongodb.com/manual/reference/operator/aggregation/facet/#behavior)) and may not even contain `$bucketAuto` or `$bucket` stages at all. 
 
- * __Single Document Result.__ If the result of a `$facet` based aggregation is allowed to be multiple documents, this will cause a problem. The results will contain a mix of records originating from different facets but with no way of ascertaining the facet each result record belongs to. Consequently, when using `$facet`, a single document is always returned, containing top-level fields identifying each facet. Having only a single result record is not usually a problem. A typical requirement for faceted search is to return a small amount of grouped summary data about a collection rather than large amounts of raw data from the collection.
+ * __Single Document Result.__ If the result of a `$facet` based aggregation is allowed to be multiple documents, this will cause a problem. The results will contain a mix of records originating from different facets but with no way of ascertaining the facet each result record belongs to. Consequently, when using `$facet`, a single document is always returned, containing top-level fields identifying each facet. Having only a single result record is not usually a problem. A typical requirement for faceted search is to return a small amount of grouped summary data about a collection rather than large amounts of raw data from the collection. Therefore the 16MB document size limit will not be an issue.
 
  * __Spread Of Ranges.__ In this example, each of the two employed bucketing facets uses a different granularity number scheme for spreading out the sub-ranges of values. You choose a numbering scheme based on what you know about the nature of the facet. For instance, most of the _ratings_ values in the sample collection have scores bunched between late 3s and early 4s. If a numbering scheme is defined to reflect an even spread of ratings, most products will appear in the same sub-range bucket and some sub-ranges would contain no products (e.g. ratings 2 to 3 in this example). This wouldn't provide website customers with much selectivity on product ratings.
 

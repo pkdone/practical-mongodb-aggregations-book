@@ -5,12 +5,12 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You want to scan a collection of _customer orders_ for shop purchases in 2020 only. Each customer record has an embedded array of one or more orders that you first want to unpack into separate order records. Then you want to group these unpacked orders by product type (e.g. _ELECTRONICS_, _BOOKS_), capturing a total value and order count for each product type. In summary, your generated report should list shop orders for each product in 2020.
+You want to generate a report to list shop purchases for each product made in 2020. There is a collection of customer records where each has an embedded array of one or more orders made by the customer. You first want to unpack the embedded orders into separate top-level order records. Then you want to group these unpacked orders by product type (e.g. _ELECTRONICS_, _BOOKS_), capturing a total value and order count for each product type. 
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate a new `customer_orders` collection with customer-related documents spanning 2019-2021, with each customer having an array of 1 or more orders:
+Drop any old version of the database (if it exists) and then populate a new `customer_orders` collection with customer-related documents spanning 2019-2021, with each customer having an array of 1 or more orders:
 
 ```javascript
 use book-unpack-array-group-differently;
@@ -136,7 +136,7 @@ db.customer_orders.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-Four documents should be returned, representing the four products that kept reoccurring in the customer orders arrays, each showing the product's total order value and orders count, for orders placed in 2020 only, as shown below:
+Four documents should be returned, representing the four products that were referenced multiple times in the customer orders arrays, each showing the product's total order value and orders count, for orders placed in 2020 only, as shown below:
 
 ```javascript
 [
@@ -168,3 +168,6 @@ Four documents should be returned, representing the four products that kept reoc
 
  * __Unwinding Arrays.__ The `$unwind` stage is a powerful concept, although often unfamiliar to many developers initially. Distilled down, it does one simple thing: it generates a new record for each element in an array field of every input document. If a source collection has 3 documents and each document contains an array of 4 elements, then performing an `$unwind` on each record's array field produces 12 records (3 x 4).
 
+ * __Introducing A Partial Match__. The current example pipeline scans all documents in the collection and then filters out unpacked records where `orderdate = 2020`. If the pipeline executed this filter as the first stage, it would incorrectly produce some result order records outside of 2020 for customers who have been shopping for multiple years. However, you can still improve the pipeline by including an additional 'partial match' filter for orders made in 2020, at the start of the pipeline. The aggregation would leverage an index (on `orderdate`), resulting in a partial rather than full collection scan. This extra filter stage is beneficial if the input data set is large and many customers didn't have any orders in 2020. This approach is described in the chapter [Pipeline Performance Considerations](../../guides/performance.md).
+
+ 

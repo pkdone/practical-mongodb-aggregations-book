@@ -5,14 +5,16 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You want to take a shop's _products_ collection and join each product record to all the product's orders stored in an _orders_ collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like `product_id` (which doesn't exist in this data set), you need to use two common fields to join (`product_name` and `product_variation`). The resulting report will show all the orders made for each product in 2020.
+You want to generate a report to list all the orders made for each product in 2020. To achieve this, you need to take a shop's _products_ collection and join each product record to all its orders stored in an _orders_ collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like `product_id` (which doesn't exist in this data set), you need to use two common fields to join (`product_name` and `product_variation`). 
 
 Note that the requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021:
+Drop any old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021 (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):
+
+&nbsp;__-Part 1-__
 
 ```javascript
 use book-multi-one-to-many;
@@ -57,8 +59,12 @@ db.products.insertMany([
     "description": "Hose + nosels + winder for tidy storage",
   },
 ]); 
+```
 
-// Create index for a orders collection
+&nbsp;__-Part 2-__
+
+```javascript
+// Create index for the orders collection
 db.orders.createIndex({"product_name": 1, "product_variation": 1});
 
 // Insert 4 records into the orders collection
@@ -206,7 +212,7 @@ Two documents should be returned, representing the two products that had one or 
 
 ## Observations & Comments
 
- * __Multiple Join Fields.__ To join two or more fields in a `$lookup` stage, you must use a `let` parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `$pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. In this instance, the`$expr` operator's comparison can leverage an index because only equality matches are employed.
+ * __Multiple Join Fields.__ To join two or more fields in a [$lookup stage](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries), you must use a `let` parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `$pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. In this instance, the`$expr` operator's comparison can leverage an index because only equality matches are employed.
  
  * __Reducing Array Content.__ The presence of an embedded pipeline in the `$lookup` stage provides an opportunity to filter out three unwanted fields brought in from the second collection. If you want to filter out these fields in a later step instead, inside the main pipeline, you can use one of the following two:
  

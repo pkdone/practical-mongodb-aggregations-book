@@ -5,14 +5,14 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-A 3rd party has imported a set of _retail orders_ into a MongoDB collection but with all data typing lost (it stored all field values as strings). You want to re-establish correct typing for all the documents and copy them into a new 'cleaned-up' collection. You can incorporate such type transformation logic in the aggregation pipeline because you know the type each field had in the original record structure.
+A 3rd party has imported a set of _retail orders_ into a MongoDB collection but with all data typing lost (it stored all field values as strings). You want to re-establish correct typing for all the documents and copy them into a new 'cleaned' collection. You can incorporate such type transformation logic in the aggregation pipeline because you know the type each field had in the original record structure.
 
 Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate a new `orders` collection with three orders documents, where each order has text fields only (note, the second document is intentionality missing the field `reported` in the sub-document `further_info`):
+Drop any old version of the database (if it exists) and then populate a new `orders` collection with three orders documents, where each order has text fields only (note, the second document is intentionality missing the field `reported` in the sub-document `further_info`):
 
 ```javascript
 use book-convert-to-strongly-typed;

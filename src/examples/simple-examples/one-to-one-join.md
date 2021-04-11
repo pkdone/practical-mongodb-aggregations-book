@@ -5,12 +5,12 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$first](https://d
 
 ## Scenario
 
-You want to take a shop's _customer orders_ collection and join each order record to the corresponding product record in the _products_ collection. There is a many:1 relationship between both collections, resulting in a 1:1 join when finding a product to match to the order. The join will use a single field comparison between both sides, based on the product's id. The resulting report will list all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id.
+You want to generate a report to list all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id. To achieve this, you need to take the customer _orders_ collection and join each order record to the corresponding product record in the _products_ collection. There is a many:1 relationship between both collections, resulting in a 1:1 join when matching an order to a product. The join will use a single field comparison between both sides, based on the product's id.
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021:
+Drop any old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021:
 
 ```javascript
 use book-one-to-one-join;

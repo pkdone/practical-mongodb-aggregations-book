@@ -12,7 +12,7 @@
     - [Getting Started](guides/getting-started.md)
     - [Getting Help](guides/getting-help.md)
     - [Embrace Composability For Increased Productivity](guides/composibility.md)
-    - [To Project Or Not To Project, That Is The Question](guides/project.md)
+    - [Better Alternatives To A Project Stage](guides/project.md)
     - [Using Explain Plans](guides/explain.md)
     - [Pipeline Performance Considerations](guides/performance.md)
     - [Can Expressions Be Used Everywhere?](guides/expressions.md)

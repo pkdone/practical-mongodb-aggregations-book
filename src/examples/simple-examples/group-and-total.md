@@ -5,12 +5,12 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You want to scan through the collection of _orders_ for shop purchases recorded in 2020 only. You need to group the records by customer, capturing each customer's first purchase date, the number of orders they made, the total value of all their orders and a list of their order items. In summary, the generated report will show what each customer shopped for in 2020.
+You want to generate a report to show what each shop customer purchased in 2020. You will group the individual order records by customer, capturing each customer's first purchase date, the number of orders they made, the total value of all their orders and a list of their order items.
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate a new `orders` collection with 9 order documents spanning 2019-2021, for 3 different unique customers:
+Drop any old version of the database (if it exists) and then populate a new `orders` collection with 9 order documents spanning 2019-2021, for 3 different unique customers:
 
 ```javascript
 use book-group-and-total;
@@ -98,7 +98,7 @@ var pipeline = [
     "orders": {"$push": {"orderdate": "$orderdate", "value": "$value"}},
   }},
   
-  // Sort by each customer"s first purchase date
+  // Sort by each customer's first purchase date
   {"$sort": {
     "first_purchase_date": 1,
   }},    

@@ -12,12 +12,12 @@ You want to perform irreversible masking on the sensitive fields of a collection
  * Replace the card's 3 digit security code with a random set of 3 digits
  * Adjust the transaction's amount by adding or subtracting a random amount up to a maximum of 10% of the original amount
  * Change the transaction's `reported` field boolean value to the opposite value for roughly 20% of the records
- * If the embedded `customer_info` sub-document's `category` field is set to _SENSITIVE_, exclude the whole `customer_info` sub-document
+ * If the embedded `customer_info` sub-document's `category` field is set to _RESTRICTED_, exclude the whole `customer_info` sub-document
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate a new `payments` collection with 2 credit card payment documents, containing sensitive data:
+Drop any old version of the database (if it exists) and then populate a new `payments` collection with 2 credit card payment documents, containing sensitive data:
 
 ```javascript
 use book-mask-sensitive-fields;
@@ -36,7 +36,7 @@ db.payments.insertMany([
         "transaction_amount": NumberDecimal("501.98"),
         "reported": false,
         "customer_info": {
-            "category": "SENSITIVE",
+            "category": "RESTRICTED",
             "rating": 89,
             "risk": 3,
         },
@@ -104,9 +104,9 @@ var pipeline = [
                    "else": {"$not": ["$reported"]},
                 }},      
 
-    // Exclude sub-doc if the sub-doc's category field's value is 'SENSITIVE'
+    // Exclude sub-doc if the sub-doc's category field's value is 'RESTRICTED'
     "customer_info": {"$cond": {
-                        "if":   {"$eq": ["$customer_info.category", "SENSITIVE"]}, 
+                        "if":   {"$eq": ["$customer_info.category", "RESTRICTED"]}, 
                         "then": "$$REMOVE",     
                         "else": "$customer_info",
                      }},                                         
@@ -138,7 +138,7 @@ db.payments.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-Two documents should be returned, corresponding to the original two source documents, but this time with many of their fields redacted and obfuscated, plus the `customer_info` embedded document omitted for one record due to it having been marked as `sensitive`, as shown below:
+Two documents should be returned, corresponding to the original two source documents, but this time with many of their fields redacted and obfuscated, plus the `customer_info` embedded document omitted for one record due to it having been marked as `RESTRICTED`, as shown below:
 
 ```javascript
 [
@@ -171,7 +171,7 @@ Two documents should be returned, corresponding to the original two source docum
 
 ## Observations & Comments
 
- * __Targeted Redaction.__ The pipeline uses a `$cond` operator to return the `$$REMOVE` marker variable if the `category` field is equal to `SENSITIVE`. This informs the aggregation engine to exclude the whole `customer_info` sub-document from the stage's output for the record. Alternatively, the pipeline could have used a `$redact` stage to achieve the same. However, `$redact` typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.
+ * __Targeted Redaction.__ The pipeline uses a `$cond` operator to return the `$$REMOVE` marker variable if the `category` field is equal to `RESTRICTED`. This informs the aggregation engine to exclude the whole `customer_info` sub-document from the stage's output for the record. Alternatively, the pipeline could have used a `$redact` stage to achieve the same. However, `$redact` typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.
  
  * __Regular Expression.__ For masking the `card_name` field, a regular expression operator is used to extract the last word of the field's original value. `$regexFind` returns metadata into the stage's output records, indicating if the match succeeded and what the matched value is. Therefore, an additional `$set` stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hard-coded text.
  

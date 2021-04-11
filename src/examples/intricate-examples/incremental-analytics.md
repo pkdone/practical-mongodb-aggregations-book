@@ -12,7 +12,7 @@ Unlike most examples in this book, the aggregation pipeline writes its output to
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then add 9 documents to the `orders` collection representing 5 orders for 01-Feb-2021 and 4 orders for 02-Feb-2021:
+Drop any old version of the database (if it exists) and then add 9 documents to the `orders` collection representing 5 orders for 01-Feb-2021 and 4 orders for 02-Feb-2021:
 
 ```javascript
 use book-incremental-analytics;
@@ -154,7 +154,7 @@ From the results, you can see that order summaries exist for both days.
 To simulate the organisation's occasional need to correct an old order retrospectively, go back and add a new 'high value' order for the first day. Then re-run the aggregation for the first day only (01-Feb-2021) to show that you can safely and correctly recalculate the summary for just one day:
 
 ```javascript
-// Restrospectively add an order to an older day (01-Feb-2021)
+// Retrospectively add an order to an older day (01-Feb-2021)
 db.orders.insertOne(
   {
     "orderdate": ISODate("2021-02-01T09:32:07Z"),

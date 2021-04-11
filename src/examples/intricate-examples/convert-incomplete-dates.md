@@ -16,7 +16,7 @@ You subsequently learn that all the payment records are for the __21st century__
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate a new _payments_ collection with 12 sample payments documents, providing coverage across all 12 months for the year 2020, with random time elements.
+Drop any old version of the database (if it exists) and then populate a new _payments_ collection with 12 sample payments documents, providing coverage across all 12 months for the year 2020, with random time elements.
 
 ```javascript
 use book-convert-incomplete-dates;

@@ -8,7 +8,7 @@ Expressions come in one of three primary flavours:
 
  * __Field Paths.__ Accessed with a `$` prefix followed by the field's path in each record being processed. &nbsp;Examples: `$account.sortcode`, `$addresses.address.city`
  
- * __Operators.__ Accessed with a `$`prefix followed by the operator function name. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`
+ * __Operators.__ Accessed with a `$` prefix followed by the operator function name. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`
  
  * __Variables.__ Accessed with a `$$` prefix followed by the fixed name and falling into three sub-categories:
  
@@ -60,7 +60,7 @@ In most of the stages that don't leverage expressions, it doesn't usually make s
 
 ## What Is Using $expr Inside $match All About?
 
-Complicating things a little, in more recent MongoDB versions, the statement about `$match` not supporting expressions is innaccurate. MongoDB version 3.6 introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) used in regular MQL queries and hence in `$match` stages too. Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables.
+Complicating things a little, in more recent MongoDB versions, the statement about `$match` not supporting expressions is inaccurate. MongoDB version 3.6 introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) used in regular MQL queries and hence in `$match` stages too. Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables.
 
 A few situations demand having to use `$expr` from inside a `$match` stage. Examples include:
 
@@ -69,7 +69,7 @@ A few situations demand having to use `$expr` from inside a `$match` stage. Exam
  
 These are impossible in an aggregation if you use regular `$match` query conditions.
 
-> _(let's ignore the possibility of using the legacy `$where` query operator here, which has documented downsides and should be avoided)_
+> _(let's ignore the possibility of using the legacy `$where` query operator here, which has [documented downsides](https://docs.mongodb.com/manual/reference/operator/query/where/) and should be avoided)_
 
 Take the example of a collection holding information on different instances of rectangles (capturing their width and height), similar to the following: 
 
@@ -102,5 +102,5 @@ The result of executing an aggregation with this pipeline is:
 
 As you can see, the second of the three shapes is not output because its area is only `12` (`3 x 4`).
 
-You should be aware that in many cases, the query engine cannot benefit from an index when using a `$expr` operator inside a `$match`stage. Specifically, if you use a 'range' comparison operator (`$gt`, `$gte`, `$lt` and `$lte`) with a field, no index will be employed to match the field. You should only use the `$expr` operator in a `$match` stage if there is no other way of assembling the criteria using regular MQL syntax criteria.
+You should be aware that in many cases, the query engine cannot benefit from an index when using a `$expr` operator inside a `$match` stage. Specifically, if you use a 'range' comparison operator (`$gt`, `$gte`, `$lt` and `$lte`) with a field, no index will be employed to match the field. You should only use the `$expr` operator in a `$match` stage if there is no other way of assembling the criteria using regular MQL syntax criteria.
 

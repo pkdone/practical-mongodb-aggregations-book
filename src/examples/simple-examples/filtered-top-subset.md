@@ -5,14 +5,14 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You want to query a collection of people for those born in 1970 or later, sorted by the youngest person first and limited to only the two youngest people.
+You want to query a collection of people to find those born in 1970 or later, sorted by the youngest person first and limited to only the two youngest people.
 
 This example is the only one in the book that you can also achieve entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines.
 
 
 ## Sample Data Population
 
-Drop the old version of the database (if it exists) and then populate a new `persons` collection with 5 person documents, where each person has a different date of birth:
+Drop any old version of the database (if it exists) and then populate a new `persons` collection with 5 person documents, where each person has a different date of birth:
 
 ```javascript
 use book-filtered-top-subset;
