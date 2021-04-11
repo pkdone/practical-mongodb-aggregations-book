@@ -219,36 +219,28 @@ The result of running the `find()` against the _view_ with the filter `"gender":
  * __View Finds & Indexes.__ The explain plan for the _gender query_ run against the _view_ shows an index has been used (the index defined for the `gender` field). At runtime, a view is essentially just an aggregation pipeline defined 'ahead of time'. When `db.adults.find({"gender": "FEMALE"})` is executed, the database engine dynamically appends a new `$match` stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the new `$match` stage to the pipeline's start. Finally, it adds the filter extracted from the new `$match` stage to the aggregation's initial query and hence the `gender` index is leveraged. The following two excerpts from the explain plan illustrate how the filter on `gender` and the filter on `dateofbirth` combine at runtime and how the index for `gender` is used to avoid a full collection scan:
  
 ```javascript  
-"$cursor" : {
-  "queryPlanner" : {
-		"parsedQuery" : {
-			"$and" : [
-				{
-					"gender" : {
-						"$eq" : "FEMALE"
-					}
-				},
-				{
-					"$expr" : {
-						"$lt" : [
-							"$dateofbirth",
-							{
-								"$subtract" : [
-									"$$NOW",
+'$cursor': {
+  queryPlanner: {
+    plannerVersion: 1,
+    namespace: 'book-restricted-view.persons',
+    indexFilterSet: false,
+    parsedQuery: {
+      '$and': [
+        { gender: { '$eq': 'FEMALE' } },
+        {
+          '$expr': {
+            '$lt': [
+              '$dateofbirth',
+              {
+                '$subtract': [ '$$NOW', { '$const': 568036800000 } ]
 ```
 ```javascript  
-"inputStage" : {
-	"stage" : "IXSCAN",
-	"keyPattern" : {
-		"gender" : 1
-	},
-	"indexName" : "gender_1",
-	"direction" : "forward",
-	"indexBounds" : {
-		"gender" : [
-			"[\"FEMALE\", \"FEMALE\"]"
-		]
-	}
+inputStage: {
+  stage: 'IXSCAN',
+  keyPattern: { gender: 1 },
+  indexName: 'gender_1',
+  direction: 'forward',
+  indexBounds: { gender: [ '["FEMALE", "FEMALE"]' ] }
 }
 ```
 

@@ -129,11 +129,11 @@ var pipeline = [
       }},
       
       // Exclude some unwanted fields from the right side of the join
-      {"$project": { 
-        "_id": 0,
-        "product_name": 0,
-        "product_variation": 0,
-      }},
+      {"$unset": [
+        "_id",
+        "product_name",
+        "product_variation",
+      ]},
     ],
     as: "orders",
   }},
