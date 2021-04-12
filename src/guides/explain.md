@@ -51,110 +51,169 @@ Note, the [aggregate()](https://docs.mongodb.com/manual/reference/method/db.coll
 
 ## Understanding The Explain Plan
 
-To provide an example, let us assume a data set includes information on a group of people. You have persisted a collection called _persons_ with an index defined on its _date of birth_ field. You've created the following aggregation pipeline to show the three youngest people in the collection, for people born on or after 1970, as shown below:
+To provide an example, let us assume a shop's data set includes information on each customer and what retail orders the customer has made over the years. The _customer orders_ collection contains documents similar to the following example:
+
+```javascript
+{
+  "customer_id": "elise_smith@myemail.com",
+  "orders": [
+    {
+      "orderdate": ISODate("2020-01-13T09:32:07Z"),
+      "product_type": "GARDEN",
+      "value": NumberDecimal("99.99")
+    },
+    {
+      "orderdate": ISODate("2020-05-30T08:35:52Z"),
+      "product_type": "ELECTRONICS",
+      "value": NumberDecimal("231.43")
+    }
+  ]
+}
+```
+
+You've defined an index on the `customer_id` field. You create the following aggregation pipeline to show the three most expensive orders made by a customer whose ID is `tonijones@myemail.com`, as shown below:
 
 ```javascript
 var pipeline = [
-  // Omit address sub-document (not needed)
-  {"$unset" : [
-    "address",
-  ]},
+  // Unpack each order from customer orders array as a new separate record
+  {"$unwind": {
+    "path": "$orders",
+  }},
+  
+  // Match on only one customer
+  {"$match": {
+    "customer_id": "tonijones@myemail.com",
+  }},
 
-  // Match people born in 1970 or later only
-  {"$match" : {
-    "dateofbirth" : {"$gte" : ISODate("1970-01-01T00:00:00Z")},
+  // Sort customer's purchases by most expensive first
+  {"$sort" : {
+    "orders.value" : -1,
+  }},
+  
+  // Show only the top 3 most expensive purchases
+  {"$limit" : 3},
+
+  // Use the order's value as a top level field
+  {"$set": {
+    "order_value": "$orders.value",
   }},
     
-  // Sort by youngest person first
-  {"$sort" : {
-    "dateofbirth" : -1,
-  }},
-
-  // Only show 3 youngest people  
-  {"$limit" : 3},
+  // Drop the document's id and orders sub-document from the results
+  {"$unset" : [
+    "_id",
+    "orders",
+  ]},
 ];
 ```
 
-You might then request the _query planner_ part of the explain plan:
+Upon executing this aggregation against an extensive sample data set, you receive the following result:
 
 ```javascript
-db.persons.explain("queryPlanner").aggregate(pipeline);
+[
+  {
+    customer_id: 'tonijones@myemail.com',
+    order_value: Decimal128("1024.89")
+  },
+  {
+    customer_id: 'tonijones@myemail.com',
+    order_value: Decimal128("187.99")
+  },
+  {
+    customer_id: 'tonijones@myemail.com',
+    order_value: Decimal128("4.59")
+  }
+]
+```
+
+You then request the _query planner_ part of the explain plan:
+
+```javascript
+db.customer_orders.explain("queryPlanner").aggregate(pipeline);
 ```
 
 The query plan output for this pipeline shows the following (excluding some information for brevity):
 
 ```javascript
 stages: [
-  {'$cursor': {
-    queryPlanner: {
-      parsedQuery: { dateofbirth: { '$gte': 1970-01-01T00:00:00.000Z } },
-      winningPlan: {
-        stage: 'FETCH',
-        inputStage: {
-          stage: 'IXSCAN',
-          keyPattern: { dateofbirth: -1 },
-          indexName: 'dateofbirth_-1',
-          isMultiKey: false,
-          multiKeyPaths: { dateofbirth: [] },
-          isUnique: false,
-          isSparse: false,
-          isPartial: false,
-          indexVersion: 2,
-          direction: 'forward',
-          indexBounds: {
-            dateofbirth: [ '[new Date(9223372036854775807), new Date(0)]' ]
+  {
+    '$cursor': {
+      queryPlanner: {
+        parsedQuery: { customer_id: { '$eq': 'tonijones@myemail.com' } },
+        winningPlan: {
+          stage: 'FETCH',
+          inputStage: {
+            stage: 'IXSCAN',
+            keyPattern: { customer_id: 1 },
+            indexName: 'customer_id_1',
+            direction: 'forward',
+            indexBounds: {
+              customer_id: [
+                '["tonijones@myemail.com", "tonijones@myemail.com"]'
+              ]
+            }
           }
-        }
+        },
       }
     }
-  }},
+  },
   
-  { '$project': { address: false } },
+  { '$unwind': { path: '$orders' } },
   
-  { '$sort': { sortKey: { dateofbirth: -1 }, limit: 3 } }
+  { '$sort': { sortKey: { 'orders.value': -1 }, limit: 3 } },
+  
+  { '$set': { order_value: '$orders.value' } },
+  
+  { '$project': { _id: false, orders: false } }
 ]
 ```
 
 You can deduce some illuminating insights from this query plan:
 
- * To optimise the aggregation, the database engine has reordered the pipeline and moved the filter belonging to the `$match` to the top of the pipeline without changing its functional behaviour or outcome.
+ * To optimise the aggregation, the database engine has reordered the pipeline positioning the filter belonging to the `$match` to the top of the pipeline. The database engine moves the content of `$match` ahead of the `$unwind` stage without changing the aggregation's functional behaviour or outcome.
  
- * To further optimise the aggregation, the database engine has collapsed the `$sort` and `$limit` into a single _special internal_ stage which can perform both actions in one go. In this circumstance, during the sorting process, the aggregation engine only has to track the three currently known youngest person records in memory. It does not have to hold the whole data set in memory when sorting, which may otherwise be resource prohibitive.
- 
- * The first stage of the database optimised version of the pipeline is always an _internal_ `$cursor` stage, regardless of the order you placed the pipeline stages in. The `$cursor` _runtime_ stage is always the first action executed. Under the covers, the aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, with a filter based on the aggregation's `$match` contents. The aggregation runtime uses the resulting query cursor to pull batches of records. This is similar to how a client application with a MongoDB driver uses a query cursor when remotely invoking an MQL query to pull batches. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense (which it does in this case, as is visible in the embedded  `$queryPlanner` metadata, showing the `"stage" : "IXSCAN"` element and the index used, `"indexName" : "dateofbirth_-1"`). 
+ * The first stage of the database optimised version of the pipeline is an _internal_ `$cursor` stage, regardless of the order you placed the pipeline stages in. The `$cursor` _runtime_ stage is always the first action executed for any aggregation. Under the covers, the aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, with a filter based on the aggregation's `$match` contents. The aggregation runtime uses the resulting query cursor to pull batches of records. This is similar to how a client application with a MongoDB driver uses a query cursor when remotely invoking an MQL query to pull batches. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense. In this case an index is indeed leveraged, as is visible in the embedded  `$queryPlanner` metadata, showing the `"stage" : "IXSCAN"` element and the index used, `"indexName" : "customer_id_1"`.
 
- * The query plan indicates that you can manually make an additional optimisation. The `$sort/$limit` combination is not currently pushed up into the internal `$cursor` stage to form part of the initial query. Moving the `$unset` stage from the start to the end of the pipeline will enable this. The pipeline's output won't change, but the `$sort/$limit` processing is now part of the initial query, which you can observe by re-running the explain plan. As a result of this change, the rest of the pipeline has less work to do and will execute faster.
+ * To further optimise the aggregation, the database engine has collapsed the `$sort` and `$limit` into a single _special internal sort stage_ which can perform both actions in one go. In this circumstance, during the sorting process, the aggregation engine only has to track the three currently known youngest person records in memory. It does not have to hold the whole data set in memory when sorting, which may otherwise be resource prohibitive, requiring more RAM than is available.
  
-You might then ask for the _execution stats_ part of the explain plan:
+You might also want to see the _execution stats_ part of the explain plan. The specific new information shown in `executionStats`, versus the default of `queryPlanner`, is identical to the [normal MQL explain plan](https://docs.mongodb.com/manual/tutorial/analyze-query-plan/) returned for a regular `find()` operation. Consequently, for aggregations, similar principles to MQL apply for spotting things like "have I used the optimal index?" and "does my data model lend itself to efficiently processing this query?".
+ 
+You ask for the _execution stats_ part of the explain plan:
 
 ```javascript
-db.persons.explain("executionStats").aggregate(pipeline);
+db.customer_orders.explain("executionStats").aggregate(pipeline);
 ```
 
 Below is a redacted example of the execution statistics you will see in the explain plan, highlighting some of the most relevant metadata elements that you should generally focus on.
 
 ```javascript
 executionStats: {
-  nReturned: 3,
-  totalKeysExamined: 3,
-  totalDocsExamined: 3,
+  nReturned: 1,
+  totalKeysExamined: 1,
+  totalDocsExamined: 1,
   executionStages: {
     stage: 'FETCH',
-    nReturned: 3,
-    docsExamined: 3,
+    nReturned: 1,
+    works: 2,
+    advanced: 1,
+    docsExamined: 1,
     inputStage: {
       stage: 'IXSCAN',
-      nReturned: 3,
-      keyPattern: { dateofbirth: -1 },
-      indexName: 'dateofbirth_-1',
+      nReturned: 1,
+      works: 2,
+      advanced: 1,
+      keyPattern: { customer_id: 1 },
+      indexName: 'customer_id_1',
       direction: 'forward',
-      keysExamined: 3,
+      indexBounds: {
+        customer_id: [
+          '["tonijones@myemail.com", "tonijones@myemail.com"]'
+        ]
+      },
+      keysExamined: 1,
     }
   }
 }
 ```
 
-Here the plan shows the aggregation uses an index, and because '_index keys examined_' and '_documents examined_' match, this indicates it is fully leveraging the index to identify the required records, which is good news. The targeted index doesn't necessarily mean the aggregation is fully optimised. For example, if there is the need to reduce latency further, you can do some analysis to determine if the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). Suppose the _cursor query_ part of the aggregation is satisfied entirely using the index and does not have to examine any documents. In that case, you will see `totalDocsExamined = 0` in the explain plan. 
-
-The specific new information shown in `executionStats`, versus the default of `queryPlanner`, is identical to the [normal MQL explain plan](https://docs.mongodb.com/manual/tutorial/analyze-query-plan/) returned for a regular `find()` operation. Consequently, for aggregations, similar principles to MQL apply for spotting things like "have I used the optimal index?" and "does my data model lend itself to efficiently processing the query?".
+Here, this part of the plan also shows that the aggregation uses the index. Because `totalKeysExamined` and `totalDocsExamined` match, the aggregation fully leverages this index to identify the required records, which is good news. Nevertheless, the targeted index doesn't necessarily mean the aggregation's query part is fully optimised. For example, if there is the need to reduce latency further, you can do some analysis to determine if the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). Suppose the _cursor query_ part of the aggregation is satisfied entirely using the index and does not have to examine any documents. In that case, you will see `totalDocsExamined = 0` in the explain plan.
 

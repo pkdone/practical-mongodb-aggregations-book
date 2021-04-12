@@ -98,7 +98,7 @@ var pipeline = [
     "orders.orderdate": {
       "$gte": ISODate("2020-01-01T00:00:00Z"),
       "$lt": ISODate("2021-01-01T00:00:00Z"),
-    }
+    },
   }},
   
   // Group by product type
