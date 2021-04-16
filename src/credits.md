@@ -2,13 +2,13 @@
 
 # Practical MongoDB Aggregations
 
-&nbsp;
- 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 0.94
+Version: 0.95
 
-Content created & assembled at: [https://github.com/pkdone/practical-mongodb-aggregations-book](https://github.com/pkdone/practical-mongodb-aggregations-book)
+Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
+
+Content created & assembled at: [github.com/pkdone/practical-mongodb-aggregations-book](https://github.com/pkdone/practical-mongodb-aggregations-book)
 
 ---
 
@@ -26,13 +26,13 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareA
 
 ---
 
-Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.pexels.com/photo/red-steel-pipe-2420294/) under the [Pexels License](https://www.pexels.com/license/) (free to use & modify)
+Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.pexels.com/photo/red-steel-pipe-2420294/) under the [Pexels License](https://www.pexels.com/license/) _(free to use & modify)_
 
 ---
 
-### Acknowledgements
+__Acknowledgements__
 
-Many thanks to the following people for feedback:
+Many thanks to the following people for their valuable feedback:
 
  * Jake McInteer
  * John Page

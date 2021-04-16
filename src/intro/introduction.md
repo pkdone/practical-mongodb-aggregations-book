@@ -60,7 +60,7 @@ The Aggregation Framework is versatile and used for many different data processi
 * Real-time queries where deeper 'server-side' data post-processing is required than provided by the MongoDB Query Language ([MQL](https://docs.mongodb.com/manual/crud/))
 * Copying and transforming subsets of data from one collection to another
 * Navigating relationships between records, looking for patterns
-* Data masking to redact and obfuscate sensitive data
+* Data masking to obfuscate sensitive data
 * Performing the Transform (T) part of an Extract-Load-Transform ([ELT](https://en.wikipedia.org/wiki/Extract,_load,_transform)) workload
 * Data quality reporting and cleansing
 * Updating a materialised view with the results of the most recent source data changes

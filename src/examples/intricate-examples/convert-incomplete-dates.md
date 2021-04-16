@@ -173,7 +173,7 @@ Twelve documents should be returned, corresponding to the original twelve source
 
 ## Observations & Comments
 
- * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `12-DEC-20 12.12.12.999000000`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`). This is achieved by concatenating together the following four example elements before passing them to the `$dateFromString` operator to convert to a date type:
+ * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `"12-DEC-20 12.12.12.999000000"`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`). This is achieved by concatenating together the following four example elements before passing them to the `$dateFromString` operator to convert to a date type:
    - `'12-'` _(day of the month from the input string + the hyphen suffix already present in the text)_
    - `'12'` _(replacing 'DEC')_
    - `'-20'` _(hard-coded hyphen + hardcoded century)_

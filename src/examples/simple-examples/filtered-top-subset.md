@@ -12,7 +12,7 @@ This example is the only one in the book that you can also achieve entirely usin
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate a new `persons` collection with 5 person documents, where each person has a different date of birth:
+Drop any old version of the database (if it exists) and then populate a new `persons` collection with 5 person documents:
 
 ```javascript
 use book-filtered-top-subset;
