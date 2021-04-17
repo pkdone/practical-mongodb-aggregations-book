@@ -1,6 +1,11 @@
 [book]
-authors = ["Paul Done & Friends"]
+authors = ["Paul Done"]
 language = "en"
 multilingual = false
 src = "src"
 title = "Practical MongoDB Aggregations"
+description = "A book providing tips and examples for effectively using the MongoDB Aggregation Framework."
+
+[output.html]
+cname = "www.practical-mongodb-aggregations.com"
+
