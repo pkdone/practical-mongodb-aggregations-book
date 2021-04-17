@@ -15,7 +15,7 @@ The book's construction and build process relies on a Markdown-based book-buildi
 
 To install the Rust and mdBook required build tools on your local workstation:
  * Via this GitHub project, choose to fork this repo to your own GitHub copy
- * From a terminal/shell/command-line, clone your forked project to your local workstation, e.g.: `git clone https://github.com/pkdone/practical-mongodb-aggregations-book.git`
+ * From a terminal/shell/command-line, clone your forked project to your local workstation, e.g.: `git clone https://github.com/myuserid/practical-mongodb-aggregations-book.git`
  * [Install Rust](https://www.rust-lang.org/tools/install) (which will also install other Rust related tools, including the required _cargo_ tool)
  * Via a terminal/shell/command-line, using Rust's _cargo_ tool, install _mdBook_: `cargo install mdbook`
  * Via a terminal/shell/command-line, from the local base folder of the local cloned repo, run the _mdBook_ command to rebuild the book and open it in a browser: `mdbook build --open`
@@ -25,8 +25,8 @@ To install the Rust and mdBook required build tools on your local workstation:
 
  * In the file `src/credits.md` increment the version number of the book
  * Via a terminal/shell/command-line, from the base folder of this GitHub repo:
- * Run the following script to rebuild the latest version of the book, and copy it to /docs directory: `./stage_book_for_publish.sh`
- * Via usual GitHub commands, in the _main_ branch: Add changes, Commit changes, Push to main in GitHub
+   - Run the following script to rebuild the latest version of the book, and copy it to the `/docs` directory: `./stage_book_for_publish.sh`
+   - Using the appropriate GitHub commands, in the _main_ branch: Add changes, Commit changes, Push to main in GitHub
  * The published new version of the book will be accessible at: [pkdone.github.io/practical-mongodb-aggregations-book/](https://pkdone.github.io/practical-mongodb-aggregations-book)
 
 
@@ -61,12 +61,12 @@ To create and then submit a new chapter for review and acceptance:
 
 ## Future Released Versions Of The Book
 
-Future versions of the book may include the following additional topics, yet to be written (not an exclusive list):
+Future versions of the book may include the following topics, yet to be written (not an exclusive list):
 
- * Aggregations Considerations When Sharding
+ * Aggregations considerations when Sharding
  * When prototyping large data sets, use the trick of using $sample or $limit to speed up prototyping (but avoiding dangers of never testing without these)
  * In the Composability chapter, provide more detail and examples on factoring out complex boilerplate parts of a pipeline into separate JavaScript functions
- * Better advice on positioning of $set/$unset/$project/$addFields to avoid blocking a sort/limit from being pushed to the top of the pipeline
+ * Better advice on positioning of $set/$unset/$project/$addFields to avoid blocking a sort/limit from being pushed to the top of the pipeline (i.e. why $project as late as possible)
  * Further example chapters at each of the 3 complexity levels
 
 

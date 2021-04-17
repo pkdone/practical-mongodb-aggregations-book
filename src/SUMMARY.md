@@ -35,3 +35,5 @@
         - [Mask Sensitive Fields](examples/intricate-examples/mask-sensitive-fields.md)
         - [Convert Incomplete Date Strings](examples/intricate-examples/convert-incomplete-dates.md)
 
+[](back-cover.md)
+
