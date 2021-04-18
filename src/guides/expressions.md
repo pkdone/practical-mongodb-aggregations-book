@@ -69,8 +69,6 @@ A few situations demand having to use `$expr` from inside a `$match` stage. Exam
  
 These are impossible in an aggregation if you use regular `$match` query conditions.
 
-> _(let's ignore the possibility of using the legacy `$where` query operator here, which has [documented downsides](https://docs.mongodb.com/manual/reference/operator/query/where/) and should be avoided)_
-
 Take the example of a collection holding information on different instances of rectangles (capturing their width and height), similar to the following: 
 
 ```javascript
