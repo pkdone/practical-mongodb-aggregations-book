@@ -103,7 +103,7 @@ var pipeline = [
 ];
 ```
 
-Furthermore, some developers may go a step or two further if they do not intend to transfer the prototyped pipeline to a different programming language:
+Furthermore, some developers may take additional steps if they do not intend to transfer the prototyped pipeline to a different programming language:
 
  * They may choose to decompose elements inside a stage into additional JavaScript variables to avoid code 'typos'. For instance, to prevent one part of a pipeline incorrectly referencing a field computed earlier in the pipeline due to a misspelling.
  * They may choose to factor out complex boilerplate parts of a pipeline into separate JavaScript functions. They can then re-use each function from multiple places within the main pipeline's code.
