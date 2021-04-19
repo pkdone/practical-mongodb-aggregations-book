@@ -15,7 +15,7 @@ Over the following two years, as user behaviour with Map-Reduce became more unde
 
 Within its first year, the Aggregation Framework rapidly became the go-to tool for processing large volumes of data in MongoDB. Now, nearly a decade on, it is like the Aggregation Framework has always been part of MongoDB. It feels like part of the database's core DNA. MongoDB still supports Map-Reduce, but developers rarely use it nowadays. MongoDB's aggregations are always the correct answer for processing data in the database!
 
-> _It is not widely known, but MongoDB's engineering team re-implemented the Map-Reduce 'back-end' in MongoDB 4.4 to execute within the aggregations runtime. They had to develop some additional 'internal' aggregation stages and expressions to fill some gaps. These aren't stages or expressions that the Aggregation Framework surfaces for developers to use in regular aggregations. In MongoDB 4.4, each Map-Reduce 'aggregation' still uses JavaScript for certain phases, and so it will not achieve the performance of a native aggregation for an equivalent workload._
+> _It is not widely known, but MongoDB's engineering team re-implemented the Map-Reduce 'back-end' in MongoDB 4.4 to execute within the aggregations runtime. They had to develop some additional 'internal' aggregation stages and expressions to fill some gaps. These aren't stages or expressions that the Aggregation Framework surfaces for developers to use in regular aggregations. In MongoDB 4.4, each Map-Reduce 'aggregation' still uses JavaScript for certain phases, and so it will not achieve the performance of a native aggregation for an equivalent workload. Nor does this change magically address the other drawbacks of Map-Reduce workloads concerning composability, concurrency,  scalability and opportunities for runtime optimisation. The primary purpose of the change was for the database engineers to eliminate redundancy and promote resiliency in the database's codebase._
 
 
 ## Key Releases & Capabilities 
@@ -23,13 +23,13 @@ Within its first year, the Aggregation Framework rapidly became the go-to tool f
 Below is a summary of the evolution of the Aggregation Framework in terms of significant capabilities added in each major release:
 
 * __MongoDB 2.2 (August 2012)__: Initial Release
-* __MongoDB 2.4 (March 2013)__: Efficiency improvements, especially for sorts, concat operator
-* __MongoDB 2.6 (April 2014)__: Unlimited size result sets, explain plans, spill to disk for large sorts, an option to output to a new collection, redact stage
+* __MongoDB 2.4 (March 2013)__: Efficiency improvements (especially for sorts), a concat operator
+* __MongoDB 2.6 (April 2014)__: Unlimited size result sets, explain plans, spill to disk for large sorts, an option to output to a new collection, a redact stage
 * __MongoDB 3.0 (March 2015)__: Date-to-string operators
 * __MongoDB 3.2 (December 2015)__: Sharded cluster optimisations, lookup (join) & sample stages, many new arithmetic & array operators
 * __MongoDB 3.4 (November 2016)__: Graph-lookup, bucketing & facets stages, many new array & string operators 
-* __MongoDB 3.6 (November 2017)__: Array to/from object operators, more extensive date to/from string operators, REMOVE variable
+* __MongoDB 3.6 (November 2017)__: Array to/from object operators, more extensive date to/from string operators, a REMOVE variable
 * __MongoDB 4.0 (July 2018)__: Number to/from string operators, string trimming operators
 * __MongoDB 4.2 (August 2019)__: Merge stage to insert/update/replace records in existing non-sharded & sharded collections, set & unset stages to address the verbosity/rigidity of project stages, trigonometry operators, regular expression operators
-* __MongoDB 4.4 (July 2020)__: Union stage, custom JavaScript expression operators (function & accumulator), first & last array element operators, string replacement operators, random number operator
+* __MongoDB 4.4 (July 2020)__: A union stage, custom JavaScript expression operators (function & accumulator), first & last array element operators, string replacement operators, a random number operator
 

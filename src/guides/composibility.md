@@ -103,7 +103,10 @@ var pipeline = [
 ];
 ```
 
-Furthermore, developers may choose to decompose elements inside a stage into additional variables to avoid code 'typos'. For instance, to avoid one part of a pipeline incorrectly referencing a field computed earlier in the pipeline by inaccurately misspelling this reference.
+Furthermore, some developers may go a step or two further if they do not intend to transfer the prototyped pipeline to a different programming language:
 
-This book is not advocating a multi-variable approach over a single-variable approach when you define a pipeline. It is just highlighting two highly composable options. Ultimately it is a personal choice concerning which you find most comfortable and productive. Indeed, some developers will go a step further if they do not intend to transfer the prototyped pipeline to another programming language. They will factor out complex boilerplate parts of a pipeline into separate JavaScript functions. They can re-use each function from multiple places within the main JavaScript-based pipeline.
+ * They may choose to decompose elements inside a stage into additional JavaScript variables to avoid code 'typos'. For instance, to prevent one part of a pipeline incorrectly referencing a field computed earlier in the pipeline due to a misspelling.
+ * They may choose to factor out complex boilerplate parts of a pipeline into separate JavaScript functions. They can then re-use each function from multiple places within the main pipeline's code.
+
+In summary, this book is not advocating a multi-variable approach over a single-variable approach when you define a pipeline. The book is just highlighting two highly composable options. Ultimately it is a personal choice concerning which you find most comfortable and productive. 
 
