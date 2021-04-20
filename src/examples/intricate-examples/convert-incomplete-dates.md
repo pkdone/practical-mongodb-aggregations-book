@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-An application is ingesting _payment_ documents into a MongoDB collection where each document's _payment date_ field contains a string looking vaguely like a date-time, such as `01-JAN-20 01.01.01.123000000`. You want to convert each _payment date_ into a valid BSON date type when aggregating the payments. However, the payment date fields do not contain all the information required for you to determine the exact date-time accurately. Therefore you cannot use just the MongoDB's [Date Expression Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators) directly to perform the text-to-date conversion. Each of these text fields is missing the following information:
+An application is ingesting _payment_ documents into a MongoDB collection where each document's _payment date_ field contains a string looking vaguely like a date-time, such as `"01-JAN-20 01.01.01.123000000"`. You want to convert each _payment date_ into a valid BSON date type when aggregating the payments. However, the payment date fields do not contain all the information required for you to determine the exact date-time accurately. Therefore you cannot use just the MongoDB's [Date Expression Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators) directly to perform the text-to-date conversion. Each of these text fields is missing the following information:
 
  * The specific __century__ (1900s?, 2000s, other?)
  * The specific __time-zone__ (GMT?, IST?, PST?, other?) 
