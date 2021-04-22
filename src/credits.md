@@ -12,17 +12,12 @@ Content created & assembled at: [github.com/pkdone/practical-mongodb-aggregation
 
 ---
 
-Copyright &copy; 2021 Paul Done
+__Acknowledgements__
 
-[![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
+Many thanks to the following people for their valuable feedback:
 
-This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa]
-
-[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
-
-[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0/
-[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
-[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
+ * Jake McInteer
+ * John Page
 
 ---
 
@@ -30,10 +25,15 @@ Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.
 
 ---
 
-__Acknowledgements__
+[![CC BY-NC-SA 3.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
 
-Many thanks to the following people for their valuable feedback:
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License][cc-by-nc-sa]
 
- * Jake McInteer
- * John Page
+[![CC BY-NC-SA 3.0][cc-by-nc-sa-image]][cc-by-nc-sa]
+
+[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/3.0/
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png
+[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%203.0-lightgrey.svg
+
+Copyright &copy; 2021 MongoDB, Inc.
 
