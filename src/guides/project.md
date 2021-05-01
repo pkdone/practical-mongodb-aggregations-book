@@ -10,7 +10,7 @@ In MongoDB version 4.2, the [$set](https://docs.mongodb.com/manual/reference/ope
 
 Despite the challenges, though, there are some specific situations where using `$project` is advantageous over `$set`/`$unset`. These situations are described in the section '_When To Use $project_' further below. 
 
-To add to the confusion, in MongoDB 3.4, a first attempt at addressing some of the disadvantages of `$project` was made by introducing a new [$addFields](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/) stage, which has the same behaviour as `$set` (`$set` came later than `$addFields`). The Aggregation Framework provided no direct equivalent to `$unset` back then. However, both `$set` and `$unest` stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (`$set` Vs `$unset`). The name `$addFields` also does not reflect that you can modify existing fields rather than just add new fields. Therefore, nowadays, you should not use `$addFields`. This helps with consistency and avoids any confusion of intent. If you have come to MongoDB only recently, pretend `$addFields` never existed!
+> _MongoDB version 3.4 addressed some of the disadvantages of `$project` by introducing a new [$addFields](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/) stage, which has the same behaviour as `$set`. `$set` came later than `$addFields`and `$set` is actually just an alias for `$addFields`. However, back then, the Aggregation Framework provided no direct equivalent to `$unset`. Both `$set` and `$unset` stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (`$set` Vs `$unset`). The name `$addFields` doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers `$set` over `$addFields` to help promote consistency and avoid any confusion of intent. However, if you are wedded to `$addFields`, use that instead, as there is no behavioural difference._
 
 
 ## When To Use Set & Unset
@@ -175,5 +175,5 @@ However, by using `$project` for this specific aggregation, as shown below, to a
 
 ## Main Takeaway
 
-In summary, you should always look to use `$set` & `$unset` for field inclusion and exclusion, rather than `$project`. The main exception is if you have an obvious requirement for a very different structure for result documents, where you only need to retain a small subset of the input fields. Unless you are already wedded to it, don't bother using `$addFields` because it adds no value and may cause confusion.
+In summary, you should always look to use `$set` (or `$addFields`) and `$unset` for field inclusion and exclusion, rather than `$project`. The main exception is if you have an obvious requirement for a very different structure for result documents, where you only need to retain a small subset of the input fields.
 

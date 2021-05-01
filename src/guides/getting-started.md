@@ -56,12 +56,12 @@ mongosh "mongodb://localhost:27017"
 
 MongoDB Compass provides an _Aggregation Pipeline Builder_ tool to assist users in prototyping and debugging aggregation pipelines and exporting them to different programming languages. Below is a screenshot of the aggregation tool in Compass:
 
-![DB Engine Aggregations Optimisations](./pics/compass.png)
+![MongoDB Compass GUI tool for building database aggregation pipelines](./pics/compass.png)
 
 
 ### Studio 3T GUI
 
 Studio 3T provides an _Aggregation Editor_ tool to help users prototype and debug aggregation pipelines and translate them to different programming languages. Below is a screenshot of the aggregation tool in Studio 3T:
 
-![DB Engine Aggregations Optimisations](./pics/studio3t.png)
+![Studio 3T GUI tool for building database aggregation pipelines](./pics/studio3t.png)
 

@@ -18,7 +18,7 @@ When executing an aggregation pipeline, the database engine pulls batches of rec
 
 The diagram below highlights the nature of streaming and blocking stages. Streaming stages allow batches to be processed and then passed through without waiting. Blocking stages wait for the whole of the input data set to arrive and accumulate before processing all this data together.
 
-![Streaming Vs Blocking](./pics/streaming-blocking.png)
+![MongoDB aggregation pipeline streaming Vs blocking stages](./pics/streaming-blocking.png)
 
 When considering `$sort` and `$group` stages, it becomes evident why they have to block. The following examples illustrate why this is the case:
 

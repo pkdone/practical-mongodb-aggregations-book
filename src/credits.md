@@ -12,12 +12,12 @@ Content created & assembled at: [github.com/pkdone/practical-mongodb-aggregation
 
 ---
 
-__Acknowledgements__
-
-Many thanks to the following people for their valuable feedback:
+Acknowledgements - many thanks to the following people for their valuable feedback:
 
  * Jake McInteer
  * John Page
+ * Asya Kamsky
+ * Mat Keep
 
 ---
 

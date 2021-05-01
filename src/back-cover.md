@@ -1,5 +1,4 @@
 
 
-![Back Cover](./pics/back-cover.png)
-
+![Practical MongoDB Aggregations book back cover](./pics/back-cover.png)
 

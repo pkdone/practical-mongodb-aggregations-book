@@ -4,7 +4,7 @@ As described in this book's introduction, an aggregation pipeline is an ordered 
 
 With MongoDB's aggregations, you can take a complex problem, requiring a complex aggregation pipeline, and break it down into straightforward individual stages, where each step can be developed and tested in isolation first. To better comprehend this composability, it may be helpful to internalise the following visual model.
 
-![Pipelines Equivalence](./pics/pipeline-equivalence.png)
+![Alternatives for MongoDB aggregation pipelines composability](./pics/pipeline-equivalence.png)
 
 Suppose you have two pipelines with one stage in each and run the second pipeline after completing the first pipeline. The final result set is the same as if you have just run a single pipeline containing both stages serially. There is no difference between the two. As a developer, you can reduce the [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) by understanding how a problem can be broken down in this way when building aggregation pipelines. Aggregation pipelines enable you to decompose a big challenge into lots of minor challenges. By embracing this approach of first developing each stage separately, you will find even the most complex challenges become surmountable.
 
