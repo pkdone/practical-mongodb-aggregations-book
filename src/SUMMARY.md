@@ -2,6 +2,7 @@
 
 [Practical MongoDB Aggregations](front-cover.md)
 [Credits](credits.md)
+[Foreword](foreword.md)
 
 ## Introduction & History
 - [Introduction](intro/introduction.md)
