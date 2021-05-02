@@ -12,5 +12,5 @@ Additionally, if you are getting stuck with an aggregation pipeline and want som
  * The MongoDB Developer Hub - [Community Forums](https://developer.mongodb.com/community/forums/)
  * Stack Overflow - [MongoDB Questions](https://stackoverflow.com/questions/tagged/mongodb)
 
-You may be asking for just general advice. However, suppose you want to ask for help on a specific aggregation pipeline under development. In that case, you should provide a sample input document and a copy of your current pipeline code (in its JSON syntax format and not a programming language specific format). If you provide this extra information, you will have a far greater chance of receiving a timely and optimal response.
+You may be asking for just general advice. However, suppose you want to ask for help on a specific aggregation pipeline under development. In that case, you should provide a sample input document, a copy of your current pipeline code (in its JSON syntax format and not a programming language specific format) and an example of the output that you are trying to achieve. If you provide this extra information, you will have a far greater chance of receiving a timely and optimal response.
 
