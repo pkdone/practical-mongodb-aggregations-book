@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You want to generate a report to show what each shop customer purchased in 2020. You will group the individual order records by customer, capturing each customer's first purchase date, the number of orders they made, the total value of all their orders and a list of their order items.
+You want to generate a report to show what each shop customer purchased in 2020. You will group the individual order records by customer, capturing each customer's first purchase date, the number of orders they made, the total value of all their orders and a list of their order items sorted by date. 
 
 
 ## Sample Data Population
@@ -163,8 +163,7 @@ Three documents should be returned, representing the three customers, each showi
     total_orders: 2,
     orders: [
       {orderdate: 2020-08-18T23:04:48.000Z, value: Decimal128("4.59")},
-      {orderdate: 2020-11-23T22:56:53.000Z, value: Decimal128("187.99")
-      }
+      {orderdate: 2020-11-23T22:56:53.000Z, value: Decimal128("187.99")}
     ]
   }
 ]

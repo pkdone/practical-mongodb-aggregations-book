@@ -54,7 +54,7 @@ var pipeline = [
     "address",
   ]},    
     
-  // Only match people born on or after 1st Janurary 1970
+  // Only match people born on or after 1st January 1970
   {"$match": {
     "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")},
   }},

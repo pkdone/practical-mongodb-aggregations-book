@@ -5,76 +5,76 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You want to generate a report to list shop purchases for each product made in 2020. There is a collection of customer records where each has an embedded array of one or more orders made by the customer. You first want to unpack the embedded orders into separate top-level order records. Then you want to group these unpacked orders by product type (e.g. _ELECTRONICS_, _BOOKS_), capturing a total value and order count for each product type. 
+You want to generate a retail report to list the total value and quantity of expensive products sold (valued over 15 dollars). The source data is a list of shop orders, where each order contains the set of products purchased as part of the order.
 
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate a new `customer_orders` collection with customer-related documents spanning 2019-2021, with each customer having an array of 1 or more orders:
+Drop any old version of the database (if it exists) and then populate a new `orders` collection where each document contains an array of products purchased:
 
 ```javascript
 use book-unpack-array-group-differently;
 db.dropDatabase();
 
-// Insert 3 records into the customer_orders collection each with 1+ orders
-db.customer_orders.insertMany([
+// Insert 4 records into the orders collection each with 1+ product items
+db.orders.insertMany([
   {
-    "customer_id": "tj@wheresmyemail.com",
-    "orders": [
+    "order_id": 6363763262239,
+    "products": [
       {
-        "orderdate": ISODate("2019-05-28T19:13:32Z"),
-        "product_type": "STATIONARY",
-        "value": NumberDecimal("2.01"),
+        "prod_id": "abc12345",
+        "name": "Asus Laptop",
+        "price": NumberDecimal("431.43"),
       },
       {
-        "orderdate": ISODate("2020-08-18T23:04:48Z"),
-        "product_type": "BOOKS",
-        "value": NumberDecimal("4.59"),
-      },
-      {
-        "orderdate": ISODate("2020-11-23T22:56:53Z"),
-        "product_type": "ELECTRONICS",
-        "value": NumberDecimal("187.99"),
-      },
-      {
-        "orderdate": ISODate("2021-03-01T07:49:32Z"),
-        "product_type": "ELECTRONICS",
-        "value": NumberDecimal("1024.89"),
+        "prod_id": "def45678",
+        "name": "Karcher Hose Set",
+        "price": NumberDecimal("22.13"),
       },
     ],
   },
   {
-    "customer_id": "oranieri@warmmail.com",
-    "orders": [
+    "order_id": 1197372932325,
+    "products": [
       {
-        "orderdate": ISODate("2020-01-01T08:25:37Z"),
-        "product_type": "GARDEN",
-        "value": NumberDecimal("63.13"),
+        "prod_id": "abc12345",
+        "name": "Asus Laptop",
+        "price": NumberDecimal("429.99"),
       },
     ],
   },
   {
-    "customer_id": "elise_smith@myemail.com",
-    "orders": [
+    "order_id": 9812343774839,
+    "products": [
       {
-        "orderdate": ISODate("2020-01-13T09:32:07Z"),
-        "product_type": "GARDEN",
-        "value": NumberDecimal("99.99"),
+        "prod_id": "pqr88223",
+        "name": "Morphy Richardds Food Mixer",
+        "price": NumberDecimal("431.43"),
       },
       {
-        "orderdate": ISODate("2020-05-30T08:35:52Z"),
-        "product_type": "ELECTRONICS",
-        "value": NumberDecimal("231.43"),
+        "prod_id": "def45678",
+        "name": "Karcher Hose Set",
+        "price": NumberDecimal("21.78"),
+      },
+    ],
+  },
+  {
+    "order_id": 4433997244387,
+    "products": [
+      {
+        "prod_id": "def45678",
+        "name": "Karcher Hose Set",
+        "price": NumberDecimal("23.43"),
       },
       {
-        "orderdate": ISODate("2020-10-03T13:49:44Z"),
-        "product_type": "GARDEN",
-        "value": NumberDecimal("102.24"),
+        "prod_id": "jkl77336",
+        "name": "Picky Pencil Sharpener",
+        "price": NumberDecimal("0.67"),
       },
       {
-        "orderdate": ISODate("2020-12-26T08:55:46Z"),
-        "product_type": "KITCHENWARE",
-        "value": NumberDecimal("48.50"),
+        "prod_id": "xyz11228",
+        "name": "Russell Hobbs Chrome Kettle",
+        "price": NumberDecimal("15.76"),
       },
     ],
   },
@@ -88,29 +88,29 @@ Define a single pipeline ready to perform the aggregation:
 
 ```javascript
 var pipeline = [
-  // Unpack each order from the customer orders array as a new separate record
+  // Unpack each product from the each order's product as a new separate record
   {"$unwind": {
-    "path": "$orders",
+    "path": "$products",
   }},
 
-  // Match only orders made in 2020
+  // Match only products valued greater than 15.00
   {"$match": {
-    "orders.orderdate": {
-      "$gte": ISODate("2020-01-01T00:00:00Z"),
-      "$lt": ISODate("2021-01-01T00:00:00Z"),
+    "products.price": {
+      "$gt": NumberDecimal("15.00"),
     },
   }},
   
-  // Group by product type
+  // Group by product type, capturing each product's total value + quantity
   {"$group": {
-    "_id": "$orders.product_type",
-    "total_value": {"$sum": "$orders.value"},
-    "total_orders": {"$sum": 1},
+    "_id": "$products.prod_id",
+    "product": {"$first": "$products.name"},
+    "total_value": {"$sum": "$products.price"},
+    "quantity": {"$sum": 1},
   }},
-  
-  // Set product type to be the value of the field that was grouped on
+
+  // Set product id to be the value of the field that was grouped on
   {"$set": {
-    "product_type": "$_id",
+    "product_id": "$_id",
   }},
   
   // Omit unwanted field
@@ -126,40 +126,44 @@ var pipeline = [
 Execute the aggregation using the defined pipeline and also view its explain plan:
 
 ```javascript
-db.customer_orders.aggregate(pipeline);
+db.orders.aggregate(pipeline);
 ```
 
 ```javascript
-db.customer_orders.explain("executionStats").aggregate(pipeline);
+db.orders.explain("executionStats").aggregate(pipeline);
 ```
 
 
 ## Expected Results
 
-Four documents should be returned, representing the four products that were referenced multiple times in the customer orders arrays, each showing the product's total order value and orders count, for orders placed in 2020 only, as shown below:
+Four documents should be returned, representing only the four expensive products that were referenced multiple times in the customer orders, each showing the product's total order value and amount sold as shown below:
 
 ```javascript
 [
   {
-    product_type: 'KITCHENWARE',
-    total_value: Decimal128("48.50"),
-    total_orders: 1,
+    product_id: 'abc12345',
+    product: 'Asus Laptop',
+    total_value: Decimal128("861.42"),
+    quantity: 2
   },
   {
-    product_type: 'ELECTRONICS',
-    total_value: Decimal128("419.42"),
-    total_orders: 2,
+    product_id: 'pqr88223',
+    product: 'Morphy Richardds Food Mixer',
+    total_value: Decimal128("431.43"),
+    quantity: 1
   },
   {
-    product_type: 'GARDEN',
-    total_value: Decimal128("265.36"),
-    total_orders: 3,
+    product_id: 'def45678',
+    product: 'Karcher Hose Set',
+    total_value: Decimal128("67.34"),
+    quantity: 3
   },
   {
-    product_type: 'BOOKS',
-    total_value: Decimal128("4.59"),
-    total_orders: 1,
-  },
+    product_id: 'xyz11228',
+    product: 'Russell Hobbs Chrome Kettle',
+    total_value: Decimal128("15.76"),
+    quantity: 1
+  }
 ]
 ```
 
@@ -168,6 +172,5 @@ Four documents should be returned, representing the four products that were refe
 
  * __Unwinding Arrays.__ The `$unwind` stage is a powerful concept, although often unfamiliar to many developers initially. Distilled down, it does one simple thing: it generates a new record for each element in an array field of every input document. If a source collection has 3 documents and each document contains an array of 4 elements, then performing an `$unwind` on each record's array field produces 12 records (3 x 4).
 
- * __Introducing A Partial Match__. The current example pipeline scans all documents in the collection and then filters out unpacked records where `orderdate = 2020`. If the pipeline executed this filter as the first stage, it would incorrectly produce some result order records outside of 2020 for customers who have been shopping for multiple years. However, you can still improve the pipeline by including an additional 'partial match' filter for orders made in 2020, at the start of the pipeline. The aggregation would leverage an index (on `orderdate`), resulting in a partial rather than full collection scan. This extra filter stage is beneficial if the input data set is large and many customers didn't have any orders in 2020. This approach is described in the chapter [Pipeline Performance Considerations](../../guides/performance.md).
+ * __Introducing A Partial Match__. The current example pipeline scans all documents in the collection and then filters out unpacked products where `price > 15.00`. If the pipeline executed this filter as the first stage, it would incorrectly produce some result product records with a value of 15 dollars or less. This would be the case for an order composed of both inexpensive and expensive products. However, you can still improve the pipeline by including an additional 'partial match' filter at the start of the pipeline for products valued at over 15 dollars. The aggregation could leverage an index (on `products.price`), resulting in a partial rather than full collection scan. This extra filter stage is beneficial if the input data set is large and many customer orders are for inexpensive items only. This approach is described in the chapter [Pipeline Performance Considerations](../../guides/performance.md).
 
- 

@@ -6,9 +6,9 @@ Expressions give aggregation pipelines their data manipulation power. However, t
 
 Expressions come in one of three primary flavours:
 
- * __Field Paths.__ Accessed with a `$` prefix followed by the field's path in each record being processed. &nbsp;Examples: `$account.sortcode`, `$addresses.address.city`
+ * __Operators.__ Accessed with a `$` prefix followed by the operator function name. These are used as the keys for objects. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`
  
- * __Operators.__ Accessed with a `$` prefix followed by the operator function name. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`
+ * __Field Paths.__ Accessed with a `$` prefix followed by the field's path in each record being processed. &nbsp;Examples: `$account.sortcode`, `$addresses.address.city`
  
  * __Variables.__ Accessed with a `$$` prefix followed by the fixed name and falling into three sub-categories:
  
@@ -16,7 +16,7 @@ Expressions come in one of three primary flavours:
    
    - __Marker flag system variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
 
-   - __Bind user variables.__ For storing values you declare with a `$let` operator (or with the 'let' option of a `$lookup` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
+   - __Bind user variables.__ For storing values you declare with a `$let` operator (or with the 'let' option of a `$lookup` stage, or 'as' option of a `$map` or `$filter` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
 
 You can combine these three categories of expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/intricate-examples/mask-sensitive-fields.html) example, which combines all three expressions.
 
@@ -50,8 +50,7 @@ There are many types of stages in the Aggregation Framework that don't allow exp
  * `$sample`
  * `$count`
 
-> _(unnecessary 'system-level' stages, like `$collStats`, are omitted because you don't use them for manipulating data)_
-
+> _('system-level' stages, like `$collStats`, are omitted because you don't use them for manipulating 'business' data)_
 
 Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider `$match` to be the most surprising item in this list. The content of a `$match` stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the `$match` stage at the top of the pipeline. Therefore, the `$match` filter must use the same syntax as MQL. 
 
@@ -67,7 +66,7 @@ A few situations demand having to use `$expr` from inside a `$match` stage. Exam
  * A requirement to compare two fields from the same record to determine whether to keep the record based on the comparison's outcome
  * A requirement to perform a calculation based on values from multiple existing fields in each record and then comparing the calculation to a constant
  
-These are impossible in an aggregation if you use regular `$match` query conditions.
+These are impossible in an aggregation (or MQL `find()`) if you use regular `$match` query conditions.
 
 Take the example of a collection holding information on different instances of rectangles (capturing their width and height), similar to the following: 
 
@@ -79,7 +78,7 @@ Take the example of a collection holding information on different instances of r
 ]
 ```
 
-What if you wanted to run an aggregation pipeline to only return rectangles with an `area` greater than `12`? This comparison isn't possible in a conventional aggregation`$match` query condition. However, with `$expr`, you can analyse a combination of fields in-situ using expressions. You can implement the requirement with the following pipeline:
+What if you wanted to run an aggregation pipeline to only return rectangles with an `area` greater than `12`? This comparison isn't possible in a conventional aggregation when using a single `$match` query condition. However, with `$expr`, you can analyse a combination of fields in-situ using expressions. You can implement the requirement with the following pipeline:
 
 ```javascript
 var pipeline = [

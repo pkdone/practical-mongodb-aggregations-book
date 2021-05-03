@@ -146,7 +146,7 @@ var pipeline = [
 
   // Only show products that have at least one order
   {"$match": {
-    orders: {$not: {$size: 0}},
+    "orders": {"$ne": []},
   }},
 
   // Omit unwanted fields
@@ -212,10 +212,7 @@ Two documents should be returned, representing the two products that had one or 
 
 ## Observations & Comments
 
- * __Multiple Join Fields.__ To join two or more fields in a [$lookup stage](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries), you must use a `let` parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `$pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. In this instance, the`$expr` operator's comparison can leverage an index because only equality matches are employed.
+ * __Multiple Join Fields.__ To join two or more fields in a [$lookup stage](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries), you must use a `let` parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. In this instance, the`$expr` operator's comparison can leverage an index because only equality matches are employed.
  
- * __Reducing Array Content.__ The presence of an embedded pipeline in the `$lookup` stage provides an opportunity to filter out three unwanted fields brought in from the second collection. If you want to filter out these fields in a later step instead, inside the main pipeline, you can use one of the following two:
- 
-    1. Add an extra stage to unwind the joined array elements, followed by a stage to unset the fields to be excluded, followed by a stage to re-group the unpacked records.
-    2. Use of one of the [Array Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators), such as `$map`. This can seem a little more complicated at first, but it is more optimal than the `$unwind/$unset/$group` combination, as described in the [Pipeline Performance Considerations](../../guides/performance.md) chapter.
-    
+ * __Reducing Array Content.__ The presence of an embedded pipeline in the `$lookup` stage provides an opportunity to filter out three unwanted fields brought in from the second collection. Instead, you could use an `$unset` stage later in the top-level pipeline to project out these unwanted array elements. If you need to perform more complex array content filtering rules, you can use the approach described in section "_2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements_" of the chapter [Pipeline Performance Considerations](../../guides/performance.md).
+     

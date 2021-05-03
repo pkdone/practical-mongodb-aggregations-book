@@ -30,7 +30,9 @@ These often unavoidable blocking stages don't just increase aggregation executio
 
 ### $sort Memory Consumption And Mitigation
  
-Used naively, a `$sort` stage will need to see all the input records at once, and so the host server must have enough capacity to hold all the input data in memory. The amount of memory required depends heavily on the initial data size and the degree to which the prior stages can reduce the size. Also, multiple instances of the aggregation pipeline may be in-flight at any one time, in addition to other database workloads. These all compete for the same finite memory. Suppose the source data set is many gigabytes or even terabytes in size, and earlier pipeline stages have not reduced this size significantly. It will be unlikely that the host machine has sufficient memory to support the pipeline's blocking `$sort` stage. Therefore, MongoDB enforces every `$stage` is limited to 100 MB of consumed RAM. The database throws an error if it exceeds this limit. To avoid this obstacle, you can set the `allowDiskUse=true` option for the overall aggregation for handling large data sets. Consequently, the pipeline's _sort_ operation spills to disk if required, and the 100 MB limit no longer constrains the pipeline. However, the sacrifice here is significantly higher latency, and the execution time is likely to increase by orders of magnitude.
+Used naively, a `$sort` stage will need to see all the input records at once, and so the host server must have enough capacity to hold all the input data in memory. The amount of memory required depends heavily on the initial data size and the degree to which the prior stages can reduce the size. Also, multiple instances of the aggregation pipeline may be in-flight at any one time, in addition to other database workloads. These all compete for the same finite memory. Suppose the source data set is many gigabytes or even terabytes in size, and earlier pipeline stages have not reduced this size significantly. It will be unlikely that the host machine has sufficient memory to support the pipeline's blocking `$sort` stage. Therefore, MongoDB enforces every `$stage` is limited to 100 MB of consumed RAM. The database throws an error if it exceeds this limit.
+
+To avoid the memory limit obstacle, you can set the `allowDiskUse=true` option for the overall aggregation for handling large data sets. Consequently, the pipeline's _sort_ operation spills to disk if required, and the 100 MB limit no longer constrains the pipeline. However, the sacrifice here is significantly higher latency, and the execution time is likely to increase by orders of magnitude.
 
 To circumvent the aggregation needing to manifest the whole data set in memory or overspill to disk, attempt to refactor your pipeline to incorporate one of the following approaches (in order of most effective first):
 
@@ -40,13 +42,15 @@ To circumvent the aggregation needing to manifest the whole data set in memory o
   
 ### $group Memory Consumption And Mitigation
 
-Used naively, the `$group` stage has the potential to consume even more memory than a `$sort` operation. This can occur if the stage attempts to group every record and retain all the data. The output will be fewer records but will be larger in terms of data size. This is because new grouping 'metadata' will be retained in addition to all the original data from the source records. Referring to the previous example of _people_ records, the `$group` stage's output size will be the size of all the people records plus the new _departments_ grouping metadata. As with the `$sort` stage, an aggregation pipeline's 100 MB RAM limit equally applies for the `$group` stage. You can use the pipeline's `allowDiskUse=true` option to avoid this limit, but with the same downsides. In practicality, though, many grouping scenarios are focussed on grouping summary data, not itemised data. In these situations, considerably reduced result data sets are produced, requiring far less memory than a `$sort` stage.  Let's consider the employees belonging to departments scenario again. An aggregation may require each _department_ group to contain a total employees count, instead of individual employee records, by using an [accumulator operator](https://docs.mongodb.com/manual/reference/operator/aggregation/group/#accumulators-group). So in reality, contrary to sort operations, group operations will typically require a fraction of the host's RAM.
+Used naively, the `$group` stage has the potential to consume even more memory than a `$sort` operation. This can occur if the stage attempts to group every record and retain all the data. The output will be fewer records but will be larger in terms of data size. This is because new grouping 'metadata' will be retained in addition to all the original data from the source records. Referring to the previous example of _people_ records, the `$group` stage's output size will be the size of all the people records plus the new _departments_ grouping metadata. As with the `$sort` stage, an aggregation pipeline's 100 MB RAM limit equally applies for the `$group` stage. You can use the pipeline's `allowDiskUse=true` option to avoid this limit, but with the same downsides.
+
+In practicality many grouping scenarios are focussed on grouping summary data, not itemised data. In these situations, considerably reduced result data sets are produced, requiring far less memory than a `$sort` stage.  Let's consider the employees belonging to departments scenario again. An aggregation may require each _department_ group to contain a total employees count, instead of individual employee records, by using an [accumulator operator](https://docs.mongodb.com/manual/reference/operator/aggregation/group/#accumulators-group). So in reality, contrary to sort operations, group operations will typically require a fraction of the host's RAM.
 
 To avoid excessive memory consumption for `$group` operations, adopt the following principles (in order of most effective first):
 
- 1. __Avoid Unnecessary Grouping__. This is covered later in this chapter in section "_2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements_".
+ 1. __Avoid Unnecessary Grouping__. This is covered below in section "_2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements_".
  2. __Group Using Accumulator Operators Only__. If the use case permits it, use the group stage to accumulate totals, sums and summary roll-ups only, rather than holding all the raw data of each record belonging to the group. You can achieve this by only using the [accumulators](https://docs.mongodb.com/manual/reference/operator/aggregation/#accumulators---group-) subset of all possible operators inside the `$group` stage.
- 3. __Reduce Amount Of Records To Group__. Move the `$group` stage to as late as possible in your pipeline and ensure earlier stages significantly reduce the number of records streaming into this late blocking `$group` stage. This blocking stage will have less data to group and use less RAM.
+ 3. __Reduce Records To Group__. Move the `$group` stage to as late as possible in your pipeline and ensure earlier stages significantly reduce the number of records streaming into this late blocking `$group` stage. This blocking stage will have less data to group and use less RAM.
 
 
 ## 2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements
@@ -58,92 +62,123 @@ Sometimes, you need an aggregation pipeline to mutate or reduce an array field's
  * You may need to retain only one reoccurring field for each sub-document in the array 
  * ..._or numerous other array 'reduction' scenarios_
 
-To bring this to life more, imagine a `product_orders` collection. Each document represents a product and contains an array of orders for that product, as shown in the example below:
+To bring this to life, imagine a retail `orders` collection where each document contains an array of products purchased as part of the order, as shown in the example below:
 
 ```javascript
 [
   {
-    name: "Asus Laptop",
-    orders: [
+    _id: 1197372932325,
+    products: [
       {
-        customer_id: "elise_smith@myemail.com",
-        orderdate: 2020-05-30T08:35:52.000Z,
-        value: Decimal128("431.43")
+        prod_id: 'abc12345',
+        name: 'Asus Laptop',
+        price: Decimal128("429.99")
+      }
+    ]
+  },
+  {
+    _id: 4433997244387,
+    products: [
+      {
+        prod_id: 'def45678',
+        name: 'Karcher Hose Set',
+        price: Decimal128("23.43")
       },
       {
-        customer_id: "jjones@tepidmail.com",
-        orderdate: 2020-12-26T08:55:46.000Z,
-        value: Decimal128("429.65")
-      }
-    ]
-  },
-  {
-    name: "Morphy Richards Food Mixer",
-    orders: [
+        prod_id: 'jkl77336',
+        name: 'Picky Pencil Sharpener',
+        price: Decimal128("0.67")
+      },
       {
-        customer_id: "oranieri@warmmail.com",
-        orderdate: 2020-01-01T08:25:37.000Z,
-        value: Decimal128("63.13")
+        prod_id: 'xyz11228',
+        name: 'Russell Hobbs Chrome Kettle',
+        price: Decimal128("15.76")
       }
     ]
   }
 ]
 ```
 
-An aggregation is required to transform these documents to retain the `customer_id` in each order for each product but exclude the `orderdate` and `value` fields because they are surplus to requirements. The desired aggregation output might be:
+The retailer wants to see a report of the orders with only expensive products purchased by customers (e.g. containing just products priced greater than 15 dollars). Consequently, an aggregation is required to filter out the inexpensive product items of each order's array. The desired aggregation output might be:
 
 ```javascript
 [
   {
-    name: "Asus Laptop",
-    orders: ["elise_smith@myemail.com", "jjones@tepidmail.com"]
+    _id: 1197372932325,
+    products: [
+      {
+        prod_id: 'abc12345',
+        name: 'Asus Laptop',
+        price: Decimal128("429.99")
+      }
+    ]
   },
   {
-    name: "Morphy Richards Food Mixer",
-    orders: ["oranieri@warmmail.com"]
+    _id: 4433997244387,
+    products: [
+      {
+        prod_id: 'def45678',
+        name: 'Karcher Hose Set',
+        price: Decimal128("23.43")
+      },
+      {
+        prod_id: 'xyz11228',
+        name: 'Russell Hobbs Chrome Kettle',
+        price: Decimal128("15.76")
+      }
+    ]
   }
 ]
 ```
 
-One obvious way of achieving this transformation is to _unwind_ the _orders_ array for each record. This produces an intermediate set of individual order records that are then _grouped_ together again by the product's `$name`. When re-grouping, only the `customer_id` field is pushed back into the `orders` array with the `orderdate` and `value` fields ignored.  The required pipeline to achieve this is below:
+Notice order `4433997244387` now only shows two products and is missing the inexpensive product.
+
+One obvious way of achieving this transformation is to _unwind_ the _products_ array of each order document to produce an intermediate set of individual product records. These records can then be _matched_ to retain products priced greater than 15 dollars. Finally, the products can be _grouped_ back together again by order ID. The required pipeline to achieve this is below:
 
 ```javascript
 // SUBOPTIMAL
 
 var pipeline = [
+  // Unpack each product from the each order's product as a new separate record
   {"$unwind": {
-    "path": "$orders",
+    "path": "$products",
   }},
 
+  // Match only products valued over 15.00
+  {"$match": {
+    "products.price": {
+      "$gt": NumberDecimal("15.00"),
+    },
+  }},
+
+  // Group by product type
   {"$group": {
-    "_id": "$name",
-    "orders": {"$push": "$orders.customer_id"},
+    "_id": "$_id",
+    "products": {"$push": "$products"},    
   }},
 ];
-
 ```
 
-This pipeline is suboptimal because a `$group` stage has been introduced, which is a blocking stage, as outlined earlier in this chapter. Both memory consumption and execution time will increase significantly, which could be fatal for a large input data set. There is a far better alternative by using one of the [Array Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators) instead. Array Operators are sometimes less intuitive to code, but they avoid introducing a blocking stage into the pipeline. Consequently, they are significantly more optimal, especially for large data sets. Shown below is a far more efficient pipeline, using the `$map` array operator, rather than the `$unwind/$group` combination, to produce the same outcome:
+This pipeline is suboptimal because a `$group` stage has been introduced, which is a blocking stage, as outlined earlier in this chapter. Both memory consumption and execution time will increase significantly, which could be fatal for a large input data set. There is a far better alternative by using one of the [Array Operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators) instead. Array Operators are sometimes less intuitive to code, but they avoid introducing a blocking stage into the pipeline. Consequently, they are significantly more optimal, especially for large data sets. Shown below is a far more efficient pipeline, using the `$filter` array operator, rather than the `$unwind/$match/$group` combination, to produce the same outcome:
 
 ```javascript
 // OPTIMAL
 
 var pipeline = [
+  // Filter out products valued 15.00 or less
   {"$set": {
-    "orders": {
-      "$map": {
-        "input": "$orders",
-        "as": "order",
-        "in": "$$order.customer_id",
+    "products": {
+      "$filter": {
+        "input": "$products",
+        "as": "product",
+        "cond": {"$gt": ["$$product.price", NumberDecimal("15.00")]},
       }
     },    
   }},
 ];
 ```
 
-Note an even simpler solution is possible for this trivial example (`{"$set": {"orders": "$orders.customer_id"}}`), but the used approach is worth highlighting to point the way for more complex array transformations.
-
-To reiterate, there should never be the need to use an `$unwind/$group` combination in an aggregation pipeline to transform an array field's elements for each document in isolation. One way to recognize this is if your pipeline contains a `$group` on a `$_id` field, which may hint at this anti-pattern. Instead, use _Array Operators_ to avoid introducing a blocking stage. Otherwise, you will suffer a magnitude of increase in execution time when your pipeline handles more than 100MB of in-flight data. Adopting this best practice may mean the difference between achieving the required business outcome and abandoning the whole task as unachievable.
+To reiterate, there should never be the need to use an `$unwind/$group` combination in an aggregation pipeline to transform an array field's elements for each document in isolation. One way to recognize if you have this anti-pattern is if your pipeline contains a `$group` on a `$_id` field. Instead, use _Array Operators_ to avoid introducing a blocking stage. Otherwise, you will suffer a magnitude of increase in execution time when your pipeline handles more than 100MB of in-flight data. Adopting this best practice may mean the difference between achieving the required business outcome and abandoning the whole task as unachievable.
 
 The primary use of an `$unwind/$group` combination is to correlate patterns across many records' arrays rather than transform the content within each input record's array in isolation. For an illustration of an appropriate use of `$unwind/$group` refer to this book's [Unpack Array & Group Differently](../examples/simple-examples/unpack-array-group-differently.md) example.
 
