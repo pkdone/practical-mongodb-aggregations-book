@@ -3,10 +3,12 @@
 [Practical MongoDB Aggregations](front-cover.md)
 [Credits](credits.md)
 [Foreword](foreword.md)
+[Who This Book Is For](who-this-is-for.md)
 
-## Introduction & History
+## Introduction
 - [Introduction](intro/introduction.md)
-    - [History](intro/history.md)
+    - [Introducing MongoDB Aggregations](intro/introducing-aggregations.md)
+    - [History of MongoDB Aggregations](intro/history.md)
 
 ## Guiding Tips & Principles    
 - [Guiding Tips & Principles](guides/guides.md)
@@ -16,7 +18,7 @@
     - [Better Alternatives To A Project Stage](guides/project.md)
     - [Using Explain Plans](guides/explain.md)
     - [Pipeline Performance Considerations](guides/performance.md)
-    - [Can Expressions Be Used Everywhere?](guides/expressions.md)
+    - [Expressions Explained](guides/expressions.md)
 
 ## Aggregations By Example
 - [Aggregations By Example](examples/examples.md)

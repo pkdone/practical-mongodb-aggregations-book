@@ -25,11 +25,11 @@ For example, imagine there is a collection of credit card payment documents simi
   _id: ObjectId("6044faa70b2c21f8705d8954"),
   card_name: "Mrs. Jane A. Doe",
   card_num: "1234567890123456",
-  card_expiry: "2023-08-31T23:59:59.736Z",
+  card_expiry: ISODate("2023-08-31T23:59:59.736Z"),
   card_sec_code: "123",
   card_provider_name: "Credit MasterCard Gold",
   transaction_id: "eb1bd77836e8713656d9bf2debba8900",
-  transaction_date: 2021-01-13T09:32:07.000Z,
+  transaction_date: ISODate("2021-01-13T09:32:07.000Z"),
   transaction_curncy_code: "GBP",
   transaction_amount: Decimal128("501.98"),
   reported: true
@@ -43,15 +43,15 @@ Then imagine an aggregation pipeline is required to produce modified versions of
 {
   card_name: "Mrs. Jane A. Doe",
   card_num: "1234567890123456",
-  card_expiry: 2023-08-31T23:59:59.736Z,  // Field type converted from text to date
+  card_expiry: ISODate("2023-08-31T23:59:59.736Z"), // Field type converted from text
   card_sec_code: "123",
   card_provider_name: "Credit MasterCard Gold",
   transaction_id: "eb1bd77836e8713656d9bf2debba8900",
-  transaction_date: 2021-01-13T09:32:07.000Z,
+  transaction_date: ISODate("2021-01-13T09:32:07.000Z"),
   transaction_curncy_code: "GBP",
   transaction_amount: Decimal128("501.98"),
   reported: true,
-  card_type: "CREDIT"                     // New field added using a literal value
+  card_type: "CREDIT"                               // New added literal value field
 }
 ```
 
@@ -117,7 +117,7 @@ This time for the same input payments collection, let us imagine you require a d
 // OUTPUT  (a record in the results of the executed aggregation)
 {
   transaction_info: { 
-    date: 2021-01-13T09:32:07.000Z,
+    date: ISODate("2021-01-13T09:32:07.000Z"),
     amount: Decimal128("501.98")
   },
   status: "REPORTED"
@@ -171,6 +171,8 @@ However, by using `$project` for this specific aggregation, as shown below, to a
   }},
 ]
 ```
+
+> _Another potential downside can occur when using `$project` to define field inclusion, rather than using `$set` (or `$addFields`). When using `$project` and hence needing to declare all required fields for inclusion, it can be easy to carelessly declare more fields from the source data set than intended. Later on, if the pipeline contains something like a `$group` stage, this will cover up this mistake. The final aggregation's output will not include the erroneous field in the output. You might ask, "Why is this a problem?". Well, what happens if the aggregation is otherwise going to take advantage of a [covered index query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query) for the few fields it requires, to avoid unnecessarily accessing the raw documents. In most cases, MongoDB's aggregation engine can track fields' dependencies throughout a pipeline and, left to its own devices, can understand that an erroneous field is not required. However, you would be overriding this capability by explicitly asking for the extra field. The quintessential mistake is to forget to exclude the `_id` field in the projection inclusion stage, and so it will be included by default. This mistake will silently kill the potential optimisation. If you must use a `$project` stage, try to use it as late as possible in the pipeline because it is then clear to you precisely what you are asking for as the aggregation's final output. Also, unnecessary fields like `_id` may already have been identified by the aggregation engine as no longer required, due to the occurrence of an earlier `$group` stage, for example._
 
 
 ## Main Takeaway

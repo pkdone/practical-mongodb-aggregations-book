@@ -137,11 +137,11 @@ Three documents should be returned, representing the three customers, each showi
 [
   {
     customer_id: 'oranieri@warmmail.com',
-    first_purchase_date: 2020-01-01T08:25:37.000Z,
+    first_purchase_date: ISODate("2020-01-01T08:25:37.000Z"),
     total_value: Decimal128("63.13"),
     total_orders: 1,
     orders: [
-      {orderdate: 2020-01-01T08:25:37.000Z, value: Decimal128("63.13")}
+      {orderdate: ISODate("2020-01-01T08:25:37.000Z"), value: Decimal128("63.13")}
     ]
   },
   {
@@ -150,10 +150,10 @@ Three documents should be returned, representing the three customers, each showi
     total_value: Decimal128("482.16"),
     total_orders: 4,
     orders: [
-      {orderdate: 2020-01-13T09:32:07.000Z, value: Decimal128("99.99")},
-      {orderdate: 2020-05-30T08:35:52.000Z, value: Decimal128("231.43")},
-      {orderdate: 2020-10-03T13:49:44.000Z, value: Decimal128("102.24")},
-      {orderdate: 2020-12-26T08:55:46.000Z, value: Decimal128("48.50")}
+      {orderdate: ISODate("2020-01-13T09:32:07.000Z"), value: Decimal128("99.99")},
+      {orderdate: ISODate("2020-05-30T08:35:52.000Z"), value: Decimal128("231.43")},
+      {orderdate: ISODate("2020-10-03T13:49:44.000Z"), value: Decimal128("102.24")},
+      {orderdate: ISODate("2020-12-26T08:55:46.000Z"), value: Decimal128("48.50")}
     ]
   },
   {
@@ -162,8 +162,8 @@ Three documents should be returned, representing the three customers, each showi
     total_value: Decimal128("192.58"),
     total_orders: 2,
     orders: [
-      {orderdate: 2020-08-18T23:04:48.000Z, value: Decimal128("4.59")},
-      {orderdate: 2020-11-23T22:56:53.000Z, value: Decimal128("187.99")}
+      {orderdate: ISODate("2020-08-18T23:04:48.000Z"), value: Decimal128("4.59")},
+      {orderdate: ISODate("2020-11-23T22:56:53.000Z"), value: Decimal128("187.99")}
     ]
   }
 ]

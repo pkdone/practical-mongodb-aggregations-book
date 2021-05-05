@@ -1,4 +1,4 @@
-# Can Expressions Be Used Everywhere?
+# Expressions Explained
 
 ## What Are Aggregation Expressions?
 
@@ -39,22 +39,21 @@ __Question:__ Can expressions be used within any type of pipeline stage?
 
 __Answer:__ No
 
-There are many types of stages in the Aggregation Framework that don't allow expressions to be embedded (or don't support embedded pipelines that indirectly allow expressions). These stages are:
+There are many types of stages in the Aggregation Framework that don't allow expressions to be embedded. Examples of some of the most commonly used of these stages are:
 
  * `$match`
- * `$geoNear`
- * `$out`
  * `$limit`
  * `$skip`
  * `$sort`
- * `$sample`
  * `$count`
-
-> _('system-level' stages, like `$collStats`, are omitted because you don't use them for manipulating 'business' data)_
+ * `$lookup`
+ * `$out`
 
 Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider `$match` to be the most surprising item in this list. The content of a `$match` stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the `$match` stage at the top of the pipeline. Therefore, the `$match` filter must use the same syntax as MQL. 
 
-In most of the stages that don't leverage expressions, it doesn't usually make sense for their behaviour to be more 'dynamic'. For example, you might provide a constant value of `20` to a `$limit` stage or a constant value of `80` to a `$skip` stage. It is hard to think of a scenario where a pipeline would need to calculate these values at runtime instead, based on the input data. Only one of the listed stages needs to be more expressive: the `$match` stage, but this stage is already flexible by being based on MQL query conditions. 
+In most of the stages that are unable to leverage expressions, it doesn't usually make sense for their behaviour to be dynamic, based on the pipeline data entering the stage. For a client application that paginates results, you might define a value of `20` for the`$limit` stage. However, maybe you want to dynamically bind a value to the `$limit` stage, sourced by a `$lookup` stage earlier in the pipeline. The lookup operation might pull in the user's preferred 'page list size' value from a 'user preferences' collection. Nonetheless, the Aggregation Framework does not support this today for the listed stage types to avoid the overhead of the extra checks it would need to perform for what are primarily rare cases.
+
+Only one of the listed stages needs to be more expressive: the `$match` stage, but this stage is already flexible by being based on MQL query conditions. 
 
 
 ## What Is Using $expr Inside $match All About?

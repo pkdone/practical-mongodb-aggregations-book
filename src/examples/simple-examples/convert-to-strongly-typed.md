@@ -111,7 +111,7 @@ The same number of documents should appear in the new `orders_typed` collection 
       item_qty: 3, 
       reported: false 
     },
-    order_date: 2020-05-30T08:35:52.000Z,
+    order_date: ISODate("2020-05-30T08:35:52.000Z"),
     value: Decimal128("231.43")
   },
   {
@@ -120,7 +120,7 @@ The same number of documents should appear in the new `orders_typed` collection 
     further_info: {
       item_qty: 2 
     },
-    order_date: 2020-01-01T08:25:37.000Z,
+    order_date: ISODate("2020-01-01T08:25:37.000Z"),
     value: Decimal128("63.13")
   },
   {
@@ -130,7 +130,7 @@ The same number of documents should appear in the new `orders_typed` collection 
       item_qty: 1,
       reported: true
     },
-    order_date: 2019-05-28T19:13:32.000Z,
+    order_date: ISODate("2019-05-28T19:13:32.000Z"),
     value: Decimal128("2.01")
   }
 ]

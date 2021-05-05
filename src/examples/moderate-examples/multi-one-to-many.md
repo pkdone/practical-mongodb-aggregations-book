@@ -183,12 +183,12 @@ Two documents should be returned, representing the two products that had one or 
     orders: [
       {
         customer_id: 'elise_smith@myemail.com',
-        orderdate: 2020-05-30T08:35:52.000Z,
+        orderdate: ISODate("2020-05-30T08:35:52.000Z"),
         value: Decimal128("431.43")
       },
       {
         customer_id: 'jjones@tepidmail.com',
-        orderdate: 2020-12-26T08:55:46.000Z,
+        orderdate: ISODate("2020-12-26T08:55:46.000Z"),
         value: Decimal128("429.65")
       }
     ]
@@ -201,7 +201,7 @@ Two documents should be returned, representing the two products that had one or 
     orders: [
       {
         customer_id: 'oranieri@warmmail.com',
-        orderdate: 2020-01-01T08:25:37.000Z,
+        orderdate: ISODate("2020-01-01T08:25:37.000Z"),
         value: Decimal128("63.13")
       }
     ]
@@ -212,7 +212,7 @@ Two documents should be returned, representing the two products that had one or 
 
 ## Observations & Comments
 
- * __Multiple Join Fields.__ To join two or more fields in a [$lookup stage](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries), you must use a `let` parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. In this instance, the`$expr` operator's comparison can leverage an index because only equality matches are employed.
+ * __Multiple Join Fields.__ To perform a join of two or more fields between the two collections, you need to use a [let](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries) parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. In this instance, the`$expr` operator's comparison can leverage an index because only equality matches are employed.
  
  * __Reducing Array Content.__ The presence of an embedded pipeline in the `$lookup` stage provides an opportunity to filter out three unwanted fields brought in from the second collection. Instead, you could use an `$unset` stage later in the top-level pipeline to project out these unwanted array elements. If you need to perform more complex array content filtering rules, you can use the approach described in section "_2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements_" of the chapter [Pipeline Performance Considerations](../../guides/performance.md).
      
