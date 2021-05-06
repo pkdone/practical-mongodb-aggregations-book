@@ -84,7 +84,7 @@ var pipeline = [
     }
   }},
   
-  // Sort by order date ascending (required to pick out "first_purchase_date" below)
+  // Sort by order date ascending (required to pick out 'first_purchase_date' below)
   {"$sort": {
     "orderdate": 1,
   }},      
@@ -103,7 +103,7 @@ var pipeline = [
     "first_purchase_date": 1,
   }},    
   
-  // Set customer"s ID to be value of the field that was grouped on
+  // Set customer's ID to be value of the field that was grouped on
   {"$set": {
     "customer_id": "$_id",
   }},
@@ -138,32 +138,32 @@ Three documents should be returned, representing the three customers, each showi
   {
     customer_id: 'oranieri@warmmail.com',
     first_purchase_date: ISODate("2020-01-01T08:25:37.000Z"),
-    total_value: Decimal128("63.13"),
+    total_value: NumberDecimal("63.13"),
     total_orders: 1,
     orders: [
-      {orderdate: ISODate("2020-01-01T08:25:37.000Z"), value: Decimal128("63.13")}
+      {orderdate: ISODate("2020-01-01T08:25:37.000Z"), value: NumberDecimal("63.13")}
     ]
   },
   {
     customer_id: 'elise_smith@myemail.com',
     first_purchase_date: 2020-01-13T09:32:07.000Z,
-    total_value: Decimal128("482.16"),
+    total_value: NumberDecimal("482.16"),
     total_orders: 4,
     orders: [
-      {orderdate: ISODate("2020-01-13T09:32:07.000Z"), value: Decimal128("99.99")},
-      {orderdate: ISODate("2020-05-30T08:35:52.000Z"), value: Decimal128("231.43")},
-      {orderdate: ISODate("2020-10-03T13:49:44.000Z"), value: Decimal128("102.24")},
-      {orderdate: ISODate("2020-12-26T08:55:46.000Z"), value: Decimal128("48.50")}
+      {orderdate: ISODate("2020-01-13T09:32:07.000Z"), value: NumberDecimal("99.99")},
+      {orderdate: ISODate("2020-05-30T08:35:52.000Z"), value: NumberDecimal("231.43")},
+      {orderdate: ISODate("2020-10-03T13:49:44.000Z"), value: NumberDecimal("102.24")},
+      {orderdate: ISODate("2020-12-26T08:55:46.000Z"), value: NumberDecimal("48.50")}
     ]
   },
   {
     customer_id: 'tj@wheresmyemail.com',
     first_purchase_date: 2020-08-18T23:04:48.000Z,
-    total_value: Decimal128("192.58"),
+    total_value: NumberDecimal("192.58"),
     total_orders: 2,
     orders: [
-      {orderdate: ISODate("2020-08-18T23:04:48.000Z"), value: Decimal128("4.59")},
-      {orderdate: ISODate("2020-11-23T22:56:53.000Z"), value: Decimal128("187.99")}
+      {orderdate: ISODate("2020-08-18T23:04:48.000Z"), value: NumberDecimal("4.59")},
+      {orderdate: ISODate("2020-11-23T22:56:53.000Z"), value: NumberDecimal("187.99")}
     ]
   }
 ]
@@ -176,11 +176,11 @@ Three documents should be returned, representing the three customers, each showi
  
  * __Renaming Group.__ Towards the end of the pipeline, you will see what is a typical pattern for pipelines that use `$group`, consisting of a combination of `$set`+`$unset` stages, to essentially take the group's key (which is always called `_id`) and substitute it with a more meaningful name (`customer_id`).
  
- * __Lossless Decimals.__ You may notice the pipeline uses a `Decimal()` function to ensure the order amounts in the inserted records are using a lossless decimal type, [IEEE 754 decimal128](https://docs.mongodb.com/manual/tutorial/model-monetary-data/). In this example, if you use a JSON _float_ or _double_ type instead, the order totals will suffer from a loss of precision. For instance, for the customer `elise_smith@myemail.com`, if you use a _double_ type, the `total_value` result will have the value shown in the second line below, rather than the first line:
+ * __Lossless Decimals.__ You may notice the pipeline uses a `NumberDecimal()` function to ensure the order amounts in the inserted records are using a lossless decimal type, [IEEE 754 decimal128](https://docs.mongodb.com/manual/tutorial/model-monetary-data/). In this example, if you use a JSON _float_ or _double_ type instead, the order totals will suffer from a loss of precision. For instance, for the customer `elise_smith@myemail.com`, if you use a _double_ type, the `total_value` result will have the value shown in the second line below, rather than the first line:
  
 ```javascript
 // Desired result achieved by using decimal128 types
-total_value: Decimal128("482.16")
+total_value: NumberDecimal("482.16")
 
 // Result that occurs if using float or double types instead
 total_value: 482.15999999999997

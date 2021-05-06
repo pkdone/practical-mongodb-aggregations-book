@@ -112,7 +112,7 @@ The same number of documents should appear in the new `orders_typed` collection 
       reported: false 
     },
     order_date: ISODate("2020-05-30T08:35:52.000Z"),
-    value: Decimal128("231.43")
+    value: NumberDecimal("231.43")
   },
   {
     _id: ObjectId("6064381b7aa89666258201fe"),
@@ -121,7 +121,7 @@ The same number of documents should appear in the new `orders_typed` collection 
       item_qty: 2 
     },
     order_date: ISODate("2020-01-01T08:25:37.000Z"),
-    value: Decimal128("63.13")
+    value: NumberDecimal("63.13")
   },
   {
     _id: ObjectId("6064381b7aa89666258201ff"),
@@ -131,7 +131,7 @@ The same number of documents should appear in the new `orders_typed` collection 
       reported: true
     },
     order_date: ISODate("2019-05-28T19:13:32.000Z"),
-    value: Decimal128("2.01")
+    value: NumberDecimal("2.01")
   }
 ]
 ```

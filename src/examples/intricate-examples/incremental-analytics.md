@@ -189,7 +189,7 @@ The content of the `daily_orders_summary` collection after running the aggregati
 [
   {
     _id: ObjectId("6062102e7eeb772e6ca96bc7"),
-    total_value: Decimal128("584.55"),
+    total_value: NumberDecimal("584.55"),
     total_orders: 5,
     day: ISODate("2021-02-01T00:00:00.000Z")
   }
@@ -202,13 +202,13 @@ The content of the `daily_orders_summary` collection after running the aggregati
 [
   {
     _id: ObjectId("6062102e7eeb772e6ca96bc7"),
-    total_value: Decimal128("584.55"),
+    total_value: NumberDecimal("584.55"),
     total_orders: 5,
     day: ISODate("2021-02-01T00:00:00.000Z")
   },
   {
     _id: ObjectId("606210377eeb772e6ca96bcc"),
-    total_value: Decimal128("1180.22"),
+    total_value: NumberDecimal("1180.22"),
     total_orders: 4,
     day: ISODate("2021-02-02T00:00:00.000Z")
   }
@@ -221,13 +221,13 @@ After re-running the aggregation for the 1st day following the addition of the m
 [
   {
     _id: ObjectId("6062102e7eeb772e6ca96bc7"),
-    total_value: Decimal128("11695.66"),
+    total_value: NumberDecimal("11695.66"),
     total_orders: 6,
     day: ISODate("2021-02-01T00:00:00.000Z")
   },
   {
     _id: ObjectId("606210377eeb772e6ca96bcc"),
-    total_value: Decimal128("1180.22"),
+    total_value: NumberDecimal("1180.22"),
     total_orders: 4,
     day: ISODate("2021-02-02T00:00:00.000Z")
   }

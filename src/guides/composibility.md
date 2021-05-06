@@ -14,7 +14,7 @@ In reality, once most developers become adept at using the Aggregation Framework
 
 To encourage composability and hence productivity, some of the principles to strive for are:
 
- * Easy disabling of subsets of stages, whilst prototyping
+ * Easy disabling of subsets of stages, whilst prototyping or debugging
  * Easy addition of new fields to a stage or new stages to a pipeline by performing a copy, a paste and then a modification without hitting cryptic error messages resulting from issues like missing a comma before the added element
  * Easy appreciation of each distinct stage's purpose, at a glance
 
@@ -24,7 +24,7 @@ With these principles in mind, the following is an opinionated list of guideline
  2. For every field in a stage, and stage in a pipeline, include a trailing comma even if it is currently the last item
  3. Include an empty newline between every stage
  4. For complex stages include a `//` comment with an explanation on a newline before the stage
- 5. To 'disable' some stages of a pipeline whilst prototyping another stage, use the multi-line comment `/*` prefix and `*/` suffix
+ 5. To 'disable' some stages of a pipeline whilst prototyping or debugging another stage, use the multi-line comment `/*` prefix and `*/` suffix
 
 Below is an example of a poor pipeline layout if you have followed none of the guiding principles:
 
@@ -71,7 +71,9 @@ var pipeline = [
 
 Notice trailing commas are included in the code snippet, at both the end of stage level and end of field level.
 
-It is also worth mentioning that some (but not all) developers take an alternative but an equally valid approach to constructing a pipeline. They decompose each stage in the pipeline into different JavaScript variables, where each stage's variable is defined separately, as shown in the example below:
+> _There is an important behaviour to be aware of in MongoDB's shell after you paste and execute a pipeline's definition with `var pipeline = [...];`. The command will appear in the shell's history, and you can press the `up` arrow key to view the command and then press `enter` to rerun it. However, in both the modern shell (`mongosh`) and the legacy shell (`mongo`), the historic command is stored and displayed as a single line with no newline breaks. This makes it challenging to navigate and refactor part of the code, inline in the shell, before rerunning it. Instead, it is very common for users to refactor their 'master version' of a pipeline in an external code editor before pasting it into the shell again to rerun. Used this way, there is no problem. Nevertheless, suppose you prefer to perform inline edits of historical commands directly in the shell. The `//` comments in your pipeline will cause an error when the command is rerun due to the historical version being a single line. The shell will inadvertently comment out the remaining part of the pipeline's code from where the first `//` occurs. To further complicate matters, the legacy shell (but not the modern shell) provides a little-known feature for you to employ an inline [command-line editor of your choice](https://docs.mongodb.com/manual/tutorial/configure-mongo-shell/#use-an-external-editor-in-the-mongo-shell) (e.g. `vi`, `nano`). With this text editor appearing directly in the shell, you modify the historical single-line version of the command before rerunning it. Consequently, if you are a user who favours changing a previous pipeline definition in the shell directly (with either `mongosh` and `mongo`) or via your chosen inline text editor (with `mongo` only), you will need to avoid the use of `//` comments. Instead, use `/* ... */` for both single-line comments and temporarily commenting out blocks of your pipeline when debugging. However, be aware that it will be more painful for you when you need to comment out a block of the pipeline that already contains a single comment line._
+
+It is worth mentioning that some (but not all) developers take an alternative but an equally valid approach to constructing a pipeline. They decompose each stage in the pipeline into different JavaScript variables, where each stage's variable is defined separately, as shown in the example below:
 
 ```javascript
 // GOOD

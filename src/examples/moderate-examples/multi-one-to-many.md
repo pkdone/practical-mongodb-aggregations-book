@@ -184,12 +184,12 @@ Two documents should be returned, representing the two products that had one or 
       {
         customer_id: 'elise_smith@myemail.com',
         orderdate: ISODate("2020-05-30T08:35:52.000Z"),
-        value: Decimal128("431.43")
+        value: NumberDecimal("431.43")
       },
       {
         customer_id: 'jjones@tepidmail.com',
         orderdate: ISODate("2020-12-26T08:55:46.000Z"),
-        value: Decimal128("429.65")
+        value: NumberDecimal("429.65")
       }
     ]
   },
@@ -202,7 +202,7 @@ Two documents should be returned, representing the two products that had one or 
       {
         customer_id: 'oranieri@warmmail.com',
         orderdate: ISODate("2020-01-01T08:25:37.000Z"),
-        value: Decimal128("63.13")
+        value: NumberDecimal("63.13")
       }
     ]
   }

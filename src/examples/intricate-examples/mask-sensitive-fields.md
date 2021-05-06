@@ -150,7 +150,7 @@ Two documents should be returned, corresponding to the original two source docum
     card_type: 'CREDIT',
     transaction_id: 'eb1bd77836e8713656d9bf2debba8900',
     transaction_date: ISODate("2021-01-13T09:32:07.000Z"),
-    transaction_amount: Decimal128("492.4016988351474881660000000000000"),
+    transaction_amount: NumberDecimal("492.4016988351474881660000000000000"),
     reported: false
   },
   {
@@ -161,7 +161,7 @@ Two documents should be returned, corresponding to the original two source docum
     card_type: 'DEBIT',
     transaction_id: '634c416a6fbcf060bb0ba90c4ad94f60',
     transaction_date: ISODate("2020-11-24T19:25:57.000Z"),
-    transaction_amount: Decimal128("58.36081337486762223600000000000000"),
+    transaction_amount: NumberDecimal("58.36081337486762223600000000000000"),
     reported: false,
     customer_info: { category: 'NORMAL', rating: 78, risk: 55 }
   }

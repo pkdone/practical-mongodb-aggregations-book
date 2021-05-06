@@ -112,15 +112,15 @@ Upon executing this aggregation against an extensive sample data set, you receiv
 [
   {
     customer_id: 'tonijones@myemail.com',
-    order_value: Decimal128("1024.89")
+    order_value: NumberDecimal("1024.89")
   },
   {
     customer_id: 'tonijones@myemail.com',
-    order_value: Decimal128("187.99")
+    order_value: NumberDecimal("187.99")
   },
   {
     customer_id: 'tonijones@myemail.com',
-    order_value: Decimal128("4.59")
+    order_value: NumberDecimal("4.59")
   }
 ]
 ```
