@@ -71,7 +71,7 @@ To bring this to life, imagine a retail `orders` collection where each document 
       {
         prod_id: 'abc12345',
         name: 'Asus Laptop',
-        price: NumberDecimal("429.99")
+        price: NumberDecimal('429.99')
       }
     ]
   },
@@ -81,17 +81,17 @@ To bring this to life, imagine a retail `orders` collection where each document 
       {
         prod_id: 'def45678',
         name: 'Karcher Hose Set',
-        price: NumberDecimal("23.43")
+        price: NumberDecimal('23.43')
       },
       {
         prod_id: 'jkl77336',
         name: 'Picky Pencil Sharpener',
-        price: NumberDecimal("0.67")
+        price: NumberDecimal('0.67')
       },
       {
         prod_id: 'xyz11228',
         name: 'Russell Hobbs Chrome Kettle',
-        price: NumberDecimal("15.76")
+        price: NumberDecimal('15.76')
       }
     ]
   }
@@ -108,7 +108,7 @@ The retailer wants to see a report of all the orders but only containing the exp
       {
         prod_id: 'abc12345',
         name: 'Asus Laptop',
-        price: NumberDecimal("429.99")
+        price: NumberDecimal('429.99')
       }
     ]
   },
@@ -118,12 +118,12 @@ The retailer wants to see a report of all the orders but only containing the exp
       {
         prod_id: 'def45678',
         name: 'Karcher Hose Set',
-        price: NumberDecimal("23.43")
+        price: NumberDecimal('23.43')
       },
       {
         prod_id: 'xyz11228',
         name: 'Russell Hobbs Chrome Kettle',
-        price: NumberDecimal("15.76")
+        price: NumberDecimal('15.76')
       }
     ]
   }
@@ -200,15 +200,15 @@ Take the following trivial example of a collection of _customer order_ documents
 ```javascript
 [
   {
-    customer_id: "elise_smith@myemail.com",
-    orderdate: ISODate("2020-05-30T08:35:52.000Z"),
-    value: NumberDecimal("9999"),
-  },
+    customer_id: 'elise_smith@myemail.com',
+    orderdate: ISODate('2020-05-30T08:35:52.000Z'),
+    value: NumberDecimal('9999')
+  }
   {
-    customer_id: "elise_smith@myemail.com",
-    orderdate: ISODate("2020-01-13T09:32:07.000Z"),
-    value: NumberDecimal("10101"),
-  },
+    customer_id: 'elise_smith@myemail.com',
+    orderdate: ISODate('2020-01-13T09:32:07.000Z'),
+    value: NumberDecimal('10101')
+  }
 ]
 ```
 

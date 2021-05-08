@@ -31,7 +31,7 @@ You can combine these three categories of expressions when operating on input re
 The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `$cond` is one of the operator expressions used in the excerpt (a 'conditional' expression operator which takes three arguments: `if`, `then` & `else`). `$eq` is another expression operator (a 'comparison' expression operator). `$$REMOVE` is a 'marker flag' variable expression instructing the pipeline to exclude the field. Both `$customer_info.category` and `$customer_info` elements are field path expressions referencing each incoming record's fields.
 
 
-## Can Expressions Be Used Everywhere?
+## Where Expressions Are Used
 
 The following question is something you may not have asked yourself before, but asking this question and considering why the answer is what it is can help reveal more about what expressions are and why you use them.
 

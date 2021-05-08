@@ -183,13 +183,13 @@ Two documents should be returned, representing the two products that had one or 
     orders: [
       {
         customer_id: 'elise_smith@myemail.com',
-        orderdate: ISODate("2020-05-30T08:35:52.000Z"),
-        value: NumberDecimal("431.43")
+        orderdate: ISODate('2020-05-30T08:35:52.000Z'),
+        value: NumberDecimal('431.43')
       },
       {
         customer_id: 'jjones@tepidmail.com',
-        orderdate: ISODate("2020-12-26T08:55:46.000Z"),
-        value: NumberDecimal("429.65")
+        orderdate: ISODate('2020-12-26T08:55:46.000Z'),
+        value: NumberDecimal('429.65')
       }
     ]
   },
@@ -201,8 +201,8 @@ Two documents should be returned, representing the two products that had one or 
     orders: [
       {
         customer_id: 'oranieri@warmmail.com',
-        orderdate: ISODate("2020-01-01T08:25:37.000Z"),
-        value: NumberDecimal("63.13")
+        orderdate: ISODate('2020-01-01T08:25:37.000Z'),
+        value: NumberDecimal('63.13')
       }
     ]
   }

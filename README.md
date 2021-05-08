@@ -41,8 +41,8 @@ For any changes or additions, the following principles must to be adhered to, fo
    - Include an empty newline between every stage
    - Include a '//' comment with an explanation, on a newline, before every stage (remember this book is a teaching aid - even though you may not comment every stage for real-world pipelines, in this book, you must do so)
    - Use double (not single) quotes for string values to be consistent with the [JSON](https://en.wikipedia.org/wiki/JSON) specification
-   - Always include quotes around field names, even though quotes are often optional for object key names in JavaScript - why?
-     - It is easier to export the pipeline text to another programming language, especially Python, where Python's dictionaries represent structured data in a similar manner as JavaScript/JSON does, but where Python mandates that quotes surround key names
+   - Always include double quotes around field names, even though quotes are often optional for object key names in JavaScript - why?
+     - It is easier to export the pipeline text to another programming language, especially Python, where Python's dictionaries represent structured data in a similar manner as JavaScript/JSON does, but where Python mandates that key names are surrounded by quotes
      - It adheres to the [JSON](https://en.wikipedia.org/wiki/JSON) specification to use double quotes, rather than single quotes
    - Always terminate each Shell JavaScript example command with a semi-colon
 
@@ -64,10 +64,11 @@ To create and then submit a new chapter for review and acceptance:
 Future versions of the book may include the following topics, yet to be written (not an exclusive list):
 
  * Aggregations considerations when Sharding
- * When prototyping large data sets, use the trick of using $sample or $limit to speed up prototyping (but avoiding dangers of never testing without these)
+ * When prototyping large data sets, use the trick of using $sample or $limit to speed up aggregation execution time when prototyping (but avoiding dangers of never testing without these)
  * In the Composability chapter, provide more detail and examples on factoring out complex boilerplate parts of a pipeline into separate JavaScript functions
- * Provide an example of complex array content manipulation
+ * New section in book for complex field value manipulations (focussing on strings and arrays manipulations)
  * Further example chapters at each of the 3 complexity levels
+ * One big $set stage vs multiple $set stage - pros & cons
 
 
 ----

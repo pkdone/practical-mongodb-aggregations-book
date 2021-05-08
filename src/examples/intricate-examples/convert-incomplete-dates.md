@@ -23,7 +23,7 @@ use book-convert-incomplete-dates;
 db.dropDatabase();
 
 // Insert 12 records into the payments collection
-db.payments.insert([
+db.payments.insertMany([
   {"account": "010101", "payment_date": "01-JAN-20 01.01.01.123000000", "amount": 1.01},
   {"account": "020202", "payment_date": "02-FEB-20 02.02.02.456000000", "amount": 2.02},
   {"account": "030303", "payment_date": "03-MAR-20 03.03.03.789000000", "amount": 3.03},
@@ -109,62 +109,62 @@ Twelve documents should be returned, corresponding to the original twelve source
 [
   {
     account: '010101',
-    payment_date: ISODate("2020-01-01T01:01:01.123Z"),
+    payment_date: ISODate('2020-01-01T01:01:01.123Z'),
     amount: 1.01
   },
   {
     account: '020202',
-    payment_date: ISODate("2020-02-02T02:02:02.456Z"),
+    payment_date: ISODate('2020-02-02T02:02:02.456Z'),
     amount: 2.02
   },
   {
     account: '030303',
-    payment_date: ISODate("2020-03-03T03:03:03.789Z"),
+    payment_date: ISODate('2020-03-03T03:03:03.789Z'),
     amount: 3.03
   },
   {
     account: '040404',
-    payment_date: ISODate("2020-04-04T04:04:04.012Z"),
+    payment_date: ISODate('2020-04-04T04:04:04.012Z'),
     amount: 4.04
   },
   {
     account: '050505',
-    payment_date: ISODate("2020-05-05T05:05:05.345Z"),
+    payment_date: ISODate('2020-05-05T05:05:05.345Z'),
     amount: 5.05
   },
   {
     account: '060606',
-    payment_date: ISODate("2020-06-06T06:06:06.678Z"),
+    payment_date: ISODate('2020-06-06T06:06:06.678Z'),
     amount: 6.06
   },
   {
     account: '070707',
-    payment_date: ISODate("2020-07-07T07:07:07.901Z"),
+    payment_date: ISODate('2020-07-07T07:07:07.901Z'),
     amount: 7.07
   },
   {
     account: '080808',
-    payment_date: ISODate("2020-08-08T08:08:08.234Z"),
+    payment_date: ISODate('2020-08-08T08:08:08.234Z'),
     amount: 8.08
   },
   {
     account: '090909',
-    payment_date: ISODate("2020-09-09T09:09:09.567Z"),
+    payment_date: ISODate('2020-09-09T09:09:09.567Z'),
     amount: 9.09
   },
   {
     account: '101010',
-    payment_date: ISODate("2020-10-10T10:10:10.890Z"),
+    payment_date: ISODate('2020-10-10T10:10:10.890Z'),
     amount: 10.1
   },
   {
     account: '111111',
-    payment_date: ISODate("2020-11-11T11:11:11.111Z"),
+    payment_date: ISODate('2020-11-11T11:11:11.111Z'),
     amount: 11.11
   },
   {
     account: '121212',
-    payment_date: ISODate("2020-12-12T12:12:12.999Z"),
+    payment_date: ISODate('2020-12-12T12:12:12.999Z'),
     amount: 12.12
   }
 ]
@@ -173,7 +173,7 @@ Twelve documents should be returned, corresponding to the original twelve source
 
 ## Observations & Comments
 
- * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `"12-DEC-20 12.12.12.999000000"`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`). This is achieved by concatenating together the following four example elements before passing them to the `$dateFromString` operator to convert to a date type:
+ * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `'12-DEC-20 12.12.12.999000000'`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`). This is achieved by concatenating together the following four example elements before passing them to the `$dateFromString` operator to convert to a date type:
    - `'12-'` _(day of the month from the input string + the hyphen suffix already present in the text)_
    - `'12'` _(replacing 'DEC')_
    - `'-20'` _(hard-coded hyphen + hardcoded century)_

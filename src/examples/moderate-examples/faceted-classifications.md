@@ -232,7 +232,7 @@ A single document should be returned, which contains 2 facets (keyed off `by_pri
           'NY Baseball Cap'
         ],
         price_range: {
-          min: NumberDecimal("0.500000000000000"), max: NumberDecimal("20.0000000000000")
+          min: NumberDecimal('0.500000000000000'), max: NumberDecimal('20.0000000000000')
         }
       },
       {
@@ -242,7 +242,7 @@ A single document should be returned, which contains 2 facets (keyed off `by_pri
           'Morphy Richardds Food Mixer', 'Diesel Flare Jeans'
         ],
         price_range: {
-          min: NumberDecimal("20.0000000000000"), max: NumberDecimal("200.0000000000000")
+          min: NumberDecimal('20.0000000000000'), max: NumberDecimal('200.0000000000000')
         }
       },
       {
@@ -252,7 +252,7 @@ A single document should be returned, which contains 2 facets (keyed off `by_pri
           'Lenovo Laptop', 'Dell XPS 13 Laptop'
         ],
         price_range: {
-          min: NumberDecimal("200.0000000000000"), max: NumberDecimal("2000.0000000000000")
+          min: NumberDecimal('200.0000000000000'), max: NumberDecimal('2000.0000000000000')
         }
       }
     ],
@@ -263,26 +263,26 @@ A single document should be returned, which contains 2 facets (keyed off `by_pri
           'Picky Pencil Sharpener', 'Jazz Silk Scarf', 'Morphy Richardds Food Mixer',
           'Oak Coffee Table'
         ],
-        rating_range: { min: NumberDecimal("1.2"), max: NumberDecimal("3.9") }
+        rating_range: { min: NumberDecimal('1.2'), max: NumberDecimal('3.9') }
       },
       {
         count: 3,
         products: [
           'Russell Hobbs Chrome Kettle', 'Tiffany Gold Chain', 'NY Baseball Cap'
         ],
-        rating_range: { min: NumberDecimal("3.9"), max: NumberDecimal("4.1") }
+        rating_range: { min: NumberDecimal('3.9'), max: NumberDecimal('4.1') }
       },
       {
         count: 3,
         products: [ 'Lenovo Laptop', 'Tots Flower Pots', 'Asus Laptop' ],
-        rating_range: { min: NumberDecimal("4.1"), max: NumberDecimal("4.3") }
+        rating_range: { min: NumberDecimal('4.1'), max: NumberDecimal('4.3') }
       },
       {
         count: 3,
         products: [
           'Karcher Hose Set', 'Diesel Flare Jeans', 'Dell XPS 13 Laptop'
         ],
-        rating_range: { min: NumberDecimal("4.3"), max: NumberDecimal("4.5") }
+        rating_range: { min: NumberDecimal('4.3'), max: NumberDecimal('4.5') }
       },
       {
         count: 3,
@@ -290,7 +290,7 @@ A single document should be returned, which contains 2 facets (keyed off `by_pri
           'Raleigh Racer 21st Century Classic', 'The Day Of The Triffids',
           'One Day in the Life of Ivan Denisovich'
         ],
-        rating_range: { min: NumberDecimal("4.5"), max: NumberDecimal("4.9") }
+        rating_range: { min: NumberDecimal('4.5'), max: NumberDecimal('4.9') }
       }
     ]
   }

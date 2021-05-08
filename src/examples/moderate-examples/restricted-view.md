@@ -170,7 +170,7 @@ The result for both the `aggregate()` command and the `find()` executed on the _
     person_id: '6392529400',
     firstname: 'Elise',
     lastname: 'Smith',
-    dateofbirth: ISODate("1972-01-13T09:32:07.000Z"),
+    dateofbirth: ISODate('1972-01-13T09:32:07.000Z'),
     gender: 'FEMALE',
     email: 'elise_smith@myemail.com',
     address: { number: 5625, street: 'Tipa Circle', city: 'Wojzinmoj' }
@@ -179,7 +179,7 @@ The result for both the `aggregate()` command and the `find()` executed on the _
     person_id: '1723338115',
     firstname: 'Olive',
     lastname: 'Ranieri',
-    dateofbirth: ISODate("1985-05-12T23:14:30.000Z"),
+    dateofbirth: ISODate('1985-05-12T23:14:30.000Z'),
     gender: 'FEMALE',
     email: 'oranieri@warmmail.com',
     address: { number: 9303, street: 'Mele Circle', city: 'Tobihbo' }
@@ -188,7 +188,7 @@ The result for both the `aggregate()` command and the `find()` executed on the _
     person_id: '7363629563',
     firstname: 'Bert',
     lastname: 'Gooding',
-    dateofbirth: ISODate("1941-04-07T22:11:52.000Z"),
+    dateofbirth: ISODate('1941-04-07T22:11:52.000Z'),
     gender: 'MALE',
     email: 'bgooding@tepidmail.com',
     address: { number: 13, street: 'Upper Bold Road', city: 'Redringtonville' }
@@ -204,7 +204,7 @@ The result of running the `find()` against the _view_ with the filter `"gender":
     person_id: '6392529400',
     firstname: 'Elise',
     lastname: 'Smith',
-    dateofbirth: ISODate("1972-01-13T09:32:07.000Z"),
+    dateofbirth: ISODate('1972-01-13T09:32:07.000Z'),
     gender: 'FEMALE',
     email: 'elise_smith@myemail.com',
     address: { number: 5625, street: 'Tipa Circle', city: 'Wojzinmoj' }
@@ -213,7 +213,7 @@ The result of running the `find()` against the _view_ with the filter `"gender":
     person_id: '1723338115',
     firstname: 'Olive',
     lastname: 'Ranieri',
-    dateofbirth: ISODate("1985-05-12T23:14:30.000Z"),
+    dateofbirth: ISODate('1985-05-12T23:14:30.000Z'),
     gender: 'FEMALE',
     email: 'oranieri@warmmail.com',
     address: { number: 9303, street: 'Mele Circle', city: 'Tobihbo' }

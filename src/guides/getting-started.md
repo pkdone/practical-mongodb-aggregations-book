@@ -14,7 +14,7 @@ The database deployment for you to connect to can be a single server, a replica 
 
 If you don't already have access to a MongoDB database, the two most accessible options for running a database for free are:
 
- 1. [Provision a Free Tier MongoDB Cluster](https://docs.atlas.mongodb.com/tutorial/deploy-free-tier-cluster/) in MongoDB Atlas, which is MongoDB Inc.'s cloud-based Database-as-a-Service (once deployed, in the Atlas Console, there is a button you can click to copy the URL of the cluster)
+ 1. [Provision a Free Tier MongoDB Cluster](https://www.mongodb.com/cloud/atlas) in MongoDB Atlas, which is MongoDB Inc.'s cloud-based Database-as-a-Service (once deployed, in the Atlas Console, there is a button you can click to copy the URL of the cluster)
  2. [Install and run a MongoDB single server](https://docs.mongodb.com/guides/server/install/) locally on your workstation
 
 
