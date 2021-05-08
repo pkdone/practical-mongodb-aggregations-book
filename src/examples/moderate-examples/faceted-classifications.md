@@ -171,7 +171,7 @@ var pipeline = [
         "price_range": "$_id",
       }},         
       
-      // Remove old _id tag
+      // Omit unwanted fields
       {"$unset": [
         "_id",
       ]},         
@@ -194,7 +194,7 @@ var pipeline = [
         "rating_range": "$_id",
       }},         
       
-      // Remove old _id tag
+      // Omit unwanted fields
       {"$unset": [
         "_id",
       ]},         
@@ -298,7 +298,7 @@ A single document should be returned, which contains 2 facets (keyed off `by_pri
 ```
 
 
-## Observations & Comments
+## Observations
 
 
  * __Multiple Pipelines.__ The `$facet` stage doesn't have to be employed for you to use the `$bucketAuto` stage. In most _faceted search_ scenarios, you will want to understand a collection by multiple dimensions at once (_price_ & _rating_ in this case). The `$facet` stage is convenient because it allows you to define various `$bucketAuto` dimensions in one go in a single pipeline. Otherwise, a client application must invoke an aggregation multiple times, each using a new `$bucketAuto` stage to process a different field. In fact, each section of a `$facet` stage is just a regular aggregation [sub-]pipeline, able to contain any type of stage (with a few specific [documented exceptions](https://docs.mongodb.com/manual/reference/operator/aggregation/facet/#behavior)) and may not even contain `$bucketAuto` or `$bucket` stages at all. 

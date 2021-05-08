@@ -16,10 +16,10 @@ Drop any old version of the database (if it exists) and then populate a new `ord
 use book-group-and-total;
 db.dropDatabase();
 
-// Create index for a orders collection
+// Create index for an orders collection
 db.orders.createIndex({"orderdate": -1});
 
-// Insert 9 records into the orders collection
+// Insert records into the orders collection
 db.orders.insertMany([
   {
     "customer_id": "elise_smith@myemail.com",
@@ -108,7 +108,7 @@ var pipeline = [
     "customer_id": "$_id",
   }},
   
-  // Omit unwanted field
+  // Omit unwanted fields
   {"$unset": [
     "_id",
   ]},   
@@ -170,7 +170,7 @@ Three documents should be returned, representing the three customers, each showi
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Double Sort Use.__ It is necessary to perform a `$sort` on the order date both before and after the `$group` stage. The `$sort` before the `$group` is required because the `$group` stage uses a `$first` group accumulator to capture just the first order's `orderdate` value for each grouped customer. The `$sort` after the `$group` is required because the act of having just grouped on customer ID will mean that the records are no longer sorted by purchase date for the records coming out of the `$group` stage.
  

@@ -21,11 +21,11 @@ Drop any old version of the database (if it exists), create an index and populat
 use book-restricted-view;
 db.dropDatabase();
 
-// Create 2 indexes for a persons collection
+// Create indexes for a persons collection
 db.persons.createIndex({"gender": 1});
 db.persons.createIndex({"dateofbirth": -1});
 
-// Insert 5 records into the persons collection
+// Insert records into the persons collection
 db.persons.insertMany([
   {
     "person_id": "6392529400",
@@ -107,7 +107,7 @@ Define a single pipeline ready to perform the aggregation:
 
 ```javascript
 var pipeline = [
-  // Filter out any persons aged under 18 ($expr required to reference '$$NOW'
+  // Filter out any persons aged under 18 ($expr required to reference '$$NOW')
   {"$match":
     {"$expr":{
       "$lt": ["$dateofbirth", {"$subtract": ["$$NOW", 18*365.25*24*60*60*1000]}]
@@ -222,7 +222,7 @@ The result of running the `find()` against the _view_ with the filter `"gender":
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Expr & Indexes.__ The ['NOW' system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/) used here returns the current system date-time. However, you can only access this system variable via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by MQL and `$match`. You must wrap an expression using `$$NOW` inside an `$expr` operator. As described in the chapter [Can Expressions Be Used Everywhere?](../../guides/expressions.md), if you use an [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) to perform a range comparison, you can't make use of an index (which is the case for `dateofbirth` here). For a view, because the pipeline is 'statically' defined when creating the view, you cannot obtain the current date-time at runtime by other means.
    

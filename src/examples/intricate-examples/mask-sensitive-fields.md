@@ -11,7 +11,7 @@ You want to perform irreversible masking on the sensitive fields of a collection
  * Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 30 days (~1 month)
  * Replace the card's 3 digit security code with a random set of 3 digits
  * Adjust the transaction's amount by adding or subtracting a random amount up to a maximum of 10% of the original amount
- * Change the transaction's `reported` field boolean value to the opposite value for roughly 20% of the records
+ * Change the `reported` field's boolean value to the opposite value for roughly 20% of the records
  * If the embedded `customer_info` sub-document's `category` field is set to _RESTRICTED_, exclude the whole `customer_info` sub-document
 
 
@@ -23,7 +23,7 @@ Drop any old version of the database (if it exists) and then populate a new `pay
 use book-mask-sensitive-fields;
 db.dropDatabase();
 
-// Insert 2 records into the payments collection
+// Insert records into the payments collection
 db.payments.insertMany([
     {
         "card_name": "Mrs. Jane A. Doe",
@@ -169,7 +169,7 @@ Two documents should be returned, corresponding to the original two source docum
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Targeted Redaction.__ The pipeline uses a `$cond` operator to return the `$$REMOVE` marker variable if the `category` field is equal to `RESTRICTED`. This informs the aggregation engine to exclude the whole `customer_info` sub-document from the stage's output for the record. Alternatively, the pipeline could have used a `$redact` stage to achieve the same. However, `$redact` typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.
  
@@ -177,7 +177,7 @@ Two documents should be returned, corresponding to the original two source docum
  
  * __Unset Alternative.__ If this example was consistent with the other examples in this book, the pipeline would include an additional `$unset` stage to exclude the `_id` field. However, in this case, chiefly to show there is another way, the pipeline marks the `_id` field for exclusion in the `$set` stage by being assigned the `$$REMOVE` variable.
 
- * __Meaningful Insight.__ Even though the pipeline is irreversibly obfuscating fields, it doesn't mean that the masked data is useless for performing analytics to gain insight. The pipeline masks some fields by fluctuating the original values by a small but limited random percentage (e.g. _card_expiry_, _transaction_amount_), rather than replacing them with completely random values (e.g. _card_sec_code_). In such cases, if the input data set is sufficiently large, then minor variances will be equalled out. For the fields that are only varied slightly, users can derive similar trends and patterns from analysing the masked data as they would the original data.
+ * __Meaningful Insight.__ Even though the pipeline is irreversibly obfuscating fields, it doesn't mean that the masked data is useless for performing analytics to gain insight. The pipeline masks some fields by fluctuating the original values by a small but limited random percentage (e.g. `card_expiry`, `transaction_amount`), rather than replacing them with completely random values (e.g. `card_sec_code`). In such cases, if the input data set is sufficiently large, then minor variances will be equalled out. For the fields that are only varied slightly, users can derive similar trends and patterns from analysing the masked data as they would the original data.
  
  * __Further Reading.__ This example is based on the output of two blog posts: 1) [MongoDB Irreversible Data Masking](https://pauldone.blogspot.com/2021/02/mongdb-data-masking.html), and 2) [MongoDB Reversible Data Masking](https://pauldone.blogspot.com/2021/02/mongdb-reversible-data-masking.html).
  

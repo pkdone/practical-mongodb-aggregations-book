@@ -21,7 +21,7 @@ db.dropDatabase();
 // Create index on field which for each graph traversal hop will connect to
 db.users.createIndex({"name": 1})
 
-// Insert 2 records into the users collection
+// Insert records into the users collection
 db.users.insertMany([
   {"name": "Paul", "followed_by": []},
   {"name": "Toni", "followed_by": ["Paul"]},
@@ -60,7 +60,7 @@ var pipeline = [
       "$size": "$extended_network"
     },
 
-    // Gather the list of the extended connections" names
+    // Gather the list of the extended connections' names
     "extended_connections": {
       "$map": {
         "input": "$extended_network",
@@ -157,7 +157,7 @@ Ten documents should be returned, corresponding to the original ten source socia
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Following Graphs.__ The `$graphLookup` stage helps you traverse relationships between records, looking for patterns that aren't necessarily evident from looking at each record in isolation. In this example, by looking at _Paul's_ record in isolation, it is evident that _Paul_ has no _friends_ and thus has the lowest network reach. However, it is not obvious that _Carol_ has the greatest network reach just by looking at the number of people _Carol_ is directly followed by, which is two. _David_, for example, is followed by three people (one more than _Carol_). However, the executed aggregation pipeline can deduce that _Carol_ has the most extensive network reach.
  

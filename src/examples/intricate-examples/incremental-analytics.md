@@ -24,7 +24,7 @@ db.daily_orders_summary.createIndex({"day": 1}, {"unique": true});
 // Create index for a orders collection
 db.orders.createIndex({"orderdate": 1});
 
-// Insert 9 records into the orders collection
+// Insert records into the orders collection
 // (5 orders for 1st Feb, 4 orders for 2nd Feb)
 db.orders.insertMany([
   {
@@ -235,7 +235,7 @@ After re-running the aggregation for the 1st day following the addition of the m
 ```
 
 
-## Observations & Comments
+## Observations
 
   * __Merging Results.__ The pipeline uses a `$merge` stage to instruct the aggregation engine to write the output to a collection rather than returning a stream of results. In this example, with the options you provide to `$merge`, the aggregation inserts a new record in the destination collection if a matching one doesn't already exist. If a matching record already exists, it replaces the previous version.
 

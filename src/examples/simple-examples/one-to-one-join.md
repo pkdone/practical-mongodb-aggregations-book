@@ -168,7 +168,7 @@ Three documents should be returned, representing the three customers orders that
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field from each collection. For an illustration of performing a join based on two or more matching fields, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
  

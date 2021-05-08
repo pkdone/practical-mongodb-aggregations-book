@@ -210,7 +210,7 @@ Two documents should be returned, representing the two products that had one or 
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Multiple Join Fields.__ To perform a join of two or more fields between the two collections, you need to use a [let](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries) parameter rather than specifying the `localField` and `foreignField` parameters used in a single field join. With a `let` parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded `pipeline` inside the `$lookup` stage to match the _bind_ variables with fields in the second collection's records. In this instance, the`$expr` operator's comparison can leverage an index because only equality matches are employed.
  

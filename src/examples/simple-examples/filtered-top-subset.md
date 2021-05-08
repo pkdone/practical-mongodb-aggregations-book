@@ -21,7 +21,7 @@ db.dropDatabase();
 // Create an index for a persons collection
 db.persons.createIndex({"vocation": 1, "dateofbirth": 1});
 
-// Insert 5 records into the persons collection
+// Insert records into the persons collection
 db.persons.insertMany([
   {
     "person_id": "6392529400",
@@ -119,7 +119,7 @@ var pipeline = [
   // Only include the first 3 youngest people
   {"$limit": 3},  
 
-  // Exclude 3 unrequired fields from each person record
+  // Exclude unrequired fields from each person record
   {"$unset": [
     "_id",
     "vocation",
@@ -171,7 +171,7 @@ Three documents should be returned, representing the three youngest people who a
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Index Use.__ A basic aggregation pipeline, where if many records belong to the collection, a compound index for `vocation + dateofbirth` should exist to enable the database to fully optimise the execution of the pipeline combining the filter of the `$match` stage with the sort from the `sort` stage and the limit of the `limit` stage.
  

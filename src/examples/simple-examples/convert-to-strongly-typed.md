@@ -18,7 +18,7 @@ Drop any old version of the database (if it exists) and then populate a new `ord
 use book-convert-to-strongly-typed;
 db.dropDatabase();
 
-// Insert 3 orders documents
+// Insert orders documents
 db.orders.insertMany([
   {
     "customer_id": "elise_smith@myemail.com",
@@ -80,7 +80,7 @@ var pipeline = [
 
 ## Execution
 
-Execute the aggregation using the defined pipeline to generate a new collection called `orders_typed`:
+Execute the aggregation using the defined pipeline to generate and populate a new collection called `orders_typed`:
 
 ```javascript
 db.orders.aggregate(pipeline);
@@ -137,7 +137,7 @@ The same number of documents should appear in the new `orders_typed` collection 
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Boolean Conversion.__ The pipeline's conversions for integers, decimals, and dates are straightforward using the corresponding expression operators, `$toInt`, `$toDecimal` and `$toDate`. However, the expression operator `$toBool` is not used for the boolean conversion. This is because `$toBool` will convert any non-empty string to _true_ regardless of its value. As a result, the pipeline uses a `$switch` operator to compare the lowercase version of strings with the text `'true'` and `'false'`, returning the matching boolean.
  

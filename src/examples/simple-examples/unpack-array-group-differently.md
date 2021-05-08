@@ -113,7 +113,7 @@ var pipeline = [
     "product_id": "$_id",
   }},
   
-  // Omit unwanted field
+  // Omit unwanted fields
   {"$unset": [
     "_id",
   ]},   
@@ -168,7 +168,7 @@ Four documents should be returned, representing only the four expensive products
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Unwinding Arrays.__ The `$unwind` stage is a powerful concept, although often unfamiliar to many developers initially. Distilled down, it does one simple thing: it generates a new record for each element in an array field of every input document. If a source collection has 3 documents and each document contains an array of 4 elements, then performing an `$unwind` on each record's array field produces 12 records (3 x 4).
 

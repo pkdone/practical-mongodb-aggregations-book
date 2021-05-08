@@ -22,7 +22,7 @@ Drop any old version of the database (if it exists) and then populate a new _pay
 use book-convert-incomplete-dates;
 db.dropDatabase();
 
-// Insert 12 records into the payments collection
+// Insert records into the payments collection
 db.payments.insertMany([
   {"account": "010101", "payment_date": "01-JAN-20 01.01.01.123000000", "amount": 1.01},
   {"account": "020202", "payment_date": "02-FEB-20 02.02.02.456000000", "amount": 2.02},
@@ -171,7 +171,7 @@ Twelve documents should be returned, corresponding to the original twelve source
 ```
 
 
-## Observations & Comments
+## Observations
 
  * __Concatenation Explanation.__ In this pipeline, the text fields (e.g. `'12-DEC-20 12.12.12.999000000'`) are each converted to date fields (e.g. `2020-12-12T12:12:12.999Z`). This is achieved by concatenating together the following four example elements before passing them to the `$dateFromString` operator to convert to a date type:
    - `'12-'` _(day of the month from the input string + the hyphen suffix already present in the text)_
