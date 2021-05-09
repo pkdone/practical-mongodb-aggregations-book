@@ -177,11 +177,11 @@ var pipeline = [
 ];
 ```
 
-Unlike the 'suboptimal' pipeline, the 'optimal' pipeline will include 'empty orders' in the results for those orders that contained only inexpensive items. If this is a problem, you can include a simple `$match` stage at the start of the pipeline with the same content as the `$match` stage shown in the 'suboptimal' example.
+Unlike the suboptimal pipeline, the optimal pipeline will include 'empty orders' in the results for those orders that contained only inexpensive items. If this is a problem, you can include a simple `$match` stage at the start of the optimal pipeline with the same content as the `$match` stage shown in the suboptimal example.
 
 To reiterate, there should never be the need to use an `$unwind/$group` combination in an aggregation pipeline to transform an array field's elements for each document in isolation. One way to recognize if you have this anti-pattern is if your pipeline contains a `$group` on a `$_id` field. Instead, use _Array Operators_ to avoid introducing a blocking stage. Otherwise, you will suffer a magnitude of increase in execution time when your pipeline handles more than 100MB of in-flight data. Adopting this best practice may mean the difference between achieving the required business outcome and abandoning the whole task as unachievable.
 
-The primary use of an `$unwind/$group` combination is to correlate patterns across many records' arrays rather than transforming the content within each input record's array in isolation. For an illustration of an appropriate use of `$unwind/$group` refer to this book's [Unpack Array & Group Differently](../examples/simple-examples/unpack-array-group-differently.md) example.
+The primary use of an `$unwind/$group` combination is to correlate patterns across many records' arrays rather than transforming the content within each input record's array only. For an illustration of an appropriate use of `$unwind/$group` refer to this book's [Unpack Array & Group Differently](../examples/simple-examples/unpack-array-group-differently.md) example.
 
 
 ## 3. Encourage Match Filters To Appear Early In The Pipeline

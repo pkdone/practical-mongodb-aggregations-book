@@ -25,7 +25,7 @@ For example, imagine there is a collection of credit card payment documents simi
   _id: ObjectId("6044faa70b2c21f8705d8954"),
   card_name: "Mrs. Jane A. Doe",
   card_num: "1234567890123456",
-  card_expiry: ISODate("2023-08-31T23:59:59.736Z"),
+  card_expiry: "2023-08-31T23:59:59.736Z",
   card_sec_code: "123",
   card_provider_name: "Credit MasterCard Gold",
   transaction_id: "eb1bd77836e8713656d9bf2debba8900",
@@ -111,7 +111,7 @@ This time, when you need to add new documents to the collection of existing paym
 
 It is best to use a `$project` stage when the required shape of output documents is very different from the input documents' shape. This situation often arises when you do not need to include most of the original fields.
 
-This time for the same input payments collection, let us imagine you require a different aggregation pipeline to produce result documents. You need each output document's structure to be very different from the input structure, and you need to retain far fewer original fields, similar to the following:
+This time for the same input payments collection, let us imagine you require a new aggregation pipeline to produce result documents. You need each output document's structure to be very different from the input structure, and you need to retain far fewer original fields, similar to the following:
 
 ```javascript
 // OUTPUT  (a record in the results of the executed aggregation)
@@ -130,7 +130,7 @@ Using `$set`/`$unset` in the pipeline to achieve this output structure would be 
 // BAD
 [
   {"$set": {
-    // Add some field  
+    // Add some fields
     "transaction_info.date": "$transaction_date",
     "transaction_info.amount": "$transaction_amount",
     "status": {"$cond": {"if": "$reported", "then": "REPORTED", "else": "UNREPORTED"}},
@@ -140,7 +140,7 @@ Using `$set`/`$unset` in the pipeline to achieve this output structure would be 
     // Remove _id field
     "_id",
 
-    // Must name all existing fields to be omitted
+    // Must name all other existing fields to be omitted
     "card_name",
     "card_num",
     "card_expiry",
@@ -161,7 +161,7 @@ However, by using `$project` for this specific aggregation, as shown below, to a
 // GOOD
 [
   {"$project": {
-    // Add some field  
+    // Add some fields
     "transaction_info.date": "$transaction_date",
     "transaction_info.amount": "$transaction_amount",
     "status": {"$cond": {"if": "$reported", "then": "REPORTED", "else": "UNREPORTED"}},

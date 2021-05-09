@@ -44,9 +44,9 @@ db.coll.explain("executionStats").aggregate(pipeline);
 db.coll.explain("allPlansExecution").aggregate(pipeline);
 ```
 
-In most cases, you will find that running the `executionStats` variant is the most informative mode. Rather than showing just the query planner's thought process, it also provides actual statistics on the 'winning' execution plan (e.g. the total keys examined, the total docs examined, etc.). However, this isn't the default because it actually executes the aggregation in addition to formulating the query plan. If the source collection is large or the pipeline is sub-optimal, it will take a while to return the explain plan result.
+In most cases, you will find that running the `executionStats` variant is the most informative mode. Rather than showing just the query planner's thought process, it also provides actual statistics on the 'winning' execution plan (e.g. the total keys examined, the total docs examined, etc.). However, this isn't the default because it actually executes the aggregation in addition to formulating the query plan. If the source collection is large or the pipeline is suboptimal, it will take a while to return the explain plan result.
 
-Note, the [aggregate()](https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/) function also has the option of providing a vestigial `explain` parameter to enable an explain plan to be generated and returned. Nonetheless, this is more limited and cumbersome to use, so you should avoid it.
+Note, the  [aggregate()](https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/) function also provides a vestigial `explain` option to ask for an explain plan to be generated and returned. Nonetheless, this is more limited and cumbersome to use, so you should avoid it.
 
 
 ## Understanding The Explain Plan
@@ -173,7 +173,7 @@ You can deduce some illuminating insights from this query plan:
  
  * The first stage of the database optimised version of the pipeline is an _internal_ `$cursor` stage, regardless of the order you placed the pipeline stages in. The `$cursor` _runtime_ stage is always the first action executed for any aggregation. Under the covers, the aggregation engine re-uses the MQL query engine to perform a 'regular' query against the collection, with a filter based on the aggregation's `$match` contents. The aggregation runtime uses the resulting query cursor to pull batches of records. This is similar to how a client application with a MongoDB driver uses a query cursor when remotely invoking an MQL query to pull batches. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense. In this case an index is indeed leveraged, as is visible in the embedded  `$queryPlanner` metadata, showing the `"stage" : "IXSCAN"` element and the index used, `"indexName" : "customer_id_1"`.
 
- * To further optimise the aggregation, the database engine has collapsed the `$sort` and `$limit` into a single _special internal sort stage_ which can perform both actions in one go. In this circumstance, during the sorting process, the aggregation engine only has to track the three currently known youngest person records in memory. It does not have to hold the whole data set in memory when sorting, which may otherwise be resource prohibitive, requiring more RAM than is available.
+ * To further optimise the aggregation, the database engine has collapsed the `$sort` and `$limit` into a single _special internal sort stage_ which can perform both actions in one go. In this situation, during the sorting process, the aggregation engine only has to track the current three most expensive orders in memory. It does not have to hold the whole data set in memory when sorting, which may otherwise be resource prohibitive in many scenarios, requiring more RAM than is available.
  
 You might also want to see the _execution stats_ part of the explain plan. The specific new information shown in `executionStats`, versus the default of `queryPlanner`, is identical to the [normal MQL explain plan](https://docs.mongodb.com/manual/tutorial/analyze-query-plan/) returned for a regular `find()` operation. Consequently, for aggregations, similar principles to MQL apply for spotting things like "have I used the optimal index?" and "does my data model lend itself to efficiently processing this query?".
  
@@ -183,7 +183,7 @@ You ask for the _execution stats_ part of the explain plan:
 db.customer_orders.explain("executionStats").aggregate(pipeline);
 ```
 
-Below is a redacted example of the execution statistics you will see in the explain plan, highlighting some of the most relevant metadata elements that you should generally focus on.
+Below is a redacted example of the output you will see, highlighting some of the most relevant metadata elements you should generally focus on.
 
 ```javascript
 executionStats: {
@@ -215,5 +215,5 @@ executionStats: {
 }
 ```
 
-Here, this part of the plan also shows that the aggregation uses the index. Because `totalKeysExamined` and `totalDocsExamined` match, the aggregation fully leverages this index to identify the required records, which is good news. Nevertheless, the targeted index doesn't necessarily mean the aggregation's query part is fully optimised. For example, if there is the need to reduce latency further, you can do some analysis to determine if the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). Suppose the _cursor query_ part of the aggregation is satisfied entirely using the index and does not have to examine any documents. In that case, you will see `totalDocsExamined: 0` in the explain plan.
+Here, this part of the plan also shows that the aggregation uses the existing index. Because `totalKeysExamined` and `totalDocsExamined` match, the aggregation fully leverages this index to identify the required records, which is good news. Nevertheless, the targeted index doesn't necessarily mean the aggregation's query part is fully optimised. For example, if there is the need to reduce latency further, you can do some analysis to determine if the index can completely [cover the query](https://docs.mongodb.com/manual/core/query-optimization/#covered-query). Suppose the _cursor query_ part of the aggregation is satisfied entirely using the index and does not have to examine any raw documents. In that case, you will see `totalDocsExamined: 0` in the explain plan.
 
