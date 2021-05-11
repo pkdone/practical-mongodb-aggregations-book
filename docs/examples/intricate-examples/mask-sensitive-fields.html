@@ -1,0 +1,397 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Mask Sensitive Fields - Practical MongoDB Aggregations</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Learn how to develop effective and optimal data manipulation and analytics pipelines with this book, using the MongoDB Aggregation Framework">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips &amp; Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/getting-started.html"><strong aria-hidden="true">2.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../guides/getting-help.html"><strong aria-hidden="true">2.2.</strong> Getting Help</a></li><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.3.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.4.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.5.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.6.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.7.</strong> Expressions Explained</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/simple-examples/simple-examples.html"><strong aria-hidden="true">3.1.</strong> Simple Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/simple-examples/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group &amp; Total</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays &amp; Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/convert-to-strongly-typed.html"><strong aria-hidden="true">3.1.4.</strong> Strongly Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/one-to-one-join.html"><strong aria-hidden="true">3.1.5.</strong> One-to-One Join</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/moderate-examples.html"><strong aria-hidden="true">3.2.</strong> Moderate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/moderate-examples/multi-one-to-many.html"><strong aria-hidden="true">3.2.1.</strong> Multi-Field Join &amp; One-to-Many</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/faceted-classifications.html"><strong aria-hidden="true">3.2.2.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/restricted-view.html"><strong aria-hidden="true">3.2.3.</strong> Restricted View</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/largest-graph-network.html"><strong aria-hidden="true">3.2.4.</strong> Largest Graph Network</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/intricate-examples.html"><strong aria-hidden="true">3.3.</strong> Intricate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/intricate-examples/incremental-analytics.html"><strong aria-hidden="true">3.3.1.</strong> Incremental Analytics</a></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/mask-sensitive-fields.html" class="active"><strong aria-hidden="true">3.3.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.3.</strong> Convert Incomplete Date Strings</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Practical MongoDB Aggregations</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="mask-sensitive-fields"><a class="header" href="#mask-sensitive-fields">Mask Sensitive Fields</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/rand/">$rand</a> operator)</em></p>
+<h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
+<p>You want to perform irreversible masking on the sensitive fields of a collection of <em>credit card payments</em>, ready to provide the output data set to a 3rd party for analysis, without exposing sensitive information to the 3rd party. The specific changes that you need to make to the payments' fields are:</p>
+<ul>
+<li>Partially obfuscate the carder holder's name</li>
+<li>Obfuscate the first 12 digits of the card's number, retaining only the final 4 digits</li>
+<li>Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 30 days (~1 month)</li>
+<li>Replace the card's 3 digit security code with a random set of 3 digits</li>
+<li>Adjust the transaction's amount by adding or subtracting a random amount up to a maximum of 10% of the original amount</li>
+<li>Change the <code>reported</code> field's boolean value to the opposite value for roughly 20% of the records</li>
+<li>If the embedded <code>customer_info</code> sub-document's <code>category</code> field is set to <em>RESTRICTED</em>, exclude the whole <code>customer_info</code> sub-document</li>
+</ul>
+<h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
+<p>Drop any old version of the database (if it exists) and then populate a new <code>payments</code> collection with 2 credit card payment documents, containing sensitive data:</p>
+<pre><code class="language-javascript">use book-mask-sensitive-fields;
+db.dropDatabase();
+
+// Insert records into the payments collection
+db.payments.insertMany([
+    {
+        &quot;card_name&quot;: &quot;Mrs. Jane A. Doe&quot;,
+        &quot;card_num&quot;: &quot;1234567890123456&quot;,
+        &quot;card_expiry&quot;: ISODate(&quot;2023-08-31T23:59:59Z&quot;),
+        &quot;card_sec_code&quot;: &quot;123&quot;,
+        &quot;card_type&quot;: &quot;CREDIT&quot;,        
+        &quot;transaction_id&quot;: &quot;eb1bd77836e8713656d9bf2debba8900&quot;,
+        &quot;transaction_date&quot;: ISODate(&quot;2021-01-13T09:32:07Z&quot;),
+        &quot;transaction_amount&quot;: NumberDecimal(&quot;501.98&quot;),
+        &quot;reported&quot;: false,
+        &quot;customer_info&quot;: {
+            &quot;category&quot;: &quot;RESTRICTED&quot;,
+            &quot;rating&quot;: 89,
+            &quot;risk&quot;: 3,
+        },
+    },
+    {
+        &quot;card_name&quot;: &quot;Jim Smith&quot;,
+        &quot;card_num&quot;: &quot;9876543210987654&quot;,
+        &quot;card_expiry&quot;: ISODate(&quot;2022-12-31T23:59:59Z&quot;),
+        &quot;card_sec_code&quot;: &quot;987&quot;,
+        &quot;card_type&quot;: &quot;DEBIT&quot;,        
+        &quot;transaction_id&quot;: &quot;634c416a6fbcf060bb0ba90c4ad94f60&quot;,
+        &quot;transaction_date&quot;: ISODate(&quot;2020-11-24T19:25:57Z&quot;),
+        &quot;transaction_amount&quot;: NumberDecimal(&quot;64.01&quot;),
+        &quot;reported&quot;: true,
+        &quot;customer_info&quot;: {
+            &quot;category&quot;: &quot;NORMAL&quot;,
+            &quot;rating&quot;: 78,
+            &quot;risk&quot;: 55,
+        },
+    },
+]);
+</code></pre>
+<h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Replace a subset of fields with new values
+  {&quot;$set&quot;: {
+    // Extract the last word from the name , eg: 'Doe' from 'Mrs. Jane A. Doe'
+    &quot;card_name&quot;: {&quot;$regexFind&quot;: {&quot;input&quot;: &quot;$card_name&quot;, &quot;regex&quot;: /(\S+)$/}},
+          
+    // Mask card num 1st part retaining last 4 chars, eg: '1234567890123456' -&gt; 'XXXXXXXXXXXX3456'
+    &quot;card_num&quot;: {&quot;$concat&quot;: [
+                  &quot;XXXXXXXXXXXX&quot;,
+                  {&quot;$substrCP&quot;: [&quot;$card_num&quot;, 12, 4]},
+                ]},                     
+
+    // Add/subtract a random time amount of a maximum of 30 days (~1 month) each-way
+    &quot;card_expiry&quot;: {&quot;$add&quot;: [
+                     &quot;$card_expiry&quot;,
+                     {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$subtract&quot;: [{&quot;$rand&quot;: {}}, 0.5]}, 2*30*24*60*60*1000]}},
+                   ]},                     
+
+    // Replace each digit with random digit, eg: '133' -&gt; '472'
+    &quot;card_sec_code&quot;: {&quot;$concat&quot;: [
+                       {&quot;$toString&quot;: {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$rand&quot;: {}}, 10]}}},
+                       {&quot;$toString&quot;: {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$rand&quot;: {}}, 10]}}},
+                       {&quot;$toString&quot;: {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$rand&quot;: {}}, 10]}}},
+                     ]},
+                     
+    // Add/subtract a random percent of the amount's value up to 10% maximum each-way
+    &quot;transaction_amount&quot;: {&quot;$add&quot;: [
+                            &quot;$transaction_amount&quot;,
+                            {&quot;$multiply&quot;: [{&quot;$subtract&quot;: [{&quot;$rand&quot;: {}}, 0.5]}, 0.2, &quot;$transaction_amount&quot;]},
+                          ]},
+                          
+    // Retain field's bool value 80% of time on average, setting to the opposite value 20% of time
+    &quot;reported&quot;: {&quot;$cond&quot;: {
+                   &quot;if&quot;:   {&quot;$lte&quot;: [{&quot;$rand&quot;: {}}, 0.8]},
+                   &quot;then&quot;: &quot;$reported&quot;,
+                   &quot;else&quot;: {&quot;$not&quot;: [&quot;$reported&quot;]},
+                }},      
+
+    // Exclude sub-doc if the sub-doc's category field's value is 'RESTRICTED'
+    &quot;customer_info&quot;: {&quot;$cond&quot;: {
+                        &quot;if&quot;:   {&quot;$eq&quot;: [&quot;$customer_info.category&quot;, &quot;RESTRICTED&quot;]}, 
+                        &quot;then&quot;: &quot;$$REMOVE&quot;,     
+                        &quot;else&quot;: &quot;$customer_info&quot;,
+                     }},                                         
+                
+    // Mark _id field to excluded from results
+    &quot;_id&quot;: &quot;$$REMOVE&quot;,                
+  }},
+  
+  // Take regex matched last word from the card name and prefix it with hardcoded value
+  {&quot;$set&quot;: {
+    &quot;card_name&quot;: {&quot;$concat&quot;: [&quot;Mx. Xxx &quot;, {&quot;$ifNull&quot;: [&quot;$card_name.match&quot;, &quot;Anonymous&quot;]}]},                       
+  }},
+];
+</code></pre>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.payments.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.payments.explain(&quot;executionStats&quot;).aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
+<p>Two documents should be returned, corresponding to the original two source documents, but this time with many of their fields redacted and obfuscated, plus the <code>customer_info</code> embedded document omitted for one record due to it having been marked as <code>RESTRICTED</code>, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    card_name: 'Mx. Xxx Doe',
+    card_num: 'XXXXXXXXXXXX3456',
+    card_expiry: ISODate('2023-08-31T23:29:46.460Z'),
+    card_sec_code: '295',
+    card_type: 'CREDIT',
+    transaction_id: 'eb1bd77836e8713656d9bf2debba8900',
+    transaction_date: ISODate('2021-01-13T09:32:07.000Z'),
+    transaction_amount: NumberDecimal('492.4016988351474881660000000000000'),
+    reported: false
+  },
+  {
+    card_name: 'Mx. Xxx Smith',
+    card_num: 'XXXXXXXXXXXX7654',
+    card_expiry: ISODate('2023-01-01T00:34:49.330Z'),
+    card_sec_code: '437',
+    card_type: 'DEBIT',
+    transaction_id: '634c416a6fbcf060bb0ba90c4ad94f60',
+    transaction_date: ISODate('2020-11-24T19:25:57.000Z'),
+    transaction_amount: NumberDecimal('58.36081337486762223600000000000000'),
+    reported: false,
+    customer_info: { category: 'NORMAL', rating: 78, risk: 55 }
+  }
+]
+</code></pre>
+<h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
+<ul>
+<li>
+<p><strong>Targeted Redaction.</strong> The pipeline uses a <code>$cond</code> operator to return the <code>$$REMOVE</code> marker variable if the <code>category</code> field is equal to <code>RESTRICTED</code>. This informs the aggregation engine to exclude the whole <code>customer_info</code> sub-document from the stage's output for the record. Alternatively, the pipeline could have used a <code>$redact</code> stage to achieve the same. However, <code>$redact</code> typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.</p>
+</li>
+<li>
+<p><strong>Regular Expression.</strong> For masking the <code>card_name</code> field, a regular expression operator is used to extract the last word of the field's original value. <code>$regexFind</code> returns metadata into the stage's output records, indicating if the match succeeded and what the matched value is. Therefore, an additional <code>$set</code> stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hard-coded text.</p>
+</li>
+<li>
+<p><strong>Unset Alternative.</strong> If this example was consistent with the other examples in this book, the pipeline would include an additional <code>$unset</code> stage to exclude the <code>_id</code> field. However, in this case, chiefly to show there is another way, the pipeline marks the <code>_id</code> field for exclusion in the <code>$set</code> stage by being assigned the <code>$$REMOVE</code> variable.</p>
+</li>
+<li>
+<p><strong>Meaningful Insight.</strong> Even though the pipeline is irreversibly obfuscating fields, it doesn't mean that the masked data is useless for performing analytics to gain insight. The pipeline masks some fields by fluctuating the original values by a small but limited random percentage (e.g. <code>card_expiry</code>, <code>transaction_amount</code>), rather than replacing them with completely random values (e.g. <code>card_sec_code</code>). In such cases, if the input data set is sufficiently large, then minor variances will be equalled out. For the fields that are only varied slightly, users can derive similar trends and patterns from analysing the masked data as they would the original data.</p>
+</li>
+<li>
+<p><strong>Further Reading.</strong> This example is based on the output of two blog posts: 1) <a href="https://pauldone.blogspot.com/2021/02/mongdb-data-masking.html">MongoDB Irreversible Data Masking</a>, and 2) <a href="https://pauldone.blogspot.com/2021/02/mongdb-reversible-data-masking.html">MongoDB Reversible Data Masking</a>.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../examples/intricate-examples/incremental-analytics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../examples/intricate-examples/convert-incomplete-dates.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../examples/intricate-examples/incremental-analytics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../examples/intricate-examples/convert-incomplete-dates.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

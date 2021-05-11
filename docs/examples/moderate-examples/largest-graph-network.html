@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Largest Graph Network - Practical MongoDB Aggregations</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Learn how to develop effective and optimal data manipulation and analytics pipelines with this book, using the MongoDB Aggregation Framework">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips &amp; Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/getting-started.html"><strong aria-hidden="true">2.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../guides/getting-help.html"><strong aria-hidden="true">2.2.</strong> Getting Help</a></li><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.3.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.4.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.5.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.6.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.7.</strong> Expressions Explained</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/simple-examples/simple-examples.html"><strong aria-hidden="true">3.1.</strong> Simple Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/simple-examples/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group &amp; Total</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays &amp; Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/convert-to-strongly-typed.html"><strong aria-hidden="true">3.1.4.</strong> Strongly Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/one-to-one-join.html"><strong aria-hidden="true">3.1.5.</strong> One-to-One Join</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/moderate-examples.html"><strong aria-hidden="true">3.2.</strong> Moderate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/moderate-examples/multi-one-to-many.html"><strong aria-hidden="true">3.2.1.</strong> Multi-Field Join &amp; One-to-Many</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/faceted-classifications.html"><strong aria-hidden="true">3.2.2.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/restricted-view.html"><strong aria-hidden="true">3.2.3.</strong> Restricted View</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/largest-graph-network.html" class="active"><strong aria-hidden="true">3.2.4.</strong> Largest Graph Network</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/intricate-examples.html"><strong aria-hidden="true">3.3.</strong> Intricate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/intricate-examples/incremental-analytics.html"><strong aria-hidden="true">3.3.1.</strong> Incremental Analytics</a></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/mask-sensitive-fields.html"><strong aria-hidden="true">3.3.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.3.</strong> Convert Incomplete Date Strings</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Practical MongoDB Aggregations</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="largest-graph-network"><a class="header" href="#largest-graph-network">Largest Graph Network</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
+<p>Your organisation wants to know the best targets for a new marketing campaign based on a social network database similar to <em>Twitter</em>. You want to search the collection of social network users, each holding a user's name and the names of other people who follow them. You will execute an aggregation pipeline that walks each user record's <code>followed_by</code> array to determine which user has the largest <em>network reach</em>.</p>
+<p>Note this example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using <code>$graphLookup</code> at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: <a href="https://github.com/mongodb-labs/socialite">Socialite</a></p>
+<h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
+<p>Drop any old version of the database (if it exists) and then populate a new <code>users</code> collection with 10 social network users documents, plus an index to help optimise the <em>graph traversal</em>:</p>
+<pre><code class="language-javascript">use book-largest-graph-network;
+db.dropDatabase();
+
+// Create index on field which for each graph traversal hop will connect to
+db.users.createIndex({&quot;name&quot;: 1})
+
+// Insert records into the users collection
+db.users.insertMany([
+  {&quot;name&quot;: &quot;Paul&quot;, &quot;followed_by&quot;: []},
+  {&quot;name&quot;: &quot;Toni&quot;, &quot;followed_by&quot;: [&quot;Paul&quot;]},
+  {&quot;name&quot;: &quot;Janet&quot;, &quot;followed_by&quot;: [&quot;Paul&quot;, &quot;Toni&quot;]},
+  {&quot;name&quot;: &quot;David&quot;, &quot;followed_by&quot;: [&quot;Janet&quot;, &quot;Paul&quot;, &quot;Toni&quot;]},
+  {&quot;name&quot;: &quot;Fiona&quot;, &quot;followed_by&quot;: [&quot;David&quot;, &quot;Paul&quot;]},
+  {&quot;name&quot;: &quot;Bob&quot;, &quot;followed_by&quot;: [&quot;Janet&quot;]},
+  {&quot;name&quot;: &quot;Carl&quot;, &quot;followed_by&quot;: [&quot;Fiona&quot;]},
+  {&quot;name&quot;: &quot;Sarah&quot;, &quot;followed_by&quot;: [&quot;Carl&quot;, &quot;Paul&quot;]},
+  {&quot;name&quot;: &quot;Carol&quot;, &quot;followed_by&quot;: [&quot;Helen&quot;, &quot;Sarah&quot;]},
+  {&quot;name&quot;: &quot;Helen&quot;, &quot;followed_by&quot;: [&quot;Paul&quot;]},
+]);
+</code></pre>
+<h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // For each social network user, graph traverse their 'followed_by' list of people
+  {&quot;$graphLookup&quot;: {
+    &quot;from&quot;: &quot;users&quot;,
+    &quot;startWith&quot;: &quot;$followed_by&quot;,
+    &quot;connectFromField&quot;: &quot;followed_by&quot;,
+    &quot;connectToField&quot;: &quot;name&quot;,
+    &quot;depthField&quot;: &quot;depth&quot;,
+    &quot;as&quot;: &quot;extended_network&quot;,
+  }},
+
+  // Add new accumulating fields
+  {&quot;$set&quot;: {
+    // Count the extended connection reach
+    &quot;network_reach&quot;: {
+      &quot;$size&quot;: &quot;$extended_network&quot;
+    },
+
+    // Gather the list of the extended connections' names
+    &quot;extended_connections&quot;: {
+      &quot;$map&quot;: {
+        &quot;input&quot;: &quot;$extended_network&quot;,
+        &quot;as&quot;: &quot;connection&quot;,
+        &quot;in&quot;: &quot;$$connection.name&quot;,
+      }
+    },    
+  }},
+    
+  // Omit unwanted fields
+  {&quot;$unset&quot;: [
+    &quot;_id&quot;,
+    &quot;followed_by&quot;,
+    &quot;extended_network&quot;,
+  ]},   
+  
+  // Sort by person with greatest network reach first, in descending order
+  {&quot;$sort&quot;: {
+    &quot;network_reach&quot;: -1,
+  }},   
+];
+</code></pre>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.users.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.users.explain(&quot;executionStats&quot;).aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
+<p>Ten documents should be returned, corresponding to the original ten source social network users, with each one including a count of the user's <em>network reach</em>, and the names of their <em>extended connections</em>, sorted by the user with the most extensive network reach first, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    name: 'Carol',
+    network_reach: 8,
+    extended_connections: [ 'David', 'Toni', 'Fiona', 'Sarah', 'Helen', 'Carl', 'Paul',  'Janet' ]
+  },
+  {
+    name: 'Sarah',
+    network_reach: 6,
+    extended_connections: [ 'David', 'Toni', 'Fiona', 'Carl', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Carl',
+    network_reach: 5,
+    extended_connections: [ 'David', 'Toni', 'Fiona', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Fiona',
+    network_reach: 4,
+    extended_connections: [ 'David', 'Toni', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'David',
+    network_reach: 3,
+    extended_connections: [ 'Toni', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Bob',
+    network_reach: 3,
+    extended_connections: [ 'Toni', 'Paul', 'Janet' ]
+  },
+  {
+    name: 'Janet',
+    network_reach: 2,
+    extended_connections: [ 'Toni', 'Paul' ]
+  },
+  {
+    name: 'Toni',
+    network_reach: 1, 
+    extended_connections: [ 'Paul']
+  },
+  { 
+    name: 'Helen',
+    network_reach: 1, 
+    extended_connections: [ 'Paul' ] 
+  },
+  { name: 'Paul', 
+    network_reach: 0, 
+    extended_connections: [] 
+  }
+]
+</code></pre>
+<h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
+<ul>
+<li>
+<p><strong>Following Graphs.</strong> The <code>$graphLookup</code> stage helps you traverse relationships between records, looking for patterns that aren't necessarily evident from looking at each record in isolation. In this example, by looking at <em>Paul's</em> record in isolation, it is evident that <em>Paul</em> has no <em>friends</em> and thus has the lowest network reach. However, it is not obvious that <em>Carol</em> has the greatest network reach just by looking at the number of people <em>Carol</em> is directly followed by, which is two. <em>David</em>, for example, is followed by three people (one more than <em>Carol</em>). However, the executed aggregation pipeline can deduce that <em>Carol</em> has the most extensive network reach.</p>
+</li>
+<li>
+<p><strong>Index Use.</strong> The <code>$graphLookup</code> stage can leverage the index on the field <code>name</code> for each of its <code>connectToField</code> hops.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../examples/moderate-examples/restricted-view.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../examples/intricate-examples/intricate-examples.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../examples/moderate-examples/restricted-view.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../examples/intricate-examples/intricate-examples.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Convert Incomplete Date Strings - Practical MongoDB Aggregations</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Learn how to develop effective and optimal data manipulation and analytics pipelines with this book, using the MongoDB Aggregation Framework">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips &amp; Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/getting-started.html"><strong aria-hidden="true">2.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../guides/getting-help.html"><strong aria-hidden="true">2.2.</strong> Getting Help</a></li><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.3.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.4.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.5.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.6.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.7.</strong> Expressions Explained</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/simple-examples/simple-examples.html"><strong aria-hidden="true">3.1.</strong> Simple Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/simple-examples/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group &amp; Total</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays &amp; Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/convert-to-strongly-typed.html"><strong aria-hidden="true">3.1.4.</strong> Strongly Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/simple-examples/one-to-one-join.html"><strong aria-hidden="true">3.1.5.</strong> One-to-One Join</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/moderate-examples.html"><strong aria-hidden="true">3.2.</strong> Moderate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/moderate-examples/multi-one-to-many.html"><strong aria-hidden="true">3.2.1.</strong> Multi-Field Join &amp; One-to-Many</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/faceted-classifications.html"><strong aria-hidden="true">3.2.2.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/restricted-view.html"><strong aria-hidden="true">3.2.3.</strong> Restricted View</a></li><li class="chapter-item expanded "><a href="../../examples/moderate-examples/largest-graph-network.html"><strong aria-hidden="true">3.2.4.</strong> Largest Graph Network</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/intricate-examples.html"><strong aria-hidden="true">3.3.</strong> Intricate Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/intricate-examples/incremental-analytics.html"><strong aria-hidden="true">3.3.1.</strong> Incremental Analytics</a></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/mask-sensitive-fields.html"><strong aria-hidden="true">3.3.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/intricate-examples/convert-incomplete-dates.html" class="active"><strong aria-hidden="true">3.3.3.</strong> Convert Incomplete Date Strings</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Practical MongoDB Aggregations</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="convert-incomplete-date-strings"><a class="header" href="#convert-incomplete-date-strings">Convert Incomplete Date Strings</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
+<p>An application is ingesting <em>payment</em> documents into a MongoDB collection where each document's <em>payment date</em> field contains a string looking vaguely like a date-time, such as <code>&quot;01-JAN-20 01.01.01.123000000&quot;</code>. You want to convert each <em>payment date</em> into a valid BSON date type when aggregating the payments. However, the payment date fields do not contain all the information required for you to determine the exact date-time accurately. Therefore you cannot use just the MongoDB's <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators">Date Expression Operators</a> directly to perform the text-to-date conversion. Each of these text fields is missing the following information:</p>
+<ul>
+<li>The specific <strong>century</strong> (1900s?, 2000s, other?)</li>
+<li>The specific <strong>time-zone</strong> (GMT?, IST?, PST?, other?) </li>
+<li>The specific <strong>language</strong> that the three-letter month abbreviation represents (is 'JAN' in French? in English? other?)</li>
+</ul>
+<p>You subsequently learn that all the payment records are for the <strong>21st century</strong> only, the time-zone used when ingesting the data is <strong>UTC</strong>, and the language used is <strong>English</strong>. Armed with this information, you build an aggregation pipeline to transform these text fields into date fields.</p>
+<h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
+<p>Drop any old version of the database (if it exists) and then populate a new <em>payments</em> collection with 12 sample payments documents, providing coverage across all 12 months for the year 2020, with random time elements.</p>
+<pre><code class="language-javascript">use book-convert-incomplete-dates;
+db.dropDatabase();
+
+// Insert records into the payments collection
+db.payments.insertMany([
+  {&quot;account&quot;: &quot;010101&quot;, &quot;payment_date&quot;: &quot;01-JAN-20 01.01.01.123000000&quot;, &quot;amount&quot;: 1.01},
+  {&quot;account&quot;: &quot;020202&quot;, &quot;payment_date&quot;: &quot;02-FEB-20 02.02.02.456000000&quot;, &quot;amount&quot;: 2.02},
+  {&quot;account&quot;: &quot;030303&quot;, &quot;payment_date&quot;: &quot;03-MAR-20 03.03.03.789000000&quot;, &quot;amount&quot;: 3.03},
+  {&quot;account&quot;: &quot;040404&quot;, &quot;payment_date&quot;: &quot;04-APR-20 04.04.04.012000000&quot;, &quot;amount&quot;: 4.04},
+  {&quot;account&quot;: &quot;050505&quot;, &quot;payment_date&quot;: &quot;05-MAY-20 05.05.05.345000000&quot;, &quot;amount&quot;: 5.05},
+  {&quot;account&quot;: &quot;060606&quot;, &quot;payment_date&quot;: &quot;06-JUN-20 06.06.06.678000000&quot;, &quot;amount&quot;: 6.06},
+  {&quot;account&quot;: &quot;070707&quot;, &quot;payment_date&quot;: &quot;07-JUL-20 07.07.07.901000000&quot;, &quot;amount&quot;: 7.07},
+  {&quot;account&quot;: &quot;080808&quot;, &quot;payment_date&quot;: &quot;08-AUG-20 08.08.08.234000000&quot;, &quot;amount&quot;: 8.08},
+  {&quot;account&quot;: &quot;090909&quot;, &quot;payment_date&quot;: &quot;09-SEP-20 09.09.09.567000000&quot;, &quot;amount&quot;: 9.09},
+  {&quot;account&quot;: &quot;101010&quot;, &quot;payment_date&quot;: &quot;10-OCT-20 10.10.10.890000000&quot;, &quot;amount&quot;: 10.10},
+  {&quot;account&quot;: &quot;111111&quot;, &quot;payment_date&quot;: &quot;11-NOV-20 11.11.11.111000000&quot;, &quot;amount&quot;: 11.11},
+  {&quot;account&quot;: &quot;121212&quot;, &quot;payment_date&quot;: &quot;12-DEC-20 12.12.12.999000000&quot;, &quot;amount&quot;: 12.12}
+]);
+</code></pre>
+<h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
+<p>Define a single pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Change field from a string to a date, filling in the missing gaps
+  {&quot;$set&quot;: {
+    &quot;payment_date&quot;: {    
+      &quot;$let&quot;: {
+        &quot;vars&quot;: {
+          &quot;txt&quot;: &quot;$payment_date&quot;,  // Assign &quot;payment_date&quot; field to variable &quot;txt&quot;
+        },
+        &quot;in&quot;: { 
+          &quot;$dateFromString&quot;: {&quot;format&quot;: &quot;%d-%m-%Y %H.%M.%S.%L&quot;, &quot;dateString&quot;:
+            {&quot;$concat&quot;: [
+              {&quot;$substrCP&quot;: [&quot;$$txt&quot;, 0, 3]},  // Use 1st 3 chars in string
+              {&quot;$switch&quot;: {&quot;branches&quot;: [  // Replace month 3 chars with month number
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;JAN&quot;]}, &quot;then&quot;: &quot;01&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;FEB&quot;]}, &quot;then&quot;: &quot;02&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;MAR&quot;]}, &quot;then&quot;: &quot;03&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;APR&quot;]}, &quot;then&quot;: &quot;04&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;MAY&quot;]}, &quot;then&quot;: &quot;05&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;JUN&quot;]}, &quot;then&quot;: &quot;06&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;JUL&quot;]}, &quot;then&quot;: &quot;07&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;AUG&quot;]}, &quot;then&quot;: &quot;08&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;SEP&quot;]}, &quot;then&quot;: &quot;09&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;OCT&quot;]}, &quot;then&quot;: &quot;10&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;NOV&quot;]}, &quot;then&quot;: &quot;11&quot;},
+                {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$substrCP&quot;: [&quot;$$txt&quot;, 3, 3]}, &quot;DEC&quot;]}, &quot;then&quot;: &quot;12&quot;},
+               ], &quot;default&quot;: &quot;ERROR&quot;}},
+              &quot;-20&quot;,  // Add hyphen + hardcoded century 2 digits
+              {&quot;$substrCP&quot;: [&quot;$$txt&quot;, 7, 15]}  // Use remaining 3 millis (ignore last 6 nanosecs)
+            ]
+          }}                  
+        }
+      }        
+    },             
+  }},
+
+  // Omit unwanted fields
+  {&quot;$unset&quot;: [
+    &quot;_id&quot;,
+  ]},         
+];
+</code></pre>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.payments.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.payments.explain(&quot;executionStats&quot;).aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
+<p>Twelve documents should be returned, corresponding to the original twelve source documents, but this time with the <code>payment_date</code> field converted from text values to proper date typed values, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    account: '010101',
+    payment_date: ISODate('2020-01-01T01:01:01.123Z'),
+    amount: 1.01
+  },
+  {
+    account: '020202',
+    payment_date: ISODate('2020-02-02T02:02:02.456Z'),
+    amount: 2.02
+  },
+  {
+    account: '030303',
+    payment_date: ISODate('2020-03-03T03:03:03.789Z'),
+    amount: 3.03
+  },
+  {
+    account: '040404',
+    payment_date: ISODate('2020-04-04T04:04:04.012Z'),
+    amount: 4.04
+  },
+  {
+    account: '050505',
+    payment_date: ISODate('2020-05-05T05:05:05.345Z'),
+    amount: 5.05
+  },
+  {
+    account: '060606',
+    payment_date: ISODate('2020-06-06T06:06:06.678Z'),
+    amount: 6.06
+  },
+  {
+    account: '070707',
+    payment_date: ISODate('2020-07-07T07:07:07.901Z'),
+    amount: 7.07
+  },
+  {
+    account: '080808',
+    payment_date: ISODate('2020-08-08T08:08:08.234Z'),
+    amount: 8.08
+  },
+  {
+    account: '090909',
+    payment_date: ISODate('2020-09-09T09:09:09.567Z'),
+    amount: 9.09
+  },
+  {
+    account: '101010',
+    payment_date: ISODate('2020-10-10T10:10:10.890Z'),
+    amount: 10.1
+  },
+  {
+    account: '111111',
+    payment_date: ISODate('2020-11-11T11:11:11.111Z'),
+    amount: 11.11
+  },
+  {
+    account: '121212',
+    payment_date: ISODate('2020-12-12T12:12:12.999Z'),
+    amount: 12.12
+  }
+]
+</code></pre>
+<h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
+<ul>
+<li>
+<p><strong>Concatenation Explanation.</strong> In this pipeline, the text fields (e.g. <code>'12-DEC-20 12.12.12.999000000'</code>) are each converted to date fields (e.g. <code>2020-12-12T12:12:12.999Z</code>). This is achieved by concatenating together the following four example elements before passing them to the <code>$dateFromString</code> operator to convert to a date type:</p>
+<ul>
+<li><code>'12-'</code> <em>(day of the month from the input string + the hyphen suffix already present in the text)</em></li>
+<li><code>'12'</code> <em>(replacing 'DEC')</em></li>
+<li><code>'-20'</code> <em>(hard-coded hyphen + hardcoded century)</em></li>
+<li><code>'20 12.12.12.999'</code> <em>(the rest of input string apart from the last 6 nanosecond digits)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Further Reading.</strong> This example is based on the output of the blog post: <a href="https://pauldone.blogspot.com/2020/05/aggregation-convert-nasty-date-strings.html">Converting Gnarly Date Strings to Proper Date Types Using a MongoDB Aggregation Pipeline</a>.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../examples/intricate-examples/mask-sensitive-fields.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../back-cover.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../examples/intricate-examples/mask-sensitive-fields.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../back-cover.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
