@@ -182,7 +182,7 @@ Three documents should be returned, representing the three youngest people who a
 ```javascript
 db.persons.find(
     {"vocation": "ENGINEER"},
-    {"_id": 0, "address": 0}
+    {"_id": 0, "vocation": 0, "address": 0},
   ).sort(
     {"dateofbirth": -1}
   ).limit(3);

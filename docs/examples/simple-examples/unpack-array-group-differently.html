@@ -280,16 +280,16 @@ db.orders.insertMany([
 <p>Four documents should be returned, representing only the four expensive products that were referenced multiple times in the customer orders, each showing the product's total order value and amount sold as shown below:</p>
 <pre><code class="language-javascript">[
   {
-    product_id: 'abc12345',
-    product: 'Asus Laptop',
-    total_value: NumberDecimal('861.42'),
-    quantity: 2
-  },
-  {
     product_id: 'pqr88223',
     product: 'Morphy Richardds Food Mixer',
     total_value: NumberDecimal('431.43'),
     quantity: 1
+  },
+  {
+    product_id: 'abc12345',
+    product: 'Asus Laptop',
+    total_value: NumberDecimal('861.42'),
+    quantity: 2
   },
   {
     product_id: 'def45678',
@@ -305,6 +305,7 @@ db.orders.insertMany([
   }
 ]
 </code></pre>
+<p><em>Note, the order of fields shown for each document may vary.</em></p>
 <h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
 <ul>
 <li>

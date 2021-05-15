@@ -146,7 +146,7 @@ Three documents should be returned, representing the three customers, each showi
   },
   {
     customer_id: 'elise_smith@myemail.com',
-    first_purchase_date: 2020-01-13T09:32:07.000Z,
+    first_purchase_date: ISODate('2020-01-13T09:32:07.000Z'),
     total_value: NumberDecimal('482.16'),
     total_orders: 4,
     orders: [
@@ -158,7 +158,7 @@ Three documents should be returned, representing the three customers, each showi
   },
   {
     customer_id: 'tj@wheresmyemail.com',
-    first_purchase_date: 2020-08-18T23:04:48.000Z,
+    first_purchase_date: ISODate('2020-08-18T23:04:48.000Z'),
     total_value: NumberDecimal('192.58'),
     total_orders: 2,
     orders: [
@@ -168,6 +168,8 @@ Three documents should be returned, representing the three customers, each showi
   }
 ]
 ```
+
+_Note, the order of fields shown for each document may vary._
 
 
 ## Observations

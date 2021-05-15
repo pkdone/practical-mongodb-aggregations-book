@@ -22,17 +22,17 @@ If you don't already have access to a MongoDB database, the two most accessible 
 
 There are many options for the client tool, four of which are:
 
- 1. __*Modern* Shell__. Install the modern version of MongoDB's command-line tool, the [Mongo Shell](https://www.mongodb.com/try/download/shell): `mongosh`
+ 1. __*Modern* Shell__. Install the modern version of MongoDB's command-line tool, the [MongoDB Shell](https://www.mongodb.com/try/download/shell): `mongosh`
  2. __*Legacy* Shell__. Install the legacy version of MongoDB's command-line tool, the [Mongo Shell](https://docs.mongodb.com/manual/mongo/): `mongo` (you will often find this binary bundled with a MongoDB database installation or you can download it from the Atlas console)
  3. __Compass__. Install the _official_ MongoDB Inc. provided graphical user interface (GUI) tool, [MongoDB Compass](https://www.mongodb.com/products/compass)
  4. __Studio 3T__. Install the _3rd party_ 3T Software Labs provided graphical user interface (GUI) tool, [Studio 3T](https://studio3t.com/download/)
  
-The book's examples present code in such a way to make it easy to copy and paste into the Mongo Shell (`mongosh` or `mongo`) to execute. All subsequent instructions in this book assume you are using the Shell. However, you will find it straightforward to use one of the mentioned GUI tools instead to consume the code examples. Of the two Shell versions, is it is easier to use and view results with the _modern_ Shell.
+The book's examples present code in such a way to make it easy to copy and paste into the MongoDB's Shell (`mongosh` or `mongo`) to execute. All subsequent instructions in this book assume you are using the Shell. However, you will find it straightforward to use one of the mentioned GUI tools instead to consume the code examples. Of the two Shell versions, is it is easier to use and view results with the _modern_ Shell.
 
 
-### Mongo Shell With Atlas Database
+### MongoDB Shell With Atlas Database
 
-Here is an example of how you can start the _modern_ Mongo Shell to connect to an Atlas Free Tier MongoDB Cluster (change the text `mongosh` to `mongo` if you are using the _legacy_ Shell):
+Here is an example of how you can start the _modern_ Shell to connect to an Atlas Free Tier MongoDB Cluster (change the text `mongosh` to `mongo` if you are using the _legacy_ Shell):
 
 ```bash
 mongosh "mongodb+srv://mycluster.a123b.mongodb.net/test" --username myuser
@@ -44,9 +44,9 @@ Note before running the command above, ensure
  3. You have changed the dummy URL and username text, shown in the above example command, to match your real cluster's details (these details are accessible via the cluster's `Connect` button in the Atlas Console)
 
 
-### Mongo Shell With Local Database
+### MongoDB Shell With Local Database
 
-Here is an example of how you can start the _modern_ Mongo Shell to connect to a MongoDB single server database if you've installed one locally on your workstation (change the text `mongosh` to `mongo` if you are using the _legacy_ Shell):
+Here is an example of how you can start the _modern_ Shell to connect to a MongoDB single server database if you've installed one locally on your workstation (change the text `mongosh` to `mongo` if you are using the _legacy_ Shell):
 
 ```bash
 mongosh "mongodb://localhost:27017"

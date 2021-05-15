@@ -1,6 +1,6 @@
 # Embrace Composability For Increased Productivity
 
-As described in this book's introduction, an aggregation pipeline is an ordered series of declarative statements, called stages. The entire output of one stage forms the whole input of the next stage, and so on, with no side effects. Pipelines exhibit high [composability](https://en.wikipedia.org/wiki/Composability) where stages are stateless self-contained components selected and assembled in various combinations (pipelines) to satisfy specific requirements. This composability promotes iterative prototyping, with straightforward testing after each increment.
+An aggregation pipeline is an ordered series of declarative statements, called stages. The entire output of one stage forms the whole input of the next stage, and so on, with no side effects. Pipelines exhibit high [composability](https://en.wikipedia.org/wiki/Composability) where stages are stateless self-contained components selected and assembled in various combinations (pipelines) to satisfy specific requirements. This composability promotes iterative prototyping, with straightforward testing after each increment.
 
 With MongoDB's aggregations, you can take a complex problem, requiring a complex aggregation pipeline, and break it down into straightforward individual stages, where each step can be developed and tested in isolation first. To better comprehend this composability, it may be helpful to internalise the following visual model.
 
@@ -10,7 +10,7 @@ Suppose you have two pipelines with one stage in each and run the second pipelin
 
 ## Specific Tips To Promote Composability
 
-In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using the Mongo Shell (or they use the 'disable stage' capability provided by the [GUI tools](./getting-started.md) for MongoDB).
+In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using MongoDB's Shell (or they use the 'disable stage' capability provided by the [GUI tools](./getting-started.md) for MongoDB).
 
 To encourage composability and hence productivity, some of the principles to strive for are:
 
@@ -39,7 +39,7 @@ var pipeline = [
     "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")}
   }}//, {"$sort": {
   //  "dateofbirth": -1
-  //}}, {"$limit": 2} */
+  //}}, {"$limit": 2}
 ];
 ```
 
@@ -71,7 +71,7 @@ var pipeline = [
 
 Notice trailing commas are included in the code snippet, at both the end of stage level and end of field level.
 
-> _There is an important behaviour to be aware of in MongoDB's shell after you paste and execute a pipeline's definition with `var pipeline = [...];`. The command will appear in the shell's history, and you can press the `up` arrow key to view the command and then press `enter` to rerun it. However, in both the modern shell (`mongosh`) and the legacy shell (`mongo`), the historic command is stored and displayed as a single line with no newline breaks. This makes it challenging to navigate and refactor part of the code, inline in the shell, before rerunning it. Instead, it is very common for users to refactor their 'master version' of a pipeline in an external code editor before pasting it into the shell again to rerun. Used this way, there is no problem. Nevertheless, suppose you prefer to perform inline edits of historical commands directly in the shell. The `//` comments in your pipeline will cause an error when the command is rerun due to the historical version being a single line. The shell will inadvertently comment out the remaining part of the pipeline's code from where the first `//` occurs. To further complicate matters, the legacy shell (but not the modern shell) provides a little-known feature for you to employ an inline [command-line editor of your choice](https://docs.mongodb.com/manual/tutorial/configure-mongo-shell/#use-an-external-editor-in-the-mongo-shell) (e.g. `vi`, `nano`). With this text editor appearing directly in the shell, you modify the historical single-line version of the command before rerunning it. Consequently, if you are a user who favours changing a previous pipeline definition in the shell directly (with either `mongosh` and `mongo`) or via your chosen inline text editor (with `mongo` only), you will need to avoid the use of `//` comments. Instead, use `/* ... */` for both single-line comments and temporarily commenting out blocks of your pipeline when debugging. However, be aware that it will be more painful for you when you need to comment out a block of the pipeline that already contains a single comment line._
+> _There is an important behaviour to be aware of in MongoDB's Shell after you paste and execute a pipeline's definition with `var pipeline = [...];`. The command will appear in the Shell's history, and you can press the `up` arrow key to view the command and then press `enter` to rerun it. However, in the Shell, the historic command is stored and displayed as a single line with no newline breaks. This makes it challenging to navigate and refactor part of the code, inline in the Shell, before rerunning it. Instead, it is very common for users to refactor their 'master version' of a pipeline in an external code editor before pasting it into the Shell again to rerun. Used this way, there is no problem. Nevertheless, suppose you prefer to perform inline edits of historical commands directly in the Shell. The `//` comments in your pipeline will cause an error when the command is rerun due to the historical version being a single line. The Shell will inadvertently comment out the remaining part of the pipeline's code from where the first `//` occurs. Therefore, if you are a user who favours changing a previous pipeline definition in the Shell directly, you will need to avoid the use of `//` comments. Instead, use `/* ... */` for both single-line comments and temporarily commenting out blocks of your pipeline when debugging. However, be aware that it will be more painful for you when you need to comment out a block of the pipeline that already contains a single comment line._
 
 It is worth mentioning that some (but not all) developers take an alternative but an equally valid approach to constructing a pipeline. They decompose each stage in the pipeline into different JavaScript variables, where each stage's variable is defined separately, as shown in the example below:
 

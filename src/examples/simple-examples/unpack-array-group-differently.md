@@ -141,16 +141,16 @@ Four documents should be returned, representing only the four expensive products
 ```javascript
 [
   {
-    product_id: 'abc12345',
-    product: 'Asus Laptop',
-    total_value: NumberDecimal('861.42'),
-    quantity: 2
-  },
-  {
     product_id: 'pqr88223',
     product: 'Morphy Richardds Food Mixer',
     total_value: NumberDecimal('431.43'),
     quantity: 1
+  },
+  {
+    product_id: 'abc12345',
+    product: 'Asus Laptop',
+    total_value: NumberDecimal('861.42'),
+    quantity: 2
   },
   {
     product_id: 'def45678',
@@ -166,6 +166,8 @@ Four documents should be returned, representing only the four expensive products
   }
 ]
 ```
+
+_Note, the order of fields shown for each document may vary._
 
 
 ## Observations

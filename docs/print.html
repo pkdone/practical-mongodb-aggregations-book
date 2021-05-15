@@ -169,7 +169,7 @@
 <p> </p>
 <h1 id="practical-mongodb-aggregations"><a class="header" href="#practical-mongodb-aggregations">Practical MongoDB Aggregations</a></h1>
 <p>Author: Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</p>
-<p>Version: 1.0</p>
+<p>Version: 1.01</p>
 <p>Book published at: <a href="https://www.practical-mongodb-aggregations.com">www.practical-mongodb-aggregations.com</a></p>
 <p>Content created &amp; assembled at: <a href="https://github.com/pkdone/practical-mongodb-aggregations-book">github.com/pkdone/practical-mongodb-aggregations-book</a></p>
 <hr />
@@ -210,7 +210,7 @@
 <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>This introduction section of the book helps you understand what MongoDB Aggregations are, the philosophy of Aggregations, what people use them for, and the history of the framework.</p>
 <h1 id="introducing-mongodb-aggregations"><a class="header" href="#introducing-mongodb-aggregations">Introducing MongoDB Aggregations</a></h1>
-<h2 id="what-is-the-aggregation-framework"><a class="header" href="#what-is-the-aggregation-framework">What Is The Aggregation Framework?</a></h2>
+<h2 id="what-are-mongodb-aggregations"><a class="header" href="#what-are-mongodb-aggregations">What Are MongoDB Aggregations?</a></h2>
 <p>MongoDB's aggregation pipeline language is somewhat of a paradox. It can appear daunting, yet it is straightforward. It can seem verbose, yet it is lean and to the point. It is <a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing complete</a> and able to solve any business problem <strong>*</strong>. Conversely, it is a strongly opinionated <a href="https://en.wikipedia.org/wiki/Domain-specific_language">Domain Specific Language (DSL)</a>, where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.</p>
 <blockquote>
 <p><strong>*</strong> <em>As <a href="http://ilearnasigoalong.blogspot.com/">John Page</a> once showed, you can even code a <a href="https://github.com/johnlpage/MongoAggMiner">Bitcoin miner</a> using MongoDB aggregations, not that he (or hopefully anyone for that matter) would ever recommend you do this for real, for both the sake of your bank balance and the environment!</em></p>
@@ -219,7 +219,7 @@
 <p>MongoDB's aggregation pipeline language is focused on data-oriented problem-solving rather than business process problem-solving. It is essentially a <a href="https://en.wikipedia.org/wiki/Declarative_programming">declarative programming language</a>, rather than an <a href="https://en.wikipedia.org/wiki/Imperative_programming">imperative programming language</a>. Also, depending on how you squint, it can be regarded as a <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming language</a> rather than a <a href="https://en.wikipedia.org/wiki/Procedural_programming">procedural programming language</a>. Why? Well, an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side effects. This functional nature is probably why many users regard the Aggregation Framework as having a steeper learning curve than many languages. Not because it is inherently more difficult to understand but because most developers come from a procedural programming background and not a functional one. Most developers also have to learn how to think like a functional programmer to learn the Aggregation Framework.</p>
 <p>The Aggregation Framework's declarative and functional characteristics ultimately make it especially powerful for processing massive data sets. Users focus more on defining 'the what' in terms of the required outcome in a declarative way. Users focus less on 'the how' of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, &quot;is this stage for performing a filter or is this stage for grouping on some fields?&quot;. With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to re-order stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.</p>
 <p><img src="intro/./pics/optimise.png" alt="MongoDB Aggregation Framework developer vs database engine optimizations comparison" /></p>
-<p>Last and by far least in terms of importance is a discussion about syntax. So far, MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, with what syntax is a MongoDB aggregation pipeline constructed? The answer is &quot;it depends&quot;, and the answer is mostly irrelevant. This book will highlight pipeline examples using the Mongo Shell and the JavaScript interpreter it runs in. The book will express aggregation pipelines using a <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> based syntax. However, if you are using one of the many <a href="https://docs.mongodb.com/drivers/">programming language drivers</a> that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON. An aggregation is specified as an array of objects, regardless of how the programming language may facilitate this. This programmatic rather than textual format has a couple of advantages compared to querying with a string. It has a low vulnerability to <a href="https://en.wikipedia.org/wiki/SQL_injection">injection attacks</a>, and it is highly <a href="https://en.wikipedia.org/wiki/Composability">composable</a>.</p>
+<p>Last and by far least in terms of importance is a discussion about syntax. So far, MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, with what syntax is a MongoDB aggregation pipeline constructed? The answer is &quot;it depends&quot;, and the answer is mostly irrelevant. This book will highlight pipeline examples using MongoDB's Shell and the JavaScript interpreter it runs in. The book will express aggregation pipelines using a <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> based syntax. However, if you are using one of the many <a href="https://docs.mongodb.com/drivers/">programming language drivers</a> that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON. An aggregation is specified as an array of objects, regardless of how the programming language may facilitate this. This programmatic rather than textual format has a couple of advantages compared to querying with a string. It has a low vulnerability to <a href="https://en.wikipedia.org/wiki/SQL_injection">injection attacks</a>, and it is highly <a href="https://en.wikipedia.org/wiki/Composability">composable</a>.</p>
 <h2 id="whats-in-a-name"><a class="header" href="#whats-in-a-name">What's In A Name?</a></h2>
 <p>You might have realised by now that there doesn't seem to be one single name for the subject of this book. You will often hear:</p>
 <ul>
@@ -302,14 +302,14 @@
 <h2 id="client-tool"><a class="header" href="#client-tool">Client Tool</a></h2>
 <p>There are many options for the client tool, four of which are:</p>
 <ol>
-<li><strong><em>Modern</em> Shell</strong>. Install the modern version of MongoDB's command-line tool, the <a href="https://www.mongodb.com/try/download/shell">Mongo Shell</a>: <code>mongosh</code></li>
+<li><strong><em>Modern</em> Shell</strong>. Install the modern version of MongoDB's command-line tool, the <a href="https://www.mongodb.com/try/download/shell">MongoDB Shell</a>: <code>mongosh</code></li>
 <li><strong><em>Legacy</em> Shell</strong>. Install the legacy version of MongoDB's command-line tool, the <a href="https://docs.mongodb.com/manual/mongo/">Mongo Shell</a>: <code>mongo</code> (you will often find this binary bundled with a MongoDB database installation or you can download it from the Atlas console)</li>
 <li><strong>Compass</strong>. Install the <em>official</em> MongoDB Inc. provided graphical user interface (GUI) tool, <a href="https://www.mongodb.com/products/compass">MongoDB Compass</a></li>
 <li><strong>Studio 3T</strong>. Install the <em>3rd party</em> 3T Software Labs provided graphical user interface (GUI) tool, <a href="https://studio3t.com/download/">Studio 3T</a></li>
 </ol>
-<p>The book's examples present code in such a way to make it easy to copy and paste into the Mongo Shell (<code>mongosh</code> or <code>mongo</code>) to execute. All subsequent instructions in this book assume you are using the Shell. However, you will find it straightforward to use one of the mentioned GUI tools instead to consume the code examples. Of the two Shell versions, is it is easier to use and view results with the <em>modern</em> Shell.</p>
-<h3 id="mongo-shell-with-atlas-database"><a class="header" href="#mongo-shell-with-atlas-database">Mongo Shell With Atlas Database</a></h3>
-<p>Here is an example of how you can start the <em>modern</em> Mongo Shell to connect to an Atlas Free Tier MongoDB Cluster (change the text <code>mongosh</code> to <code>mongo</code> if you are using the <em>legacy</em> Shell):</p>
+<p>The book's examples present code in such a way to make it easy to copy and paste into the MongoDB's Shell (<code>mongosh</code> or <code>mongo</code>) to execute. All subsequent instructions in this book assume you are using the Shell. However, you will find it straightforward to use one of the mentioned GUI tools instead to consume the code examples. Of the two Shell versions, is it is easier to use and view results with the <em>modern</em> Shell.</p>
+<h3 id="mongodb-shell-with-atlas-database"><a class="header" href="#mongodb-shell-with-atlas-database">MongoDB Shell With Atlas Database</a></h3>
+<p>Here is an example of how you can start the <em>modern</em> Shell to connect to an Atlas Free Tier MongoDB Cluster (change the text <code>mongosh</code> to <code>mongo</code> if you are using the <em>legacy</em> Shell):</p>
 <pre><code class="language-bash">mongosh &quot;mongodb+srv://mycluster.a123b.mongodb.net/test&quot; --username myuser
 </code></pre>
 <p>Note before running the command above, ensure</p>
@@ -318,8 +318,8 @@
 <li>You have <a href="https://docs.atlas.mongodb.com/tutorial/create-mongodb-user-for-cluster/">created a database user</a> for the deployed Atlas cluster, with rights to create, read and write to any database</li>
 <li>You have changed the dummy URL and username text, shown in the above example command, to match your real cluster's details (these details are accessible via the cluster's <code>Connect</code> button in the Atlas Console)</li>
 </ol>
-<h3 id="mongo-shell-with-local-database"><a class="header" href="#mongo-shell-with-local-database">Mongo Shell With Local Database</a></h3>
-<p>Here is an example of how you can start the <em>modern</em> Mongo Shell to connect to a MongoDB single server database if you've installed one locally on your workstation (change the text <code>mongosh</code> to <code>mongo</code> if you are using the <em>legacy</em> Shell):</p>
+<h3 id="mongodb-shell-with-local-database"><a class="header" href="#mongodb-shell-with-local-database">MongoDB Shell With Local Database</a></h3>
+<p>Here is an example of how you can start the <em>modern</em> Shell to connect to a MongoDB single server database if you've installed one locally on your workstation (change the text <code>mongosh</code> to <code>mongo</code> if you are using the <em>legacy</em> Shell):</p>
 <pre><code class="language-bash">mongosh &quot;mongodb://localhost:27017&quot;
 </code></pre>
 <h3 id="mongodb-compass-gui"><a class="header" href="#mongodb-compass-gui">MongoDB Compass GUI</a></h3>
@@ -342,12 +342,12 @@
 </ul>
 <p>You may be asking for just general advice. However, suppose you want to ask for help on a specific aggregation pipeline under development. In that case, you should provide a sample input document, a copy of your current pipeline code (in its JSON syntax format and not a programming language specific format) and an example of the output that you are trying to achieve. If you provide this extra information, you will have a far greater chance of receiving a timely and optimal response.</p>
 <h1 id="embrace-composability-for-increased-productivity"><a class="header" href="#embrace-composability-for-increased-productivity">Embrace Composability For Increased Productivity</a></h1>
-<p>As described in this book's introduction, an aggregation pipeline is an ordered series of declarative statements, called stages. The entire output of one stage forms the whole input of the next stage, and so on, with no side effects. Pipelines exhibit high <a href="https://en.wikipedia.org/wiki/Composability">composability</a> where stages are stateless self-contained components selected and assembled in various combinations (pipelines) to satisfy specific requirements. This composability promotes iterative prototyping, with straightforward testing after each increment.</p>
+<p>An aggregation pipeline is an ordered series of declarative statements, called stages. The entire output of one stage forms the whole input of the next stage, and so on, with no side effects. Pipelines exhibit high <a href="https://en.wikipedia.org/wiki/Composability">composability</a> where stages are stateless self-contained components selected and assembled in various combinations (pipelines) to satisfy specific requirements. This composability promotes iterative prototyping, with straightforward testing after each increment.</p>
 <p>With MongoDB's aggregations, you can take a complex problem, requiring a complex aggregation pipeline, and break it down into straightforward individual stages, where each step can be developed and tested in isolation first. To better comprehend this composability, it may be helpful to internalise the following visual model.</p>
 <p><img src="guides/./pics/pipeline-equivalence.png" alt="Alternatives for MongoDB aggregation pipelines composability" /></p>
 <p>Suppose you have two pipelines with one stage in each and run the second pipeline after completing the first pipeline. The final result set is the same as if you have just run a single pipeline containing both stages serially. There is no difference between the two. As a developer, you can reduce the <a href="https://en.wikipedia.org/wiki/Cognitive_load">cognitive load</a> by understanding how a problem can be broken down in this way when building aggregation pipelines. Aggregation pipelines enable you to decompose a big challenge into lots of minor challenges. By embracing this approach of first developing each stage separately, you will find even the most complex challenges become surmountable.</p>
 <h2 id="specific-tips-to-promote-composability"><a class="header" href="#specific-tips-to-promote-composability">Specific Tips To Promote Composability</a></h2>
-<p>In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using the Mongo Shell (or they use the 'disable stage' capability provided by the <a href="guides/./getting-started.html">GUI tools</a> for MongoDB).</p>
+<p>In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using MongoDB's Shell (or they use the 'disable stage' capability provided by the <a href="guides/./getting-started.html">GUI tools</a> for MongoDB).</p>
 <p>To encourage composability and hence productivity, some of the principles to strive for are:</p>
 <ul>
 <li>Easy disabling of subsets of stages, whilst prototyping or debugging</li>
@@ -373,7 +373,7 @@ var pipeline = [
     &quot;dateofbirth&quot;: {&quot;$gte&quot;: ISODate(&quot;1970-01-01T00:00:00Z&quot;)}
   }}//, {&quot;$sort&quot;: {
   //  &quot;dateofbirth&quot;: -1
-  //}}, {&quot;$limit&quot;: 2} */
+  //}}, {&quot;$limit&quot;: 2}
 ];
 </code></pre>
 <p>Whereas the following is an example of a far better pipeline layout, where you meet all of the guiding principles:</p>
@@ -401,7 +401,7 @@ var pipeline = [
 </code></pre>
 <p>Notice trailing commas are included in the code snippet, at both the end of stage level and end of field level.</p>
 <blockquote>
-<p><em>There is an important behaviour to be aware of in MongoDB's shell after you paste and execute a pipeline's definition with <code>var pipeline = [...];</code>. The command will appear in the shell's history, and you can press the <code>up</code> arrow key to view the command and then press <code>enter</code> to rerun it. However, in both the modern shell (<code>mongosh</code>) and the legacy shell (<code>mongo</code>), the historic command is stored and displayed as a single line with no newline breaks. This makes it challenging to navigate and refactor part of the code, inline in the shell, before rerunning it. Instead, it is very common for users to refactor their 'master version' of a pipeline in an external code editor before pasting it into the shell again to rerun. Used this way, there is no problem. Nevertheless, suppose you prefer to perform inline edits of historical commands directly in the shell. The <code>//</code> comments in your pipeline will cause an error when the command is rerun due to the historical version being a single line. The shell will inadvertently comment out the remaining part of the pipeline's code from where the first <code>//</code> occurs. To further complicate matters, the legacy shell (but not the modern shell) provides a little-known feature for you to employ an inline <a href="https://docs.mongodb.com/manual/tutorial/configure-mongo-shell/#use-an-external-editor-in-the-mongo-shell">command-line editor of your choice</a> (e.g. <code>vi</code>, <code>nano</code>). With this text editor appearing directly in the shell, you modify the historical single-line version of the command before rerunning it. Consequently, if you are a user who favours changing a previous pipeline definition in the shell directly (with either <code>mongosh</code> and <code>mongo</code>) or via your chosen inline text editor (with <code>mongo</code> only), you will need to avoid the use of <code>//</code> comments. Instead, use <code>/* ... */</code> for both single-line comments and temporarily commenting out blocks of your pipeline when debugging. However, be aware that it will be more painful for you when you need to comment out a block of the pipeline that already contains a single comment line.</em></p>
+<p><em>There is an important behaviour to be aware of in MongoDB's Shell after you paste and execute a pipeline's definition with <code>var pipeline = [...];</code>. The command will appear in the Shell's history, and you can press the <code>up</code> arrow key to view the command and then press <code>enter</code> to rerun it. However, in the Shell, the historic command is stored and displayed as a single line with no newline breaks. This makes it challenging to navigate and refactor part of the code, inline in the Shell, before rerunning it. Instead, it is very common for users to refactor their 'master version' of a pipeline in an external code editor before pasting it into the Shell again to rerun. Used this way, there is no problem. Nevertheless, suppose you prefer to perform inline edits of historical commands directly in the Shell. The <code>//</code> comments in your pipeline will cause an error when the command is rerun due to the historical version being a single line. The Shell will inadvertently comment out the remaining part of the pipeline's code from where the first <code>//</code> occurs. Therefore, if you are a user who favours changing a previous pipeline definition in the Shell directly, you will need to avoid the use of <code>//</code> comments. Instead, use <code>/* ... */</code> for both single-line comments and temporarily commenting out blocks of your pipeline when debugging. However, be aware that it will be more painful for you when you need to comment out a block of the pipeline that already contains a single comment line.</em></p>
 </blockquote>
 <p>It is worth mentioning that some (but not all) developers take an alternative but an equally valid approach to constructing a pipeline. They decompose each stage in the pipeline into different JavaScript variables, where each stage's variable is defined separately, as shown in the example below:</p>
 <pre><code class="language-javascript">// GOOD
@@ -448,7 +448,7 @@ var pipeline = [
 <p><strong><em>$project</em> is verbose and inflexible</strong>. If you want to define one new field or revise one field, you will have to name all other fields in the projection to include. If each input record has 100 fields and the pipeline needs to employ a <code>$project</code> stage for the first time, things become tiresome. To include a new 101st field, you now also have to name all the original 100 fields in this new <code>$project</code> stage too. You will find this irritating if you have an evolving data model, where additional new fields appear in some records over time. Because you use a <code>$project</code> for inclusion, then each time a new field appears in the data set, you must go back to the old aggregation pipeline to modify it to name the new field explicitly for inclusion in the results. This is the antithesis of flexibility and agility.</p>
 </li>
 </ol>
-<p>In MongoDB version 4.2, the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a> stages were introduced, which, in most cases, are preferable to using <code>$project</code> for declaring field inclusion and exclusion. They make the code's intent much clearer, lead to less verbose pipelines, and, criticality, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use <code>$set</code> &amp; <code>$unset</code> stages is described in the section '<em>When To Use $set &amp; $unset</em>', further below.</p>
+<p>In MongoDB version 4.2, the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a> stages were introduced, which, in most cases, are preferable to using <code>$project</code> for declaring field inclusion and exclusion. They make the code's intent much clearer, lead to less verbose pipelines, and, critically, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use <code>$set</code> &amp; <code>$unset</code> stages is described in the section '<em>When To Use $set &amp; $unset</em>', further below.</p>
 <p>Despite the challenges, though, there are some specific situations where using <code>$project</code> is advantageous over <code>$set</code>/<code>$unset</code>. These situations are described in the section '<em>When To Use $project</em>' further below. </p>
 <blockquote>
 <p><em>MongoDB version 3.4 addressed some of the disadvantages of <code>$project</code> by introducing a new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a> stage, which has the same behaviour as <code>$set</code>. <code>$set</code> came later than <code>$addFields</code>and <code>$set</code> is actually just an alias for <code>$addFields</code>. However, back then, the Aggregation Framework provided no direct equivalent to <code>$unset</code>. Both <code>$set</code> and <code>$unset</code> stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (<code>$set</code> Vs <code>$unset</code>). The name <code>$addFields</code> doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers <code>$set</code> over <code>$addFields</code> to help promote consistency and avoid any confusion of intent. However, if you are wedded to <code>$addFields</code>, use that instead, as there is no behavioural difference.</em></p>
@@ -1223,7 +1223,7 @@ db.persons.insertMany([
 </ul>
 <pre><code class="language-javascript">db.persons.find(
     {&quot;vocation&quot;: &quot;ENGINEER&quot;},
-    {&quot;_id&quot;: 0, &quot;address&quot;: 0}
+    {&quot;_id&quot;: 0, &quot;vocation&quot;: 0, &quot;address&quot;: 0},
   ).sort(
     {&quot;dateofbirth&quot;: -1}
   ).limit(3);
@@ -1350,7 +1350,7 @@ db.orders.insertMany([
   },
   {
     customer_id: 'elise_smith@myemail.com',
-    first_purchase_date: 2020-01-13T09:32:07.000Z,
+    first_purchase_date: ISODate('2020-01-13T09:32:07.000Z'),
     total_value: NumberDecimal('482.16'),
     total_orders: 4,
     orders: [
@@ -1362,7 +1362,7 @@ db.orders.insertMany([
   },
   {
     customer_id: 'tj@wheresmyemail.com',
-    first_purchase_date: 2020-08-18T23:04:48.000Z,
+    first_purchase_date: ISODate('2020-08-18T23:04:48.000Z'),
     total_value: NumberDecimal('192.58'),
     total_orders: 2,
     orders: [
@@ -1372,6 +1372,7 @@ db.orders.insertMany([
   }
 ]
 </code></pre>
+<p><em>Note, the order of fields shown for each document may vary.</em></p>
 <h2 id="observations-1"><a class="header" href="#observations-1">Observations</a></h2>
 <ul>
 <li>
@@ -1507,16 +1508,16 @@ db.orders.insertMany([
 <p>Four documents should be returned, representing only the four expensive products that were referenced multiple times in the customer orders, each showing the product's total order value and amount sold as shown below:</p>
 <pre><code class="language-javascript">[
   {
-    product_id: 'abc12345',
-    product: 'Asus Laptop',
-    total_value: NumberDecimal('861.42'),
-    quantity: 2
-  },
-  {
     product_id: 'pqr88223',
     product: 'Morphy Richardds Food Mixer',
     total_value: NumberDecimal('431.43'),
     quantity: 1
+  },
+  {
+    product_id: 'abc12345',
+    product: 'Asus Laptop',
+    total_value: NumberDecimal('861.42'),
+    quantity: 2
   },
   {
     product_id: 'def45678',
@@ -1532,6 +1533,7 @@ db.orders.insertMany([
   }
 ]
 </code></pre>
+<p><em>Note, the order of fields shown for each document may vary.</em></p>
 <h2 id="observations-2"><a class="header" href="#observations-2">Observations</a></h2>
 <ul>
 <li>
@@ -1668,7 +1670,8 @@ db.orders.insertMany([
 <h2 id="scenario-4"><a class="header" href="#scenario-4">Scenario</a></h2>
 <p>You want to generate a report to list all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id. To achieve this, you need to take the customer <em>orders</em> collection and join each order record to the corresponding product record in the <em>products</em> collection. There is a many:1 relationship between both collections, resulting in a 1:1 join when matching an order to a product. The join will use a single field comparison between both sides, based on the product's id.</p>
 <h2 id="sample-data-population-4"><a class="header" href="#sample-data-population-4">Sample Data Population</a></h2>
-<p>Drop any old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021:</p>
+<p>Drop any old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021 (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):</p>
+<p> <strong>-Part 1-</strong></p>
 <pre><code class="language-javascript">use book-one-to-one-join;
 db.dropDatabase();
 
@@ -1702,8 +1705,9 @@ db.products.insertMany([
     &quot;description&quot;: &quot;Hose + nosels + winder for tidy storage&quot;,
   },
 ]); 
-
-// Create index for a orders collection
+</code></pre>
+<p> <strong>-Part 2-</strong></p>
+<pre><code class="language-javascript">// Create index for a orders collection
 db.orders.createIndex({&quot;orderdate&quot;: -1});
 
 // Insert 4 records into the orders collection

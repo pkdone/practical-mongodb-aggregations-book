@@ -10,7 +10,9 @@ You want to generate a report to list all shop purchases for 2020, showing the p
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021:
+Drop any old version of the database (if it exists) and then populate new `products` and `orders` collections with documents spanning 2019-2021 (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):
+
+&nbsp;__-Part 1-__
 
 ```javascript
 use book-one-to-one-join;
@@ -46,7 +48,11 @@ db.products.insertMany([
     "description": "Hose + nosels + winder for tidy storage",
   },
 ]); 
+```
 
+&nbsp;__-Part 2-__
+
+```javascript
 // Create index for a orders collection
 db.orders.createIndex({"orderdate": -1});
 

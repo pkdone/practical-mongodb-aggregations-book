@@ -321,7 +321,7 @@ db.persons.insertMany([
 </ul>
 <pre><code class="language-javascript">db.persons.find(
     {&quot;vocation&quot;: &quot;ENGINEER&quot;},
-    {&quot;_id&quot;: 0, &quot;address&quot;: 0}
+    {&quot;_id&quot;: 0, &quot;vocation&quot;: 0, &quot;address&quot;: 0},
   ).sort(
     {&quot;dateofbirth&quot;: -1}
   ).limit(3);

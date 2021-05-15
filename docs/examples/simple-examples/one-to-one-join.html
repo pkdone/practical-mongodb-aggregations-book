@@ -168,7 +168,8 @@
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
 <p>You want to generate a report to list all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id. To achieve this, you need to take the customer <em>orders</em> collection and join each order record to the corresponding product record in the <em>products</em> collection. There is a many:1 relationship between both collections, resulting in a 1:1 join when matching an order to a product. The join will use a single field comparison between both sides, based on the product's id.</p>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
-<p>Drop any old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021:</p>
+<p>Drop any old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021 (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):</p>
+<p> <strong>-Part 1-</strong></p>
 <pre><code class="language-javascript">use book-one-to-one-join;
 db.dropDatabase();
 
@@ -202,8 +203,9 @@ db.products.insertMany([
     &quot;description&quot;: &quot;Hose + nosels + winder for tidy storage&quot;,
   },
 ]); 
-
-// Create index for a orders collection
+</code></pre>
+<p> <strong>-Part 2-</strong></p>
+<pre><code class="language-javascript">// Create index for a orders collection
 db.orders.createIndex({&quot;orderdate&quot;: -1});
 
 // Insert 4 records into the orders collection

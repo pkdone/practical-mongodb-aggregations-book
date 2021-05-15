@@ -1,6 +1,6 @@
 # Introducing MongoDB Aggregations
 
-## What Is The Aggregation Framework?
+## What Are MongoDB Aggregations?
 
 MongoDB's aggregation pipeline language is somewhat of a paradox. It can appear daunting, yet it is straightforward. It can seem verbose, yet it is lean and to the point. It is [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) and able to solve any business problem __*__. Conversely, it is a strongly opinionated [Domain Specific Language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language), where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.
 
@@ -14,7 +14,7 @@ The Aggregation Framework's declarative and functional characteristics ultimatel
 
 ![MongoDB Aggregation Framework developer vs database engine optimizations comparison](./pics/optimise.png)
 
-Last and by far least in terms of importance is a discussion about syntax. So far, MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, with what syntax is a MongoDB aggregation pipeline constructed? The answer is "it depends", and the answer is mostly irrelevant. This book will highlight pipeline examples using the Mongo Shell and the JavaScript interpreter it runs in. The book will express aggregation pipelines using a [JSON](https://en.wikipedia.org/wiki/JSON) based syntax. However, if you are using one of the many [programming language drivers](https://docs.mongodb.com/drivers/) that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON. An aggregation is specified as an array of objects, regardless of how the programming language may facilitate this. This programmatic rather than textual format has a couple of advantages compared to querying with a string. It has a low vulnerability to [injection attacks](https://en.wikipedia.org/wiki/SQL_injection), and it is highly [composable](https://en.wikipedia.org/wiki/Composability).
+Last and by far least in terms of importance is a discussion about syntax. So far, MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, with what syntax is a MongoDB aggregation pipeline constructed? The answer is "it depends", and the answer is mostly irrelevant. This book will highlight pipeline examples using MongoDB's Shell and the JavaScript interpreter it runs in. The book will express aggregation pipelines using a [JSON](https://en.wikipedia.org/wiki/JSON) based syntax. However, if you are using one of the many [programming language drivers](https://docs.mongodb.com/drivers/) that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON. An aggregation is specified as an array of objects, regardless of how the programming language may facilitate this. This programmatic rather than textual format has a couple of advantages compared to querying with a string. It has a low vulnerability to [injection attacks](https://en.wikipedia.org/wiki/SQL_injection), and it is highly [composable](https://en.wikipedia.org/wiki/Composability).
 
 
 ## What's In A Name?
