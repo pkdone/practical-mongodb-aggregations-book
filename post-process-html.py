@@ -30,7 +30,7 @@ def main():
     filepaths = glob.glob('./docs/**/*.html', recursive=True)
 
     for filepath in filepaths:
-      add_analytics_tag_to_html_file(filepath)
+        add_analytics_tag_to_html_file(filepath)
 
     print('Ending post-processing of HTML files')
 
@@ -39,14 +39,14 @@ def main():
 # Add Google Analytics tag to HTML before </head> tag.
 ####
 def add_analytics_tag_to_html_file(filepath):
-  print(f' {filepath}')
+    print(f' {filepath}')
 
-  with open(filepath, 'r+') as f:
-      text = f.read()
-      text = re.sub(analytics_html_target, analytics_html_snippet, text)
-      f.seek(0)
-      f.write(text)
-      f.truncate()
+    with open(filepath, 'r+') as f:
+        text = f.read()
+        text = re.sub(analytics_html_target, analytics_html_snippet, text)
+        f.seek(0)
+        f.write(text)
+        f.truncate()
 
 
 ####
