@@ -3,7 +3,7 @@ authors = ["Paul Done"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Practical MongoDB Aggregations"
+title = "Practical MongoDB Aggregations Book"
 description = "Learn how to develop effective and optimal data manipulation and analytics pipelines with this book, using the MongoDB Aggregation Framework"
 
 [output.html]
