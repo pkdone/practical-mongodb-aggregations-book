@@ -242,7 +242,7 @@ db.orders.insertMany([
     &quot;orderdate&quot;: {
       &quot;$gte&quot;: ISODate(&quot;2020-01-01T00:00:00Z&quot;),
       &quot;$lt&quot;: ISODate(&quot;2021-01-01T00:00:00Z&quot;),
-    }
+    },
   }},
   
   // Sort by order date ascending (required to pick out 'first_purchase_date' below)
