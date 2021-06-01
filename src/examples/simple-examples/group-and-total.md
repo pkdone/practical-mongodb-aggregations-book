@@ -81,7 +81,7 @@ var pipeline = [
     "orderdate": {
       "$gte": ISODate("2020-01-01T00:00:00Z"),
       "$lt": ISODate("2021-01-01T00:00:00Z"),
-    }
+    },
   }},
   
   // Sort by order date ascending (required to pick out 'first_purchase_date' below)
