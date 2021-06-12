@@ -25,7 +25,7 @@ To install the Rust and mdBook required build tools on your local workstation:
 
  * In the file `src/credits.md` increment the version number of the book
  * Via a terminal/shell/command-line, from the base folder of this GitHub repo:
-   - Run the following script to rebuild the latest version of the book, and copy it to the `/docs` directory: `./stage_book_for_publish.sh`
+   - Run the following script which will rebuild the latest version of the book, copy it to the `/docs` directory, and add analytics tracking to each generated book HTML page: `./stage_book_for_publish.sh`
    - Using the appropriate GitHub commands, in the _main_ branch: Add changes, Commit changes, Push to main in GitHub
  
 &nbsp;(the published new version of the book is also accessible via: [pkdone.github.io/practical-mongodb-aggregations-book/](https://pkdone.github.io/practical-mongodb-aggregations-book))
@@ -69,7 +69,7 @@ Future versions of the book may include the following topics, yet to be written 
  * In the Composability chapter, provide more detail and examples on factoring out complex boilerplate parts of a pipeline into separate JavaScript functions
  * New section in book for complex field value manipulations (focussing on strings and arrays manipulations)
  * Further example chapters at each of the 3 complexity levels
- * One big $set stage vs multiple $set stage - pros & cons
+ * One big $set stage vs multiple $set stages - pros & cons
 
 
 ----
