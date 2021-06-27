@@ -127,22 +127,22 @@ Nine unique language names should be returned sorted in alphabetical order, as s
 
 ```javascript
 [
-  { language: 'English' },
-  { language: 'French' },
-  { language: 'Gaelic' },
-  { language: 'German' },
-  { language: 'Italian' },
-  { language: 'Spanish' },
-  { language: 'Welsh' }
+  {language: 'English'},
+  {language: 'French'},
+  {language: 'Gaelic'},
+  {language: 'German'},
+  {language: 'Italian'},
+  {language: 'Spanish'},
+  {language: 'Welsh'}
 ]
 ```
 
 
 ## Observations
 
- * __Todo.__ TODO. unwind on non array fields - some fields simple, some list
+ * __Unwinding Non-Arrays.__ In some documents in this example, the `language` field is an array, whilst the same field is a simple string value in other documents. The `$unwind` stage can seamlessly deal with both field types and does not throw an error if it encounters a non-array value. Instead, if the field is not an array, `$stage` outputs a single record using the field's string value in the same way it would if the field was an array containing just one element. 
 
- * __Todo.__ TODO. group stage finds distinct
+ * __Group ID Provides Unique Values.__ By grouping on the field that unique values are required for and not accumulating any other fields such as total or count, the output is just every unique group's ID, which in this case is every unique language.
 
- * __Unset Alternative.__ If this example was consistent with some of the earlier examples in this book, the pipeline would include an additional `$unset` stage to exclude the `_id` field. However, in this case, chiefly to show there is another way, the pipeline marks the `_id` field for exclusion in the `$set` stage by being assigned the `$$REMOVE` variable.
+ * __Unset Alternative.__ If this example were consistent with some of the earlier examples in this book, the pipeline would include an additional `$unset` stage to exclude the `_id` field. However, in this case, partly to show there is another way, the pipeline marks the `_id` field for exclusion in the `$set` stage by being assigned the `$$REMOVE` variable.
 
