@@ -51,25 +51,26 @@ var pipeline = [
     "payment_date": {    
       "$let": {
         "vars": {
-          "txt": "$payment_date",  // Assign "payment_date" field to variable "txt"
+          "txt": "$payment_date",  // Assign "payment_date" field to variable "txt",
+          "month": {"$substrCP": ["$payment_date", 3, 3]},  // Extract month text
         },
         "in": { 
           "$dateFromString": {"format": "%d-%m-%Y %H.%M.%S.%L", "dateString":
             {"$concat": [
               {"$substrCP": ["$$txt", 0, 3]},  // Use 1st 3 chars in string
               {"$switch": {"branches": [  // Replace month 3 chars with month number
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "JAN"]}, "then": "01"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "FEB"]}, "then": "02"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "MAR"]}, "then": "03"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "APR"]}, "then": "04"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "MAY"]}, "then": "05"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "JUN"]}, "then": "06"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "JUL"]}, "then": "07"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "AUG"]}, "then": "08"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "SEP"]}, "then": "09"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "OCT"]}, "then": "10"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "NOV"]}, "then": "11"},
-                {"case": {"$eq": [{"$substrCP": ["$$txt", 3, 3]}, "DEC"]}, "then": "12"},
+                {"case": {"$eq": ["$$month", "JAN"]}, "then": "01"},
+                {"case": {"$eq": ["$$month", "FEB"]}, "then": "02"},
+                {"case": {"$eq": ["$$month", "MAR"]}, "then": "03"},
+                {"case": {"$eq": ["$$month", "APR"]}, "then": "04"},
+                {"case": {"$eq": ["$$month", "MAY"]}, "then": "05"},
+                {"case": {"$eq": ["$$month", "JUN"]}, "then": "06"},
+                {"case": {"$eq": ["$$month", "JUL"]}, "then": "07"},
+                {"case": {"$eq": ["$$month", "AUG"]}, "then": "08"},
+                {"case": {"$eq": ["$$month", "SEP"]}, "then": "09"},
+                {"case": {"$eq": ["$$month", "OCT"]}, "then": "10"},
+                {"case": {"$eq": ["$$month", "NOV"]}, "then": "11"},
+                {"case": {"$eq": ["$$month", "DEC"]}, "then": "12"},
                ], "default": "ERROR"}},
               "-20",  // Add hyphen + hardcoded century 2 digits
               {"$substrCP": ["$$txt", 7, 15]}  // Use remaining 3 millis (ignore last 6 nanosecs)

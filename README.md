@@ -64,7 +64,6 @@ To create and then submit a new chapter for review and acceptance:
 
 Future versions of the book may include the following topics, yet to be written (not an exclusive list):
 
- * Aggregations considerations when Sharding
  * When prototyping large data sets, use the trick of using $sample or $limit to speed up aggregation execution time when prototyping (but avoiding dangers of never testing without these)
  * In the Composability chapter, provide more detail and examples on factoring out complex boilerplate parts of a pipeline into separate JavaScript functions
  * New section in book for complex field value manipulations (focussing on strings and arrays manipulations)

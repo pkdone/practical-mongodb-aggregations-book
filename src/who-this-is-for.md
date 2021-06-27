@@ -9,5 +9,5 @@ This book is for developers, architects, data analysts, data engineers and data 
 This book is not for complete novices, explaining how you should get started on your first MongoDB aggregation pipeline. Neither is this book a comprehensive programming language guide detailing every nuance of the Aggregation Framework and its syntax. This book intends to assist you with two key aspects:
 
  1. Providing a set of opinionated yet easy to digest principles and approaches for increasing your effectiveness in using the Aggregation Framework
- 2. Providing a set of examples for using the Aggregation Framework to solve common data manipulation challenges with varying degrees of complexity
+ 2. Providing a set of examples for building aggregation pipelines to solve various types of data manipulation and analysis challenges
 

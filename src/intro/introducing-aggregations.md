@@ -1,6 +1,10 @@
 # Introducing MongoDB Aggregations
 
-## What Are MongoDB Aggregations?
+## What Is MongoDB’s Aggregation Framework?
+
+**TODO:** New intro section to be dropped in here
+
+## The MongoDB Aggregations Language
 
 MongoDB's aggregation pipeline language is somewhat of a paradox. It can appear daunting, yet it is straightforward. It can seem verbose, yet it is lean and to the point. It is [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) and able to solve any business problem __*__. Conversely, it is a strongly opinionated [Domain Specific Language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language), where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.
 
