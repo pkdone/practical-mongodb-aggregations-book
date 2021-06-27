@@ -27,6 +27,7 @@
         - [Filtered Top Subset](examples/foundational/filtered-top-subset.md)
         - [Group & Total](examples/foundational/group-and-total.md)
         - [Unpack Arrays & Group Differently](examples/foundational/unpack-array-group-differently.md)
+        - [Distinct List Of Values](examples/foundational/distinct-values.md)
     - [Joining Data Examples](examples/joining/joining.md)
         - [One-to-One Join](examples/joining/one-to-one-join.md)    
         - [Multi-Field Join & One-to-Many](examples/joining/multi-one-to-many.md)
