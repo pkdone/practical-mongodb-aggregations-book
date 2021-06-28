@@ -10,7 +10,7 @@ Suppose you have two pipelines with one stage in each and run the second pipelin
 
 ## Specific Tips To Promote Composability
 
-In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using MongoDB's Shell (or they use the 'disable stage' capability provided by the [GUI tools](./getting-started.md) for MongoDB).
+In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using MongoDB's Shell (or they use the 'disable stage' capability provided by the [GUI tools](../intro/getting-started.md) for MongoDB).
 
 To encourage composability and hence productivity, some of the principles to strive for are:
 

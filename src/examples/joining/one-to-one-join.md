@@ -176,7 +176,7 @@ Three documents should be returned, representing the three customers orders that
 
 ## Observations
 
- * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field from each collection. For an illustration of performing a join based on two or more matching fields, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
+ * __Single Field Match.__ The pipeline includes a `$lookup` join between a single field from each collection. For an illustration of performing a join based on two or more matching fields, see the [Multi-Field Join & One-to-Many](./multi-one-to-many.html) example.
  
- * __First Element Assumption.__ In this particular data model example, the join between the two collections is 1:1. Therefore the returned array of joined elements coming out of the `$lookup` stage always contains precisely one array element. As a result, the pipeline extracts the data from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join instead, see the [Multi-Field Join & One-to-Many](../moderate-examples/multi-one-to-many.html) example.
+ * __First Element Assumption.__ In this particular data model example, the join between the two collections is 1:1. Therefore the returned array of joined elements coming out of the `$lookup` stage always contains precisely one array element. As a result, the pipeline extracts the data from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join instead, see the [Multi-Field Join & One-to-Many](./multi-one-to-many.html) example.
 

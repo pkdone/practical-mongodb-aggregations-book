@@ -32,4 +32,5 @@ Below is a summary of the evolution of the Aggregation Framework in terms of sig
 * __MongoDB 4.0 (July 2018)__: Number to/from string operators, string trimming operators
 * __MongoDB 4.2 (August 2019)__: A merge stage to insert/update/replace records in existing non-sharded & sharded collections, set & unset stages to address the verbosity/rigidity of project stages, trigonometry operators, regular expression operators
 * __MongoDB 4.4 (July 2020)__: A union stage, custom JavaScript expression operators (function & accumulator), first & last array element operators, string replacement operators, a random number operator
+* __MongoDB 5.0 (July 2021)__: A setWindowFields stage, TODO: new time series related operators
 

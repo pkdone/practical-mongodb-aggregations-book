@@ -18,7 +18,7 @@ Expressions come in one of three primary flavours:
 
    - __Bind user variables.__ For storing values you declare with a `$let` operator (or with the 'let' option of a `$lookup` stage, or 'as' option of a `$map` or `$filter` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
 
-You can combine these three categories of expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/intricate-examples/mask-sensitive-fields.html) example, which combines all three expressions.
+You can combine these three categories of expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/securing-data/mask-sensitive-fields.html) example, which combines all three expressions.
 
 ```javascript
 "customer_info": {"$cond": {
