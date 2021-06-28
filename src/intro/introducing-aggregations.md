@@ -2,7 +2,17 @@
 
 ## What Is MongoDB’s Aggregation Framework?
 
-**TODO:** New intro section to be dropped in here
+MongoDB’s Aggregation Framework enables users to send an analytics or data processing workload, written using the framework’s aggregation language, to the database for it to execute the workload against the data it holds. You can think of the Aggregation Framework as having two parts:
+
+ 1. The Aggregations API provided by the MongoDB Driver embedded in each application to enable the application to define an aggregation task called a pipeline and send it to the database for the database to process
+ 2. The Aggregation Runtime running in the database to receive the pipeline request from the application and execute the pipeline against the persisted data
+
+The following diagram illustrates these two elements and their inter-relationship:
+
+![MongoDB Aggregation Framework components - Driver API and Database Aggregation Runtime](./pics/aggregation-components.png)
+
+The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation framework. In the database, the Aggregation Runtime re-uses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.
+
 
 ## The MongoDB Aggregations Language
 
