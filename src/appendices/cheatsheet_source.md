@@ -1,8 +1,8 @@
 # Stages Cheatsheet Source
 
-To test all the aggregation stage examples shown in the [Cheatsheet](cheatsheet.html), run the following JavaScript from a MongoDB Shell connected to a MongoDB database.
+To test all the aggregation stage examples shown in the [Cheatsheet](cheatsheet.html), run the following JavaScript from a MongoDB shell connected to a MongoDB database.
 
-## Collection Configuration & Data Population
+## Collections Configuration & Data Population
 
 ```javascript
 // DB configuration
