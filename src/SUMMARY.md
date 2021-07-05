@@ -41,7 +41,7 @@
     - [Securing Data Examples](examples/securing-data/securing-data.md)
         - [Restricted View](examples/securing-data/restricted-view.md)
         - [Mask Sensitive Fields](examples/securing-data/mask-sensitive-fields.md)
-    - [Time-Series](examples/time-series/time-series.md)
+    - [Time-Series Examples](examples/time-series/time-series.md)
         - [IOT Power Consumption](examples/time-series/iot-power-consumption.md)
 
 ## Appendices
