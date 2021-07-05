@@ -18,8 +18,8 @@ Drop any old version of the database (if it exists) and then populate a new `use
 use book-largest-graph-network;
 db.dropDatabase();
 
-// Create index on field which for each graph traversal hop will connect to
-db.users.createIndex({"name": 1})
+// Create index on field which each graph traversal hop will connect to
+db.users.createIndex({"name": 1});
 
 // Insert records into the users collection
 db.users.insertMany([

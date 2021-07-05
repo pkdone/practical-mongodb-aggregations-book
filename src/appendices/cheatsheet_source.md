@@ -41,14 +41,16 @@ db.places.insertMany([
 
 ## Aggregation Stage Examples
 
+> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running an earlier version, first comment out the appropriate JavaScript 'stage' sections before executing the code._
+
 ```javascript
-// $addFields
+// $addFields  (v3.4)
 db.shapes.aggregate([
   {"$addFields": {"z": "●"}}
 ]);
 
 
-// $bucket
+// $bucket  (v3.4)
 db.shapes.aggregate([
   {"$bucket": {
     "groupBy": "$val", "boundaries": [0, 25, 50, 75, 100], "default": "Other"
@@ -56,19 +58,19 @@ db.shapes.aggregate([
 ]);
 
 
-// $bucketAuto
+// $bucketAuto  (v3.4)
 db.shapes.aggregate([
   {"$bucketAuto": {"groupBy": "$val", "buckets": 3}}
 ]);
 
 
-// $count
+// $count  (v3.4)
 db.shapes.aggregate([
   {"$count": "amount"}
 ]);
 
 
-// $facet
+// $facet  (v3.4)
 db.shapes.aggregate([
   {"$facet": {
     "X_CIRCLE_FACET": [{"$match": {"x": "●"}}],
@@ -77,7 +79,7 @@ db.shapes.aggregate([
 ]);
 
 
-// $geoNear
+// $geoNear  (v2.2)
 db.places.aggregate([
   {"$geoNear": {
     "near": {"type": "Point", "coordinates": [9,9]}, "distanceField": "distance"
@@ -85,7 +87,7 @@ db.places.aggregate([
 ]);
 
 
-// $graphLookup
+// $graphLookup  (v3.4)
 db.shapes.aggregate([
   {"$graphLookup": {
     "from": "shapes",
@@ -99,19 +101,19 @@ db.shapes.aggregate([
 ]);
 
 
-// $group
+// $group  (v2.2)
 db.shapes.aggregate([
   {"$group": {"_id": "$x", "ylist": {"$push": "$y"}}}
 ]);
 
 
-// $limit
+// $limit  (v2.2)
 db.shapes.aggregate([
   {"$limit": 2}
 ]);
 
 
-// $lookup
+// $lookup  (v3.2)
 db.shapes.aggregate([
   {"$lookup": {
     "from": "lists",
@@ -122,13 +124,13 @@ db.shapes.aggregate([
 ]);
 
 
-// $match
+// $match  (v2.2)
 db.shapes.aggregate([
   {"$match": {"y": "▲"}  
 }]);
 
 
-// $merge
+// $merge  (v4.2)
 db.results.drop();
 db.shapes.aggregate([
   {"$merge": {"into": "results"}}
@@ -136,7 +138,7 @@ db.shapes.aggregate([
 db.results.find();
 
 
-// $out
+// $out  (v2.6)
 db.results.drop();
 db.shapes.aggregate([
   {"$out": "results"}
@@ -144,13 +146,13 @@ db.shapes.aggregate([
 db.results.find();
 
 
-// $project
+// $project  (v2.2)
 db.shapes.aggregate([
   {"$project": {"x": 1}}
 ]);
 
 
-// $redact
+// $redact  (v2.6)
 db.places.aggregate([
   {"$redact": {"$cond": {
     "if"  : {"$eq": ["$type", "LineString"]},
@@ -160,31 +162,31 @@ db.places.aggregate([
 ]);
 
 
-// $replaceRoot
+// $replaceRoot  (v3.4)
 db.lists.aggregate([
   {"$replaceRoot": {"newRoot": {"first": {"$first": "$b"}, "last": {"$last": "$b"}}}}
 ]);
 
 
-// $replaceWith
+// $replaceWith  (v4.2)
 db.lists.aggregate([
   {"$replaceWith": {"first": {"$first": "$b"}, "last": {"$last": "$b"}}}
 ]);
 
 
-// $sample
+// $sample  (v3.2)
 db.shapes.aggregate([
   {"$sample": {"size": 2}}
 ]);
 
 
-// $set
+// $set  (v4.2)
 db.shapes.aggregate([
   {"$set": {"y": "▲"}}
 ]);
 
 
-// $setWindowFields
+// $setWindowFields  (v5.0)
 db.shapes.aggregate([
   {"$setWindowFields": {
     "partitionBy": "$x",
@@ -201,37 +203,37 @@ db.shapes.aggregate([
 ]);
 
 
-// $skip
+// $skip  (v2.2)
 db.shapes.aggregate([
   {"$skip": 5}
 ]);
 
 
-// $sort
+// $sort  (v2.2)
 db.shapes.aggregate([
   {"$sort": {"x": 1, "y": 1}}
 ]);
 
 
-// $sortByCount
+// $sortByCount  (v3.4)
 db.shapes.aggregate([
   {"$sortByCount": "$x"}
 ]);
 
 
-// $unionWith
+// $unionWith  (v4.4)
 db.shapes.aggregate([
   {"$unionWith": {"coll": "lists"}}
 ]);
 
 
-// $unset
+// $unset  (v4.2)
 db.shapes.aggregate([
   {"$unset": ["x"]}
 ]);
 
 
-// $unwind
+// $unwind  (v2.2)
 db.lists.aggregate([
   {"$unwind": {"path": "$b"}}
 ]);

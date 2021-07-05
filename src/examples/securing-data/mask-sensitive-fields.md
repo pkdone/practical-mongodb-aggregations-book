@@ -25,38 +25,38 @@ db.dropDatabase();
 
 // Insert records into the payments collection
 db.payments.insertMany([
-    {
-        "card_name": "Mrs. Jane A. Doe",
-        "card_num": "1234567890123456",
-        "card_expiry": ISODate("2023-08-31T23:59:59Z"),
-        "card_sec_code": "123",
-        "card_type": "CREDIT",        
-        "transaction_id": "eb1bd77836e8713656d9bf2debba8900",
-        "transaction_date": ISODate("2021-01-13T09:32:07Z"),
-        "transaction_amount": NumberDecimal("501.98"),
-        "reported": false,
-        "customer_info": {
-            "category": "RESTRICTED",
-            "rating": 89,
-            "risk": 3,
-        },
+  {
+    "card_name": "Mrs. Jane A. Doe",
+    "card_num": "1234567890123456",
+    "card_expiry": ISODate("2023-08-31T23:59:59Z"),
+    "card_sec_code": "123",
+    "card_type": "CREDIT",        
+    "transaction_id": "eb1bd77836e8713656d9bf2debba8900",
+    "transaction_date": ISODate("2021-01-13T09:32:07Z"),
+    "transaction_amount": NumberDecimal("501.98"),
+    "reported": false,
+    "customer_info": {
+      "category": "RESTRICTED",
+      "rating": 89,
+      "risk": 3,
     },
-    {
-        "card_name": "Jim Smith",
-        "card_num": "9876543210987654",
-        "card_expiry": ISODate("2022-12-31T23:59:59Z"),
-        "card_sec_code": "987",
-        "card_type": "DEBIT",        
-        "transaction_id": "634c416a6fbcf060bb0ba90c4ad94f60",
-        "transaction_date": ISODate("2020-11-24T19:25:57Z"),
-        "transaction_amount": NumberDecimal("64.01"),
-        "reported": true,
-        "customer_info": {
-            "category": "NORMAL",
-            "rating": 78,
-            "risk": 55,
-        },
+  },
+  {
+    "card_name": "Jim Smith",
+    "card_num": "9876543210987654",
+    "card_expiry": ISODate("2022-12-31T23:59:59Z"),
+    "card_sec_code": "987",
+    "card_type": "DEBIT",        
+    "transaction_id": "634c416a6fbcf060bb0ba90c4ad94f60",
+    "transaction_date": ISODate("2020-11-24T19:25:57Z"),
+    "transaction_amount": NumberDecimal("64.01"),
+    "reported": true,
+    "customer_info": {
+      "category": "NORMAL",
+      "rating": 78,
+      "risk": 55,
     },
+  },
 ]);
 ```
 

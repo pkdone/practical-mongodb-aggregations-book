@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You want to query a collection of persons where each document contains data on one or more languages spoken by the person. The query result should be an alphabetically sorted list of unique languages that a developer can use to populate a list of values in a user interface's "drop-down" widget.
+You want to query a collection of persons where each document contains data on one or more languages spoken by the person. The query result should be an alphabetically sorted list of unique languages that a developer can subsequently use to populate a list of values in a user interface's "drop-down" widget.
 
 This example is the equivalent of a _select distinct_ statement in [SQL](https://en.wikipedia.org/wiki/SQL).
 
@@ -140,9 +140,9 @@ Nine unique language names should be returned sorted in alphabetical order, as s
 
 ## Observations
 
- * __Unwinding Non-Arrays.__ In some documents in this example, the `language` field is an array, whilst the same field is a simple string value in other documents. The `$unwind` stage can seamlessly deal with both field types and does not throw an error if it encounters a non-array value. Instead, if the field is not an array, `$stage` outputs a single record using the field's string value in the same way it would if the field was an array containing just one element. 
+ * __Unwinding Non-Arrays.__ In some of the example's documents, the `language` field is an array, whilst in others, the field is a simple string value. The `$unwind` stage can seamlessly deal with both field types and does not throw an error if it encounters a non-array value. Instead, if the field is not an array, the stage outputs a single record using the field's string value in the same way it would if the field was an array containing just one element. If you are sure the field in every document will only ever be a simple field rather than an array, you can omit this first stage (`$unwind`) from the pipeline.
 
- * __Group ID Provides Unique Values.__ By grouping on the field that unique values are required for and not accumulating any other fields such as total or count, the output is just every unique group's ID, which in this case is every unique language.
+ * __Group ID Provides Unique Values.__ By grouping on a single field and not accumulating other fields such as total or count, the output of a `$group` stage is just every unique group's ID, which in this case is every unique language.
 
- * __Unset Alternative.__ If this example were consistent with some of the earlier examples in this book, the pipeline would include an additional `$unset` stage to exclude the `_id` field. However, in this case, partly to show there is another way, the pipeline marks the `_id` field for exclusion in the `$set` stage by being assigned the `$$REMOVE` variable.
+ * __Unset Alternative.__ For the pipeline to be consistent with earlier examples in this book, it could have included an additional `$unset` stage to exclude the `_id` field. However, partly to show another way, the example pipeline used here marks the `_id` field for exclusion in the `$set` stage by being assigned the `$$REMOVE` variable.
 
