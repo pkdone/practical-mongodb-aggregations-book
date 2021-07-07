@@ -4,7 +4,7 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 2.00beta01
+Version: 2.00beta03
 
 Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 

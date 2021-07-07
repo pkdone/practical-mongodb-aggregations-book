@@ -5,11 +5,11 @@ __Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of $setWindowFields s
 
 ## Scenario
 
-You are monitoring various Wi-Fi Hub devices running in two buildings on an industrial campus. Every 30 seconds, each device sends its current power consumption back to base, which a central database persists. You want to analyse this data to see how much energy (in Watt-hours - _Wh_) a device has consumed over the last hour for each device reading received. Furthermore, you then want to compute the total energy consumed by all the devices combined in each building for every hour.
+You are monitoring various air-conditioning units running in two buildings on an industrial campus. Every 30 seconds, a device in each unit sends the unit's current power consumption reading back to base, which a central database persists. You want to analyse this data to see how much energy in kilowatt-hours (kWh) each air-conditioning unit has consumed over the last hour for each device reading received. Furthermore, you then want to compute the total energy consumed by all the air-conditioning units combined in each building for every hour.
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate a new `device_readings` collection with device readings spanning 4 hours of a day for devices in two different buildings.
+Drop any old version of the database (if it exists) and then populate a new `device_readings` collection with device readings spanning 3 hours of a day for air-conditioning units in two different buildings.
 
 ```javascript
 use book-iot-power-consumption;
@@ -18,166 +18,126 @@ db.dropDatabase();
 // Create compount index to support the partitionBy & sortBy of setWindowFields
 db.device_readings.createIndex({"deviceID": 1, "timestamp": 1});
 
-// Insert 24 records into the device readings collection
+// Insert 18 records into the device readings collection
 db.device_readings.insertMany([
-  // 11:29am sensor readings
+  // 11:29am device readings
   {
     "buildingID": "Building-ABC", 
-    "deviceID": "WifiHub-111",    
+    "deviceID": "UltraAirCon-111",    
     "timestamp": ISODate("2021-07-03T11:29:00Z"),
-    "powerWatts": 8,     
+    "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
+    "deviceID": "UltraAirCon-222",    
     "timestamp": ISODate("2021-07-03T11:29:00Z"),
-    "powerWatts": 7,     
+    "powerKilowatts": 7,     
   },
   {
     "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
+    "deviceID": "UltraAirCon-666",    
     "timestamp": ISODate("2021-07-03T11:29:00Z"),
-    "powerWatts": 10,     
+    "powerKilowatts": 10,     
   },
   
-  // 11:59am sensor readings
+  // 11:59am device readings
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
+    "deviceID": "UltraAirCon-222",    
     "timestamp": ISODate("2021-07-03T11:59:00Z"),
-    "powerWatts": 9,     
+    "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-111",    
+    "deviceID": "UltraAirCon-111",    
     "timestamp": ISODate("2021-07-03T11:59:00Z"),
-    "powerWatts": 8,     
+    "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
+    "deviceID": "UltraAirCon-666",    
     "timestamp": ISODate("2021-07-03T11:59:00Z"),
-    "powerWatts": 11,     
+    "powerKilowatts": 11,     
   },
   
-  // 12:29pm sensor readings
+  // 12:29pm device readings
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
+    "deviceID": "UltraAirCon-222",    
     "timestamp": ISODate("2021-07-03T12:29:00Z"),
-    "powerWatts": 9,     
+    "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-111",    
+    "deviceID": "UltraAirCon-111",    
     "timestamp": ISODate("2021-07-03T12:29:00Z"),
-    "powerWatts": 9,     
+    "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
+    "deviceID": "UltraAirCon-666",    
     "timestamp": ISODate("2021-07-03T12:29:00Z"),
-    "powerWatts": 10,     
+    "powerKilowatts": 10,     
   },
 
-  // 12:59pm sensor readings
+  // 12:59pm device readings
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
+    "deviceID": "UltraAirCon-222",    
     "timestamp": ISODate("2021-07-03T12:59:00Z"),
-    "powerWatts": 8,     
+    "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-111",    
+    "deviceID": "UltraAirCon-111",    
     "timestamp": ISODate("2021-07-03T12:59:00Z"),
-    "powerWatts": 8,     
+    "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
+    "deviceID": "UltraAirCon-666",    
     "timestamp": ISODate("2021-07-03T12:59:00Z"),
-    "powerWatts": 11,     
+    "powerKilowatts": 11,     
   },
 
-  // 13:29pm sensor readings
+  // 13:29pm device readings
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
+    "deviceID": "UltraAirCon-222",    
     "timestamp": ISODate("2021-07-03T13:29:00Z"),
-    "powerWatts": 9,     
+    "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-111",    
+    "deviceID": "UltraAirCon-111",    
     "timestamp": ISODate("2021-07-03T13:29:00Z"),
-    "powerWatts": 9,     
+    "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
+    "deviceID": "UltraAirCon-666",    
     "timestamp": ISODate("2021-07-03T13:29:00Z"),
-    "powerWatts": 10,     
+    "powerKilowatts": 10,     
   },
 
-  // 13:59pm sensor readings
+  // 13:59pm device readings
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
+    "deviceID": "UltraAirCon-222",    
     "timestamp": ISODate("2021-07-03T13:59:00Z"),
-    "powerWatts": 8,     
+    "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-111",    
+    "deviceID": "UltraAirCon-111",    
     "timestamp": ISODate("2021-07-03T13:59:00Z"),
-    "powerWatts": 8,     
+    "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
+    "deviceID": "UltraAirCon-666",    
     "timestamp": ISODate("2021-07-03T13:59:00Z"),
-    "powerWatts": 11,     
-  },
-
-  // 14:29pm sensor readings
-  {
-    "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
-    "timestamp": ISODate("2021-07-03T14:29:00Z"),
-    "powerWatts": 10,     
-  },
-  {
-    "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-111",    
-    "timestamp": ISODate("2021-07-03T14:29:00Z"),
-    "powerWatts": 9,     
-  },
-  {
-    "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
-    "timestamp": ISODate("2021-07-03T14:29:00Z"),
-    "powerWatts": 11,     
-  },
-
-  // 14:59pm sensor readings
-  {
-    "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-222",    
-    "timestamp": ISODate("2021-07-03T14:59:00Z"),
-    "powerWatts": 9,     
-  },
-  {
-    "buildingID": "Building-ABC",
-    "deviceID": "WifiHub-111",    
-    "timestamp": ISODate("2021-07-03T14:59:00Z"),
-    "powerWatts": 10,     
-  },
-  {
-    "buildingID": "Building-XYZ",
-    "deviceID": "WifiHub-666",    
-    "timestamp": ISODate("2021-07-03T14:59:00Z"),
-    "powerWatts": 12,     
+    "powerKilowatts": 11,     
   },
 ]);
 ```
@@ -185,18 +145,18 @@ db.device_readings.insertMany([
 
 ## Aggregation Pipeline
 
-Define a pipeline ready to perform an aggregation to calculate the energy a device has consumed over the last hour for each reading received:
+Define a pipeline ready to perform an aggregation to calculate the energy an air-conditioning unit has consumed over the last hour for each reading received:
 
 ```javascript
 var pipelineRawReadings = [
-  // Calculate each device's energy consumed over the last hour for each raading
+  // Calculate each unit's energy consumed over the last hour for each raading
   {"$setWindowFields": {
     "partitionBy": "$deviceID",
     "sortBy": {"timestamp": 1},    
     "output": {
-      "consumedWattHours": {
+      "consumedKilowattHours": {
         "$integral": {
-          "input": "$powerWatts",
+          "input": "$powerKilowatts",
           "outputUnit": "hour",
         },
         "window": {
@@ -209,18 +169,18 @@ var pipelineRawReadings = [
 ];
 ```
 
-Define a pipeline ready to compute the total energy consumed by all the devices combined in each building for every hour:
+Define a pipeline ready to compute the total energy consumed by all the air-conditioning units combined in each building for every hour:
 
 ```javascript
 var pipelineBuildingsSummary = [
-  // Calculate each device's energy consumed over the last hour for each raading
+  // Calculate each unit's energy consumed over the last hour for each raading
   {"$setWindowFields": {
     "partitionBy": "$deviceID",
     "sortBy": {"timestamp": 1},    
     "output": {
-      "consumedWattHours": {
+      "consumedKilowattHours": {
         "$integral": {
-          "input": "$powerWatts",
+          "input": "$powerKilowatts",
           "outputUnit": "hour",
         },
         "window": {
@@ -231,7 +191,7 @@ var pipelineBuildingsSummary = [
     },
   }},
   
-  // Sort each reading by device and then by timestamp
+  // Sort each reading by unit/device and then by timestamp
   {"$sort": {
     "deviceID": 1,
     "timestamp": 1,
@@ -250,17 +210,17 @@ var pipelineBuildingsSummary = [
       },
     },
     "buildingID": {"$last": "$buildingID"},
-    "consumedWattHours": {"$last": "$consumedWattHours"},
+    "consumedKilowattHours": {"$last": "$consumedKilowattHours"},
   }},    
 
   // Sum together the energy consumption for the whole building
-  // for each hour accross all the devices in the building   
+  // for each hour accross all the units in the building   
   {"$group": {
     "_id": {
       "buildingID": "$buildingID",
-      "dayHour": {"$dateToString": {"format": "%Y-%m-%d: %H", "date": "$_id.date"}},
+      "dayHour": {"$dateToString": {"format": "%Y-%m-%d  %H", "date": "$_id.date"}},
     },
-    "consumedWattHours": {"$sum": "$consumedWattHours"},
+    "consumedKilowattHours": {"$sum": "$consumedKilowattHours"},
   }},    
 
   // Sort the results by each building and then by each hourly summary
@@ -281,7 +241,7 @@ var pipelineBuildingsSummary = [
 
 ## Execution
 
-Execute an aggregation using the pipeline to calculate the energy a device has consumed over the last hour for each reading received and also view its explain plan:
+Execute an aggregation using the pipeline to calculate the energy an air-conditioning unit has consumed over the last hour for each reading received and also view its explain plan:
 
 ```javascript
 db.device_readings.aggregate(pipelineRawReadings);
@@ -291,7 +251,7 @@ db.device_readings.aggregate(pipelineRawReadings);
 db.device_readings.explain("executionStats").aggregate(pipelineRawReadings);
 ```
 
-Execute an aggregation using the pipeline to compute the total energy consumed by all the devices combined in each building for every hour and also view its explain plan:
+Execute an aggregation using the pipeline to compute the total energy consumed by all the air-conditioning units combined in each building for every hour and also view its explain plan:
 
 ```javascript
 db.device_readings.aggregate(pipelineBuildingsSummary);
@@ -303,106 +263,88 @@ db.device_readings.explain("executionStats").aggregate(pipelineBuildingsSummary)
 
 ## Expected Results
 
-For the pipeline to calculate the energy a device has consumed over the last hour for each reading received, results like the following should be returned (redacted for brevity - only showing the first few records):
+For the pipeline to calculate the energy an air-conditioning unit has consumed over the last hour for each reading received, results like the following should be returned (redacted for brevity - only showing the first few records):
 
 ```javascript
 [
   {
-    _id: ObjectId("60e203791fa2582f9d8cf830"),
+    _id: ObjectId("60e56c3b67efa144f838daec"),
     buildingID: 'Building-ABC',
-    deviceID: 'WifiHub-111',
+    deviceID: 'UltraAirCon-111',
     timestamp: ISODate("2021-07-03T11:29:00.000Z"),
-    powerWatts: 8,
-    consumedWattHours: 0
+    powerKilowatts: 8,
+    consumedKilowattHours: 0
   },
   {
-    _id: ObjectId("60e203791fa2582f9d8cf834"),
+    _id: ObjectId("60e56c3b67efa144f838daf0"),
     buildingID: 'Building-ABC',
-    deviceID: 'WifiHub-111',
+    deviceID: 'UltraAirCon-111',
     timestamp: ISODate("2021-07-03T11:59:00.000Z"),
-    powerWatts: 8,
-    consumedWattHours: 4
+    powerKilowatts: 8,
+    consumedKilowattHours: 4
   },
   {
-    _id: ObjectId("60e203791fa2582f9d8cf837"),
+    _id: ObjectId("60e56c3b67efa144f838daf3"),
     buildingID: 'Building-ABC',
-    deviceID: 'WifiHub-111',
+    deviceID: 'UltraAirCon-111',
     timestamp: ISODate("2021-07-03T12:29:00.000Z"),
-    powerWatts: 9,
-    consumedWattHours: 8.25
+    powerKilowatts: 9,
+    consumedKilowattHours: 8.25
   },
   {
-    _id: ObjectId("60e203791fa2582f9d8cf83a"),
+    _id: ObjectId("60e56c3b67efa144f838daf6"),
     buildingID: 'Building-ABC',
-    deviceID: 'WifiHub-111',
+    deviceID: 'UltraAirCon-111',
     timestamp: ISODate("2021-07-03T12:59:00.000Z"),
-    powerWatts: 8,
-    consumedWattHours: 8.5
+    powerKilowatts: 8,
+    consumedKilowattHours: 8.5
   },
   {
-    _id: ObjectId("60e203791fa2582f9d8cf83d"),
+    _id: ObjectId("60e56c3b67efa144f838daf9"),
     buildingID: 'Building-ABC',
-    deviceID: 'WifiHub-111',
+    deviceID: 'UltraAirCon-111',
     timestamp: ISODate("2021-07-03T13:29:00.000Z"),
-    powerWatts: 9,
-    consumedWattHours: 8.5
-  },
-  {
-    _id: ObjectId("60e203791fa2582f9d8cf840"),
-    buildingID: 'Building-ABC',
-    deviceID: 'WifiHub-111',
-    timestamp: ISODate("2021-07-03T13:59:00.000Z"),
-    powerWatts: 8,
-    consumedWattHours: 8.5
+    powerKilowatts: 9,
+    consumedKilowattHours: 8.5
   },
   ...
   ...
 ]
 ```
 
-For the pipeline to compute the total energy consumed by all the devices combined in each building for every hour, the following results should be returned:
+For the pipeline to compute the total energy consumed by all the air-conditioning units combined in each building for every hour, the following results should be returned:
 
 ```javascript
 [
   {
     buildingID: 'Building-ABC',
-    dayHour: '2021-07-03: 11',
-    consumedWattHours: 8
+    dayHour: '2021-07-03  11',
+    consumedKilowattHours: 8
   },
   {
     buildingID: 'Building-ABC',
-    dayHour: '2021-07-03: 12',
-    consumedWattHours: 17.25
+    dayHour: '2021-07-03  12',
+    consumedKilowattHours: 17.25
   },
   {
     buildingID: 'Building-ABC',
-    dayHour: '2021-07-03: 13',
-    consumedWattHours: 17
-  },
-  {
-    buildingID: 'Building-ABC',
-    dayHour: '2021-07-03: 14',
-    consumedWattHours: 18.25
+    dayHour: '2021-07-03  13',
+    consumedKilowattHours: 17
   },
   {
     buildingID: 'Building-XYZ',
-    dayHour: '2021-07-03: 11',
-    consumedWattHours: 5.25
+    dayHour: '2021-07-03  11',
+    consumedKilowattHours: 5.25
   },
   {
     buildingID: 'Building-XYZ',
-    dayHour: '2021-07-03: 12',
-    consumedWattHours: 10.5
+    dayHour: '2021-07-03  12',
+    consumedKilowattHours: 10.5
   },
   {
     buildingID: 'Building-XYZ',
-    dayHour: '2021-07-03: 13',
-    consumedWattHours: 10.5
-  },
-  {
-    buildingID: 'Building-XYZ',
-    dayHour: '2021-07-03: 14',
-    consumedWattHours: 11.25
+    dayHour: '2021-07-03  13',
+    consumedKilowattHours: 10.5
   }
 ]
 ```
@@ -410,15 +352,15 @@ For the pipeline to compute the total energy consumed by all the devices combine
 
 ## Observations
 
- * __Integral Trapezoidal Rule.__ As [documented in the MongoDB Manual](http://todo), `$integral` _"returns an approximation for the mathematical integral value, which is calculated using the trapezoidal rule"_. For the non-mathematicians amongst us, these words can be quite hard to parse, and so it is far better to explain the purpose of the `$integral` operator by using the illustration below:
+ * __Integral Trapezoidal Rule.__ As [documented in the MongoDB Manual](http://todo), `$integral` _"returns an approximation for the mathematical integral value, which is calculated using the trapezoidal rule"_. For the non-mathematicians amongst us, these words can be quite hard to parse, and so the purpose of the `$integral` operator is best explained by the illustration below:
  
 ![Example of calculating power consumption by approximating integrals using the trapezoidal rul ](./pics/trapezoidal-rule-example.png)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Essentially the [trapezoidal rule](https://en.wikipedia.org/wiki/Trapezoidal_rule) calculates the area of a region under a graph by matching the region with a trapezoid shape that approximately fits this region and then taking the area of this trapezoid. In the illustration, you can see a set of points on the graph with the approximated trapezoid shape underneath (shown in a peach colour) spanning 1 hour. For this IOT Power Consumption example, the points on the graph represent a device's captured power readings in Watts. The Y-axis is the power rate in Watts, and the X-axis captures the time each reading was taken. Consequently, the energy consumed by the device for a given hour is the area of the hour's specific region under the graph (approximated by a trapezoid). By using the `$integral` operator for the window of time you define in the `$setWindowFields` stage, you are asking for this approximate area, which is the Watt-hours consumed by the device in one hour.
+ * _(continued)_... Essentially the [trapezoidal rule](https://en.wikipedia.org/wiki/Trapezoidal_rule) determines the area of a region under a graph by matching the region with a trapezoid shape that approximately fits this region and then calculating the area of this trapezoid. You can see a set of points on the illustrated graph with the approximated trapezoid shape underneath spanning 1 hour. For this IOT Power Consumption example, the points on the graph represent an air-conditioning unit's captured power readings. The Y-axis is the _power rate_ in Kilowatts, and the X-axis is _time _ to indicate when the device captured each reading. Consequently, the energy consumed by an air-conditioning unit for a given hour is the area of the hour's specific region under the graph. Using the `$integral` operator for the window of time you define in the `$setWindowFields` stage, you are asking for this approximate area to be calculated, which is the Kilowatt-hours consumed by the air-conditioning unit in one hour.
 
- * __Window Range Definition.__ For every captured document representing a device reading, this example's pipeline identifies a window of _1-hour_ of previous documents, relative to this _current_ document, to be the input for the `$integral` operator. The pipeline defines this in the option `range": [-1, "current"], "unit": "hour"`. The pipeline assigns the output of the `$integral` calculation to a new field called `consumedWattHours`,
+ * __Window Range Definition.__ For every captured document representing a device reading, this example's pipeline identifies a window of _1-hour_ of previous documents relative to this _current_ document. The pipeline uses this set of documents as the input for the `$integral` operator. It defines this window range in the option `range": [-1, "current"], "unit": "hour"`. The pipeline assigns the output of the `$integral` calculation to a new field called `consumedKilowattHours`.
 
- * __Hour Range Vs Hour Units.__ The fact that the `$setWindowFields` stage in the pipeline defines both `"unit": "hour"` and `"outputUnit": "hour"` may appear redundant at face value. However, this is not the case, and each option serves a different purpose. As described in the previous observation, `"unit": "hour"` helps dictate the size of the window of the previous number of documents to analyse. However, the `"outputUnit": "hour"` option defines that the output should be in hours ("Watt-hours" here), yielding the result `consumedWattHours: 8.5` for one of the device readings processed. However, if the pipeline defined this option to be `"outputUnit": "minute"` instead, which is perfectly valid, the output value would be `510` Watt-minutes (i.e. 8.5 x 60 minutes).
+ * __Hour Range Vs Hour Units.__ The fact that the `$setWindowFields` stage in the pipeline defines both `"unit": "hour"` and `"outputUnit": "hour"` may appear redundant at face value. However, this is not the case, and each option serves a different purpose. As described in the previous observation, `"unit": "hour"` helps dictate the size of the window of the previous number of documents to analyse. However, the `"outputUnit": "hour"` option defines that the output should be in hours ("Kilowatt-hours" in this example), yielding the result `consumedKilowattHours: 8.5` for one of the processed device readings. However, if the pipeline defined this option to be `"outputUnit": "minute"` instead, which is perfectly valid, the output value would be `510` Kilowatt-minutes (i.e. 8.5 x 60 minutes).
  
- * __Index for Partition By & Sort By.__ In this example, you define an index on `{"deviceID": 1, "timestamp": 1}` to support the combination of the `partitionBy` and `sortBy` parameters for the `$setWindowFields` stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it avoids the pipeline stage memory limit of 100 MB.
+ * __Index for Partition By & Sort By.__ In this example, you define the index `{"deviceID": 1, "timestamp": 1}` to support the combination of the `partitionBy` and `sortBy` parameters for the `$setWindowFields` stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB.
  
