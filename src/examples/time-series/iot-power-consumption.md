@@ -157,7 +157,7 @@ var pipelineRawReadings = [
       "consumedKilowattHours": {
         "$integral": {
           "input": "$powerKilowatts",
-          "outputUnit": "hour",
+          "unit": "hour",
         },
         "window": {
           "range": [-1, "current"],
@@ -181,7 +181,7 @@ var pipelineBuildingsSummary = [
       "consumedKilowattHours": {
         "$integral": {
           "input": "$powerKilowatts",
-          "outputUnit": "hour",
+          "unit": "hour",
         },
         "window": {
           "range": [-1, "current"],
@@ -360,7 +360,7 @@ For the pipeline to compute the total energy consumed by all the air-conditionin
 
  * __Window Range Definition.__ For every captured document representing a device reading, this example's pipeline identifies a window of _1-hour_ of previous documents relative to this _current_ document. The pipeline uses this set of documents as the input for the `$integral` operator. It defines this window range in the option `range": [-1, "current"], "unit": "hour"`. The pipeline assigns the output of the `$integral` calculation to a new field called `consumedKilowattHours`.
 
- * __Hour Range Vs Hour Units.__ The fact that the `$setWindowFields` stage in the pipeline defines both `"unit": "hour"` and `"outputUnit": "hour"` may appear redundant at face value. However, this is not the case, and each option serves a different purpose. As described in the previous observation, `"unit": "hour"` helps dictate the size of the window of the previous number of documents to analyse. However, the `"outputUnit": "hour"` option defines that the output should be in hours ("Kilowatt-hours" in this example), yielding the result `consumedKilowattHours: 8.5` for one of the processed device readings. However, if the pipeline defined this option to be `"outputUnit": "minute"` instead, which is perfectly valid, the output value would be `510` Kilowatt-minutes (i.e. 8.5 x 60 minutes).
+ * __Hour Range Vs Hour Units.__ The fact that the `$setWindowFields` stage in the pipeline defines `"unit": "hour"` in two places may appear redundant at face value. However, this is not the case, and each serves a different purpose. As described in the previous observation, `"unit": "hour"` for the `"window"` option helps dictate the size of the window of the previous number of documents to analyse. However, `unit": "hour"` for the `$integral` operator defines that the output should be in hours ("Kilowatt-hours" in this example), yielding the result `consumedKilowattHours: 8.5` for one of the processed device readings. However, if the pipeline defined this `$integral` parameter to be `"unit": "minute"` instead, which is perfectly valid, the output value would be `510` Kilowatt-minutes (i.e. 8.5 x 60 minutes).
  
  * __Index for Partition By & Sort By.__ In this example, you define the index `{"deviceID": 1, "timestamp": 1}` to support the combination of the `partitionBy` and `sortBy` parameters for the `$setWindowFields` stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB.
  
