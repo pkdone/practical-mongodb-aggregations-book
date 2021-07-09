@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of $setWindowFields s
 
 ## Scenario
 
-You are monitoring various air-conditioning units running in two buildings on an industrial campus. Every 30 seconds, a device in each unit sends the unit's current power consumption reading back to base, which a central database persists. You want to analyse this data to see how much energy in kilowatt-hours (kWh) each air-conditioning unit has consumed over the last hour for each device reading received. Furthermore, you then want to compute the total energy consumed by all the air-conditioning units combined in each building for every hour.
+You are monitoring various air-conditioning units running in two buildings on an industrial campus. Every 30 seconds, a device in each unit sends the unit's current power consumption reading back to base, which a central database persists. You want to analyse this data to see how much energy in kilowatt-hours (kWh) each air-conditioning unit has consumed over the last hour for each reading received. Furthermore, you want to compute the total energy consumed by all the air-conditioning units combined in each building for every hour.
 
 ## Sample Data Population
 
@@ -353,10 +353,10 @@ For the pipeline to compute the total energy consumed by all the air-conditionin
 ## Observations
 
  * __Integral Trapezoidal Rule.__ As [documented in the MongoDB Manual](http://todo), `$integral` _"returns an approximation for the mathematical integral value, which is calculated using the trapezoidal rule"_. For the non-mathematicians amongst us, these words can be quite hard to parse, and so the purpose of the `$integral` operator is best explained by the illustration below:
- 
-![Example of calculating power consumption by approximating integrals using the trapezoidal rul ](./pics/trapezoidal-rule-example.png)
 
- * _(continued)_... Essentially the [trapezoidal rule](https://en.wikipedia.org/wiki/Trapezoidal_rule) determines the area of a region under a graph by matching the region with a trapezoid shape that approximately fits this region and then calculating the area of this trapezoid. You can see a set of points on the illustrated graph with the approximated trapezoid shape underneath spanning 1 hour. For this IOT Power Consumption example, the points on the graph represent an air-conditioning unit's captured power readings. The Y-axis is the _power rate_ in Kilowatts, and the X-axis is _time _ to indicate when the device captured each reading. Consequently, the energy consumed by an air-conditioning unit for a given hour is the area of the hour's specific region under the graph. Using the `$integral` operator for the window of time you define in the `$setWindowFields` stage, you are asking for this approximate area to be calculated, which is the Kilowatt-hours consumed by the air-conditioning unit in one hour.
+     ![Example of calculating power consumption by approximating integrals using the trapezoidal rul ](./pics/trapezoidal-rule-example.png)
+
+     Essentially the [trapezoidal rule](https://en.wikipedia.org/wiki/Trapezoidal_rule) determines the area of a region under a graph by matching the region with a trapezoid shape that approximately fits this region and then calculating the area of this trapezoid. You can see a set of points on the illustrated graph with the approximated trapezoid shape underneath spanning 1 hour. For this IOT Power Consumption example, the points on the graph represent an air-conditioning unit's captured power readings. The Y-axis is the _power rate_ in Kilowatts, and the X-axis is _time _ to indicate when the device captured each reading. Consequently, the energy consumed by an air-conditioning unit for a given hour is the area of the hour's specific region under the graph. Using the `$integral` operator for the window of time you define in the `$setWindowFields` stage, you are asking for this approximate area to be calculated, which is the Kilowatt-hours consumed by the air-conditioning unit in one hour.
 
  * __Window Range Definition.__ For every captured document representing a device reading, this example's pipeline identifies a window of _1-hour_ of previous documents relative to this _current_ document. The pipeline uses this set of documents as the input for the `$integral` operator. It defines this window range in the option `range": [-1, "current"], "unit": "hour"`. The pipeline assigns the output of the `$integral` calculation to a new field called `consumedKilowattHours`.
 
