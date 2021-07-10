@@ -5,6 +5,7 @@
 MongoDB’s Aggregation Framework enables users to send an analytics or data processing workload, written using the framework’s aggregation language, to the database for it to execute the workload against the data it holds. You can think of the Aggregation Framework as having two parts:
 
  1. The Aggregations API provided by the MongoDB Driver embedded in each application to enable the application to define an aggregation task called a pipeline and send it to the database for the database to process
+ 
  2. The Aggregation Runtime running in the database to receive the pipeline request from the application and execute the pipeline against the persisted data
 
 The following diagram illustrates these two elements and their inter-relationship:
@@ -14,7 +15,7 @@ The following diagram illustrates these two elements and their inter-relationshi
 The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation framework. In the database, the Aggregation Runtime re-uses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.
 
 
-## The MongoDB Aggregations Language
+## What Is MongoDB's Aggregations Language?
 
 MongoDB's aggregation pipeline language is somewhat of a paradox. It can appear daunting, yet it is straightforward. It can seem verbose, yet it is lean and to the point. It is [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) and able to solve any business problem __*__. Conversely, it is a strongly opinionated [Domain Specific Language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language), where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.
 
@@ -24,7 +25,7 @@ Invariably, for beginners, the Aggregation Framework seems difficult to understa
 
 MongoDB's aggregation pipeline language is focused on data-oriented problem-solving rather than business process problem-solving. It is essentially a [declarative programming language](https://en.wikipedia.org/wiki/Declarative_programming), rather than an [imperative programming language](https://en.wikipedia.org/wiki/Imperative_programming). Also, depending on how you squint, it can be regarded as a [functional programming language](https://en.wikipedia.org/wiki/Functional_programming) rather than a [procedural programming language](https://en.wikipedia.org/wiki/Procedural_programming). Why? Well, an aggregation pipeline is an ordered series of declarative statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side effects. This functional nature is probably why many users regard the Aggregation Framework as having a steeper learning curve than many languages. Not because it is inherently more difficult to understand but because most developers come from a procedural programming background and not a functional one. Most developers also have to learn how to think like a functional programmer to learn the Aggregation Framework.
 
-The Aggregation Framework's declarative and functional characteristics ultimately make it especially powerful for processing massive data sets. Users focus more on defining 'the what' in terms of the required outcome in a declarative way. Users focus less on 'the how' of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, "is this stage for performing a filter or is this stage for grouping on some fields?". With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to re-order stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.
+The Aggregation Framework's declarative and functional characteristics ultimately make it especially powerful for processing massive data sets. Users focus more on defining "the what" in terms of the required outcome in a declarative way. Users focus less on "the how" of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, "is this stage for performing a filter or is this stage for grouping on some fields?". With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to re-order stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.
 
 ![MongoDB Aggregation Framework developer vs database engine optimizations comparison](./pics/optimise.png)
 
@@ -55,10 +56,10 @@ The Aggregation Framework is versatile and used for many different data processi
 * Report generation with roll-ups, sums & averages
 * Real-time dashboards
 * Redacting data to present via views
-* Joining data together from different collections on the 'server-side'
+* Joining data together from different collections on the "server-side"
 * Data science, including data discovery and data wrangling
-* Mass data analysis at scale (a la '[big data](https://en.wikipedia.org/wiki/Big_data)')
-* Real-time queries where deeper 'server-side' data post-processing is required than provided by the MongoDB Query Language ([MQL](https://docs.mongodb.com/manual/crud/))
+* Mass data analysis at scale (a la "[big data](https://en.wikipedia.org/wiki/Big_data)")
+* Real-time queries where deeper "server-side" data post-processing is required than provided by the MongoDB Query Language ([MQL](https://docs.mongodb.com/manual/crud/))
 * Copying and transforming subsets of data from one collection to another
 * Navigating relationships between records, looking for patterns
 * Data masking to obfuscate sensitive data

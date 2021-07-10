@@ -151,7 +151,7 @@ db.daily_orders_summary.find()
 
 From the results, you can see that order summaries exist for both days.
 
-To simulate the organisation's occasional need to correct an old order retrospectively, go back and add a new 'high value' order for the first day. Then re-run the aggregation for the first day only (01-Feb-2021) to show that you can safely and correctly recalculate the summary for just one day:
+To simulate the organisation's occasional need to correct an old order retrospectively, go back and add a new "high value" order for the first day. Then re-run the aggregation for the first day only (01-Feb-2021) to show that you can safely and correctly recalculate the summary for just one day:
 
 ```javascript
 // Retrospectively add an order to an older day (01-Feb-2021)

@@ -10,7 +10,7 @@ You have a _persons_ collection, where a particular client application shouldn't
  1. Only show people aged 18 and over (by checking each person's `dateofbirth` field)
  2. Exclude each person's `social_security_num` field from results
 
-Essentially, this is an illustration of achieving 'record-level' access control in MongoDB.
+Essentially, this is an illustration of achieving "record-level" access control in MongoDB.
 
 
 ## Sample Data Population
@@ -224,35 +224,36 @@ The result of running the `find()` against the _view_ with the filter `"gender":
 
 ## Observations
 
- * __Expr & Indexes.__ The ['NOW' system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/) used here returns the current system date-time. However, you can only access this system variable via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by MQL and `$match`. You must wrap an expression using `$$NOW` inside an `$expr` operator. As described in the chapter [Can Expressions Be Used Everywhere?](../../guides/expressions.md), if you use an [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) to perform a range comparison, you can't make use of an index (which is the case for `dateofbirth` here). For a view, because the pipeline is 'statically' defined when creating the view, you cannot obtain the current date-time at runtime by other means.
+ * __Expr & Indexes.__ The ["NOW" system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/) used here returns the current system date-time. However, you can only access this system variable via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the normal MongoDB query syntax used by MQL and `$match`. You must wrap an expression using `$$NOW` inside an `$expr` operator. As described in the chapter [Can Expressions Be Used Everywhere?](../../guides/expressions.md), if you use an [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) to perform a range comparison, you can't make use of an index (which is the case for `dateofbirth` here). For a view, because the pipeline is "statically" defined when creating the view, you cannot obtain the current date-time at runtime by other means.
    
  * __View Finds & Indexes.__ The explain plan for the _gender query_ run against the _view_ shows an index has been used (the index defined for the `gender` field). At runtime, a view is essentially just an aggregation pipeline defined 'ahead of time'. When `db.adults.find({"gender": "FEMALE"})` is executed, the database engine dynamically appends a new `$match` stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the new `$match` stage to the pipeline's start. Finally, it adds the filter extracted from the new `$match` stage to the aggregation's initial query and hence the `gender` index is leveraged. The following two excerpts from the explain plan illustrate how the filter on `gender` and the filter on `dateofbirth` combine at runtime and how the index for `gender` is used to avoid a full collection scan:
- 
-```javascript  
-'$cursor': {
-  queryPlanner: {
-    plannerVersion: 1,
-    namespace: 'book-restricted-view.persons',
-    indexFilterSet: false,
-    parsedQuery: {
-      '$and': [
-        { gender: { '$eq': 'FEMALE' } },
-        {
-          '$expr': {
-            '$lt': [
-              '$dateofbirth',
-              {
-                '$subtract': [ '$$NOW', { '$const': 568036800000 } ]
-```
-```javascript  
-inputStage: {
-  stage: 'IXSCAN',
-  keyPattern: { gender: 1 },
-  indexName: 'gender_1',
-  direction: 'forward',
-  indexBounds: { gender: [ '["FEMALE", "FEMALE"]' ] }
-}
-```
+
+    ```javascript  
+    '$cursor': {
+      queryPlanner: {
+        plannerVersion: 1,
+        namespace: 'book-restricted-view.persons',
+        indexFilterSet: false,
+        parsedQuery: {
+          '$and': [
+            { gender: { '$eq': 'FEMALE' } },
+            {
+              '$expr': {
+                '$lt': [
+                  '$dateofbirth',
+                  {
+                    '$subtract': [ '$$NOW', { '$const': 568036800000 } ]
+                    ...
+    ```
+    ```javascript  
+    inputStage: {
+      stage: 'IXSCAN',
+      keyPattern: { gender: 1 },
+      indexName: 'gender_1',
+      direction: 'forward',
+      indexBounds: { gender: [ '["FEMALE", "FEMALE"]' ] }
+    }
+    ```
 
  * __Further Reading.__ The ability for _find_ operations on a view to automatically push filters into the view's aggregation pipeline, and then be further optimised, is described in the blog post: [Is Querying A MongoDB View Optimised?](https://pauldone.blogspot.com/2020/11/mongdb-views-optimisations.html)
  

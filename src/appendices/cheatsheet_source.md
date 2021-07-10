@@ -1,6 +1,6 @@
 # Stages Cheatsheet Source
 
-To test all the aggregation stage examples shown in the [Cheatsheet](cheatsheet.html), run the following JavaScript from a MongoDB shell connected to a MongoDB database.
+To test all the aggregation stage examples shown in the [Cheatsheet](cheatsheet.html), run the following JavaScript from the MongoDB Shell connected to a MongoDB database.
 
 ## Collections Configuration & Data Population
 
@@ -41,7 +41,7 @@ db.places.insertMany([
 
 ## Aggregation Stage Examples
 
-> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running an earlier version, first comment out the appropriate JavaScript 'stage' sections before executing the code._
+> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running an earlier version, first comment out the appropriate "JavaScript stage sections" before executing the code._
 
 ```javascript
 // $addFields  (v3.4)

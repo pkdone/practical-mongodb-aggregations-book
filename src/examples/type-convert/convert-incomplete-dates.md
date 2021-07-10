@@ -9,7 +9,7 @@ An application is ingesting _payment_ documents into a MongoDB collection where 
 
  * The specific __century__ (1900s?, 2000s, other?)
  * The specific __time-zone__ (GMT?, IST?, PST?, other?) 
- * The specific __language__ that the three-letter month abbreviation represents (is 'JAN' in French? in English? other?)
+ * The specific __language__ that the three-letter month abbreviation represents (is "JAN" in French? in English? other?)
 
 You subsequently learn that all the payment records are for the __21st century__ only, the time-zone used when ingesting the data is __UTC__, and the language used is __English__. Armed with this information, you build an aggregation pipeline to transform these text fields into date fields.
 

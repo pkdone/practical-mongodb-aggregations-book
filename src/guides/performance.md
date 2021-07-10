@@ -4,7 +4,7 @@ Similar to any programming language, there is a downside if you prematurely opti
 
 With all that said, it can still help you to be aware of some guiding principles regarding performance whilst you are prototyping a pipeline. Critically, such guiding principles will be invaluable to you once the aggregation's explain plan is analysed and if it shows that the current pipeline is sub-optimal.
 
-This chapter outlines three crucial tips to assist you when creating and tuning an aggregation pipeline. For sizable data sets, adopting these principles may mean the difference between aggregations completing in a few seconds versus minutes, hours or even longer.
+This chapter outlines three crucial tips to assist you when creating and tuning an aggregation pipeline. For sizeable data sets, adopting these principles may mean the difference between aggregations completing in a few seconds versus minutes, hours or even longer.
 
 
 ## 1. Be Cognizant Of Streaming Vs Blocking Stages Ordering
@@ -14,7 +14,7 @@ When executing an aggregation pipeline, the database engine pulls batches of rec
  * `$sort`
  * `$group` *
  
-> \* _actually when stating `$group`, this also includes other less frequently used 'grouping' stages too, specifically:_`$bucket`, `$bucketAuto`, `$count`, `$sortByCount` & `$facet` &nbsp;_(it's a stretch to call `$facet` a group stage, but in the context of this topic, it's best to think of it that way)_
+> \* _actually when stating `$group`, this also includes other less frequently used "grouping" stages too, specifically:_`$bucket`, `$bucketAuto`, `$count`, `$sortByCount` & `$facet` &nbsp;_(it's a stretch to call `$facet` a group stage, but in the context of this topic, it's best to think of it that way)_
 
 The diagram below highlights the nature of streaming and blocking stages. Streaming stages allow batches to be processed and then passed through without waiting. Blocking stages wait for the whole of the input data set to arrive and accumulate before processing all this data together.
 
@@ -37,7 +37,9 @@ To avoid the memory limit obstacle, you can set the `allowDiskUse:true` option f
 To circumvent the aggregation needing to manifest the whole data set in memory or overspill to disk, attempt to refactor your pipeline to incorporate one of the following approaches (in order of most effective first):
 
  1. __Use Index Sort__. If the `$sort` stage does not depend on a `$unwind`, `$group` or `$project` stage preceding it, move the `$sort` stage to near the start of your pipeline to target an index for the sort. The aggregation runtime does not need to perform an expensive in-memory sort operation as a result. The `$sort` stage won't necessarily be the first stage in your pipeline because there may also be a `$match` stage that takes advantage of the same index. Always inspect the explain plan to ensure you are inducing the intended behaviour.
+ 
  2. __Use Limit With Sort__. If you only need the first subset of records from the sorted set of data, add a `$limit` stage directly after the `$sort` stage, limiting the results to the fixed amount you require (e.g. 10). At runtime, the aggregation engine will collapse the `$sort` and `$limit` into a single special internal sort stage which performs both actions together. The in-flight sort process only has to track the ten records in memory, which currently satisfy the executing sort/limit rule. It does not have to hold the whole data set in memory to execute the sort successfully.
+ 
  3. __Reduce Records To Sort__. Move the `$sort` stage to as late as possible in your pipeline and ensure earlier stages significantly reduce the number of records streaming into this late blocking `$sort` stage. This blocking stage will have fewer records to process and less thirst for RAM.
   
 ### $group Memory Consumption And Mitigation
@@ -48,10 +50,12 @@ In reality, most grouping scenarios focus on accumulating summary data such as t
 
 To ensure you avoid excessive memory consumption when you are looking to use a `$group` stage, adopt the following principles:
 
- 1. __Avoid Unnecessary Grouping__. This chapter covers this recommendation below, in far greater detail (section "_2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements_").
+ 1. __Avoid Unnecessary Grouping__. This chapter covers this recommendation in far greater detail in the section _[2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements](#avoid_unwinding)_.
+ 
  2. __Group Summary Data Only__. If the use case permits it, use the group stage to accumulate things like totals, counts and summary roll-ups only, rather than holding all the raw data of each record belonging to a group. The Aggregation Framework provides a robust set of [accumulator operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#accumulators---group-) to help you achieve this inside a `$group` stage.
 
 
+<a name="avoid_unwinding"></a>
 ## 2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements
 
 Sometimes, you need an aggregation pipeline to mutate or reduce an array field's content for each record. For example:
@@ -59,7 +63,7 @@ Sometimes, you need an aggregation pipeline to mutate or reduce an array field's
  * You may need to add together all the values in the array into a total field
  * You may need to retain the first and last elements of the array only
  * You may need to retain only one reoccurring field for each sub-document in the array 
- * ..._or numerous other array 'reduction' scenarios_
+ * ..._or numerous other array "reduction" scenarios_
 
 To bring this to life, imagine a retail `orders` collection where each document contains an array of products purchased as part of the order, as shown in the example below:
 
@@ -177,7 +181,7 @@ var pipeline = [
 ];
 ```
 
-Unlike the suboptimal pipeline, the optimal pipeline will include 'empty orders' in the results for those orders that contained only inexpensive items. If this is a problem, you can include a simple `$match` stage at the start of the optimal pipeline with the same content as the `$match` stage shown in the suboptimal example.
+Unlike the suboptimal pipeline, the optimal pipeline will include "empty orders" in the results for those orders that contained only inexpensive items. If this is a problem, you can include a simple `$match` stage at the start of the optimal pipeline with the same content as the `$match` stage shown in the suboptimal example.
 
 To reiterate, there should never be the need to use an `$unwind/$group` combination in an aggregation pipeline to transform an array field's elements for each document in isolation. One way to recognize if you have this anti-pattern is if your pipeline contains a `$group` on a `$_id` field. Instead, use _Array Operators_ to avoid introducing a blocking stage. Otherwise, you will suffer a magnitude of increase in execution time when your pipeline handles more than 100MB of in-flight data. Adopting this best practice may mean the difference between achieving the required business outcome and abandoning the whole task as unachievable.
 
@@ -186,11 +190,14 @@ The primary use of an `$unwind/$group` combination is to correlate patterns acro
 
 ## 3. Encourage Match Filters To Appear Early In The Pipeline
 
+### Explore If Bringing Forward A Full Match Is Possible
+
 As discussed, the database engine will do its best to optimise the aggregation pipeline at runtime, with a particular focus on attempting to move the `$match` stages to the top of the pipeline. Top-level `$match` content will form part of the filter that the engine first executes as the initial query. The aggregation then has the best chance of leveraging an index. However, it may not always be possible to promote `$match` filters in such a way without changing the meaning and resulting output of an aggregation.
 
 Sometimes, a `$match` stage is defined later in a pipeline to perform a filter on a field that the pipeline computed in an earlier stage. The computed field isn't present in the pipeline's original input collection. Some examples are:
 
  * A pipeline where a `$group` stage creates a new `total` field based on an [accumulator operator](https://docs.mongodb.com/manual/reference/operator/aggregation/group/#accumulators-group). Later in the pipeline, a `$match` stage filters groups where each group's `total` is greater than `1000`. 
+ 
  * A pipeline where a `$set` stage computes a new `total` field value based on adding up all the elements of an array field in each document. Later in the pipeline, a `$match` stage filters documents where the `total` is less than `50`.
 
 At first glance, it may seem like the match on the computed field is irreversibly trapped behind an earlier stage that computed the field's value. Indeed the aggregation engine cannot automatically optimise this further. In some situations, though, there may be a missed opportunity where beneficial refactoring is possible by you, the developer.
@@ -256,9 +263,14 @@ var pipeline = [
 ];
 ```
 
-This pipeline produces the same data output. However, when you look at its explain plan, it shows the database engine has pushed the `$match` filter to the top of the pipeline and used an index on the `value` field. The aggregation is now optimal because the `$match` stage is no longer 'blocked' by its dependency on the computed field.
+This pipeline produces the same data output. However, when you look at its explain plan, it shows the database engine has pushed the `$match` filter to the top of the pipeline and used an index on the `value` field. The aggregation is now optimal because the `$match` stage is no longer "blocked" by its dependency on the computed field.
 
-There may be some cases where you can't unravel a computed value in such a manner. However, it may still be possible for you to include an additional `$match` stage, to perform a __partial match__ targeting the aggregation's query cursor. Suppose you have a pipeline that masks the values of sensitive `date_of_birth` fields (replaced with computed `masked_date` fields). The computed field adds a random number of days (one to seven) to each current date. The pipeline already contains a `$match` stage with the filter `masked_date > 01-Jan-2020`. The runtime cannot optimise this to the top of the pipeline due to the dependency on a computed value. Nevertheless, you can manually add an extra `$match` stage at the top of the pipeline, with the filter `date_of_birth > 25-Dec-2019`. This new `$match` leverages an index and filters records seven days earlier than the existing `$match`, but the aggregation's final output is the same. The new `$match` may pass on a few more records than intended. However, later on, the pipeline applies the existing filter `masked_date > 01-Jan-2020` that will naturally remove surviving surplus records before the pipeline completes.
+<a name="partial_match"></a>
+### Explore If Bringing Forward A Partial Match Is Possible
+
+There may be some cases where you can't unravel a computed value in such a manner. However, it may still be possible for you to include an additional `$match` stage, to perform a _partial match_ targeting the aggregation's query cursor. Suppose you have a pipeline that masks the values of sensitive `date_of_birth` fields (replaced with computed `masked_date` fields). The computed field adds a random number of days (one to seven) to each current date. The pipeline already contains a `$match` stage with the filter `masked_date > 01-Jan-2020`. The runtime cannot optimise this to the top of the pipeline due to the dependency on a computed value. Nevertheless, you can manually add an extra `$match` stage at the top of the pipeline, with the filter `date_of_birth > 25-Dec-2019`. This new `$match` leverages an index and filters records seven days earlier than the existing `$match`, but the aggregation's final output is the same. The new `$match` may pass on a few more records than intended. However, later on, the pipeline applies the existing filter `masked_date > 01-Jan-2020` that will naturally remove surviving surplus records before the pipeline completes.
+
+### Pipeline Match Summary
 
 In summary, if you have a pipeline leveraging a `$match` stage and the explain plan shows this is not moving to the start of the pipeline, explore whether manually refactoring will help. If the `$match` filter depends on a computed value, examine if you can alter this or add an extra `$match` to yield a more efficient pipeline.
 
