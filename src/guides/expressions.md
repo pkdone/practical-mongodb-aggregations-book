@@ -99,5 +99,12 @@ The result of executing an aggregation with this pipeline is:
 
 As you can see, the second of the three shapes is not output because its area is only `12` (`3 x 4`).
 
-You should be aware that in many cases, the query engine cannot benefit from an index when using a `$expr` operator inside a `$match` stage. Specifically, if you use a "range" comparison operator (`$gt`, `$gte`, `$lt` and `$lte`) with a field, no index will be employed to match the field. You should only use the `$expr` operator in a `$match` stage if there is no other way of assembling the criteria using regular MQL syntax criteria.
+<a name="expression-restrictions"></a>
+### Restrictions When Using Expressions
+
+You should be aware that there are restrictions on when the runtime can benefit from an index when using a `$expr` operator inside a `$match` stage. This partly depends on the version of MongoDB you are running. Using `$expr`, you can leverage an `$eq` comparison operator with some constraints, including an inability to use a [multi-key index](https://docs.mongodb.com/manual/core/index-multikey/). For MongoDB versions before 5.0, if you use a "range" comparison operator (`$gt`, `$gte`, `$lt` and `$lte`), an index cannot be employed to match the field, but this works fine in version 5.0.
+
+There are also subtle differences when ordering values for a specific field across multiple documents when some values have different types. The MongoDB Query Engine (as used in MQL and a regular `$match`) and the Aggregation Engine (which implements `$expr`) can apply different ordering rules, referred to as "type bracketing". Consequently, a range query may not yield the same result with `$expr` as it does with MQL if some values have different types.
+
+Due to the potential challenges outlined, only use an `$expr` operator in a `$match` stage if there is no other way of assembling the filter criteria using regular MQL syntax.
 
