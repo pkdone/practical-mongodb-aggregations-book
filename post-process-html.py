@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 ##
-# Post-process mdbook generated HTML files to add Google Analytics tag
+# Post-process mdbook generated HTML files to add Google Analytics tag and optionally cheatsheet
+# pre style tag
 ##
 import glob
 import re
@@ -43,15 +44,15 @@ def main():
     filepaths = glob.glob('./docs/**/*.html', recursive=True)
 
     for filepath in filepaths:
-        add_analytics_tag_to_html_file(filepath)
+        add_extra_heaad_tags_to_html_file(filepath)
 
     print('Ending post-processing of HTML files')
 
 
 ####
-# Add Google Analytics tag to HTML before </head> tag.
+# Add Google Analytics tag + plus optional cheatsheet pre style tag to HTML before </head> tag.
 ####
-def add_analytics_tag_to_html_file(filepath):
+def add_extra_heaad_tags_to_html_file(filepath):
     print(f' {filepath}')
 
     with open(filepath, 'r+') as f:
