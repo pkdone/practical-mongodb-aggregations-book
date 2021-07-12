@@ -123,7 +123,7 @@ db.persons.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-Nine unique language names should be returned sorted in alphabetical order, as shown below:
+Seven unique language names should be returned sorted in alphabetical order, as shown below:
 
 ```javascript
 [

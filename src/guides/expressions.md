@@ -4,7 +4,7 @@
 
 Expressions give aggregation pipelines their data manipulation power. However, they tend to be something that developers start using by just copying examples from the MongoDB Manual and then refactoring these without thinking enough about what they are. Proficiency in aggregation pipelines demands a deeper understanding of expressions.
 
-Expressions come in one of three primary flavours:
+Aggregation expressions come in one of three primary flavours:
 
  * __Operators.__ Accessed with a `$` prefix followed by the operator function name. These are used as the keys for objects. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`
  
@@ -18,7 +18,7 @@ Expressions come in one of three primary flavours:
 
    - __Bind user variables.__ For storing values you declare with a `$let` operator (or with the `let` option of a `$lookup` stage, or `as` option of a `$map` or `$filter` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
 
-You can combine these three categories of expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/securing-data/mask-sensitive-fields.html) example, which combines all three expressions.
+You can combine these three categories of aggregation expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/securing-data/mask-sensitive-fields.html) example, which combines all three expressions.
 
 ```javascript
 "customer_info": {"$cond": {
@@ -31,11 +31,11 @@ You can combine these three categories of expressions when operating on input re
 The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `$cond` is one of the operator expressions used in the excerpt (a "conditional" expression operator which takes three arguments: `if`, `then` & `else`). `$eq` is another expression operator (a "comparison" expression operator). `$$REMOVE` is a "marker flag" variable expression instructing the pipeline to exclude the field. Both `$customer_info.category` and `$customer_info` elements are field path expressions referencing each incoming record's fields.
 
 
-## Where Expressions Are Used
+## Where Aggregation Expressions Are Used
 
-The following question is something you may not have asked yourself before, but asking this question and considering why the answer is what it is can help reveal more about what expressions are and why you use them.
+The following question is something you may not have asked yourself before, but asking this question and considering why the answer is what it is can help reveal more about what aggregation expressions are and why you use them.
 
-__Question:__ Can expressions be used within any type of pipeline stage?
+__Question:__ Can aggregation expressions be used within any type of pipeline stage?
 
 __Answer:__ No
 
@@ -53,14 +53,14 @@ Some of these stages may be a surprise to you if you've never really thought abo
 
 In most of the stages that are unable to leverage expressions, it doesn't usually make sense for their behaviour to be dynamic, based on the pipeline data entering the stage. For a client application that paginates results, you might define a value of `20` for the`$limit` stage. However, maybe you want to dynamically bind a value to the `$limit` stage, sourced by a `$lookup` stage earlier in the pipeline. The lookup operation might pull in the user's preferred "page list size" value from a "user preferences" collection. Nonetheless, the Aggregation Framework does not support this today for the listed stage types to avoid the overhead of the extra checks it would need to perform for what are primarily rare cases.
 
-Only one of the listed stages needs to be more expressive: the `$match` stage, but this stage is already flexible by being based on MQL query conditions. 
+In most cases, only one of the listed stages needs to be more expressive: the `$match` stage, but this stage is already flexible by being based on MQL query conditions. However, sometimes, even MQL isn't expressive enough to sufficiently define a rule to identify records to retain in an aggregation. The remainder of this chapter explores these challenges and how they are solved.
 
 
 ## What Is Using $expr Inside $match All About?
 
-Complicating things a little, in more recent MongoDB versions, the statement about `$match` not supporting expressions is inaccurate. MongoDB version 3.6 introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) used in regular MQL queries and hence in `$match` stages too. Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables.
+The previously stated generalisation about `$match` not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/), which you can embed within a `$match` stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's `$match`) to re-use expressions provided by MongoDB's aggregation runtime.
 
-A few situations demand having to use `$expr` from inside a `$match` stage. Examples include:
+Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables. A few situations demand having to use $expr from inside a $match stage. Examples include:
 
  * A requirement to compare two fields from the same record to determine whether to keep the record based on the comparison's outcome
  
@@ -100,11 +100,11 @@ The result of executing an aggregation with this pipeline is:
 As you can see, the second of the three shapes is not output because its area is only `12` (`3 x 4`).
 
 <a name="expression-restrictions"></a>
-### Restrictions When Using Expressions
+### Restrictions When Using Expressions with $match
 
 You should be aware that there are restrictions on when the runtime can benefit from an index when using a `$expr` operator inside a `$match` stage. This partly depends on the version of MongoDB you are running. Using `$expr`, you can leverage a `$eq` comparison operator with some constraints, including an inability to use a [multi-key index](https://docs.mongodb.com/manual/core/index-multikey/). For MongoDB versions before 5.0, if you use a "range" comparison operator (`$gt`, `$gte`, `$lt` and `$lte`), an index cannot be employed to match the field, but this works fine in version 5.0.
 
-There are also subtle differences when ordering values for a specific field across multiple documents when some values have different types. The MongoDB Query Engine (as used in MQL and a regular `$match`) and the Aggregation Engine (which implements `$expr`) can apply different ordering rules, referred to as "type bracketing". Consequently, a range query may not yield the same result with `$expr` as it does with MQL if some values have different types.
+There are also subtle differences when ordering values for a specific field across multiple documents when some values have different types. MongoDB's query runtime (which executes regular MQL and `$match` filters) and MongoDB's aggregation runtime (which implements `$expr`) can apply different ordering rules when filtering, referred to as "type bracketing". Consequently, a range query may not yield the same result with `$expr` as it does with MQL if some values have different types.
 
 Due to the potential challenges outlined, only use a `$expr` operator in a `$match` stage if there is no other way of assembling the filter criteria using regular MQL syntax.
 

@@ -4,7 +4,11 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 2.00beta6
+Version: 2-.00beta7
+
+Last Updated: July 2021
+
+MongoDB Versions Supported: 4.2 → 5.0
 
 Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 
