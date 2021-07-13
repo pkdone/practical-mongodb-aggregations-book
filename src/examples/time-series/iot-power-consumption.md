@@ -1,11 +1,11 @@
 # IOT Power Consumption
 
-__Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of $setWindowFields stage & $integral operator)_
+__Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of [$setWindowFields](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/) stage & [$integral](https://docs.mongodb.com/manual/reference/operator/aggregation/integral/) operator)_
 
 
 ## Scenario
 
-You are monitoring various air-conditioning units running in two buildings on an industrial campus. Every 30 seconds, a device in each unit sends the unit's current power consumption reading back to base, which a central database persists. You want to analyse this data to see how much energy in kilowatt-hours (kWh) each air-conditioning unit has consumed over the last hour for each reading received. Furthermore, you want to compute the total energy consumed by all the air-conditioning units combined in each building for every hour.
+You are monitoring various air-conditioning units running in two buildings on an industrial campus. Every 30 minutes, a device in each unit sends the unit's current power consumption reading back to base, which a central database persists. You want to analyse this data to see how much energy in kilowatt-hours (kWh) each air-conditioning unit has consumed over the last hour for each reading received. Furthermore, you want to compute the total energy consumed by all the air-conditioning units combined in each building for every hour.
 
 ## Sample Data Population
 
@@ -15,7 +15,7 @@ Drop any old version of the database (if it exists) and then populate a new `dev
 use book-iot-power-consumption;
 db.dropDatabase();
 
-// Create compount index to support the partitionBy & sortBy of setWindowFields
+// Create compound index to aid performance for partitionBy & sortBy of setWindowFields
 db.device_readings.createIndex({"deviceID": 1, "timestamp": 1});
 
 // Insert 18 records into the device readings collection
@@ -24,19 +24,19 @@ db.device_readings.insertMany([
   {
     "buildingID": "Building-ABC", 
     "deviceID": "UltraAirCon-111",    
-    "timestamp": ISODate("2021-07-03T11:29:00Z"),
+    "timestamp": ISODate("2021-07-03T11:29:59Z"),
     "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-222",    
-    "timestamp": ISODate("2021-07-03T11:29:00Z"),
+    "timestamp": ISODate("2021-07-03T11:29:59Z"),
     "powerKilowatts": 7,     
   },
   {
     "buildingID": "Building-XYZ",
     "deviceID": "UltraAirCon-666",    
-    "timestamp": ISODate("2021-07-03T11:29:00Z"),
+    "timestamp": ISODate("2021-07-03T11:29:59Z"),
     "powerKilowatts": 10,     
   },
   
@@ -44,19 +44,19 @@ db.device_readings.insertMany([
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-222",    
-    "timestamp": ISODate("2021-07-03T11:59:00Z"),
+    "timestamp": ISODate("2021-07-03T11:59:59Z"),
     "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-111",    
-    "timestamp": ISODate("2021-07-03T11:59:00Z"),
+    "timestamp": ISODate("2021-07-03T11:59:59Z"),
     "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-XYZ",
     "deviceID": "UltraAirCon-666",    
-    "timestamp": ISODate("2021-07-03T11:59:00Z"),
+    "timestamp": ISODate("2021-07-03T11:59:59Z"),
     "powerKilowatts": 11,     
   },
   
@@ -64,19 +64,19 @@ db.device_readings.insertMany([
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-222",    
-    "timestamp": ISODate("2021-07-03T12:29:00Z"),
+    "timestamp": ISODate("2021-07-03T12:29:59Z"),
     "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-111",    
-    "timestamp": ISODate("2021-07-03T12:29:00Z"),
+    "timestamp": ISODate("2021-07-03T12:29:59Z"),
     "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-XYZ",
     "deviceID": "UltraAirCon-666",    
-    "timestamp": ISODate("2021-07-03T12:29:00Z"),
+    "timestamp": ISODate("2021-07-03T12:29:59Z"),
     "powerKilowatts": 10,     
   },
 
@@ -84,19 +84,19 @@ db.device_readings.insertMany([
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-222",    
-    "timestamp": ISODate("2021-07-03T12:59:00Z"),
+    "timestamp": ISODate("2021-07-03T12:59:59Z"),
     "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-111",    
-    "timestamp": ISODate("2021-07-03T12:59:00Z"),
+    "timestamp": ISODate("2021-07-03T12:59:59Z"),
     "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-XYZ",
     "deviceID": "UltraAirCon-666",    
-    "timestamp": ISODate("2021-07-03T12:59:00Z"),
+    "timestamp": ISODate("2021-07-03T12:59:59Z"),
     "powerKilowatts": 11,     
   },
 
@@ -104,19 +104,19 @@ db.device_readings.insertMany([
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-222",    
-    "timestamp": ISODate("2021-07-03T13:29:00Z"),
+    "timestamp": ISODate("2021-07-03T13:29:59Z"),
     "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-111",    
-    "timestamp": ISODate("2021-07-03T13:29:00Z"),
+    "timestamp": ISODate("2021-07-03T13:29:59Z"),
     "powerKilowatts": 9,     
   },
   {
     "buildingID": "Building-XYZ",
     "deviceID": "UltraAirCon-666",    
-    "timestamp": ISODate("2021-07-03T13:29:00Z"),
+    "timestamp": ISODate("2021-07-03T13:29:59Z"),
     "powerKilowatts": 10,     
   },
 
@@ -124,19 +124,19 @@ db.device_readings.insertMany([
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-222",    
-    "timestamp": ISODate("2021-07-03T13:59:00Z"),
+    "timestamp": ISODate("2021-07-03T13:59:59Z"),
     "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-ABC",
     "deviceID": "UltraAirCon-111",    
-    "timestamp": ISODate("2021-07-03T13:59:00Z"),
+    "timestamp": ISODate("2021-07-03T13:59:59Z"),
     "powerKilowatts": 8,     
   },
   {
     "buildingID": "Building-XYZ",
     "deviceID": "UltraAirCon-666",    
-    "timestamp": ISODate("2021-07-03T13:59:00Z"),
+    "timestamp": ISODate("2021-07-03T13:59:59Z"),
     "powerKilowatts": 11,     
   },
 ]);
@@ -149,7 +149,7 @@ Define a pipeline ready to perform an aggregation to calculate the energy an air
 
 ```javascript
 var pipelineRawReadings = [
-  // Calculate each unit's energy consumed over the last hour for each raading
+  // Calculate each unit's energy consumed over the last hour for each reading
   {"$setWindowFields": {
     "partitionBy": "$deviceID",
     "sortBy": {"timestamp": 1},    
@@ -173,7 +173,7 @@ Define a pipeline ready to compute the total energy consumed by all the air-cond
 
 ```javascript
 var pipelineBuildingsSummary = [
-  // Calculate each unit's energy consumed over the last hour for each raading
+  // Calculate each unit's energy consumed over the last hour for each reading
   {"$setWindowFields": {
     "partitionBy": "$deviceID",
     "sortBy": {"timestamp": 1},    
@@ -214,7 +214,7 @@ var pipelineBuildingsSummary = [
   }},    
 
   // Sum together the energy consumption for the whole building
-  // for each hour accross all the units in the building   
+  // for each hour across all the units in the building   
   {"$group": {
     "_id": {
       "buildingID": "$buildingID",
@@ -268,42 +268,42 @@ For the pipeline to calculate the energy an air-conditioning unit has consumed o
 ```javascript
 [
   {
-    _id: ObjectId("60e56c3b67efa144f838daec"),
+    _id: ObjectId("60ed5e679ea1f9f74814ca2b"),
     buildingID: 'Building-ABC',
     deviceID: 'UltraAirCon-111',
-    timestamp: ISODate("2021-07-03T11:29:00.000Z"),
+    timestamp: ISODate("2021-07-03T11:29:59.000Z"),
     powerKilowatts: 8,
     consumedKilowattHours: 0
   },
   {
-    _id: ObjectId("60e56c3b67efa144f838daf0"),
+    _id: ObjectId("60ed5e679ea1f9f74814ca2f"),
     buildingID: 'Building-ABC',
     deviceID: 'UltraAirCon-111',
-    timestamp: ISODate("2021-07-03T11:59:00.000Z"),
+    timestamp: ISODate("2021-07-03T11:59:59.000Z"),
     powerKilowatts: 8,
     consumedKilowattHours: 4
   },
   {
-    _id: ObjectId("60e56c3b67efa144f838daf3"),
+    _id: ObjectId("60ed5e679ea1f9f74814ca32"),
     buildingID: 'Building-ABC',
     deviceID: 'UltraAirCon-111',
-    timestamp: ISODate("2021-07-03T12:29:00.000Z"),
+    timestamp: ISODate("2021-07-03T12:29:59.000Z"),
     powerKilowatts: 9,
     consumedKilowattHours: 8.25
   },
   {
-    _id: ObjectId("60e56c3b67efa144f838daf6"),
+    _id: ObjectId("60ed5e679ea1f9f74814ca35"),
     buildingID: 'Building-ABC',
     deviceID: 'UltraAirCon-111',
-    timestamp: ISODate("2021-07-03T12:59:00.000Z"),
+    timestamp: ISODate("2021-07-03T12:59:59.000Z"),
     powerKilowatts: 8,
     consumedKilowattHours: 8.5
   },
   {
-    _id: ObjectId("60e56c3b67efa144f838daf9"),
+    _id: ObjectId("60ed5e679ea1f9f74814ca38"),
     buildingID: 'Building-ABC',
     deviceID: 'UltraAirCon-111',
-    timestamp: ISODate("2021-07-03T13:29:00.000Z"),
+    timestamp: ISODate("2021-07-03T13:29:59.000Z"),
     powerKilowatts: 9,
     consumedKilowattHours: 8.5
   },
@@ -352,15 +352,15 @@ For the pipeline to compute the total energy consumed by all the air-conditionin
 
 ## Observations
 
- * __Integral Trapezoidal Rule.__ As [documented in the MongoDB Manual](http://todo), `$integral` _"returns an approximation for the mathematical integral value, which is calculated using the trapezoidal rule"_. For non-mathematicians, this explanation may be hard to understand. You may find it easier to comprehend the behaviour of the `$integral` operator by studying the illustration below and the explanation that follows:
+ * __Integral Trapezoidal Rule.__ As [documented in the MongoDB Manual](https://docs.mongodb.com/manual/reference/operator/aggregation/integral/), `$integral` _"returns an approximation for the mathematical integral value, which is calculated using the trapezoidal rule"_. For non-mathematicians, this explanation may be hard to understand. You may find it easier to comprehend the behaviour of the `$integral` operator by studying the illustration below and the explanation that follows:
 
-     ![Example of calculating power consumption by approximating integrals using the trapezoidal rul ](./pics/trapezoidal-rule-example.png)
+     ![Example of calculating power consumption by approximating integrals using the trapezoidal rule](./pics/trapezoidal-rule-example.png)
 
-     Essentially the [trapezoidal rule](https://en.wikipedia.org/wiki/Trapezoidal_rule) determines the area of a region under a graph by matching the region with a trapezoid shape that approximately fits this region and then calculating the area of this trapezoid. You can see a set of points on the illustrated graph with the approximated trapezoid shape underneath spanning 1 hour. For this IOT Power Consumption example, the points on the graph represent an air-conditioning unit's captured power readings. The Y-axis is the _power rate_ in Kilowatts, and the X-axis is _time_ to indicate when the device captured each reading. Consequently, the energy consumed by an air-conditioning unit for a given hour is the area of the hour's specific region under the graph. Using the `$integral` operator for the window of time you define in the `$setWindowFields` stage, you are asking for this approximate area to be calculated, which is the Kilowatt-hours consumed by the air-conditioning unit in one hour.
+     Essentially the [trapezoidal rule](https://en.wikipedia.org/wiki/Trapezoidal_rule) determines the area of a region between two points under a graph by matching the region with a trapezoid shape that approximately fits this region and then calculating the area of this trapezoid. You can see a set of points on the illustrated graph with the matched trapezoid shape underneath each pair of points. For this IOT Power Consumption example, the points on the graph represent an air-conditioning unit's power readings captured every 30 minutes. The Y-axis is the _power rate_ in Kilowatts, and the X-axis is _time_ to indicate when the device captured each reading. Consequently, for this example, the energy consumed by the air-conditioning unit for a given hour's span is the area of the hour's specific section under the graph. This section's area is approximately the area of the two trapezoids shown. Using the `$integral` operator for the window of time you define in the `$setWindowFields` stage, you are asking for this approximate area to be calculated, which is the Kilowatt-hours consumed by the air-conditioning unit in one hour.
 
  * __Window Range Definition.__ For every captured document representing a device reading, this example's pipeline identifies a window of _1-hour_ of previous documents relative to this _current_ document. The pipeline uses this set of documents as the input for the `$integral` operator. It defines this window range in the setting `range: [-1, "current"], unit: "hour"`. The pipeline assigns the output of the `$integral` calculation to a new field called `consumedKilowattHours`.
 
  * __One Hour Range Vs Hours Output.__ The fact that the `$setWindowFields` stage in the pipeline defines `unit: "hour"` in two places may appear redundant at face value. However, this is not the case, and each serves a different purpose. As described in the previous observation, `unit: "hour"` for the `"window"` option helps dictate the size of the window of the previous number of documents to analyse. However, `unit: "hour"` for the `$integral` operator defines that the output should be in hours ("Kilowatt-hours" in this example), yielding the result `consumedKilowattHours: 8.5` for one of the processed device readings. However, if the pipeline defined this `$integral` parameter to be `"unit": "minute"` instead, which is perfectly valid, the output value would be `510` Kilowatt-minutes (i.e. 8.5 x 60 minutes).
  
- * __Index for Partition By & Sort By.__ In this example, you define the index `{deviceID: 1, timestamp: 1}` to support the combination of the `partitionBy` and `sortBy` parameters for the `$setWindowFields` stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB.
+ * __Index for Partition By & Sort By.__ In this example, you define the index `{deviceID: 1, timestamp: 1}` to optimise the use of the combination of the `partitionBy` and `sortBy` parameters in the `$setWindowFields` stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB.
 
