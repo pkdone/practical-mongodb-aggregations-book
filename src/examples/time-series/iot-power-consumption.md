@@ -1,6 +1,6 @@
 # IOT Power Consumption
 
-__Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of [$setWindowFields](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/) stage & [$integral](https://docs.mongodb.com/manual/reference/operator/aggregation/integral/) operator)_
+__Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of [time series collections](https://docs.mongodb.com/manual/core/timeseries-collections/), [$setWindowFields](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/) stage & [$integral](https://docs.mongodb.com/manual/reference/operator/aggregation/integral/) operator)_
 
 
 ## Scenario
@@ -14,6 +14,14 @@ Drop any old version of the database (if it exists) and then populate a new `dev
 ```javascript
 use book-iot-power-consumption;
 db.dropDatabase();
+
+db.createCollection("device_readings", {
+   timeseries: {
+     timeField: "timestamp",
+     metaField: "deviceID",
+     granularity: "minutes"
+  }
+});
 
 // Create compound index to aid performance for partitionBy & sortBy of setWindowFields
 db.device_readings.createIndex({"deviceID": 1, "timestamp": 1});
