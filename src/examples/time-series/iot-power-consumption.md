@@ -15,11 +15,13 @@ Drop any old version of the database (if it exists) and then populate a new `dev
 use book-iot-power-consumption;
 db.dropDatabase();
 
+// Use a time-series collection for optimal processing
+// NOTE: This command can be commented out and the full example will still work
 db.createCollection("device_readings", {
-   timeseries: {
-     timeField: "timestamp",
-     metaField: "deviceID",
-     granularity: "minutes"
+  "timeseries": {
+    "timeField": "timestamp",
+    "metaField": "deviceID",
+    "granularity": "minutes"
   }
 });
 
@@ -369,6 +371,8 @@ For the pipeline to compute the total energy consumed by all the air-conditionin
  * __Window Range Definition.__ For every captured document representing a device reading, this example's pipeline identifies a window of _1-hour_ of previous documents relative to this _current_ document. The pipeline uses this set of documents as the input for the `$integral` operator. It defines this window range in the setting `range: [-1, "current"], unit: "hour"`. The pipeline assigns the output of the `$integral` calculation to a new field called `consumedKilowattHours`.
 
  * __One Hour Range Vs Hours Output.__ The fact that the `$setWindowFields` stage in the pipeline defines `unit: "hour"` in two places may appear redundant at face value. However, this is not the case, and each serves a different purpose. As described in the previous observation, `unit: "hour"` for the `"window"` option helps dictate the size of the window of the previous number of documents to analyse. However, `unit: "hour"` for the `$integral` operator defines that the output should be in hours ("Kilowatt-hours" in this example), yielding the result `consumedKilowattHours: 8.5` for one of the processed device readings. However, if the pipeline defined this `$integral` parameter to be `"unit": "minute"` instead, which is perfectly valid, the output value would be `510` Kilowatt-minutes (i.e. 8.5 x 60 minutes).
- 
- * __Index for Partition By & Sort By.__ In this example, you define the index `{deviceID: 1, timestamp: 1}` to optimise the use of the combination of the `partitionBy` and `sortBy` parameters in the `$setWindowFields` stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB.
+
+ * __Optional Time Series Collection.__ This example uses a [time series collection](https://docs.mongodb.com/manual/core/timeseries-collections/) to store sequences of device measurements over time efficiently. Employing a time series collection is optional, as shown in the `NOTE` Javascript comment in the example code. The aggregation pipeline does not need to be changed and achieves the same output if you use a regular collection instead. However, when dealing with large data sets, the aggregation will complete quicker by employing a time series collection.
+  
+ * __Index for Partition By & Sort By.__ In this example, you define the index `{deviceID: 1, timestamp: 1}` to optimise the use of the combination of the `partitionBy` and `sortBy` parameters in the `$setWindowFields` stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB. It is beneficial to use this index regardless of whether you employ a regular collection or adopt a time series collection.
 
