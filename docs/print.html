@@ -179,7 +179,7 @@
 <p> </p>
 <h1 id="practical-mongodb-aggregations"><a class="header" href="#practical-mongodb-aggregations">Practical MongoDB Aggregations</a></h1>
 <p>Author: Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</p>
-<p>Version: 2.00</p>
+<p>Version: 2.01</p>
 <p>Last Updated: July 2021</p>
 <p>MongoDB Versions Supported: 4.2 → 5.0</p>
 <p>Book published at: <a href="https://www.practical-mongodb-aggregations.com">www.practical-mongodb-aggregations.com</a></p>
@@ -3498,13 +3498,23 @@ db.payments.insertMany([
 <h1 id="time-series-examples"><a class="header" href="#time-series-examples">Time-Series Examples</a></h1>
 <p>This section provides examples of aggregating time-series data, common in use cases involving financial data sets and Internet-of-Things (IoT).</p>
 <h1 id="iot-power-consumption"><a class="header" href="#iot-power-consumption">IOT Power Consumption</a></h1>
-<p><strong>Minimum MongoDB Version:</strong> 5.0    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/">$setWindowFields</a> stage &amp; <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/integral/">$integral</a> operator)</em></p>
+<p><strong>Minimum MongoDB Version:</strong> 5.0    <em>(due to use of <a href="https://docs.mongodb.com/manual/core/timeseries-collections/">time series collections</a>, <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/">$setWindowFields</a> stage &amp; <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/integral/">$integral</a> operator)</em></p>
 <h2 id="scenario-13"><a class="header" href="#scenario-13">Scenario</a></h2>
 <p>You are monitoring various air-conditioning units running in two buildings on an industrial campus. Every 30 minutes, a device in each unit sends the unit's current power consumption reading back to base, which a central database persists. You want to analyse this data to see how much energy in kilowatt-hours (kWh) each air-conditioning unit has consumed over the last hour for each reading received. Furthermore, you want to compute the total energy consumed by all the air-conditioning units combined in each building for every hour.</p>
 <h2 id="sample-data-population-13"><a class="header" href="#sample-data-population-13">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>device_readings</code> collection with device readings spanning 3 hours of a day for air-conditioning units in two different buildings.</p>
 <pre><code class="language-javascript">use book-iot-power-consumption;
 db.dropDatabase();
+
+// Use a time-series collection for optimal processing
+// NOTE: This command can be commented out and the full example will still work
+db.createCollection(&quot;device_readings&quot;, {
+  &quot;timeseries&quot;: {
+    &quot;timeField&quot;: &quot;timestamp&quot;,
+    &quot;metaField&quot;: &quot;deviceID&quot;,
+    &quot;granularity&quot;: &quot;minutes&quot;
+  }
+});
 
 // Create compound index to aid performance for partitionBy &amp; sortBy of setWindowFields
 db.device_readings.createIndex({&quot;deviceID&quot;: 1, &quot;timestamp&quot;: 1});
@@ -3826,7 +3836,10 @@ db.device_readings.insertMany([
 <p><strong>One Hour Range Vs Hours Output.</strong> The fact that the <code>$setWindowFields</code> stage in the pipeline defines <code>unit: &quot;hour&quot;</code> in two places may appear redundant at face value. However, this is not the case, and each serves a different purpose. As described in the previous observation, <code>unit: &quot;hour&quot;</code> for the <code>&quot;window&quot;</code> option helps dictate the size of the window of the previous number of documents to analyse. However, <code>unit: &quot;hour&quot;</code> for the <code>$integral</code> operator defines that the output should be in hours (&quot;Kilowatt-hours&quot; in this example), yielding the result <code>consumedKilowattHours: 8.5</code> for one of the processed device readings. However, if the pipeline defined this <code>$integral</code> parameter to be <code>&quot;unit&quot;: &quot;minute&quot;</code> instead, which is perfectly valid, the output value would be <code>510</code> Kilowatt-minutes (i.e. 8.5 x 60 minutes).</p>
 </li>
 <li>
-<p><strong>Index for Partition By &amp; Sort By.</strong> In this example, you define the index <code>{deviceID: 1, timestamp: 1}</code> to optimise the use of the combination of the <code>partitionBy</code> and <code>sortBy</code> parameters in the <code>$setWindowFields</code> stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB.</p>
+<p><strong>Optional Time Series Collection.</strong> This example uses a <a href="https://docs.mongodb.com/manual/core/timeseries-collections/">time series collection</a> to store sequences of device measurements over time efficiently. Employing a time series collection is optional, as shown in the <code>NOTE</code> Javascript comment in the example code. The aggregation pipeline does not need to be changed and achieves the same output if you use a regular collection instead. However, when dealing with large data sets, the aggregation will complete quicker by employing a time series collection.</p>
+</li>
+<li>
+<p><strong>Index for Partition By &amp; Sort By.</strong> In this example, you define the index <code>{deviceID: 1, timestamp: 1}</code> to optimise the use of the combination of the <code>partitionBy</code> and <code>sortBy</code> parameters in the <code>$setWindowFields</code> stage. This means that the aggregation runtime does not have to perform a slow in-memory sort based on these two fields, and it also avoids the pipeline stage memory limit of 100 MB. It is beneficial to use this index regardless of whether you employ a regular collection or adopt a time series collection.</p>
 </li>
 </ul>
 <h1 id="appendices"><a class="header" href="#appendices">Appendices</a></h1>
