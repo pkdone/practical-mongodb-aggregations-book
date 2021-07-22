@@ -25,7 +25,7 @@ To install the Rust and mdBook required build tools on your local workstation:
 
  * In the file `src/credits.md` increment the version number of the book
  * Via a terminal/shell/command-line, from the base folder of this GitHub repo:
-   - Run the following script which will rebuild the latest version of the book, copy it to the `/docs` directory, and add analytics tracking to each generated book HTML page: `./stage_book_for_publish.sh`
+   - Run the following script which will rebuild the latest version of the book, copy it to the `/docs` directory, and add analytics tracking and other metadata to each generated book HTML page: `./stage_book_for_publish.sh`
    - Using the appropriate GitHub commands, in the _main_ branch: Add changes, Commit changes, Push to main in GitHub
  
 &nbsp;(the published new version of the book is also accessible via: [pkdone.github.io/practical-mongodb-aggregations-book/](https://pkdone.github.io/practical-mongodb-aggregations-book))
@@ -36,7 +36,7 @@ To install the Rust and mdBook required build tools on your local workstation:
 For any changes or additions, the following principles must to be adhered to, for consistency across all the chapters in the book and for ease of consumption by readers:
 
  * For the examples chapters, follow the exact `.md` file markdown section header and code area structure used by every existing example chapter
- * For Mongo-Shell/JavaScript code samples in each examples chapter's _Sample Data Population_ and _Aggregation Pipeline(s)_ sections, adhere to the following rules (note, for Mongo Shell results, these rules do not need to be adhered too - just use the result text as-is, as outputted from the shell):
+ * For MongoDB-Shell/JavaScript code samples in each examples chapter's _Sample Data Population_ and _Aggregation Pipeline(s)_ sections, adhere to the following rules (note, for MongoDB Shell results, these rules do not need to be adhered too - just use the result text as-is, as outputted from the Shell):
    - Don't start or end a stage on the same line as another stage
    - For every field in a stage, and stage in a pipeline, include a trailing comma even if it is currently the last item
    - Include an empty newline between every stage
