@@ -4,7 +4,7 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 2.01
+Version: 2.02
 
 Last Updated: July 2021
 

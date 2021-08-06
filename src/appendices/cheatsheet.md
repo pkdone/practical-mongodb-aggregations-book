@@ -487,8 +487,8 @@ $replaceRoot: {
 {_id: "▧", a: "●", b: ["◰"]}
 {_id: "▨", a: "■", b: ["◳", "◱"]}
    ⬇︎      
-$replaceWith:
-  {first: {$first: "$b"}, last: {$last: "$b"}
+$replaceWith: {
+  first: {$first: "$b"}, last: {$last: "$b"}
 }
    ⬇︎      
 {first: '◰', last: '◱'}
