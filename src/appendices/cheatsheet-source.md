@@ -176,7 +176,7 @@ db.lists.aggregate([
 
 // $sample  (v3.2)
 db.shapes.aggregate([
-  {"$sample": {"size": 2}}
+  {"$sample": {"size": 3}}
 ]);
 
 

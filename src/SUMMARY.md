@@ -32,7 +32,7 @@
         - [One-to-One Join](examples/joining/one-to-one-join.md)    
         - [Multi-Field Join & One-to-Many](examples/joining/multi-one-to-many.md)
     - [Data Types Conversion Examples](examples/type-convert/type-convert.md)
-        - [Strongly Typed Conversion](examples/type-convert/convert-to-strongly-typed.md)
+        - [Strongly-Typed Conversion](examples/type-convert/convert-to-strongly-typed.md)
         - [Convert Incomplete Date Strings](examples/type-convert/convert-incomplete-dates.md)
     - [Trend Analysis Examples](examples/trend-analysis/trend-analysis.md)
         - [Faceted Classification](examples/trend-analysis/faceted-classifications.md)    
@@ -42,12 +42,13 @@
         - [Restricted View](examples/securing-data/restricted-view.md)
         - [Mask Sensitive Fields](examples/securing-data/mask-sensitive-fields.md)
     - [Time-Series Examples](examples/time-series/time-series.md)
-        - [IOT Power Consumption](examples/time-series/iot-power-consumption.md)
+        - [IoT Power Consumption](examples/time-series/iot-power-consumption.md)
 
 ## Appendices
 - [Appendices](appendices/appendices.md)
     - [Appendix: Stages Cheatsheet](appendices/cheatsheet.md)
-    - [Appendix: Stages Cheatsheet Source](appendices/cheatsheet_source.md)
+    - [Appendix: Stages Cheatsheet Source](appendices/cheatsheet-source.md)
+    - [Appendix: Book Version History](appendices/book-history.md)
 
 [](back-cover.md)
 

@@ -6,11 +6,11 @@ With MongoDB's aggregations, you can take a complex problem, requiring a complex
 
 ![Alternatives for MongoDB aggregation pipelines composability](./pics/pipeline-equivalence.png)
 
-Suppose you have two pipelines with one stage in each and run the second pipeline after completing the first pipeline. The final result set is the same as if you have just run a single pipeline containing both stages serially. There is no difference between the two. As a developer, you can reduce the [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) by understanding how a problem can be broken down in this way when building aggregation pipelines. Aggregation pipelines enable you to decompose a big challenge into lots of minor challenges. By embracing this approach of first developing each stage separately, you will find even the most complex challenges become surmountable.
+Suppose you have two pipelines with one stage in each. After saving the intermediate results by running the first pipeline, you run the second pipeline against the saved intermediate data set. The final result is the same as running a single pipeline containing both stages serially. There is no difference between the two. As a developer, you can reduce the [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) by understanding how a problem can be broken down in this way when building aggregation pipelines. Aggregation pipelines enable you to decompose a big challenge into lots of minor challenges. By embracing this approach of first developing each stage separately, you will find even the most complex challenges become surmountable.
 
 ## Specific Tips To Promote Composability
 
-In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate collections whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using MongoDB's Shell (or they use the "disable stage" capability provided by the [GUI tools](../intro/getting-started.md) for MongoDB).
+In reality, once most developers become adept at using the Aggregation Framework, they tend not to rely on temporary intermediate data sets whilst prototyping each stage. However, it is still a reasonable development approach if you prefer it. Instead, seasoned aggregation pipeline developers typically comment out one or more stages of an aggregation pipeline when using MongoDB's Shell (or they use the "disable stage" capability provided by the [GUI tools](../intro/getting-started.md) for MongoDB).
 
 To encourage composability and hence productivity, some of the principles to strive for are:
 
@@ -108,7 +108,7 @@ var pipeline = [
 Furthermore, some developers may take additional steps if they do not intend to transfer the prototyped pipeline to a different programming language:
 
  * They may choose to decompose elements inside a stage into additional JavaScript variables to avoid code "typos". For instance, to prevent one part of a pipeline incorrectly referencing a field computed earlier in the pipeline due to a misspelling.
- * They may choose to factor out complex boilerplate parts of a pipeline into separate JavaScript functions. They can then re-use each function from multiple places within the main pipeline's code.
+ * They may choose to factor out the generation of a complex boilerplate part of a pipeline into a separate JavaScript function. They can then re-use this function from multiple places within the main pipeline's code. The [Incremental Analytics example](../examples/trend-analysis/incremental-analytics.html#aggregation-pipeline), later in this book, provides an example of this approach.
 
 In summary, this book is not advocating a multi-variable approach over a single-variable approach when you define a pipeline. The book is just highlighting two highly composable options. Ultimately it is a personal choice concerning which you find most comfortable and productive. 
 

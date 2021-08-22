@@ -1,4 +1,4 @@
-# Strongly Typed Conversion
+# Strongly-Typed Conversion
 
 __Minimum MongoDB Version:__ 4.2
 
@@ -100,7 +100,7 @@ db.orders.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-The same number of documents should appear in the new `orders_typed` collection as the source collection had, with the same field structure and fields names, but now using strongly typed boolean/date/integer/decimal values where appropriate, as shown below:
+The same number of documents should appear in the new `orders_typed` collection as the source collection had, with the same field structure and fields names, but now using strongly-typed boolean/date/integer/decimal values where appropriate, as shown below:
 
 ```javascript
 [
@@ -125,7 +125,7 @@ The same number of documents should appear in the new `orders_typed` collection 
   },
   {
     _id: ObjectId('6064381b7aa89666258201ff'),
-    customer_id: 'tj@wheresmyemail.com',
+    customer_id: 'tj@wheresmyemail.com',\
     further_info: {
       item_qty: 1,
       reported: true

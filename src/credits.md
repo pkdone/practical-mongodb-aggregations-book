@@ -6,7 +6,7 @@ Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
 Version: 2.02
 
-Last Updated: July 2021
+Last Updated: August 2021
 
 MongoDB Versions Supported: 4.2 → 5.0
 

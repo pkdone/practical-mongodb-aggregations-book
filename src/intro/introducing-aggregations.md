@@ -2,7 +2,7 @@
 
 ## What Is MongoDB’s Aggregation Framework?
 
-MongoDB’s Aggregation Framework enables users to send an analytics or data processing workload, written using the framework’s aggregation language, to the database for it to execute the workload against the data it holds. You can think of the Aggregation Framework as having two parts:
+MongoDB’s Aggregation Framework enables users to send an analytics or data processing workload, written using an aggregation language, to the database to execute the workload against the data it holds. You can think of the Aggregation Framework as having two parts:
 
  1. The Aggregations API provided by the MongoDB Driver embedded in each application to enable the application to define an aggregation task called a pipeline and send it to the database for the database to process
  
