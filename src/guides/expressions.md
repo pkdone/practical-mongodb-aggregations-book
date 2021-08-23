@@ -1,6 +1,6 @@
 # Expressions Explained
 
-## What Are Aggregation Expressions?
+## Summarising Aggregation Expressions
 
 Expressions give aggregation pipelines their data manipulation power. However, they tend to be something that developers start using by just copying examples from the MongoDB Manual and then refactoring these without thinking enough about what they are. Proficiency in aggregation pipelines demands a deeper understanding of expressions.
 
@@ -12,11 +12,11 @@ Aggregation expressions come in one of three primary flavours:
  
  * __Variables.__ Accessed with a `$$` prefix followed by the fixed name and falling into three sub-categories:
  
-   - __Context system variables.__ With values coming from the system environment rather than each input record an aggregation stage is processing. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
+   - __Context System Variables.__ With values coming from the system environment rather than each input record an aggregation stage is processing. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
    
-   - __Marker flag system variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
+   - __Marker Flag System Variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
 
-   - __Bind user variables.__ For storing values you declare with a `$let` operator (or with the `let` option of a `$lookup` stage, or `as` option of a `$map` or `$filter` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
+   - __Bind User Variables.__ For storing values you declare with a `$let` operator (or with the `let` option of a `$lookup` stage, or `as` option of a `$map` or `$filter` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
 
 You can combine these three categories of aggregation expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/securing-data/mask-sensitive-fields.html) example, which combines all three expressions.
 
@@ -31,7 +31,49 @@ You can combine these three categories of aggregation expressions when operating
 The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `$cond` is one of the operator expressions used in the excerpt (a "conditional" expression operator which takes three arguments: `if`, `then` & `else`). `$eq` is another expression operator (a "comparison" expression operator). `$$REMOVE` is a "marker flag" variable expression instructing the pipeline to exclude the field. Both `$customer_info.category` and `$customer_info` elements are field path expressions referencing each incoming record's fields.
 
 
-## Where Aggregation Expressions Are Used
+## What Do Expressions Produce?
+
+As described above, an expression can be an Operator (e.g. `$concat`), a Variable (e.g. `$$ROOT`) or a Field Path (e.g. `$address`). In all these cases, an expression is just something that dynamically populates and returns a new [JSON](https://en.wikipedia.org/wiki/JSON#Data_types)/[BSON](https://en.wikipedia.org/wiki/BSON) data type element, which can be one of:
+* a Number &nbsp;_(including integer, long, float, double, decimal128)_
+* a String &nbsp;_(UTF-8)_
+* a Boolean
+* a DateTime &nbsp;_(UTC)_
+* an Array
+* an Object
+
+However, a specific expression can restrict you to returning just one or a few of these types. For example, the `$concat` Operator, which combines multiple strings, can only produce a _String_ data type (or null). The Variable `$$ROOT` can only return an _Object_ which refers to the root document currently being processed in the pipeline stage. 
+
+A Field Path (e.g. `$address`) is different and can return an element of any data type, depending on what the field refers to in the current input document. For example, suppose `$address` references a sub-document. In this case, it will return an _Object_. However, if it references a list of elements, it will return an _Array_. As a human, you can guess that the Field Path `$address` won't return a _DateTime_, but the aggregation runtime does not know this ahead of time. There could be even more dynamics at play. Due to MongoDB's flexible data model, `$address` could yield a different type for each record processed in a pipeline stage. The first record's `address` may be an _Object_ sub-document with street name and city fields. The second record's `address` might represent the full address as a single _String_.
+
+In summary, _Field Paths_ and _Bind User Variables_ are expressions that can return any JSON/BSON data type at runtime depending on their context. For the other kinds of expressions (_Operators_, _Context System Variables_ and _Marker Flag System Variables_), the data type each can return is fixed to one or a set number of documented types. To establish the exact data type produced by these specific operators, you need to consult the [Aggregation Pipeline Quick Reference documentation](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/). 
+
+For the Operator category of expressions, an expression can also take other expressions as parameters, making them composable. Suppose you need to determine the day of the week for a given date, for example:
+
+```
+{"$dayOfWeek": ISODate("2021-04-24T00:00:00Z")}
+```
+Here the `$dayOfWeek` Operator expression can only return an element of type _Number_ and takes a single parameter, an element of type _DateTime_. However, rather than using a hardcoded date-time for the parameter, you could have provided an expression. This could be a _Field Path_ expression, for example:
+
+```
+{"$dayOfWeek": "$person_details.data_of_birth"}
+```
+
+Alternatively, you could have defined the parameter using a _Context System Variable_ expression, for example:
+
+```
+{"$dayOfWeek": "$$NOW"}
+```
+
+Or you could even have defined the parameter using yet another _Operator_ expression, for example: 
+
+```
+{"$dayOfWeek": {"$dateFromParts": {"year" : 2021, "month" : 4, "day": 24}}}
+```
+
+Furthermore, you could have defined `year`, `month` and `day` parameters for `$dateFromParts` to be dynamically generated using expressions rather than literal values. The ability to chain expressions together in this way gives your pipelines a lot of power and flexibility when you need it. 
+
+
+## Can All Stages Use Expressions?
 
 The following question is something you may not have asked yourself before, but asking this question and considering why the answer is what it is can help reveal more about what aggregation expressions are and why you use them.
 
@@ -99,7 +141,7 @@ The result of executing an aggregation with this pipeline is:
 
 As you can see, the second of the three shapes is not output because its area is only `12` (`3 x 4`).
 
-<a name="expression-restrictions"></a>
+
 ### Restrictions When Using Expressions with $match
 
 You should be aware that there are restrictions on when the runtime can benefit from an index when using a `$expr` operator inside a `$match` stage. This partly depends on the version of MongoDB you are running. Using `$expr`, you can leverage a `$eq` comparison operator with some constraints, including an inability to use a [multi-key index](https://docs.mongodb.com/manual/core/index-multikey/). For MongoDB versions before 5.0, if you use a "range" comparison operator (`$gt`, `$gte`, `$lt` and `$lte`), an index cannot be employed to match the field, but this works fine in version 5.0.

@@ -174,7 +174,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="expressions-explained"><a class="header" href="#expressions-explained">Expressions Explained</a></h1>
-<h2 id="what-are-aggregation-expressions"><a class="header" href="#what-are-aggregation-expressions">What Are Aggregation Expressions?</a></h2>
+<h2 id="summarising-aggregation-expressions"><a class="header" href="#summarising-aggregation-expressions">Summarising Aggregation Expressions</a></h2>
 <p>Expressions give aggregation pipelines their data manipulation power. However, they tend to be something that developers start using by just copying examples from the MongoDB Manual and then refactoring these without thinking enough about what they are. Proficiency in aggregation pipelines demands a deeper understanding of expressions.</p>
 <p>Aggregation expressions come in one of three primary flavours:</p>
 <ul>
@@ -188,13 +188,13 @@
 <p><strong>Variables.</strong> Accessed with a <code>$$</code> prefix followed by the fixed name and falling into three sub-categories:</p>
 <ul>
 <li>
-<p><strong>Context system variables.</strong> With values coming from the system environment rather than each input record an aggregation stage is processing.  Examples:  <code>$$NOW</code>, <code>$$CLUSTER_TIME</code></p>
+<p><strong>Context System Variables.</strong> With values coming from the system environment rather than each input record an aggregation stage is processing.  Examples:  <code>$$NOW</code>, <code>$$CLUSTER_TIME</code></p>
 </li>
 <li>
-<p><strong>Marker flag system variables.</strong> To indicate desired behaviour to pass back to the aggregation runtime.  Examples: <code>$$ROOT</code>, <code>$$REMOVE</code>, <code>$$PRUNE</code></p>
+<p><strong>Marker Flag System Variables.</strong> To indicate desired behaviour to pass back to the aggregation runtime.  Examples: <code>$$ROOT</code>, <code>$$REMOVE</code>, <code>$$PRUNE</code></p>
 </li>
 <li>
-<p><strong>Bind user variables.</strong> For storing values you declare with a <code>$let</code> operator (or with the <code>let</code> option of a <code>$lookup</code> stage, or <code>as</code> option of a <code>$map</code> or <code>$filter</code> stage).  Examples: <code>$$product_name_var</code>, <code>$$order_id_var</code></p>
+<p><strong>Bind User Variables.</strong> For storing values you declare with a <code>$let</code> operator (or with the <code>let</code> option of a <code>$lookup</code> stage, or <code>as</code> option of a <code>$map</code> or <code>$filter</code> stage).  Examples: <code>$$product_name_var</code>, <code>$$order_id_var</code></p>
 </li>
 </ul>
 </li>
@@ -207,7 +207,33 @@
                  }}
 </code></pre>
 <p>The pipeline retains an embedded sub-document (<code>customer_info</code>) in each resulting record unless a field in the original sub-document has a specific value (<code>category=SENSITIVE</code>). <code>$cond</code> is one of the operator expressions used in the excerpt (a &quot;conditional&quot; expression operator which takes three arguments: <code>if</code>, <code>then</code> &amp; <code>else</code>). <code>$eq</code> is another expression operator (a &quot;comparison&quot; expression operator). <code>$$REMOVE</code> is a &quot;marker flag&quot; variable expression instructing the pipeline to exclude the field. Both <code>$customer_info.category</code> and <code>$customer_info</code> elements are field path expressions referencing each incoming record's fields.</p>
-<h2 id="where-aggregation-expressions-are-used"><a class="header" href="#where-aggregation-expressions-are-used">Where Aggregation Expressions Are Used</a></h2>
+<h2 id="what-do-expressions-produce"><a class="header" href="#what-do-expressions-produce">What Do Expressions Produce?</a></h2>
+<p>As described above, an expression can be an Operator (e.g. <code>$concat</code>), a Variable (e.g. <code>$$ROOT</code>) or a Field Path (e.g. <code>$address</code>). In all these cases, an expression is just something that dynamically populates and returns a new <a href="https://en.wikipedia.org/wiki/JSON#Data_types">JSON</a>/<a href="https://en.wikipedia.org/wiki/BSON">BSON</a> data type element, which can be one of:</p>
+<ul>
+<li>a Number  <em>(including integer, long, float, double, decimal128)</em></li>
+<li>a String  <em>(UTF-8)</em></li>
+<li>a Boolean</li>
+<li>a DateTime  <em>(UTC)</em></li>
+<li>an Array</li>
+<li>an Object</li>
+</ul>
+<p>However, a specific expression can restrict you to returning just one or a few of these types. For example, the <code>$concat</code> Operator, which combines multiple strings, can only produce a <em>String</em> data type (or null). The Variable <code>$$ROOT</code> can only return an <em>Object</em> which refers to the root document currently being processed in the pipeline stage. </p>
+<p>A Field Path (e.g. <code>$address</code>) is different and can return an element of any data type, depending on what the field refers to in the current input document. For example, suppose <code>$address</code> references a sub-document. In this case, it will return an <em>Object</em>. However, if it references a list of elements, it will return an <em>Array</em>. As a human, you can guess that the Field Path <code>$address</code> won't return a <em>DateTime</em>, but the aggregation runtime does not know this ahead of time. There could be even more dynamics at play. Due to MongoDB's flexible data model, <code>$address</code> could yield a different type for each record processed in a pipeline stage. The first record's <code>address</code> may be an <em>Object</em> sub-document with street name and city fields. The second record's <code>address</code> might represent the full address as a single <em>String</em>.</p>
+<p>In summary, <em>Field Paths</em> and <em>Bind User Variables</em> are expressions that can return any JSON/BSON data type at runtime depending on their context. For the other kinds of expressions (<em>Operators</em>, <em>Context System Variables</em> and <em>Marker Flag System Variables</em>), the data type each can return is fixed to one or a set number of documented types. To establish the exact data type produced by these specific operators, you need to consult the <a href="https://docs.mongodb.com/manual/meta/aggregation-quick-reference/">Aggregation Pipeline Quick Reference documentation</a>. </p>
+<p>For the Operator category of expressions, an expression can also take other expressions as parameters, making them composable. Suppose you need to determine the day of the week for a given date, for example:</p>
+<pre><code>{&quot;$dayOfWeek&quot;: ISODate(&quot;2021-04-24T00:00:00Z&quot;)}
+</code></pre>
+<p>Here the <code>$dayOfWeek</code> Operator expression can only return an element of type <em>Number</em> and takes a single parameter, an element of type <em>DateTime</em>. However, rather than using a hardcoded date-time for the parameter, you could have provided an expression. This could be a <em>Field Path</em> expression, for example:</p>
+<pre><code>{&quot;$dayOfWeek&quot;: &quot;$person_details.data_of_birth&quot;}
+</code></pre>
+<p>Alternatively, you could have defined the parameter using a <em>Context System Variable</em> expression, for example:</p>
+<pre><code>{&quot;$dayOfWeek&quot;: &quot;$$NOW&quot;}
+</code></pre>
+<p>Or you could even have defined the parameter using yet another <em>Operator</em> expression, for example: </p>
+<pre><code>{&quot;$dayOfWeek&quot;: {&quot;$dateFromParts&quot;: {&quot;year&quot; : 2021, &quot;month&quot; : 4, &quot;day&quot;: 24}}}
+</code></pre>
+<p>Furthermore, you could have defined <code>year</code>, <code>month</code> and <code>day</code> parameters for <code>$dateFromParts</code> to be dynamically generated using expressions rather than literal values. The ability to chain expressions together in this way gives your pipelines a lot of power and flexibility when you need it. </p>
+<h2 id="can-all-stages-use-expressions"><a class="header" href="#can-all-stages-use-expressions">Can All Stages Use Expressions?</a></h2>
 <p>The following question is something you may not have asked yourself before, but asking this question and considering why the answer is what it is can help reveal more about what aggregation expressions are and why you use them.</p>
 <p><strong>Question:</strong> Can aggregation expressions be used within any type of pipeline stage?</p>
 <p><strong>Answer:</strong> No</p>
@@ -257,7 +283,6 @@
 ]
 </code></pre>
 <p>As you can see, the second of the three shapes is not output because its area is only <code>12</code> (<code>3 x 4</code>).</p>
-<p><a name="expression-restrictions"></a></p>
 <h3 id="restrictions-when-using-expressions-with-match"><a class="header" href="#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions with $match</a></h3>
 <p>You should be aware that there are restrictions on when the runtime can benefit from an index when using a <code>$expr</code> operator inside a <code>$match</code> stage. This partly depends on the version of MongoDB you are running. Using <code>$expr</code>, you can leverage a <code>$eq</code> comparison operator with some constraints, including an inability to use a <a href="https://docs.mongodb.com/manual/core/index-multikey/">multi-key index</a>. For MongoDB versions before 5.0, if you use a &quot;range&quot; comparison operator (<code>$gt</code>, <code>$gte</code>, <code>$lt</code> and <code>$lte</code>), an index cannot be employed to match the field, but this works fine in version 5.0.</p>
 <p>There are also subtle differences when ordering values for a specific field across multiple documents when some values have different types. MongoDB's query runtime (which executes regular MQL and <code>$match</code> filters) and MongoDB's aggregation runtime (which implements <code>$expr</code>) can apply different ordering rules when filtering, referred to as &quot;type bracketing&quot;. Consequently, a range query may not yield the same result with <code>$expr</code> as it does with MQL if some values have different types.</p>

@@ -50,12 +50,11 @@ In reality, most grouping scenarios focus on accumulating summary data such as t
 
 To ensure you avoid excessive memory consumption when you are looking to use a `$group` stage, adopt the following principles:
 
- 1. __Avoid Unnecessary Grouping__. This chapter covers this recommendation in far greater detail in the section _[2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements](#avoid_unwinding)_.
+ 1. __Avoid Unnecessary Grouping__. This chapter covers this recommendation in far greater detail in the section _[2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements](#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements)_.
  
  2. __Group Summary Data Only__. If the use case permits it, use the group stage to accumulate things like totals, counts and summary roll-ups only, rather than holding all the raw data of each record belonging to a group. The Aggregation Framework provides a robust set of [accumulator operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#accumulators---group-) to help you achieve this inside a `$group` stage.
 
 
-<a name="avoid_unwinding"></a>
 ## 2. Avoid Unwinding & Regrouping Documents Just To Process Array Elements
 
 Sometimes, you need an aggregation pipeline to mutate or reduce an array field's content for each record. For example:
@@ -265,7 +264,6 @@ var pipeline = [
 
 This pipeline produces the same data output. However, when you look at its explain plan, it shows the database engine has pushed the `$match` filter to the top of the pipeline and used an index on the `value` field. The aggregation is now optimal because the `$match` stage is no longer "blocked" by its dependency on the computed field.
 
-<a name="partial_match"></a>
 ### Explore If Bringing Forward A Partial Match Is Possible
 
 There may be some cases where you can't unravel a computed value in such a manner. However, it may still be possible for you to include an additional `$match` stage, to perform a _partial match_ targeting the aggregation's query cursor. Suppose you have a pipeline that masks the values of sensitive `date_of_birth` fields (replaced with computed `masked_date` fields). The computed field adds a random number of days (one to seven) to each current date. The pipeline already contains a `$match` stage with the filter `masked_date > 01-Jan-2020`. The runtime cannot optimise this to the top of the pipeline due to the dependency on a computed value. Nevertheless, you can manually add an extra `$match` stage at the top of the pipeline, with the filter `date_of_birth > 25-Dec-2019`. This new `$match` leverages an index and filters records seven days earlier than the existing `$match`, but the aggregation's final output is the same. The new `$match` may pass on a few more records than intended. However, later on, the pipeline applies the existing filter `masked_date > 01-Jan-2020` that will naturally remove surviving surplus records before the pipeline completes.
