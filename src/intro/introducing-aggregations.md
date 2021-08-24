@@ -12,7 +12,7 @@ The following diagram illustrates these two elements and their inter-relationshi
 
 ![MongoDB Aggregation Framework components - Driver API and Database Aggregation Runtime](./pics/aggregation-components.png)
 
-The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation framework. In the database, the Aggregation Runtime re-uses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.
+The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation Framework. In the database, the Aggregation Runtime re-uses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.
 
 
 ## What Is MongoDB's Aggregations Language?
