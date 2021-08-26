@@ -6,7 +6,7 @@ Expressions give aggregation pipelines their data manipulation power. However, t
 
 Aggregation expressions come in one of three primary flavours:
 
- * __Operators.__ Accessed as an object with a `$` prefix followed by the operator function name. The "_dollar-operator-name_" is used as the main key for object. &nbsp;Examples:  `{$arrayElemAt: ...}`, `{$cond: ...}`, `{$dateToString: ...}`
+ * __Operators.__ Accessed as an object with a `$` prefix followed by the operator function name. The "_dollar-operator-name_" is used as the main key for the object. &nbsp;Examples:  `{$arrayElemAt: ...}`, `{$cond: ...}`, `{$dateToString: ...}`
  
  * __Field Paths.__ Accessed as a string with a `$` prefix followed by the field's path in each record being processed. &nbsp;Examples: `"$account.sortcode"`, `"$addresses.address.city"`
  
