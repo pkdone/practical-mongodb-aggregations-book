@@ -6,17 +6,17 @@ Expressions give aggregation pipelines their data manipulation power. However, t
 
 Aggregation expressions come in one of three primary flavours:
 
- * __Operators.__ Accessed with a `$` prefix followed by the operator function name. These are used as the keys for objects. &nbsp;Examples:  `$arrayElemAt`, `$cond`, `$dateToString`
+ * __Operators.__ Accessed as an object with a `$` prefix followed by the operator function name. The "_dollar-operator-name_" is used as the main key for object. &nbsp;Examples:  `{$arrayElemAt: ...}`, `{$cond: ...}`, `{$dateToString: ...}`
  
- * __Field Paths.__ Accessed with a `$` prefix followed by the field's path in each record being processed. &nbsp;Examples: `$account.sortcode`, `$addresses.address.city`
+ * __Field Paths.__ Accessed as a string with a `$` prefix followed by the field's path in each record being processed. &nbsp;Examples: `"$account.sortcode"`, `"$addresses.address.city"`
  
- * __Variables.__ Accessed with a `$$` prefix followed by the fixed name and falling into three sub-categories:
+ * __Variables.__ Accessed as a string with a `$$` prefix followed by the fixed name and falling into three sub-categories:
  
-   - __Context System Variables.__ With values coming from the system environment rather than each input record an aggregation stage is processing. &nbsp;Examples:  `$$NOW`, `$$CLUSTER_TIME`
+   - __Context System Variables.__ With values coming from the system environment rather than each input record an aggregation stage is processing. &nbsp;Examples:  `"$$NOW"`, `"$$CLUSTER_TIME"`
    
-   - __Marker Flag System Variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `$$ROOT`, `$$REMOVE`, `$$PRUNE`
+   - __Marker Flag System Variables.__ To indicate desired behaviour to pass back to the aggregation runtime. &nbsp;Examples: `"$$ROOT"`, `"$$REMOVE"`, `"$$PRUNE"`
 
-   - __Bind User Variables.__ For storing values you declare with a `$let` operator (or with the `let` option of a `$lookup` stage, or `as` option of a `$map` or `$filter` stage). &nbsp;Examples: `$$product_name_var`, `$$order_id_var`
+   - __Bind User Variables.__ For storing values you declare with a `$let` operator (or with the `let` option of a `$lookup` stage, or `as` option of a `$map` or `$filter` stage). &nbsp;Examples: `"$$product_name_var"`, `"$$orderIdVal"`
 
 You can combine these three categories of aggregation expressions when operating on input records, enabling you to perform complex comparisons and transformations of data. To highlight this, the code snippet below is an excerpt from this book's [Mask Sensitive Fields](../examples/securing-data/mask-sensitive-fields.html) example, which combines all three expressions.
 
@@ -28,12 +28,12 @@ You can combine these three categories of aggregation expressions when operating
                  }}
 ```
 
-The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `$cond` is one of the operator expressions used in the excerpt (a "conditional" expression operator which takes three arguments: `if`, `then` & `else`). `$eq` is another expression operator (a "comparison" expression operator). `$$REMOVE` is a "marker flag" variable expression instructing the pipeline to exclude the field. Both `$customer_info.category` and `$customer_info` elements are field path expressions referencing each incoming record's fields.
+The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `{$cond: ...}` is one of the operator expressions used in the excerpt (a "conditional" expression operator which takes three arguments: `if`, `then` & `else`). `{$eq: ...}` is another expression operator (a "comparison" expression operator). `"$$REMOVE"` is a "marker flag" variable expression instructing the pipeline to exclude the field. Both `"$customer_info.category"` and `"$customer_info"` elements are field path expressions referencing each incoming record's fields.
 
 
 ## What Do Expressions Produce?
 
-As described above, an expression can be an Operator (e.g. `$concat`), a Variable (e.g. `$$ROOT`) or a Field Path (e.g. `$address`). In all these cases, an expression is just something that dynamically populates and returns a new [JSON](https://en.wikipedia.org/wiki/JSON#Data_types)/[BSON](https://en.wikipedia.org/wiki/BSON) data type element, which can be one of:
+As described above, an expression can be an Operator (e.g. `{$concat: ...}`), a Variable (e.g. `"$$ROOT"`) or a Field Path (e.g. `"$address"`). In all these cases, an expression is just something that dynamically populates and returns a new [JSON](https://en.wikipedia.org/wiki/JSON#Data_types)/[BSON](https://en.wikipedia.org/wiki/BSON) data type element, which can be one of:
 * a Number &nbsp;_(including integer, long, float, double, decimal128)_
 * a String &nbsp;_(UTF-8)_
 * a Boolean
@@ -41,9 +41,9 @@ As described above, an expression can be an Operator (e.g. `$concat`), a Variabl
 * an Array
 * an Object
 
-However, a specific expression can restrict you to returning just one or a few of these types. For example, the `$concat` Operator, which combines multiple strings, can only produce a _String_ data type (or null). The Variable `$$ROOT` can only return an _Object_ which refers to the root document currently being processed in the pipeline stage. 
+However, a specific expression can restrict you to returning just one or a few of these types. For example, the `{$concat: ...}` Operator, which combines multiple strings, can only produce a _String_ data type (or null). The Variable `"$$ROOT"` can only return an _Object_ which refers to the root document currently being processed in the pipeline stage. 
 
-A Field Path (e.g. `$address`) is different and can return an element of any data type, depending on what the field refers to in the current input document. For example, suppose `$address` references a sub-document. In this case, it will return an _Object_. However, if it references a list of elements, it will return an _Array_. As a human, you can guess that the Field Path `$address` won't return a _DateTime_, but the aggregation runtime does not know this ahead of time. There could be even more dynamics at play. Due to MongoDB's flexible data model, `$address` could yield a different type for each record processed in a pipeline stage. The first record's `address` may be an _Object_ sub-document with street name and city fields. The second record's `address` might represent the full address as a single _String_.
+A Field Path (e.g. `"$address"`) is different and can return an element of any data type, depending on what the field refers to in the current input document. For example, suppose `"$address"` references a sub-document. In this case, it will return an _Object_. However, if it references a list of elements, it will return an _Array_. As a human, you can guess that the Field Path `"$address"` won't return a _DateTime_, but the aggregation runtime does not know this ahead of time. There could be even more dynamics at play. Due to MongoDB's flexible data model, `"$address"` could yield a different type for each record processed in a pipeline stage. The first record's `address` may be an _Object_ sub-document with street name and city fields. The second record's `address` might represent the full address as a single _String_.
 
 In summary, _Field Paths_ and _Bind User Variables_ are expressions that can return any JSON/BSON data type at runtime depending on their context. For the other kinds of expressions (_Operators_, _Context System Variables_ and _Marker Flag System Variables_), the data type each can return is fixed to one or a set number of documented types. To establish the exact data type produced by these specific operators, you need to consult the [Aggregation Pipeline Quick Reference documentation](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/). 
 
