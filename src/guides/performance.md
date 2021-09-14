@@ -61,7 +61,7 @@ Sometimes, you need an aggregation pipeline to mutate or reduce an array field's
 
  * You may need to add together all the values in the array into a total field
  * You may need to retain the first and last elements of the array only
- * You may need to retain only one reoccurring field for each sub-document in the array 
+ * You may need to retain only one recurring field for each sub-document in the array 
  * ..._or numerous other array "reduction" scenarios_
 
 To bring this to life, imagine a retail `orders` collection where each document contains an array of products purchased as part of the order, as shown in the example below:
