@@ -4,9 +4,9 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 2.04
+Version: 2.05
 
-Last Updated: August 2021
+Last Updated: September 2021
 
 MongoDB Versions Supported: 4.2 → 5.0
 
