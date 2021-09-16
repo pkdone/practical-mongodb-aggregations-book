@@ -28,7 +28,7 @@ You can combine these three categories of aggregation expressions when operating
                  }}
 ```
 
-The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `{$cond: ...}` is one of the operator expressions used in the excerpt (a "conditional" expression operator which takes three arguments: `if`, `then` & `else`). `{$eq: ...}` is another expression operator (a "comparison" expression operator). `"$$REMOVE"` is a "marker flag" variable expression instructing the pipeline to exclude the field. Both `"$customer_info.category"` and `"$customer_info"` elements are field path expressions referencing each incoming record's fields.
+The pipeline retains an embedded sub-document (`customer_info`) in each resulting record unless a field in the original sub-document has a specific value (`category=SENSITIVE`). `{$cond: ...}` is one of the operator expressions used in the excerpt (a "conditional" operator expression which takes three arguments: `if`, `then` & `else`). `{$eq: ...}` is another operator expression (a "comparison" operator expression). `"$$REMOVE"` is a "marker flag" variable expression instructing the pipeline to exclude the field. Both `"$customer_info.category"` and `"$customer_info"` elements are field path expressions referencing each incoming record's fields.
 
 
 ## What Do Expressions Produce?
