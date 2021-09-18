@@ -145,7 +145,7 @@ db.orders.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-Three documents should be returned, representing the three customers orders that occurred in 2020, but with each orders `product_id` field replaced by two new looked up fields, `product_name` and `product_category`, as shown below:
+Three documents should be returned, representing the three customers orders that occurred in 2020, but with each order's `product_id` field replaced by two new looked up fields, `product_name` and `product_category`, as shown below:
 
 ```javascript
 [
