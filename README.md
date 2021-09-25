@@ -60,16 +60,6 @@ To create and then submit a new chapter for review and acceptance:
  * Create and submit a GitHub pull request capturing your additions and the reason why you feel the new chapter would add value to the book
 
 
-## Future Released Versions Of The Book
-
-Future versions of the book may include the following topics, yet to be written (not an exclusive list):
-
- * When prototyping large data sets, use the trick of using $sample or $limit to speed up aggregation execution time (but avoiding dangers of never testing without these)
- * In the Composability chapter, provide more detail and examples on factoring out complex boilerplate parts of a pipeline into separate JavaScript functions
- * New section in book for complex field value manipulations (focussing on strings and arrays manipulations)
- * One big $set stage vs multiple $set stages - pros & cons
-
-
 ----
 
 [![CC BY-NC-SA 3.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
