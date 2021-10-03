@@ -2,6 +2,12 @@
 
 A summary of the significant additions in each _major_ version of this book.
 
+__Version 3.0 (released in October 2021)__
+* Advanced Use Of Expressions For Array Processing chapter
+* Summarising Arrays For First, Last, Min, Max & Average example chapter
+* Pivot Array Items By A Key example chapter
+* Array Sorting & Percentiles example chapter
+
 __Version 2.0 (released in July 2021)__
 * Sharding Considerations chapter
 * Distinct List Of Values example chapter

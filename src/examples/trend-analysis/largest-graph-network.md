@@ -163,5 +163,5 @@ Ten documents should be returned, corresponding to the original ten source socia
  
  * __Index Use.__ The `$graphLookup` stage can leverage the index on the field `name` for each of its `connectToField` hops.
 
- * __Extracting One Field From Each Array Element.__ TODO: talk about $map use and link to new array manipulation chapter
+ * __Extracting One Field From Each Array Element.__ The pipeline uses the `$map` array operator to only take one field from each _user_ element matched by the `$graphLookup` stage. The `$map` logic loops through each matched _user_, adding the value of the user's `name` field to the `$map`'s array of results and ignoring the other field (`followed_by`). For more information about using the `$map` operator, see the [Advanced Use Of Expressions For Array Processing](../../guides/advanced-arrays.md) chapter.
 
