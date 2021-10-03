@@ -4,9 +4,9 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 2.05
+Version: 3.00-beta01
 
-Last Updated: September 2021
+Last Updated: October 2021
 
 MongoDB Versions Supported: 4.2 → 5.0
 
@@ -22,6 +22,7 @@ Acknowledgements - many thanks to the following people for their valuable feedba
  * John Page
  * Asya Kamsky
  * Mat Keep
+ * Brian Leonard
 
 ---
 

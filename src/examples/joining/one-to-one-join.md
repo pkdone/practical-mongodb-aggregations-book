@@ -180,3 +180,10 @@ Three documents should be returned, representing the three customers orders that
  
  * __First Element Assumption.__ In this particular data model example, the join between the two collections is 1:1. Therefore the returned array of joined elements coming out of the `$lookup` stage always contains precisely one array element. As a result, the pipeline extracts the data from this first array element only, using the `$first` operator. For an illustration of performing a 1:many join instead, see the [Multi-Field Join & One-to-Many](./multi-one-to-many.html) example.
 
+ * __First Element For Earlier MongoDB Versions.__ MongoDB only introduced the `$first` array operator expression in version 4.4. However, it is straightforward for you to replace its use in the pipeline with an equivalent solution, using the `$arrayElemAt` operator, to then allow the pipeline to work in MongoDB versions before 4.4:
+
+     ```javascript
+     // $first equivalent
+     "product_mapping": {"$arrayElemAt": ["$product_mapping", 0]},
+     ```
+

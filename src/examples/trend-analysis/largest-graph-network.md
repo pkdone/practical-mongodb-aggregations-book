@@ -65,7 +65,7 @@ var pipeline = [
       "$map": {
         "input": "$extended_network",
         "as": "connection",
-        "in": "$$connection.name",
+        "in": "$$connection.name", // Just get name field from each array element
       }
     },    
   }},
@@ -162,4 +162,6 @@ Ten documents should be returned, corresponding to the original ten source socia
  * __Following Graphs.__ The `$graphLookup` stage helps you traverse relationships between records, looking for patterns that aren't necessarily evident from looking at each record in isolation. In this example, by looking at _Paul's_ record in isolation, it is evident that _Paul_ has no _friends_ and thus has the lowest network reach. However, it is not obvious that _Carol_ has the greatest network reach just by looking at the number of people _Carol_ is directly followed by, which is two. _David_, for example, is followed by three people (one more than _Carol_). However, the executed aggregation pipeline can deduce that _Carol_ has the most extensive network reach.
  
  * __Index Use.__ The `$graphLookup` stage can leverage the index on the field `name` for each of its `connectToField` hops.
+
+ * __Extracting One Field From Each Array Element.__ TODO: talk about $map use and link to new array manipulation chapter
 

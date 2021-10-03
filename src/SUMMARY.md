@@ -20,6 +20,7 @@
     - [Pipeline Performance Considerations](guides/performance.md)
     - [Expressions Explained](guides/expressions.md)
     - [Sharding Considerations](guides/sharding.md)
+    - [Advanced Use Of Expressions For Array Processing](guides/advanced-arrays.md)
 
 ## Aggregations By Example
 - [Aggregations By Example](examples/examples.md)
@@ -43,6 +44,10 @@
         - [Mask Sensitive Fields](examples/securing-data/mask-sensitive-fields.md)
     - [Time-Series Examples](examples/time-series/time-series.md)
         - [IoT Power Consumption](examples/time-series/iot-power-consumption.md)
+    - [Array Manipulation Examples](examples/array-manipulations/array-manipulations.md)
+        - [Summarising Arrays For First, Last, Min, Max & Average](examples/array-manipulations/array-high-low-avg.md)
+        - [Pivot Array Items By A Key](examples/array-manipulations/pivot-array-items.md)
+        - [Array Sorting & Percentiles](examples/array-manipulations/array-sort-percentiles.md)
 
 ## Appendices
 - [Appendices](appendices/appendices.md)
