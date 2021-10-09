@@ -106,7 +106,7 @@ var pipeline = [
 Furthermore, some developers may take additional steps if they do not intend to transfer the prototyped pipeline to a different programming language:
 
  * They may choose to decompose elements inside a stage into additional JavaScript variables to avoid code "typos". For instance, to prevent one part of a pipeline incorrectly referencing a field computed earlier in the pipeline due to a misspelling.
- * They may choose to factor out the generation of a complex boilerplate part of a pipeline into a separate JavaScript function. They can then re-use this function from multiple places within the main pipeline's code. The [Incremental Analytics example](../examples/trend-analysis/incremental-analytics.html#aggregation-pipeline), later in this book, provides an example of this approach.
+ * They may choose to factor out the generation of some boilerplate code, representing a complex set of expressions, from part of a pipeline into a separate JavaScript function. This new function is essentially a [macro](https://en.wikipedia.org/wiki/Macro_(computer_science)). They can then re-use this function from multiple places within the main pipeline's code. Whenever the pipeline invokes this function, the pipeline's body directly embeds the returned boilerplate code. The [Array Sorting & Percentiles](../examples/array-manipulations/array-sort-percentiles.md#aggregation-pipeline), later in this book, provides an example of this approach.
 
 In summary, this book is not advocating a multi-variable approach over a single-variable approach when you define a pipeline. The book is just highlighting two highly composable options. Ultimately it is a personal choice concerning which you find most comfortable and productive. 
 

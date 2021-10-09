@@ -85,46 +85,55 @@ Define the new `sortArray()` function for sorting the contents of an array field
 // Macro function to generate complex aggregation expression for sorting an array
 function sortArray(sourceArrayField) {
   return {
-    // GENERATE A BRAND NEW ARRAY WHICH CONTAINS THE ELEMENTS OF THE SOURCE ARRAY BUT NOW SORTED
+    // GENERATE BRAND NEW ARRAY TO CONTAIN THE ELEMENTS FROM SOURCE ARRAY BUT NOW SORTED
     "$reduce": {
       "input": sourceArrayField, 
-      "initialValue": [],   // THE FIRST VERSION OF A TEMPORARY SORTED ARRAY WILL BE EMPTY
+      "initialValue": [],  // THE FIRST VERSION OF TEMP SORTED ARRAY WILL BE EMPTY
       "in": {
         "$let": {
-          "vars": {  // CAPTURE $$this & $$value FROM OUTER $reduce AS THEY WILL BE OVERRIDDEN BY INNER $reduce BELOW
+          "vars": {  // CAPTURE $$this & $$value FROM OUTER $reduce BEFORE OVERRIDDEN
             "resultArray": "$$value",
             "currentSourceArrayElement": "$$this"
           },   
           "in": {
             "$let": {
               "vars": { 
-                // FIND EACH SOURCE ARRAY'S CURRENT ELEMENT POSITION IN THE NEW SORTED TEMPORARY ARRAY BEING BUILT UP
+                // FIND EACH SOURCE ARRAY'S CURRENT ELEMENT POSITION IN NEW SORTED ARRAY
                 "targetArrayPosition": {
                   "$reduce": { 
-                    "input": {"$range": [0, {"$size": "$$resultArray"}]},  // CREATE SEQUENCE OF "0,1,2...<array-size>"
-                    "initialValue": {"$size": "$$resultArray"},   // SET THE INITIAL SORTED POSITION TO BE LAST ARRAY ELEMENT POSITION
-                    "in": {  // LOOP THRU "0,1,2...<array-size>"
+                    "input": {"$range": [0, {"$size": "$$resultArray"}]},  // "0,1,2.."
+                    "initialValue": {  // SET INIT SORTED POSITION TO BE LAST ARRAY ELEMENT
+                      "$size": "$$resultArray"
+                    },
+                    "in": {  // LOOP THRU "0,1,2..."
                       "$cond": [ 
-                        {"$lt": ["$$currentSourceArrayElement", {"$arrayElemAt": ["$$resultArray", "$$this"]}]}, 
-                        {"$min": ["$$value", "$$this"]},  // ONLY USE CURRENT LOW VALUE IF A LOW VALUE NOT ALREADY FOUND
-                        "$$value"  // RETAIN THE INITIAL VALUE AGAIN AS NOT YET FOUND THE ELEMENT'S CORRECT POSITION
+                        {"$lt": [
+                          "$$currentSourceArrayElement",
+                          {"$arrayElemAt": ["$$resultArray", "$$this"]}
+                        ]}, 
+                        {"$min": ["$$value", "$$this"]},  // ONLY USE IF LOW VAL NOT YET FOUND
+                        "$$value"  // RETAIN INITIAL VAL AGAIN AS NOT YET FOUND CORRECT POSTN
                       ]
                     }
                   }
                 }
               },
               "in": {
-                // REBUILD NEW TEMP VERSION OF SORTED ARRAY BY SLICING OLDER TEMPORARY VERSION & INSERTING THE NEW ELEMENT IN-BETWEEN
+                // BUILD NEW SORTED ARRAY BY SLICING OLDER ONE & INSERTING NEW ELEMENT BETWEEN
                 "$concatArrays": [
-                  {"$cond": [   // RETAIN THE EXISTING FIRST PART OF THE NEW ARRAY
+                  {"$cond": [  // RETAIN THE EXISTING FIRST PART OF THE NEW ARRAY
                     {"$eq": [0, "$$targetArrayPosition"]}, 
                     [],
                     {"$slice": ["$$resultArray", 0, "$$targetArrayPosition"]},
                   ]},
-                  ["$$currentSourceArrayElement"],   // PULL IN THE NEW POSITIONED ELEMENT
-                  {"$cond": [   // RETAIN THE EXISTING LAST PART OF THE NEW ARRAY
+                  ["$$currentSourceArrayElement"],  // PULL IN THE NEW POSITIONED ELEMENT
+                  {"$cond": [  // RETAIN THE EXISTING LAST PART OF THE NEW ARRAY
                     {"$gt": [{"$size": "$$resultArray"}, 0]}, 
-                    {"$slice": ["$$resultArray", "$$targetArrayPosition", {"$size": "$$resultArray"}]},
+                    {"$slice": [
+                      "$$resultArray",
+                      "$$targetArrayPosition",
+                      {"$size": "$$resultArray"}
+                    ]},
                     [],
                   ]},
                 ]
@@ -141,7 +150,7 @@ function sortArray(sourceArrayField) {
 Define the new arrayElemAtPercentile(n) function for capturing the element of a sorted array at the nth percentile position:
 
 ```javascript
-// Macro function to find the nth percentile element of a sorted version of an array
+// Macro function to find nth percentile element of a sorted version of an array
 function arrayElemAtPercentile(sourceArrayField, percentile) {
   return {    
     "$let": {
@@ -177,12 +186,12 @@ var pipeline = [
     "medianTimeMillis": arrayElemAtPercentile("$responseTimesMillis", 50),
     "ninetiethPercentileTimeMillis": arrayElemAtPercentile("$responseTimesMillis", 90),
   }},
-  
+
   // Only show results for tests with slow latencies (i.e. 90th%-ile responses >100ms)
   {"$match": {
     "ninetiethPercentileTimeMillis": {"$gt": 100},
   }},
-  
+
   // Exclude unrequired fields from each record
   {"$unset": [
     "_id",
@@ -262,7 +271,7 @@ Five documents should be returned, representing the subset of documents with a 9
 
  * __Comparison With Classic Sorting Algorithms.__ Despite being more optimal than unwinding and re-grouping arrays to bring them back into the same documents, the sorting code will be slow compared with commonly recognised computer science [sorting algorithms](https://en.wikipedia.org/wiki/Sorting_algorithm). This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with a small number of elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance is likely to be more profound.
 
- * __Why Isn’t There A Native “$sortArray” Expression?.__ As you've seen, the composite set of expressions you must generate to perform an inline sort operation on an array is complex, in addition to being computationally suboptimal. If you are writing aggregations using JavaScript for the MongoDB Shell, you can copy the function provided in this chapter. However, in most "production" situations, you will be using a different programming language. Consequently, you would first need to port the example macro function to your chosen programming language. Ideally, the Aggregation Framework would provide a native and optimised array operator expression for this (e.g.  called `$sortArray`), and this operator would take optional parameters to:
+ * __Why Isn’t There A Native "$sortArray" Expression?.__ As you've seen, the composite set of expressions you must generate to perform an inline sort operation on an array is complex, in addition to being computationally suboptimal. If you are writing aggregations using JavaScript for the MongoDB Shell, you can copy the function provided in this chapter. However, in most "production" situations, you will be using a different programming language. Consequently, you would first need to port the example macro function to your chosen programming language. Ideally, the Aggregation Framework would provide a native and optimised array operator expression for this (e.g.  called `$sortArray`), and this operator would take optional parameters to:
  
      1. Indicate whether the ordering should be ascending or descending (defaulting to ascending)
      2. Name a field (or fields) in each array element to sort by, rather than the default of sorting by each array element "as a whole"

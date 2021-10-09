@@ -422,11 +422,13 @@ db.orders.insertOne({
     "items": [
       {
         "product" : "WizzyWidget", 
-        "unitPrice": 25.99, "qty": 8
+        "unitPrice": 25.99,
+        "qty": 8,
       },
       {
         "product" : "HighEndGizmo", 
-        "unitPrice": 33.24, "qty": 3
+        "unitPrice": 33.24,
+        "qty": 3,
       }
     ]
 });
