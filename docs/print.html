@@ -1680,7 +1680,7 @@ db.orders.aggregate(pipeline);
 
 db.orders.aggregate(pipeline);
 </code></pre>
-<p>If this achieves the same as using <code>$mergeObjects</code> but is more verbose, why bother using this pattern? Well, in most cases, you wouldn't. One situation where you would use the more verbose combination is if you need to dynamically set the value of an array item's field name, in addition to its value. Rather than naming the computed total field as cost, suppose you want the field's name also to reflect the product's name (e.g. <code>costForWizzyWidget</code>, <code>costForHighEndGizmo</code>). You can achieve this by using the <code>$arrayToObject</code>/<code>$concatArrays</code>/<code>$objectToArray</code> approach rather than the <code>$mergeObjects</code> method, as follows:</p>
+<p>If this achieves the same as using <code>$mergeObjects</code> but is more verbose, why bother using this pattern? Well, in most cases, you wouldn't. One situation where you would use the more verbose combination is if you need to dynamically set the value of an array item's field name, in addition to its value. Rather than naming the computed total field as <code>cost</code>, suppose you want the field's name also to reflect the product's name (e.g. <code>costForWizzyWidget</code>, <code>costForHighEndGizmo</code>). You can achieve this by using the <code>$arrayToObject</code>/<code>$concatArrays</code>/<code>$objectToArray</code> approach rather than the <code>$mergeObjects</code> method, as follows:</p>
 <pre><code class="language-javascript">var pipeline = [
   {&quot;$set&quot;: {
     &quot;items&quot;: {
@@ -5788,14 +5788,14 @@ db.lists.aggregate([
 <p>A summary of the significant additions in each <em>major</em> version of this book.</p>
 <p><strong>Version 3.0 (released in October 2021)</strong></p>
 <ul>
-<li>Advanced Use Of Expressions For Array Processing chapter</li>
+<li>Advanced Use Of Expressions For Array Processing guide chapter</li>
 <li>Summarising Arrays For First, Last, Min, Max &amp; Average example chapter</li>
 <li>Pivot Array Items By A Key example chapter</li>
 <li>Array Sorting &amp; Percentiles example chapter</li>
 </ul>
 <p><strong>Version 2.0 (released in July 2021)</strong></p>
 <ul>
-<li>Sharding Considerations chapter</li>
+<li>Sharding Considerations guide chapter</li>
 <li>Distinct List Of Values example chapter</li>
 <li>IoT Power Consumption example chapter</li>
 <li>Stages Cheatsheet appendices</li>
@@ -5803,15 +5803,15 @@ db.lists.aggregate([
 </ul>
 <p><strong>Version 1.0 (released in May 2021)</strong></p>
 <ul>
-<li>Introducing MongoDB Aggregations chapter</li>
-<li>History Of MongoDB Aggregations chapter</li>
-<li>Getting Started chapter</li>
-<li>Getting Help chapter</li>
-<li>Embrace Composability For Increased Productivity chapter</li>
-<li>Better Alternatives To A Project Stage chapter</li>
-<li>Using Explain Plans chapter</li>
-<li>Pipeline Performance Considerations chapter</li>
-<li>Expressions Explained chapter</li>
+<li>Introducing MongoDB Aggregations guide chapter</li>
+<li>History Of MongoDB Aggregations guide chapter</li>
+<li>Getting Started guide chapter</li>
+<li>Getting Help guide chapter</li>
+<li>Embrace Composability For Increased Productivity guide chapter</li>
+<li>Better Alternatives To A Project Stage guide chapter</li>
+<li>Using Explain Plans guide chapter</li>
+<li>Pipeline Performance Considerations guide chapter</li>
+<li>Expressions Explained guide chapter</li>
 <li>Filtered Top Subset example chapter</li>
 <li>Group &amp; Total example chapter</li>
 <li>Unpack Arrays &amp; Group Differently example chapter</li>

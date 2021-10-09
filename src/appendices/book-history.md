@@ -3,28 +3,28 @@
 A summary of the significant additions in each _major_ version of this book.
 
 __Version 3.0 (released in October 2021)__
-* Advanced Use Of Expressions For Array Processing chapter
+* Advanced Use Of Expressions For Array Processing guide chapter
 * Summarising Arrays For First, Last, Min, Max & Average example chapter
 * Pivot Array Items By A Key example chapter
 * Array Sorting & Percentiles example chapter
 
 __Version 2.0 (released in July 2021)__
-* Sharding Considerations chapter
+* Sharding Considerations guide chapter
 * Distinct List Of Values example chapter
 * IoT Power Consumption example chapter
 * Stages Cheatsheet appendices
 * Book Version History appendix
 
 __Version 1.0 (released in May 2021)__
-* Introducing MongoDB Aggregations chapter
-* History Of MongoDB Aggregations chapter
-* Getting Started chapter
-* Getting Help chapter
-* Embrace Composability For Increased Productivity chapter
-* Better Alternatives To A Project Stage chapter
-* Using Explain Plans chapter
-* Pipeline Performance Considerations chapter
-* Expressions Explained chapter
+* Introducing MongoDB Aggregations guide chapter
+* History Of MongoDB Aggregations guide chapter
+* Getting Started guide chapter
+* Getting Help guide chapter
+* Embrace Composability For Increased Productivity guide chapter
+* Better Alternatives To A Project Stage guide chapter
+* Using Explain Plans guide chapter
+* Pipeline Performance Considerations guide chapter
+* Expressions Explained guide chapter
 * Filtered Top Subset example chapter
 * Group & Total example chapter
 * Unpack Arrays & Group Differently example chapter
