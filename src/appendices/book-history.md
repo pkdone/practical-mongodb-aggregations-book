@@ -16,10 +16,10 @@ __Version 2.0 (released in July 2021)__
 * Book Version History appendix
 
 __Version 1.0 (released in May 2021)__
-* Introducing MongoDB Aggregations guide chapter
-* History Of MongoDB Aggregations guide chapter
-* Getting Started guide chapter
-* Getting Help guide chapter
+* Introducing MongoDB Aggregations chapter
+* History Of MongoDB Aggregations chapter
+* Getting Started chapter
+* Getting Help chapter
 * Embrace Composability For Increased Productivity guide chapter
 * Better Alternatives To A Project Stage guide chapter
 * Using Explain Plans guide chapter
