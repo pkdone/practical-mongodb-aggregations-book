@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$first](https://d
 
 ## Scenario
 
-You want to generate daily summaries for the exchange rates of foreign currency "pairs" (e.g. "Euro-to-USDollar"). You need to analyse an array of persisted hourly rates for each currency pair for each day. You will output a daily summary of the open (first), close (last), low (minimum), high (maximum) and average exchange rate values for each currency
+You want to generate daily summaries for the exchange rates of foreign currency "pairs" (e.g. "Euro-to-USDollar"). You need to analyse an array of persisted hourly rates for each currency pair for each day. You will output a daily summary of the open (first), close (last), low (minimum), high (maximum) and average exchange rate values for each currency pair.
 
 
 ## Sample Data Population
@@ -120,7 +120,7 @@ Two documents should be returned, now showing the daily summary open, low, high,
 
 ## Observations
 
- * __First & Last For Earlier MongoDB Versions.__ MongoDB only introduced the `$first` and `$last` array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the `$arrayElemAt` operator. Below are the alternatives you can use instead of `$first` and `$last` to work in MongoDB versions before 4.4:
+ * __First & Last For Earlier MongoDB Versions.__ MongoDB only introduced the `$first` and `$last` array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the `$arrayElemAt` operator. Below are the alternatives you can use instead of `$first` and `$last` to operator correctly in MongoDB versions before 4.4:
 
      ```javascript
      // $first equivalent

@@ -4455,7 +4455,7 @@ db.device_readings.insertMany([
 <h1 id="summarising-arrays-for-first-last-minimum-maximum--average-values"><a class="header" href="#summarising-arrays-for-first-last-minimum-maximum--average-values">Summarising Arrays For First, Last, Minimum, Maximum &amp; Average Values</a></h1>
 <p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/">$first</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/last-array-element/">$last</a> array operators)</em></p>
 <h2 id="scenario-14"><a class="header" href="#scenario-14">Scenario</a></h2>
-<p>You want to generate daily summaries for the exchange rates of foreign currency &quot;pairs&quot; (e.g. &quot;Euro-to-USDollar&quot;). You need to analyse an array of persisted hourly rates for each currency pair for each day. You will output a daily summary of the open (first), close (last), low (minimum), high (maximum) and average exchange rate values for each currency</p>
+<p>You want to generate daily summaries for the exchange rates of foreign currency &quot;pairs&quot; (e.g. &quot;Euro-to-USDollar&quot;). You need to analyse an array of persisted hourly rates for each currency pair for each day. You will output a daily summary of the open (first), close (last), low (minimum), high (maximum) and average exchange rate values for each currency pair.</p>
 <h2 id="sample-data-population-14"><a class="header" href="#sample-data-population-14">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate new <em>currency-pair daily</em> records:</p>
 <pre><code class="language-javascript">use book-array-high-low-avg;
@@ -4548,7 +4548,7 @@ db.currency_pair_values.explain(&quot;executionStats&quot;).aggregate(pipeline);
 <h2 id="observations-14"><a class="header" href="#observations-14">Observations</a></h2>
 <ul>
 <li>
-<p><strong>First &amp; Last For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to work in MongoDB versions before 4.4:</p>
+<p><strong>First &amp; Last For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to operator correctly in MongoDB versions before 4.4:</p>
 <pre><code class="language-javascript">// $first equivalent
 &quot;summary.open&quot;: {&quot;$arrayElemAt&quot;: [&quot;$hour_values&quot;, 0]},
   
@@ -4698,15 +4698,12 @@ db.weather_measurements.explain(&quot;executionStats&quot;).aggregate(pipeline);
 <h2 id="scenario-16"><a class="header" href="#scenario-16">Scenario</a></h2>
 <p>You have been conducting performance testing of an application's API with the results of each &quot;test run&quot; captured in a document in a database. Each &quot;test run&quot; document contains an array of multiple response times that the test recorded during its execution. You need to analyse the recorded data to identify the slow tests. To achieve this, you want to calculate the <a href="https://en.wikipedia.org/wiki/Median">median</a> (50th percentile) and 90th <a href="https://en.wikipedia.org/wiki/Percentile">percentile</a> response times for each recorded &quot;test run&quot; and then only keep documents where the 90th percentile response time is greater than 100 milliseconds.</p>
 <blockquote>
-<p><em>This example chapter uses a slightly modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">macro function for sorting arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can re-use this chapter's <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents.</em></p>
+<p><em>This example chapter uses a slightly modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">macro function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can re-use this chapter's <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents.</em></p>
 </blockquote>
 <h2 id="sample-data-population-16"><a class="header" href="#sample-data-population-16">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate the test run results documents:</p>
 <pre><code class="language-javascript">use book-inline-array-sort-percentile;
 db.dropDatabase();
-
-// Create index on the responseTimesMillis array field
-db.performance_test_results.createIndex({&quot;responseTimesMillis&quot;: 1});
 
 // Insert 7 records into the performance_test_results collection
 db.performance_test_results.insertMany([
@@ -4763,8 +4760,8 @@ db.performance_test_results.insertMany([
 ]);
 </code></pre>
 <h2 id="aggregation-pipeline-16"><a class="header" href="#aggregation-pipeline-16">Aggregation Pipeline</a></h2>
-<p>Define the new <code>sortArray()</code> function for sorting the contents of an array field ready for you to use in a pipeline:</p>
-<pre><code class="language-javascript">// Macro function to generate complex aggregation expression for sorting an array
+<p>Define the new <code>sortArray()</code> function for inline sorting of the contents of an array field, ready for you to use in a pipeline:</p>
+<pre><code class="language-javascript">// Macro function to generate a complex aggregation expression for sorting an array
 function sortArray(sourceArrayField) {
   return {
     // GENERATE BRAND NEW ARRAY TO CONTAIN THE ELEMENTS FROM SOURCE ARRAY BUT NOW SORTED
@@ -4784,7 +4781,7 @@ function sortArray(sourceArrayField) {
                 &quot;targetArrayPosition&quot;: {
                   &quot;$reduce&quot;: { 
                     &quot;input&quot;: {&quot;$range&quot;: [0, {&quot;$size&quot;: &quot;$$resultArray&quot;}]},  // &quot;0,1,2..&quot;
-                    &quot;initialValue&quot;: {  // SET INIT SORTED POSITION TO BE LAST ARRAY ELEMENT
+                    &quot;initialValue&quot;: {  // INITIALISE SORTED POSITION TO BE LAST ARRAY ELEMENT
                       &quot;$size&quot;: &quot;$$resultArray&quot;
                     },
                     &quot;in&quot;: {  // LOOP THRU &quot;0,1,2...&quot;
@@ -4930,7 +4927,7 @@ db.performance_test_results.explain(&quot;executionStats&quot;).aggregate(pipeli
 <h2 id="observations-16"><a class="header" href="#observations-16">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Macro Functions.</strong> In this chapter, you employ two functions, <code>sortArray()</code> and <code>arrayElemAtPercentile()</code>, to generate portions of aggregation <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>. These functions are essentially <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macros</a>. You invoke these functions from within the pipeline you create in the MongoDB Shell. Each function you invoke embeds the returned boilerplate code into the pipeline's code. You can see this in action by typing the text pipeline into the Shell and pressing enter. (not you may have to increase the depth displayed in <code>monogosh</code> first by issuing the command <code>config.set(&quot;inspectDepth&quot;, 100)</code> in <code>mongosh</code>. This action will display a single large piece of code representing the whole pipeline, including the macro-generated code. The aggregation runtime never sees or runs the functions <code>sortArray()</code> and <code>arrayElemAtPercentile()</code> directly. Of course, you won't use JavaScript functions to generate composite expressions if you use a different programming language and <a href="https://docs.mongodb.com/drivers/">MongoDB Driver</a>. You will use the relevant features of your specific programming language to assemble composite expression objects instead.</p>
+<p><strong>Macro Functions.</strong> In this chapter, you employ two functions, <code>sortArray()</code> and <code>arrayElemAtPercentile()</code>, to generate portions of aggregation <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>. These functions are essentially <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macros</a>. You invoke these functions from within the pipeline you create in the MongoDB Shell. Each function you invoke embeds the returned boilerplate code into the pipeline's code. You can see this in action by typing the text <code>pipeline</code> into the Shell and pressing <em>enter</em>. Note, you may first have to increase the depth displayed in <code>monogosh</code> by issuing the command <code>config.set(&quot;inspectDepth&quot;, 100)</code> in <code>mongosh</code>. This action will display a single large piece of code representing the whole pipeline, including the macro-generated code. The aggregation runtime never sees or runs the functions <code>sortArray()</code> and <code>arrayElemAtPercentile()</code> directly. Of course, you won't use JavaScript functions to generate composite expressions if you use a different programming language and <a href="https://docs.mongodb.com/drivers/">MongoDB Driver</a>. You will use the relevant features of your specific programming language to assemble composite expression objects.</p>
 </li>
 <li>
 <p><strong>Sorting On Primitives Only.</strong> The sort function in this chapter will correctly sort arrays containing just primitive values, such as integers, floats, date-times and strings. However, if an array's members are objects (i.e. each has its own fields and values), the code will not sort the array correctly. It is possible to construct a function to enable the sorting of an array of objects, but such a function will be more complex and beyond the scope of this chapter.</p>
@@ -4944,7 +4941,7 @@ db.performance_test_results.explain(&quot;executionStats&quot;).aggregate(pipeli
 <li>Indicate whether the ordering should be ascending or descending (defaulting to ascending)</li>
 <li>Name a field (or fields) in each array element to sort by, rather than the default of sorting by each array element &quot;as a whole&quot;</li>
 </ol>
-<p>You can upvote the MongoDB enhancement request &quot;<a href="https://jira.mongodb.org/browse/SERVER-29425">Add an expression to sort an array</a>&quot; if you would like to register your desire for a native sort operator expression.</p>
+<p>You can upvote the MongoDB enhancement request &quot;<a href="https://jira.mongodb.org/browse/SERVER-29425">Add an expression to sort an array</a>&quot; if you would like to register your desire for a native sort array operator expression.</p>
 </li>
 </ul>
 <h1 id="appendices"><a class="header" href="#appendices">Appendices</a></h1>
