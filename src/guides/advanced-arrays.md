@@ -83,7 +83,7 @@ When you want to transform or extract data from an array field, and a single hig
 The `$map` and `$reduce` operators are the "swiss army knives" of the Aggregation Framework. Do not confuse these two array operators with MongoDB's old [Map-Reduce API](https://docs.mongodb.com/manual/core/map-reduce/), which was essentially made redundant and obsolete by the [emergence of the superior Aggregation Framework in MongoDB](../intro/history.html). In the old Map-Reduce API, you combine a `map()` function and a `reduce()` function to generate a result. In the Aggregation Framework, the `$map` and `$reduce` operators are independent of each other. Depending on your specific requirements, you would use one or the other to process an array's field, but not both together. Here's an explanation of these two "power" operators:
 
  * [`$map`](https://docs.mongodb.com/manual/reference/operator/aggregation/map/). Allows you to specify some logic to perform against each element in the array that the operator iterates, returning an array as the final result. Typically you use `$map` to mutate each array member and then return this transformed array. The `$map` operator exposes the current array element's content to your logic via a special variable, with the default name of `$$this`.
- * [`$reduce`](https://docs.mongodb.com/manual/reference/operator/aggregation/reduce/). Similarly, you can specify some logic to execute for each element in an array that the operator iterates but instead returning a single value (instead of an array) as the final result. You typically use `$reduce` to compute a summary having analysed each array element. For example, you might want to return a number by multiplying together a specific field value from each array's element. Like the `$map` operator, the `$reduce` operator provides your logic with access to the current array element via the variable `$$this`. The operator also provides a second variable, called `$$value`, for your logic to update when accumulating the single result (e.g. the multiplication result).
+ * [`$reduce`](https://docs.mongodb.com/manual/reference/operator/aggregation/reduce/). Similarly, you can specify some logic to execute for each element in an array that the operator iterates but instead returning a single value (rather than an array) as the final result. You typically use `$reduce` to compute a summary having analysed each array element. For example, you might want to return a number by multiplying together a specific field value from each array's element. Like the `$map` operator, the `$reduce` operator provides your logic with access to the current array element via the variable `$$this`. The operator also provides a second variable, called `$$value`, for your logic to update when accumulating the single result (e.g. the multiplication result).
 
 The rest of this chapter explores how these two "power" operators are used to manipulate arrays.
 
@@ -382,7 +382,7 @@ So why would you ever want to use `$reduce` for this requirement and take on thi
 }
 ```
 
-You cannot achieve this using `$map` because the logic in each iteration does not know the current loop count or input array position. However, you can solve this by using `$reduce` if adopting the pattern where the input is a generated sequence of incrementing numbers (as covered earlier in this chapter). Consequently, the string concatenating code can include the array position in each transformed element's value (accessed via the `$$this` variable), as shown in the pipeline below:
+You cannot achieve this using `$map` because the logic in each iteration does not know the current loop count or input array position. However, you can solve this by using `$reduce` if adopting the pattern where the input is a `$range` generated sequence of incrementing numbers (as covered earlier in this chapter). Consequently, the string concatenating code can include the array position in each transformed element's value (accessed via the `$$this` variable), as shown in the pipeline below:
 
 ```javascript
 var pipeline = [
@@ -595,7 +595,7 @@ When retaining existing items from an array, plus adding new fields, you can use
 
 ## Rudimentary Schema Reflection Using Arrays
 
-As a final "fun" example, let's see how to use an `$objectToArray` operator expression to use [reflection](https://en.wikipedia.org/wiki/Reflective_programming) to analyse the shape of a collection of documents as part of a custom schema analysis tool. Such reflection capabilities are vital in databases that provide a flexible data model, such as MongoDB, where the included fields may vary from document to document. 
+As a final "fun" example, let's see how to employ an `$objectToArray` operator expression to use [reflection](https://en.wikipedia.org/wiki/Reflective_programming) to analyse the shape of a collection of documents as part of a custom schema analysis tool. Such reflection capabilities are vital in databases that provide a flexible data model, such as MongoDB, where the included fields may vary from document to document. 
 
 Imagine you have a collection of customer documents, similar to the following:
 
