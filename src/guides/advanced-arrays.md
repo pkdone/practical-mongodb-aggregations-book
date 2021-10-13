@@ -540,7 +540,7 @@ var pipeline = [
 db.orders.aggregate(pipeline);
 ```
 
-If this achieves the same as using `$mergeObjects` but is more verbose, why bother using this pattern? Well, in most cases, you wouldn't. One situation where you would use the more verbose combination is if you need to dynamically set the value of an array item's field name, in addition to its value. Rather than naming the computed total field as `cost`, suppose you want the field's name also to reflect the product's name (e.g. `costForWizzyWidget`, `costForHighEndGizmo`). You can achieve this by using the `$arrayToObject`/`$concatArrays`/`$objectToArray` approach rather than the `$mergeObjects` method, as follows:
+If this achieves the same as using `$mergeObjects` but is more verbose, why bother using this pattern? Well, in most cases, you wouldn't. One situation where you would use the more verbose combination is if you need to dynamically set the name of an array item's field, in addition to its value. Rather than naming the computed total field as `cost`, suppose you want the field's name also to reflect the product's name (e.g. `costForWizzyWidget`, `costForHighEndGizmo`). You can achieve this by using the `$arrayToObject`/`$concatArrays`/`$objectToArray` approach rather than the `$mergeObjects` method, as follows:
 
 ```javascript
 var pipeline = [
