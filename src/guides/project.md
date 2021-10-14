@@ -13,7 +13,7 @@ Despite the challenges, though, there are some specific situations where using `
 > _MongoDB version 3.4 addressed some of the disadvantages of `$project` by introducing a new [$addFields](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/) stage, which has the same behaviour as `$set`. `$set` came later than `$addFields`and `$set` is actually just an alias for `$addFields`. However, back then, the Aggregation Framework provided no direct equivalent to `$unset`. Both `$set` and `$unset` stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (`$set` Vs `$unset`). The name `$addFields` doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers `$set` over `$addFields` to help promote consistency and avoid any confusion of intent. However, if you are wedded to `$addFields`, use that instead, as there is no behavioural difference._
 
 
-## When To Use Set & Unset
+## When To Use _$set_ & _$unset_
 
 You should use `$set` & `$unset` stages when you need to retain most of the fields in the input records, and you want to add, modify or remove a minority subset of fields. This is the case for most uses of aggregation pipelines.
 
@@ -107,7 +107,7 @@ A better approach to building the aggregation pipeline, to achieve the same resu
 This time, when you need to add new documents to the collection of existing payments, which include additional new fields, e.g. `settlement_date` & `settlement_curncy_code`, no changes are required. The existing aggregation pipeline allows these new fields to appear in the results automatically. However, when using `$project`, each time the possibility of a new field arises, a developer must first refactor the pipeline to incorporate an additional inclusion declaration (e.g. `"settlement_date": 1`, or `"settlement_curncy_code": 1`).
 
 
-## When To Use Project
+## When To Use _$project_
 
 It is best to use a `$project` stage when the required shape of output documents is very different from the input documents' shape. This situation often arises when you do not need to include most of the original fields.
 

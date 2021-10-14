@@ -98,7 +98,7 @@ In most of the stages that are unable to leverage expressions, it doesn't usuall
 In most cases, only one of the listed stages needs to be more expressive: the `$match` stage, but this stage is already flexible by being based on MQL query conditions. However, sometimes, even MQL isn't expressive enough to sufficiently define a rule to identify records to retain in an aggregation. The remainder of this chapter explores these challenges and how they are solved.
 
 
-## What Is Using $expr Inside $match All About?
+## What Is Using _$expr_ Inside _$match_ All About?
 
 The previously stated generalisation about `$match` not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/), which you can embed within a `$match` stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's `$match`) to re-use expressions provided by MongoDB's aggregation runtime.
 
@@ -142,7 +142,7 @@ The result of executing an aggregation with this pipeline is:
 As you can see, the second of the three shapes is not output because its area is only `12` (`3 x 4`).
 
 
-### Restrictions When Using Expressions with $match
+### Restrictions When Using Expressions with _$match_
 
 You should be aware that there are restrictions on when the runtime can benefit from an index when using a `$expr` operator inside a `$match` stage. This partly depends on the version of MongoDB you are running. Using `$expr`, you can leverage a `$eq` comparison operator with some constraints, including an inability to use a [multi-key index](https://docs.mongodb.com/manual/core/index-multikey/). For MongoDB versions before 5.0, if you use a "range" comparison operator (`$gt`, `$gte`, `$lt` and `$lte`), an index cannot be employed to match the field, but this works fine in version 5.0.
 
