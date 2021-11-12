@@ -6,9 +6,9 @@ Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
 Version: 3.01
 
-Last Updated: October 2021
+Last Updated: November 2021
 
-MongoDB Versions Supported: 4.2 → 5.0
+MongoDB Versions Supported: 4.2 → 5.1
 
 Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 

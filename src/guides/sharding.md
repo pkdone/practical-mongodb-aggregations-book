@@ -17,14 +17,13 @@ One or more deployed [mongos](https://docs.mongodb.com/manual/reference/program/
 
 ## Sharded Aggregation Constraints
 
-Three of MongoDB's stages are only partly supported for sharded aggregations. These three stages all happen to reference a second collection in addition to the pipeline's source input collection. The pipeline can use a sharded collection as its source in all three cases, but the second collection referenced must be unsharded. The three stages are:
+Some of MongoDB's stages are only partly supported for sharded aggregations depending on which version of MongoDB you are running. These stages all happen to reference a second collection in addition to the pipeline's source input collection. The pipeline can use a sharded collection as its source in each case, but the second collection referenced must be unsharded. The affected stages and versions are:
 
- * __`$lookup`__. The other referenced collection to join with must be unsharded.
+ * __`$lookup`__. In MongoDB versions prior to 5.1, the other referenced collection to join with must be unsharded.
  
- * __`$graphLookup`__. The other referenced collection to recursively traverse must be unsharded.
+ * __`$graphLookup`__. In MongoDB versions prior to 5.1, the other referenced collection to recursively traverse must be unsharded.
  
- * __`$out`__. The other referenced collection used as the destination of the aggregation's output must be unsharded. However, you can use a `$merge` stage instead to output the aggregation result to a sharded collection.
- 
+ * __`$out`__. In all MongoDB versions, the other referenced collection used as the destination of the aggregation's output must be unsharded. However, you can use a `$merge` stage instead to output the aggregation result to a sharded collection.
 
 ## Where Does A Sharded Aggregation Run?
 
