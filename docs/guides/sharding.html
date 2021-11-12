@@ -182,16 +182,16 @@
 <p><img src="./pics/sharded-db-cluster.png" alt="MongoDB sharded cluster containing sharded and unsharded collections" /></p>
 <p>One or more deployed <a href="https://docs.mongodb.com/manual/reference/program/mongos/">mongos</a> processes act as a <a href="https://en.wikipedia.org/wiki/Reverse_proxy">reverse proxy</a>, routing read and write operations from the client application to the appropriate shards. For document write operations (i.e. create, update, delete), a mongos router knows which shard the document lives on and routes the operation to that specific shard. For read operations, if the query includes the shard key, the mongos knows which shards hold the required documents to route the query to (called &quot;targeting&quot;). If the query does not include the shard key, it sends the query to all shards using a &quot;scatter/gather&quot; pattern (called &quot;broadcasting&quot;). These are the rules for sharded reads and writes, but the approach for sharded aggregations requires a deeper explanation. Consequently, the rest of this chapter outlines how a sharded cluster handles the routing and execution of aggregations.</p>
 <h2 id="sharded-aggregation-constraints"><a class="header" href="#sharded-aggregation-constraints">Sharded Aggregation Constraints</a></h2>
-<p>Three of MongoDB's stages are only partly supported for sharded aggregations. These three stages all happen to reference a second collection in addition to the pipeline's source input collection. The pipeline can use a sharded collection as its source in all three cases, but the second collection referenced must be unsharded. The three stages are:</p>
+<p>Some of MongoDB's stages are only partly supported for sharded aggregations depending on which version of MongoDB you are running. These stages all happen to reference a second collection in addition to the pipeline's source input collection. The pipeline can use a sharded collection as its source in each case, but the second collection referenced must be unsharded. The affected stages and versions are:</p>
 <ul>
 <li>
-<p><strong><code>$lookup</code></strong>. The other referenced collection to join with must be unsharded.</p>
+<p><strong><code>$lookup</code></strong>. In MongoDB versions prior to 5.1, the other referenced collection to join with must be unsharded.</p>
 </li>
 <li>
-<p><strong><code>$graphLookup</code></strong>. The other referenced collection to recursively traverse must be unsharded.</p>
+<p><strong><code>$graphLookup</code></strong>. In MongoDB versions prior to 5.1, the other referenced collection to recursively traverse must be unsharded.</p>
 </li>
 <li>
-<p><strong><code>$out</code></strong>. The other referenced collection used as the destination of the aggregation's output must be unsharded. However, you can use a <code>$merge</code> stage instead to output the aggregation result to a sharded collection.</p>
+<p><strong><code>$out</code></strong>. In all MongoDB versions, the other referenced collection used as the destination of the aggregation's output must be unsharded. However, you can use a <code>$merge</code> stage instead to output the aggregation result to a sharded collection.</p>
 </li>
 </ul>
 <h2 id="where-does-a-sharded-aggregation-run"><a class="header" href="#where-does-a-sharded-aggregation-run">Where Does A Sharded Aggregation Run?</a></h2>

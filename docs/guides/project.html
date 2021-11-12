@@ -188,7 +188,7 @@
 <blockquote>
 <p><em>MongoDB version 3.4 addressed some of the disadvantages of <code>$project</code> by introducing a new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a> stage, which has the same behaviour as <code>$set</code>. <code>$set</code> came later than <code>$addFields</code>and <code>$set</code> is actually just an alias for <code>$addFields</code>. However, back then, the Aggregation Framework provided no direct equivalent to <code>$unset</code>. Both <code>$set</code> and <code>$unset</code> stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (<code>$set</code> Vs <code>$unset</code>). The name <code>$addFields</code> doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers <code>$set</code> over <code>$addFields</code> to help promote consistency and avoid any confusion of intent. However, if you are wedded to <code>$addFields</code>, use that instead, as there is no behavioural difference.</em></p>
 </blockquote>
-<h2 id="when-to-use-set--unset"><a class="header" href="#when-to-use-set--unset">When To Use Set &amp; Unset</a></h2>
+<h2 id="when-to-use-set--unset"><a class="header" href="#when-to-use-set--unset">When To Use <em>$set</em> &amp; <em>$unset</em></a></h2>
 <p>You should use <code>$set</code> &amp; <code>$unset</code> stages when you need to retain most of the fields in the input records, and you want to add, modify or remove a minority subset of fields. This is the case for most uses of aggregation pipelines.</p>
 <p>For example, imagine there is a collection of credit card payment documents similar to the following:</p>
 <pre><code class="language-javascript">// INPUT  (a record from the source collection to be operated on by an aggregation)
@@ -264,7 +264,7 @@
 ]
 </code></pre>
 <p>This time, when you need to add new documents to the collection of existing payments, which include additional new fields, e.g. <code>settlement_date</code> &amp; <code>settlement_curncy_code</code>, no changes are required. The existing aggregation pipeline allows these new fields to appear in the results automatically. However, when using <code>$project</code>, each time the possibility of a new field arises, a developer must first refactor the pipeline to incorporate an additional inclusion declaration (e.g. <code>&quot;settlement_date&quot;: 1</code>, or <code>&quot;settlement_curncy_code&quot;: 1</code>).</p>
-<h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use Project</a></h2>
+<h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use <em>$project</em></a></h2>
 <p>It is best to use a <code>$project</code> stage when the required shape of output documents is very different from the input documents' shape. This situation often arises when you do not need to include most of the original fields.</p>
 <p>This time for the same input payments collection, let us imagine you require a new aggregation pipeline to produce result documents. You need each output document's structure to be very different from the input structure, and you need to retain far fewer original fields, similar to the following:</p>
 <pre><code class="language-javascript">// OUTPUT  (a record in the results of the executed aggregation)

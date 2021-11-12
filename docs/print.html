@@ -179,9 +179,9 @@
 <p> </p>
 <h1 id="practical-mongodb-aggregations"><a class="header" href="#practical-mongodb-aggregations">Practical MongoDB Aggregations</a></h1>
 <p>Author: Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</p>
-<p>Version: 3.00</p>
-<p>Last Updated: October 2021</p>
-<p>MongoDB Versions Supported: 4.2 → 5.0</p>
+<p>Version: 3.01</p>
+<p>Last Updated: November 2021</p>
+<p>MongoDB Versions Supported: 4.2 → 5.1</p>
 <p>Book published at: <a href="https://www.practical-mongodb-aggregations.com">www.practical-mongodb-aggregations.com</a></p>
 <p>Content created &amp; assembled at: <a href="https://github.com/pkdone/practical-mongodb-aggregations-book">github.com/pkdone/practical-mongodb-aggregations-book</a></p>
 <hr />
@@ -309,6 +309,7 @@
 <li><strong>MongoDB 4.2 (August 2019)</strong>: A merge stage to insert/update/replace records in existing non-sharded &amp; sharded collections, set &amp; unset stages to address the verbosity/rigidity of project stages, trigonometry operators, regular expression operators</li>
 <li><strong>MongoDB 4.4 (July 2020)</strong>: A union stage, custom JavaScript operator expressions (function &amp; accumulator), first &amp; last array element operators, string replacement operators, a random number operator</li>
 <li><strong>MongoDB 5.0 (July 2021)</strong>: A setWindowFields stage, time-series/window operators, date manipulation operators</li>
+<li><strong>MongoDB 5.1 (November 2021)</strong>: Support for lookup &amp; graph-lookup stages joining to sharded collections, documents and densify stage s</li>
 </ul>
 <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
 <p>For developing aggregation pipelines effectively, and also to try the examples in the second half of this book, you need the following two elements:</p>
@@ -482,7 +483,7 @@ var pipeline = [
 <blockquote>
 <p><em>MongoDB version 3.4 addressed some of the disadvantages of <code>$project</code> by introducing a new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a> stage, which has the same behaviour as <code>$set</code>. <code>$set</code> came later than <code>$addFields</code>and <code>$set</code> is actually just an alias for <code>$addFields</code>. However, back then, the Aggregation Framework provided no direct equivalent to <code>$unset</code>. Both <code>$set</code> and <code>$unset</code> stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (<code>$set</code> Vs <code>$unset</code>). The name <code>$addFields</code> doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers <code>$set</code> over <code>$addFields</code> to help promote consistency and avoid any confusion of intent. However, if you are wedded to <code>$addFields</code>, use that instead, as there is no behavioural difference.</em></p>
 </blockquote>
-<h2 id="when-to-use-set--unset"><a class="header" href="#when-to-use-set--unset">When To Use Set &amp; Unset</a></h2>
+<h2 id="when-to-use-set--unset"><a class="header" href="#when-to-use-set--unset">When To Use <em>$set</em> &amp; <em>$unset</em></a></h2>
 <p>You should use <code>$set</code> &amp; <code>$unset</code> stages when you need to retain most of the fields in the input records, and you want to add, modify or remove a minority subset of fields. This is the case for most uses of aggregation pipelines.</p>
 <p>For example, imagine there is a collection of credit card payment documents similar to the following:</p>
 <pre><code class="language-javascript">// INPUT  (a record from the source collection to be operated on by an aggregation)
@@ -558,7 +559,7 @@ var pipeline = [
 ]
 </code></pre>
 <p>This time, when you need to add new documents to the collection of existing payments, which include additional new fields, e.g. <code>settlement_date</code> &amp; <code>settlement_curncy_code</code>, no changes are required. The existing aggregation pipeline allows these new fields to appear in the results automatically. However, when using <code>$project</code>, each time the possibility of a new field arises, a developer must first refactor the pipeline to incorporate an additional inclusion declaration (e.g. <code>&quot;settlement_date&quot;: 1</code>, or <code>&quot;settlement_curncy_code&quot;: 1</code>).</p>
-<h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use Project</a></h2>
+<h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use <em>$project</em></a></h2>
 <p>It is best to use a <code>$project</code> stage when the required shape of output documents is very different from the input documents' shape. This situation often arises when you do not need to include most of the original fields.</p>
 <p>This time for the same input payments collection, let us imagine you require a new aggregation pipeline to produce result documents. You need each output document's structure to be very different from the input structure, and you need to retain far fewer original fields, similar to the following:</p>
 <pre><code class="language-javascript">// OUTPUT  (a record in the results of the executed aggregation)
@@ -809,14 +810,14 @@ db.coll.explain(&quot;allPlansExecution&quot;).aggregate(pipeline);
 <p>When considering <code>$sort</code> and <code>$group</code> stages, it becomes evident why they have to block. The following examples illustrate why this is the case:</p>
 <ol>
 <li>
-<p><strong>$sort blocking example</strong>: A pipeline must sort <em>people</em> in ascending order of <em>age</em>. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. </p>
+<p><strong><em>$sort</em> blocking example</strong>: A pipeline must sort <em>people</em> in ascending order of <em>age</em>. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. </p>
 </li>
 <li>
-<p><strong>$group blocking example</strong>: A pipeline must group <em>employees</em> by one of two <em>work departments</em> (either the <em>sales</em> or <em>manufacturing</em> departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. </p>
+<p><strong><em>$group</em> blocking example</strong>: A pipeline must group <em>employees</em> by one of two <em>work departments</em> (either the <em>sales</em> or <em>manufacturing</em> departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. </p>
 </li>
 </ol>
 <p>These often unavoidable blocking stages don't just increase aggregation execution time by reducing concurrency. If used without careful forethought, the throughput and latency of a pipeline will slow dramatically due to significantly increased memory consumption. The following sub-sections explore why this occurs and tactics to mitigate this.</p>
-<h3 id="sort-memory-consumption-and-mitigation"><a class="header" href="#sort-memory-consumption-and-mitigation">$sort Memory Consumption And Mitigation</a></h3>
+<h3 id="sort-memory-consumption-and-mitigation"><a class="header" href="#sort-memory-consumption-and-mitigation"><em>$sort</em> Memory Consumption And Mitigation</a></h3>
 <p>Used naïvely, a <code>$sort</code> stage will need to see all the input records at once, and so the host server must have enough capacity to hold all the input data in memory. The amount of memory required depends heavily on the initial data size and the degree to which the prior stages can reduce the size. Also, multiple instances of the aggregation pipeline may be in-flight at any one time, in addition to other database workloads. These all compete for the same finite memory. Suppose the source data set is many gigabytes or even terabytes in size, and earlier pipeline stages have not reduced this size significantly. It will be unlikely that the host machine has sufficient memory to support the pipeline's blocking <code>$sort</code> stage. Therefore, MongoDB enforces every stage is limited to 100 MB of consumed RAM. The database throws an error if it exceeds this limit.</p>
 <p>To avoid the memory limit obstacle, you can set the <code>allowDiskUse:true</code> option for the overall aggregation for handling large result data sets. Consequently, the pipeline's <em>sort</em> operation spills to disk if required, and the 100 MB limit no longer constrains the pipeline. However, the sacrifice here is significantly higher latency, and the execution time is likely to increase by orders of magnitude.</p>
 <p>To circumvent the aggregation needing to manifest the whole data set in memory or overspill to disk, attempt to refactor your pipeline to incorporate one of the following approaches (in order of most effective first):</p>
@@ -831,7 +832,7 @@ db.coll.explain(&quot;allPlansExecution&quot;).aggregate(pipeline);
 <p><strong>Reduce Records To Sort</strong>. Move the <code>$sort</code> stage to as late as possible in your pipeline and ensure earlier stages significantly reduce the number of records streaming into this late blocking <code>$sort</code> stage. This blocking stage will have fewer records to process and less thirst for RAM.</p>
 </li>
 </ol>
-<h3 id="group-memory-consumption-and-mitigation"><a class="header" href="#group-memory-consumption-and-mitigation">$group Memory Consumption And Mitigation</a></h3>
+<h3 id="group-memory-consumption-and-mitigation"><a class="header" href="#group-memory-consumption-and-mitigation"><em>$group</em> Memory Consumption And Mitigation</a></h3>
 <p>Like the <code>$sort</code> stage, the <code>$group</code> stage has the potential to consume a large amount of memory. The aggregation pipeline's 100 MB RAM limit equally applies to the <code>$group</code> stage. As with sorting, you can use the pipeline's <code>allowDiskUse:true</code> option to avoid this limit for heavyweight grouping operations, but with the same downsides.</p>
 <p>In reality, most grouping scenarios focus on accumulating summary data such as totals, counts, averages, highs and lows, and not itemised data. In these situations, considerably reduced result data sets are produced, requiring far less processing memory than a <code>$sort</code> stage. Contrary to many sorting scenarios, grouping operations will typically demand a fraction of the host's RAM.</p>
 <p>To ensure you avoid excessive memory consumption when you are looking to use a <code>$group</code> stage, adopt the following principles:</p>
@@ -1103,7 +1104,7 @@ var pipeline = [
 <p>Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider <code>$match</code> to be the most surprising item in this list. The content of a <code>$match</code> stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine re-uses the MQL query engine to perform a &quot;regular&quot; query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the <code>$match</code> stage at the top of the pipeline. Therefore, the <code>$match</code> filter must use the same syntax as MQL. </p>
 <p>In most of the stages that are unable to leverage expressions, it doesn't usually make sense for their behaviour to be dynamic, based on the pipeline data entering the stage. For a client application that paginates results, you might define a value of <code>20</code> for the <code>$limit</code> stage. However, maybe you want to dynamically bind a value to the <code>$limit</code> stage, sourced by a <code>$lookup</code> stage earlier in the pipeline. The lookup operation might pull in the user's preferred &quot;page list size&quot; value from a &quot;user preferences&quot; collection. Nonetheless, the Aggregation Framework does not support this today for the listed stage types to avoid the overhead of the extra checks it would need to perform for what are essentially rare cases.</p>
 <p>In most cases, only one of the listed stages needs to be more expressive: the <code>$match</code> stage, but this stage is already flexible by being based on MQL query conditions. However, sometimes, even MQL isn't expressive enough to sufficiently define a rule to identify records to retain in an aggregation. The remainder of this chapter explores these challenges and how they are solved.</p>
-<h2 id="what-is-using-expr-inside-match-all-about"><a class="header" href="#what-is-using-expr-inside-match-all-about">What Is Using $expr Inside $match All About?</a></h2>
+<h2 id="what-is-using-expr-inside-match-all-about"><a class="header" href="#what-is-using-expr-inside-match-all-about">What Is Using <em>$expr</em> Inside <em>$match</em> All About?</a></h2>
 <p>The previously stated generalisation about <code>$match</code> not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr operator</a>, which you can embed within a <code>$match</code> stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's <code>$match</code>) to re-use expressions provided by MongoDB's aggregation runtime.</p>
 <p>Inside an  <code>$expr</code> operator, you can include any composite expression fashioned from <code>$</code> operator functions, <code>$</code> field paths and <code>$$</code> variables. A few situations demand having to use <code>$expr</code> from inside a <code>$match</code> stage. Examples include:</p>
 <ul>
@@ -1136,7 +1137,7 @@ var pipeline = [
 ]
 </code></pre>
 <p>As you can see, the second of the three shapes is not output because its area is only <code>12</code> (<code>3 x 4</code>).</p>
-<h3 id="restrictions-when-using-expressions-with-match"><a class="header" href="#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions with $match</a></h3>
+<h3 id="restrictions-when-using-expressions-with-match"><a class="header" href="#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions with <em>$match</em></a></h3>
 <p>You should be aware that there are restrictions on when the runtime can benefit from an index when using a <code>$expr</code> operator inside a <code>$match</code> stage. This partly depends on the version of MongoDB you are running. Using <code>$expr</code>, you can leverage a <code>$eq</code> comparison operator with some constraints, including an inability to use a <a href="https://docs.mongodb.com/manual/core/index-multikey/">multi-key index</a>. For MongoDB versions before 5.0, if you use a &quot;range&quot; comparison operator (<code>$gt</code>, <code>$gte</code>, <code>$lt</code> and <code>$lte</code>), an index cannot be employed to match the field, but this works fine in version 5.0.</p>
 <p>There are also subtle differences when ordering values for a specific field across multiple documents when some values have different types. MongoDB's query runtime (which executes regular MQL and <code>$match</code> filters) and MongoDB's aggregation runtime (which implements <code>$expr</code>) can apply different ordering rules when filtering, referred to as &quot;type bracketing&quot;. Consequently, a range query may not yield the same result with <code>$expr</code> as it does with MQL if some values have different types.</p>
 <p>Due to the potential challenges outlined, only use a <code>$expr</code> operator in a <code>$match</code> stage if there is no other way of assembling the filter criteria using regular MQL syntax.</p>
@@ -1149,16 +1150,16 @@ var pipeline = [
 <p><img src="guides/./pics/sharded-db-cluster.png" alt="MongoDB sharded cluster containing sharded and unsharded collections" /></p>
 <p>One or more deployed <a href="https://docs.mongodb.com/manual/reference/program/mongos/">mongos</a> processes act as a <a href="https://en.wikipedia.org/wiki/Reverse_proxy">reverse proxy</a>, routing read and write operations from the client application to the appropriate shards. For document write operations (i.e. create, update, delete), a mongos router knows which shard the document lives on and routes the operation to that specific shard. For read operations, if the query includes the shard key, the mongos knows which shards hold the required documents to route the query to (called &quot;targeting&quot;). If the query does not include the shard key, it sends the query to all shards using a &quot;scatter/gather&quot; pattern (called &quot;broadcasting&quot;). These are the rules for sharded reads and writes, but the approach for sharded aggregations requires a deeper explanation. Consequently, the rest of this chapter outlines how a sharded cluster handles the routing and execution of aggregations.</p>
 <h2 id="sharded-aggregation-constraints"><a class="header" href="#sharded-aggregation-constraints">Sharded Aggregation Constraints</a></h2>
-<p>Three of MongoDB's stages are only partly supported for sharded aggregations. These three stages all happen to reference a second collection in addition to the pipeline's source input collection. The pipeline can use a sharded collection as its source in all three cases, but the second collection referenced must be unsharded. The three stages are:</p>
+<p>Some of MongoDB's stages are only partly supported for sharded aggregations depending on which version of MongoDB you are running. These stages all happen to reference a second collection in addition to the pipeline's source input collection. The pipeline can use a sharded collection as its source in each case, but the second collection referenced must be unsharded. The affected stages and versions are:</p>
 <ul>
 <li>
-<p><strong><code>$lookup</code></strong>. The other referenced collection to join with must be unsharded.</p>
+<p><strong><code>$lookup</code></strong>. In MongoDB versions prior to 5.1, the other referenced collection to join with must be unsharded.</p>
 </li>
 <li>
-<p><strong><code>$graphLookup</code></strong>. The other referenced collection to recursively traverse must be unsharded.</p>
+<p><strong><code>$graphLookup</code></strong>. In MongoDB versions prior to 5.1, the other referenced collection to recursively traverse must be unsharded.</p>
 </li>
 <li>
-<p><strong><code>$out</code></strong>. The other referenced collection used as the destination of the aggregation's output must be unsharded. However, you can use a <code>$merge</code> stage instead to output the aggregation result to a sharded collection.</p>
+<p><strong><code>$out</code></strong>. In all MongoDB versions, the other referenced collection used as the destination of the aggregation's output must be unsharded. However, you can use a <code>$merge</code> stage instead to output the aggregation result to a sharded collection.</p>
 </li>
 </ul>
 <h2 id="where-does-a-sharded-aggregation-run"><a class="header" href="#where-does-a-sharded-aggregation-run">Where Does A Sharded Aggregation Run?</a></h2>
@@ -1680,7 +1681,7 @@ db.orders.aggregate(pipeline);
 
 db.orders.aggregate(pipeline);
 </code></pre>
-<p>If this achieves the same as using <code>$mergeObjects</code> but is more verbose, why bother using this pattern? Well, in most cases, you wouldn't. One situation where you would use the more verbose combination is if you need to dynamically set the value of an array item's field name, in addition to its value. Rather than naming the computed total field as <code>cost</code>, suppose you want the field's name also to reflect the product's name (e.g. <code>costForWizzyWidget</code>, <code>costForHighEndGizmo</code>). You can achieve this by using the <code>$arrayToObject</code>/<code>$concatArrays</code>/<code>$objectToArray</code> approach rather than the <code>$mergeObjects</code> method, as follows:</p>
+<p>If this achieves the same as using <code>$mergeObjects</code> but is more verbose, why bother using this pattern? Well, in most cases, you wouldn't. One situation where you would use the more verbose combination is if you need to dynamically set the name of an array item's field, in addition to its value. Rather than naming the computed total field as <code>cost</code>, suppose you want the field's name also to reflect the product's name (e.g. <code>costForWizzyWidget</code>, <code>costForHighEndGizmo</code>). You can achieve this by using the <code>$arrayToObject</code>/<code>$concatArrays</code>/<code>$objectToArray</code> approach rather than the <code>$mergeObjects</code> method, as follows:</p>
 <pre><code class="language-javascript">var pipeline = [
   {&quot;$set&quot;: {
     &quot;items&quot;: {
@@ -4548,7 +4549,7 @@ db.currency_pair_values.explain(&quot;executionStats&quot;).aggregate(pipeline);
 <h2 id="observations-14"><a class="header" href="#observations-14">Observations</a></h2>
 <ul>
 <li>
-<p><strong>First &amp; Last For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to operator correctly in MongoDB versions before 4.4:</p>
+<p><strong><em>$first</em> &amp; <em>$last</em> For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to operator correctly in MongoDB versions before 4.4:</p>
 <pre><code class="language-javascript">// $first equivalent
 &quot;summary.open&quot;: {&quot;$arrayElemAt&quot;: [&quot;$hour_values&quot;, 0]},
   
@@ -4936,7 +4937,7 @@ db.performance_test_results.explain(&quot;executionStats&quot;).aggregate(pipeli
 <p><strong>Comparison With Classic Sorting Algorithms.</strong> Despite being more optimal than unwinding and re-grouping arrays to bring them back into the same documents, the sorting code will be slow compared with commonly recognised computer science <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a>. This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with a small number of elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance is likely to be more profound.</p>
 </li>
 <li>
-<p><strong>Why Isn’t There A Native &quot;$sortArray&quot; Operator?.</strong> As you've seen, the composite set of expressions you must generate to perform an inline sort operation on an array is complex, in addition to being computationally suboptimal. If you are writing aggregations using JavaScript for the MongoDB Shell, you can copy the function provided in this chapter. However, in most &quot;production&quot; situations, you will be using a different programming language. Consequently, you would first need to port the example macro function to your chosen programming language. Ideally, the Aggregation Framework would provide a native and optimised array operator expression for this (e.g.  called <code>$sortArray</code>), and this operator would take optional parameters to:</p>
+<p><strong>Why Isn’t There A Native <em>$sortArray</em> Operator?.</strong> As you've seen, the composite set of expressions you must generate to perform an inline sort operation on an array is complex, in addition to being computationally suboptimal. If you are writing aggregations using JavaScript for the MongoDB Shell, you can copy the function provided in this chapter. However, in most &quot;production&quot; situations, you will be using a different programming language. Consequently, you would first need to port the example macro function to your chosen programming language. Ideally, the Aggregation Framework would provide a native and optimised array operator expression for this (e.g.  called <code>$sortArray</code>), and this operator would take optional parameters to:</p>
 <ol>
 <li>Indicate whether the ordering should be ascending or descending (defaulting to ascending)</li>
 <li>Name a field (or fields) in each array element to sort by, rather than the default of sorting by each array element &quot;as a whole&quot;</li>
