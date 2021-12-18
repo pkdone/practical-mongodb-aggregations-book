@@ -4,9 +4,9 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 3.01
+Version: 3.02
 
-Last Updated: November 2021
+Last Updated: December 2021
 
 MongoDB Versions Supported: 4.2 → 5.1
 
