@@ -6,9 +6,9 @@ Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
 Version: 3.02
 
-Last Updated: December 2021
+Last Updated: January 2022
 
-MongoDB Versions Supported: 4.2 → 5.1
+MongoDB Versions Supported: 4.2 → 5.2
 
 Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 
@@ -40,5 +40,5 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareA
 [cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png
 [cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%203.0-lightgrey.svg
 
-Copyright &copy; 2021 MongoDB, Inc.
+Copyright &copy; 2022 MongoDB, Inc.
 

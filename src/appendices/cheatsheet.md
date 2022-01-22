@@ -5,30 +5,31 @@ A simple example for each [stage in the MongoDB Aggregation Framework](https://d
 
 #### Stages:
 
-| Query                      | Mutate                                     | Summarise/Itemise                  | Join                               | Output                 |
-| :--------------------------| :------------------------------------------| :----------------------------------| :----------------------------------| :----------------------|
-| [$geoNear](#stage_geoNear) | [$addFields](#stage_addFields)             | [$bucket](#stage_bucket)           | [$graphLookup](#stage_graphLookup) | [$merge](#stage_merge) |
-| [$limit](#stage_limit)     | [$project](#stage_project)                 | [$bucketAuto](#stage_bucketAuto)   | [$lookup](#stage_lookup)           | [$out](#stage_out)     |
-| [$match](#stage_match)     | [$redact](#stage_redact)                   | [$count](#stage_count)             | [$unionWith](#stage_unionWith)     |                        |
-| [$sample](#stage_sample)   | [$replaceRoot](#stage_replaceRoot)         | [$facet](#stage_facet)             |                                    |                        |
-| [$skip](#stage_skip)       | [$replaceWith](#stage_replaceWith)         | [$group](#stage_group)             |                                    |                        |
-| [$sort](#stage_sort)       | [$set](#stage_set)                         | [$sortByCount](#stage_sortByCount) |                                    |                        |
-|                            | [$setWindowFields](#stage_setWindowFields) | [$unwind](#stage_unwind)           |                                    |                        |
-|                            | [$unset](#stage_unset)                     |                                    |                                    |                        |
+| Query                      | Mutate                                     | Summarise/Itemise                  | Join                               | Input/Output                   |
+| :--------------------------| :------------------------------------------| :----------------------------------| :----------------------------------| :------------------------------|
+| [$geoNear](#stage_geoNear) | [$addFields](#stage_addFields)             | [$bucket](#stage_bucket)           | [$graphLookup](#stage_graphLookup) | [$documents](#stage_documents) |
+| [$limit](#stage_limit)     | [$densify](#stage_densify)                 | [$bucketAuto](#stage_bucketAuto)   | [$lookup](#stage_lookup)           | [$merge](#stage_merge)         |
+| [$match](#stage_match)     | [$project](#stage_project)                 | [$count](#stage_count)             | [$unionWith](#stage_unionWith)     | [$out](#stage_out)             |
+| [$sample](#stage_sample)   | [$redact](#stage_redact)                   | [$facet](#stage_facet)             |                                    |                                |
+| [$skip](#stage_skip)       | [$replaceRoot](#stage_replaceRoot)         | [$group](#stage_group)             |                                    |                                |
+| [$sort](#stage_sort)       | [$replaceWith](#stage_replaceWith)         | [$sortByCount](#stage_sortByCount) |                                    |                                |
+|                            | [$set](#stage_set)                         | [$unwind](#stage_unwind)           |                                    |                                |
+|                            | [$setWindowFields](#stage_setWindowFields) |                                    |                                    |                                |
+|                            | [$unset](#stage_unset)                     |                                    |                                    |                                |
 
 
-> _The following stages are not included because they are unrelated to aggregating business data or rely on external systems: &nbsp;`$collStats`, `$indexStats`, `$listSessions`, `$planCacheStats`, `$currentOp`, `$listLocalSessions`, `$search`_
+> _The following stages are not included because they are unrelated to aggregating business data or rely on external systems: &nbsp;`$collStats`, `$indexStats`, `$listSessions`, `$planCacheStats`, `$currentOp`, `$listLocalSessions`, `$search`, `$searchMeta`_
 
 #### Input Collections:
 
 ```javascript
 // shapes
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
 
 // lists
 {_id: "▤", a: "●", b: ["◰", "◱"]}
@@ -52,21 +53,21 @@ A simple example for each [stage in the MongoDB Aggregation Framework](https://d
 ## [$addFields](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $addFields: {z: "●"}      
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11, z: '●'}
-{_id: '◑', x: '■', y: '■', val: 74, z: '●'}
-{_id: '◒', x: '●', y: '■', val: 79, z: '●'}
-{_id: '◓', x: '▲', y: '▲', val: 81, z: '●'}
-{_id: '◔', x: '■', y: '▲', val: 83, z: '●'}
-{_id: '◕', x: '●', y: '■', val: 85, z: '●'}
+{_id: '◐', x: '■', y: '▲', val: 10, z: '●'}
+{_id: '◑', x: '■', y: '■', val: 60, z: '●'}
+{_id: '◒', x: '●', y: '■', val: 80, z: '●'}
+{_id: '◓', x: '▲', y: '▲', val: 85, z: '●'}
+{_id: '◔', x: '■', y: '▲', val: 90, z: '●'}
+{_id: '◕', x: '●', y: '■', val: 95, z: '●'}
 ```
 
 &nbsp;
@@ -77,12 +78,12 @@ $addFields: {z: "●"}
 ## [$bucket](https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $bucket: {
   groupBy: "$val",
@@ -103,18 +104,18 @@ $bucket: {
 ## [$bucketAuto](https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $bucketAuto: {groupBy: "$val", buckets: 3}
    ⬇︎      
-{_id: {min: 11, max: 79}, count: 2}
-{_id: {min: 79, max: 83}, count: 2}
-{_id: {min: 83, max: 85}, count: 2}   
+{_id: {min: 10, max: 80}, count: 2}
+{_id: {min: 80, max: 90}, count: 2}
+{_id: {min: 90, max: 95}, count: 2}   
 ```
 
 &nbsp;
@@ -125,12 +126,12 @@ $bucketAuto: {groupBy: "$val", buckets: 3}
 ## [$count](https://docs.mongodb.com/manual/reference/operator/aggregation/count/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $count: "amount"
    ⬇︎      
@@ -141,16 +142,73 @@ $count: "amount"
 
 ---
 
+<a name="stage_densify"></a>
+## [$densify](https://docs.mongodb.com/v5.2/reference/operator/aggregation/densify/)
+
+```javascript
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
+   ⬇︎      
+$densify: {
+  field: "val",
+  partitionByFields: ["x"],
+  range: {bounds: "full", step: 25}
+}
+   ⬇︎      
+{_id: '◐', x: '■', y: '▲', val: 10}
+{x: '■', val: 35}
+{_id: '◑', x: '■', y: '■', val: 60}
+{x: '●', val: 10}
+{x: '●', val: 35}
+{x: '●', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{x: '▲', val: 10}
+{x: '▲', val: 35}
+{x: '▲', val: 60}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{x: '■', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{x: '●', val: 85}
+{_id: '◕', x: '●', y: '■', val: 95}
+```
+
+&nbsp;
+
+---
+
+<a name="stage_documents"></a>
+## [$documents](https://docs.mongodb.com/v5.2/reference/operator/aggregation/documents/)
+
+```javascript
+[     ]
+   ⬇︎      
+$documents: {
+  {p: "▭", q: "▯"},
+  {p: "▯", q: "▭"}
+}
+   ⬇︎      
+{p: '▭', q: '▯'}
+{p: '▯', q: '▭'}
+```
+
+&nbsp;
+
+---
+
 <a name="stage_facet"></a>
 ## [$facet](https://docs.mongodb.com/manual/reference/operator/aggregation/facet/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $facet: {
   X_CIRCLE_FACET: [{$match: {x: "●"}}],
@@ -159,12 +217,12 @@ $facet: {
    ⬇︎      
 {
   X_CIRCLE_FACET: [
-    {_id: '◒', x: '●', y: '■', val: 79},
-    {_id: '◕', x: '●', y: '■', val: 85}
+    {_id: '◒', x: '●', y: '■', val: 80},
+    {_id: '◕', x: '●', y: '■', val: 95}
   ],
   FIRST_TWO_FACET: [
-    {_id: '◐', x: '■', y: '▲', val: 11},
-    {_id: '◑', x: '■', y: '■', val: 74}
+    {_id: '◐', x: '■', y: '▲', val: 10},
+    {_id: '◑', x: '■', y: '■', val: 60}
   ]
 }   
 ```
@@ -205,12 +263,12 @@ $geoNear: {
 ## [$graphLookup](https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $graphLookup: {
   from: "shapes",
@@ -238,12 +296,12 @@ $project: {connections_count: {$size: "$connections"}}
 ## [$group](https://docs.mongodb.com/manual/reference/operator/aggregation/group/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $group: {_id: "$x", ylist: {$push: "$y"}}
    ⬇︎   
@@ -260,17 +318,17 @@ $group: {_id: "$x", ylist: {$push: "$y"}}
 ## [$limit](https://docs.mongodb.com/manual/reference/operator/aggregation/limit/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $limit: 2
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}   
 ```
 
 &nbsp;
@@ -281,12 +339,12 @@ $limit: 2
 ## [$lookup](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ✚
 {_id: "▤", a: "●", b: ["◰", "◱"]}
 {_id: "▥", a: "▲", b: ["◲"]}
@@ -301,25 +359,25 @@ $lookup: {
   as: "refs"
 }
    ⬇︎         
-{_id: '◐', x: '■', y: '▲', val: 11, refs: [
+{_id: '◐', x: '■', y: '▲', val: 10, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◑', x: '■', y: '■', val: 74, refs: [
+{_id: '◑', x: '■', y: '■', val: 60, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}
-{_id: '◒', x: '●', y: '■', val: 79, refs: [
+{_id: '◒', x: '●', y: '■', val: 80, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}
-{_id: '◓', x: '▲', y: '▲', val: 81, refs: [
+{_id: '◓', x: '▲', y: '▲', val: 85, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◔', x: '■', y: '▲', val: 83, refs: [
+{_id: '◔', x: '■', y: '▲', val: 90, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◕', x: '●', y: '■', val: 85, refs: [
+{_id: '◕', x: '●', y: '■', val: 95, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}   
 ```
@@ -332,18 +390,18 @@ $lookup: {
 ## [$match](https://docs.mongodb.com/manual/reference/operator/aggregation/match/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $match: {y: "▲"}  
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}   
 ```
 
 &nbsp;
@@ -354,22 +412,22 @@ $match: {y: "▲"}
 ## [$merge](https://docs.mongodb.com/manual/reference/operator/aggregation/merge/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $merge: {into: "results"}
    ⬇︎      
 db.results.find()   
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}   
 ```
 
 &nbsp;
@@ -380,22 +438,22 @@ db.results.find()
 ## [$out](https://docs.mongodb.com/manual/reference/operator/aggregation/out/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $out: "results"
    ⬇︎      
 db.results.find()   
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}   
 ```
 
 &nbsp;
@@ -406,12 +464,12 @@ db.results.find()
 ## [$project](https://docs.mongodb.com/manual/reference/operator/aggregation/project/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $project: {x: 1}
    ⬇︎      
@@ -506,18 +564,18 @@ $replaceWith: {
 ## [$sample](https://docs.mongodb.com/manual/reference/operator/aggregation/sample/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $sample: {size: 3}
    ⬇︎     
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◑', x: '■', y: '■', val: 74}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◑', x: '■', y: '■', val: 60}
 ```
 
 &nbsp;
@@ -528,21 +586,21 @@ $sample: {size: 3}
 ## [$set](https://docs.mongodb.com/manual/reference/operator/aggregation/set/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $set: {y: "▲"}
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '▲', val: 74}
-{_id: '◒', x: '●', y: '▲', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '▲', val: 85}        
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '▲', val: 60}
+{_id: '◒', x: '●', y: '▲', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '▲', val: 95}        
 ```
 
 &nbsp;
@@ -553,12 +611,12 @@ $set: {y: "▲"}
 ## [$setWindowFields](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $setWindowFields: {
   partitionBy: "$x",
@@ -573,12 +631,12 @@ $setWindowFields: {
  }
 }
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11, cumulativeValShapeX: 11}
-{_id: '◑', x: '■', y: '■', val: 74, cumulativeValShapeX: 85}
-{_id: '◔', x: '■', y: '▲', val: 83, cumulativeValShapeX: 168}
-{_id: '◓', x: '▲', y: '▲', val: 81, cumulativeValShapeX: 81}
-{_id: '◒', x: '●', y: '■', val: 79, cumulativeValShapeX: 79}
-{_id: '◕', x: '●', y: '■', val: 85, cumulativeValShapeX: 164}
+{_id: '◐', x: '■', y: '▲', val: 10, cumulativeValShapeX: 10}
+{_id: '◑', x: '■', y: '■', val: 60, cumulativeValShapeX: 70}
+{_id: '◔', x: '■', y: '▲', val: 90, cumulativeValShapeX: 160}
+{_id: '◓', x: '▲', y: '▲', val: 85, cumulativeValShapeX: 85}
+{_id: '◒', x: '●', y: '■', val: 80, cumulativeValShapeX: 80}
+{_id: '◕', x: '●', y: '■', val: 95, cumulativeValShapeX: 175}
 ```
 
 &nbsp;
@@ -589,16 +647,16 @@ $setWindowFields: {
 ## [$skip](https://docs.mongodb.com/manual/reference/operator/aggregation/skip/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $skip: 5
    ⬇︎      
-{_id: '◕', x: '●', y: '■', val: 85}
+{_id: '◕', x: '●', y: '■', val: 95}
 ```
 
 &nbsp;
@@ -609,21 +667,21 @@ $skip: 5
 ## [$sort](https://docs.mongodb.com/manual/reference/operator/aggregation/sort/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $sort: {x: 1, y: 1}
    ⬇︎      
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◕', x: '●', y: '■', val: 95}   
 ```
 
 &nbsp;
@@ -634,12 +692,12 @@ $sort: {x: 1, y: 1}
 ## [$sortByCount](https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $sortByCount: "$x"
    ⬇︎    
@@ -656,12 +714,12 @@ $sortByCount: "$x"
 ## [$unionWith](https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ✚
 {_id: "▤", a: "●", b: ["◰", "◱"]}
 {_id: "▥", a: "▲", b: ["◲"]}
@@ -671,12 +729,12 @@ $sortByCount: "$x"
    ⬇︎      
 $unionWith: {coll: "lists"} 
    ⬇︎    
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}
 {_id: '▤', a: '●', b: ['◰', '◱']}
 {_id: '▥', a: '▲', b: ['◲']}
 {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
@@ -692,21 +750,21 @@ $unionWith: {coll: "lists"}
 ## [$unset](https://docs.mongodb.com/manual/reference/operator/aggregation/unset/)
 
 ```javascript
-{_id: "◐", x: "■", y: "▲", val: 11}
-{_id: "◑", x: "■", y: "■", val: 74}
-{_id: "◒", x: "●", y: "■", val: 79}
-{_id: "◓", x: "▲", y: "▲", val: 81}
-{_id: "◔", x: "■", y: "▲", val: 83}
-{_id: "◕", x: "●", y: "■", val: 85}
+{_id: "◐", x: "■", y: "▲", val: 10}
+{_id: "◑", x: "■", y: "■", val: 60}
+{_id: "◒", x: "●", y: "■", val: 80}
+{_id: "◓", x: "▲", y: "▲", val: 85}
+{_id: "◔", x: "■", y: "▲", val: 90}
+{_id: "◕", x: "●", y: "■", val: 95}
    ⬇︎      
 $unset: ["x"] 
    ⬇︎  
-{_id: '◐', y: '▲', val: 11}
-{_id: '◑', y: '■', val: 74}
-{_id: '◒', y: '■', val: 79}
-{_id: '◓', y: '▲', val: 81}
-{_id: '◔', y: '▲', val: 83}
-{_id: '◕', y: '■', val: 85}       
+{_id: '◐', y: '▲', val: 10}
+{_id: '◑', y: '■', val: 60}
+{_id: '◒', y: '■', val: 80}
+{_id: '◓', y: '▲', val: 85}
+{_id: '◔', y: '▲', val: 90}
+{_id: '◕', y: '■', val: 95}       
 ```
 
 &nbsp;

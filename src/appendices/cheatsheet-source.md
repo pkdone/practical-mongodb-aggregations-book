@@ -12,12 +12,12 @@ db.places.createIndex({loc: "2dsphere"});
 
 // 'shapes' collection
 db.shapes.insertMany([
-  {_id: "◐", x: "■", y: "▲", val: 11},
-  {_id: "◑", x: "■", y: "■", val: 74},
-  {_id: "◒", x: "●", y: "■", val: 79},
-  {_id: "◓", x: "▲", y: "▲", val: 81},
-  {_id: "◔", x: "■", y: "▲", val: 83},
-  {_id: "◕", x: "●", y: "■", val: 85},
+  {_id: "◐", x: "■", y: "▲", val: 10},
+  {_id: "◑", x: "■", y: "■", val: 60},
+  {_id: "◒", x: "●", y: "■", val: 80},
+  {_id: "◓", x: "▲", y: "▲", val: 85},
+  {_id: "◔", x: "■", y: "▲", val: 90},
+  {_id: "◕", x: "●", y: "■", val: 95},
 ]);
 
 // 'lists' collection
@@ -67,6 +67,25 @@ db.shapes.aggregate([
 // $count  (v3.4)
 db.shapes.aggregate([
   {"$count": "amount"}
+]);
+
+
+// $densify  (v5.1)
+db.shapes.aggregate([
+  {"$densify": {
+    "field": "val", 
+    "partitionByFields": ["x"], 
+    "range": {"bounds": "full", "step": 25}
+  }}
+]);
+
+
+// $documents  (v5.1)
+db.aggregate([
+  {"$documents": [
+    {"p": "▭", "q": "▯"},
+    {"p": "▯", "q": "▭"},
+  ]}
 ]);
 
 
