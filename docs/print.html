@@ -179,9 +179,9 @@
 <p> </p>
 <h1 id="practical-mongodb-aggregations"><a class="header" href="#practical-mongodb-aggregations">Practical MongoDB Aggregations</a></h1>
 <p>Author: Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</p>
-<p>Version: 3.01</p>
-<p>Last Updated: November 2021</p>
-<p>MongoDB Versions Supported: 4.2 → 5.1</p>
+<p>Version: 3.02</p>
+<p>Last Updated: January 2022</p>
+<p>MongoDB Versions Supported: 4.2 → 5.2</p>
 <p>Book published at: <a href="https://www.practical-mongodb-aggregations.com">www.practical-mongodb-aggregations.com</a></p>
 <p>Content created &amp; assembled at: <a href="https://github.com/pkdone/practical-mongodb-aggregations-book">github.com/pkdone/practical-mongodb-aggregations-book</a></p>
 <hr />
@@ -199,7 +199,7 @@
 <p><a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%203.0-lightgrey.svg" alt="CC BY-NC-SA 3.0" /></a></p>
 <p>This work is licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License</a></p>
 <p><a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png" alt="CC BY-NC-SA 3.0" /></a></p>
-<p>Copyright © 2021 MongoDB, Inc.</p>
+<p>Copyright © 2022 MongoDB, Inc.</p>
 <h1 id="foreword"><a class="header" href="#foreword">Foreword</a></h1>
 <p><strong>By Asya Kamsky</strong> (<a href="https://twitter.com/asya999">@asya999</a>)</p>
 <p>I've been involved with databases since the early 1990's when I &quot;accidentally&quot; got a job with a small database company.  For the next two decades, databases were synonymous with SQL in my mind, until someone asked me what I thought about these new &quot;No SQL&quot; databases, and MongoDB in particular.  I tried MongoDB for a small project I was doing on the side, and the rest, as they say, is history. </p>
@@ -310,6 +310,7 @@
 <li><strong>MongoDB 4.4 (July 2020)</strong>: A union stage, custom JavaScript operator expressions (function &amp; accumulator), first &amp; last array element operators, string replacement operators, a random number operator</li>
 <li><strong>MongoDB 5.0 (July 2021)</strong>: A setWindowFields stage, time-series/window operators, date manipulation operators</li>
 <li><strong>MongoDB 5.1 (November 2021)</strong>: Support for lookup &amp; graph-lookup stages joining to sharded collections, documents and densify stages</li>
+<li><strong>MongoDB 5.2 (January 2021)</strong>: An array sorting operator, operators to get a subset of ordered arrays and a subset of ordered grouped documents</li>
 </ul>
 <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
 <p>For developing aggregation pipelines effectively, and also to try the examples in the second half of this book, you need the following two elements:</p>
@@ -1138,7 +1139,7 @@ var pipeline = [
 </code></pre>
 <p>As you can see, the second of the three shapes is not output because its area is only <code>12</code> (<code>3 x 4</code>).</p>
 <h3 id="restrictions-when-using-expressions-with-match"><a class="header" href="#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions with <em>$match</em></a></h3>
-<p>You should be aware that there are restrictions on when the runtime can benefit from an index when using a <code>$expr</code> operator inside a <code>$match</code> stage. This partly depends on the version of MongoDB you are running. Using <code>$expr</code>, you can leverage a <code>$eq</code> comparison operator with some constraints, including an inability to use a <a href="https://docs.mongodb.com/manual/core/index-multikey/">multi-key index</a>. For MongoDB versions before 5.0, if you use a &quot;range&quot; comparison operator (<code>$gt</code>, <code>$gte</code>, <code>$lt</code> and <code>$lte</code>), an index cannot be employed to match the field, but this works fine in version 5.0.</p>
+<p>You should be aware that there are restrictions on when the runtime can benefit from an index when using a <code>$expr</code> operator inside a <code>$match</code> stage. This partly depends on the version of MongoDB you are running. Using <code>$expr</code>, you can leverage a <code>$eq</code> comparison operator with some constraints, including an inability to use a <a href="https://docs.mongodb.com/manual/core/index-multikey/">multi-key index</a>. For MongoDB versions before 5.0, if you use a &quot;range&quot; comparison operator (<code>$gt</code>, <code>$gte</code>, <code>$lt</code> and <code>$lte</code>), an index cannot be employed to match the field, but this works fine in version 5.0 and greater.</p>
 <p>There are also subtle differences when ordering values for a specific field across multiple documents when some values have different types. MongoDB's query runtime (which executes regular MQL and <code>$match</code> filters) and MongoDB's aggregation runtime (which implements <code>$expr</code>) can apply different ordering rules when filtering, referred to as &quot;type bracketing&quot;. Consequently, a range query may not yield the same result with <code>$expr</code> as it does with MQL if some values have different types.</p>
 <p>Due to the potential challenges outlined, only use a <code>$expr</code> operator in a <code>$match</code> stage if there is no other way of assembling the filter criteria using regular MQL syntax.</p>
 <h1 id="sharding-considerations"><a class="header" href="#sharding-considerations">Sharding Considerations</a></h1>
@@ -1150,7 +1151,7 @@ var pipeline = [
 <p><img src="guides/./pics/sharded-db-cluster.png" alt="MongoDB sharded cluster containing sharded and unsharded collections" /></p>
 <p>One or more deployed <a href="https://docs.mongodb.com/manual/reference/program/mongos/">mongos</a> processes act as a <a href="https://en.wikipedia.org/wiki/Reverse_proxy">reverse proxy</a>, routing read and write operations from the client application to the appropriate shards. For document write operations (i.e. create, update, delete), a mongos router knows which shard the document lives on and routes the operation to that specific shard. For read operations, if the query includes the shard key, the mongos knows which shards hold the required documents to route the query to (called &quot;targeting&quot;). If the query does not include the shard key, it sends the query to all shards using a &quot;scatter/gather&quot; pattern (called &quot;broadcasting&quot;). These are the rules for sharded reads and writes, but the approach for sharded aggregations requires a deeper explanation. Consequently, the rest of this chapter outlines how a sharded cluster handles the routing and execution of aggregations.</p>
 <h2 id="sharded-aggregation-constraints"><a class="header" href="#sharded-aggregation-constraints">Sharded Aggregation Constraints</a></h2>
-<p>Some of MongoDB's stages are only partly supported for sharded aggregations depending on which version of MongoDB you are running. These stages all happen to reference a second collection in addition to the pipeline's source input collection. The pipeline can use a sharded collection as its source in each case, but the second collection referenced must be unsharded. The affected stages and versions are:</p>
+<p>Some of MongoDB's stages only partly support sharded aggregations depending on which version of MongoDB you are running. These stages all happen to reference a second collection in addition to the pipeline's source input collection. In each case, the pipeline can use a sharded collection as its source, but the second collection referenced must be unsharded (for earlier MongoDB versions, at least). The affected stages and versions are:</p>
 <ul>
 <li>
 <p><strong><code>$lookup</code></strong>. In MongoDB versions prior to 5.1, the other referenced collection to join with must be unsharded.</p>
@@ -1187,14 +1188,14 @@ var pipeline = [
 <p><strong>Optimisations Applied In Shards Part</strong>. For the <code>$sort</code> or <code>$group</code> blocking stages where the pipeline splits, the blocking stage divides into two. The runtime executes the first phase of the blocking stage as the last stage of the <code>shardsPart</code> of the divided pipeline. It then completes the stage's remaining work as the first stage of the <code>mergerPart</code>. For a <code>$sort</code> stage, this means the cluster conducts a large portion of the sorting work in parallel on all shards, with a remaining &quot;merge sort&quot; occurring at the final location. For a <code>$group</code> stage, the cluster performs the grouping in parallel on every shard, accumulating partial sums and totals ahead of its final merge phase. Consequently, the runtime does not have to ship masses of raw ungrouped data from the source shards to where the runtime merges the partially formed groups.</p>
 </li>
 <li>
-<p><strong>Merger Part Running From A Single Location</strong>. The specific location where the runtime executes the pipeline's <code>mergerPart</code> stages depends on several variables. The explain plan shows the location chosen by the runtime in the mergeType field of its output. In these two examples, the locations are <code>mongos</code> and <code>anyShard</code>, respectively. This chapter's <em><a href="guides/sharding.html#execution-of-the-merger-part-of-the-split-pipeline-if-any">Execution Of The Merger Part Of The Split Pipeline</a></em> section outlines the rules that the aggregation runtime uses to decide this location.</p>
+<p><strong>Merger Part Running From A Single Location</strong>. The specific location where the runtime executes the pipeline's <code>mergerPart</code> stages depends on several variables. The explain plan shows the location chosen by the runtime in the <code>mergeType</code> field of its output. In these two examples, the locations are <code>mongos</code> and <code>anyShard</code>, respectively. This chapter's <em><a href="guides/sharding.html#execution-of-the-merger-part-of-the-split-pipeline-if-any">Execution Of The Merger Part Of The Split Pipeline</a></em> section outlines the rules that the aggregation runtime uses to decide this location.</p>
 </li>
 <li>
 <p><strong>Final Merge Sorting When The Sort Stage Is Split</strong>. The <code>$sort</code>'s final phase shown in the <code>mergerPart</code> of the first pipeline is not a blocking operation, whereas, with <code>$group</code> shown in the second pipeline, <code>$group</code>'s final phase is blocking. This chapter's <em><a href="guides/sharding.html#difference-in-merging-behaviour-for-grouping-vs-sorting">Difference In Merging Behaviour For Grouping Vs Sorting</a></em> section discusses why.</p>
 </li>
 </ul>
 <blockquote>
-<p><em>Unfortunately, if you are running your aggregations in MongoDB versions 4.2 to 5.0, the explain plan generated by the aggregation runtime erroneously neglects to log the final phase of the <code>$sort</code> stage in the pipeline's <code>mergerPart</code>. This is caused by an <a href="https://jira.mongodb.org/browse/SERVER-57383">explain plan bug</a> but rest assured that the final phase of the <code>$sort</code> stage (the &quot;merge sort&quot;) does indeed happen in the pipeline's <code>mergerPart</code>.</em></p>
+<p><em>Unfortunately, if you are running your aggregations in MongoDB versions 4.2 to 5.2, the explain plan generated by the aggregation runtime erroneously neglects to log the final phase of the <code>$sort</code> stage in the pipeline's <code>mergerPart</code>. This is caused by an <a href="https://jira.mongodb.org/browse/SERVER-57383">explain plan bug</a> but rest assured that the final phase of the <code>$sort</code> stage (the &quot;merge sort&quot;) does indeed happen in the pipeline's <code>mergerPart</code>.</em></p>
 </blockquote>
 <h3 id="execution-of-the-shards-part-of-the-split-pipeline"><a class="header" href="#execution-of-the-shards-part-of-the-split-pipeline">Execution Of The Shards Part Of The Split Pipeline</a></h3>
 <p>When a mongos receives a request to execute an aggregation pipeline, it needs to determine where to target the <em>shards part</em> of the pipeline. It will endeavour to run this on the relevant subset of shards rather than broadcasting the work to all. </p>
@@ -1206,10 +1207,10 @@ var pipeline = [
 <p>The aggregation runtime selects the <em>merger part</em> location (if any) by following a decision tree, with four possible outcomes. The list below outlines the ordered decisions the runtime takes. However, it is crucial to understand that this order does not reflect precedence or preference. Achieving either the <em>Targeted-Shard Execution</em> (2) or <em>Mongos Merge</em> (4) is usually the preferred outcome for optimum performance.</p>
 <ol>
 <li>
-<p><strong>Primary-Shard Merge</strong>. When the pipeline contains a stage referencing an unsharded collection, the aggregation runtime will place this stage in the <em>merger part</em> of the split pipeline. It executes this <em>merger part</em> on the designated primary shard, which holds the unsharded collection. This is always the case for the types of stages that only reference unsharded collections (i.e. <code>$lookup</code>, <code>$graphLookup</code> or <code>$out</code>). This is also the situation if you use a <code>$merge</code> stage and the collection you specify happens to be unsharded.</p>
+<p><strong>Primary-Shard Merge</strong>. When the pipeline contains a stage referencing a second unsharded collection, the aggregation runtime will place this stage in the <em>merger part</em> of the split pipeline. It executes this <em>merger part</em> on the designated primary shard, which holds the referenced unsharded collection. This is always the case for the stages that can only reference unsharded collections (i.e. for <code>$out</code> generally or for <code>$lookup</code> and <code>$graphLookup</code> in MongoDB versions before 5.1). This is also the situation if the collection happens to be unsharded and you reference it from a <code>$merge</code> stage or, in MongoDB 5.1 or greater,  from a <code>$lookup</code> or <code>$graphLookup</code> stage.</p>
 </li>
 <li>
-<p><strong>Targeted-Shard Execution</strong>. As discussed earlier, if the runtime can ensure the pipeline matches to just one shard, it does not split the pipeline, and there is no <em>merger part</em>. Instead, the runtime executes the entire pipeline on the one matched shard, just like it would for non-sharded deployments. This optimisation avoids unnecessarily breaking the pipeline into two parts, where intermediate data then has to move from the <em>shards part(s)</em> to the <em>merger part</em>.</p>
+<p><strong>Targeted-Shard Execution</strong>. As discussed earlier, if the runtime can ensure the pipeline matches the required subset of the source collection data to just one shard, it does not split the pipeline, and there is no <em>merger part</em>. Instead, the runtime executes the entire pipeline on the one matched shard, just like it would for non-sharded deployments. This optimisation avoids unnecessarily breaking the pipeline into two parts, where intermediate data then has to move from the <em>shards part(s)</em> to the <em>merger part</em>. The behaviour of pinning to a single shard occurs even if the pipeline contains a <code>$merge</code>, <code>$lookup</code> or <code>$graphLookup</code> stage referencing a second sharded collection containing records dispersed across multiple shards.</p>
 </li>
 <li>
 <p><strong>Any-Shard Merge</strong>. Suppose you've configured <code>allowDiskUse:true</code> for the aggregation to avoid the 100 MB memory consumption limit per stage. If one of the following two situations is also true, the aggregation runtime must run the <em>merger part</em> of the split pipeline on a randomly chosen shard (a.k.a. &quot;any shard&quot;):</p>
@@ -3909,7 +3910,7 @@ db.persons.insertMany([
 <h2 id="observations-11"><a class="header" href="#observations-11">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Expr &amp; Indexes.</strong> The <a href="https://docs.mongodb.com/manual/reference/aggregation-variables/">&quot;NOW&quot; system variable</a> used here returns the current system date-time. However, you can only access this system variable via an <a href="https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions">aggregation expression</a> and not directly via the regular MongoDB query syntax used by MQL and <code>$match</code>. You must wrap an expression using <code>$$NOW</code> inside an <code>$expr</code> operator. As described in the section <em><a href="examples/securing-data/../../guides/expressions.html#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions</a></em> in an earlier chapter, if you use an <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr query operator</a> to perform a range comparison, you can't make use of an index in versions of MongoDB earlier then 5.0. Therefore, in this example, unless you use MongoDB 5.0, the aggregation will not take advantage of an index on <code>dateofbirth</code>. For a view, because you specify the pipeline earlier than it is ever run, you cannot obtain the current date-time at runtime by other means.</p>
+<p><strong>Expr &amp; Indexes.</strong> The <a href="https://docs.mongodb.com/manual/reference/aggregation-variables/">&quot;NOW&quot; system variable</a> used here returns the current system date-time. However, you can only access this system variable via an <a href="https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions">aggregation expression</a> and not directly via the regular MongoDB query syntax used by MQL and <code>$match</code>. You must wrap an expression using <code>$$NOW</code> inside an <code>$expr</code> operator. As described in the section <em><a href="examples/securing-data/../../guides/expressions.html#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions</a></em> in an earlier chapter, if you use an <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr query operator</a> to perform a range comparison, you can't make use of an index in versions of MongoDB earlier then 5.0. Therefore, in this example, unless you use MongoDB 5.0 or greater, the aggregation will not take advantage of an index on <code>dateofbirth</code>. For a view, because you specify the pipeline earlier than it is ever run, you cannot obtain the current date-time at runtime by other means.</p>
 </li>
 <li>
 <p><strong>View Finds &amp; Indexes.</strong> Even for versions of MongoDB before 5.0, the explain plan for the <em>gender query</em> run against the view shows an index has been used (the index defined for the <code>gender</code> field). At runtime, a view is essentially just an aggregation pipeline defined &quot;ahead of time&quot;. When <code>db.adults.find({&quot;gender&quot;: &quot;FEMALE&quot;})</code> is executed, the database engine dynamically appends a new <code>$match</code> stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the new <code>$match</code> stage to the pipeline's start. Finally, it adds the filter extracted from the new <code>$match</code> stage to the aggregation's initial query, and hence it can then leverage an index containing the <code>gender</code> field. The following two excerpts, from an explain plan from a MongoDB version before 5.0, illustrate how the filter on <code>gender</code> and the filter on <code>dateofbirth</code> combine at runtime and how the index for <code>gender</code> is used to avoid a full collection scan:</p>
@@ -3937,7 +3938,7 @@ db.persons.insertMany([
   indexBounds: { gender: [ '[&quot;FEMALE&quot;, &quot;FEMALE&quot;]' ] }
 }
 </code></pre>
-<p>In MongoDB 5.0, the explain plan will show the aggregation runtime executing the pipeline more optimally by entirely using the compound index based on both the fields <code>gender</code> and <code>dateofbirth</code>.</p>
+<p>In MongoDB 5.0 and greater, the explain plan will show the aggregation runtime executing the pipeline more optimally by entirely using the compound index based on both the fields <code>gender</code> and <code>dateofbirth</code>.</p>
 </li>
 <li>
 <p><strong>Further Reading.</strong> The ability for <em>find</em> operations on a view to automatically push filters into the view's aggregation pipeline, and then be further optimised, is described in the blog post: <a href="https://pauldone.blogspot.com/2020/11/mongdb-views-optimisations.html">Is Querying A MongoDB View Optimised?</a></p>
@@ -4697,9 +4698,9 @@ db.weather_measurements.explain(&quot;executionStats&quot;).aggregate(pipeline);
 <h1 id="array-sorting--percentiles"><a class="header" href="#array-sorting--percentiles">Array Sorting &amp; Percentiles</a></h1>
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario-16"><a class="header" href="#scenario-16">Scenario</a></h2>
-<p>You have been conducting performance testing of an application's API with the results of each &quot;test run&quot; captured in a document in a database. Each &quot;test run&quot; document contains an array of multiple response times that the test recorded during its execution. You need to analyse the recorded data to identify the slow tests. To achieve this, you want to calculate the <a href="https://en.wikipedia.org/wiki/Median">median</a> (50th percentile) and 90th <a href="https://en.wikipedia.org/wiki/Percentile">percentile</a> response times for each recorded &quot;test run&quot; and then only keep documents where the 90th percentile response time is greater than 100 milliseconds.</p>
+<p>You've conducted performance testing of an application with the results of each &quot;test run&quot; captured in a database. Each record contains a set of response times for the test run. You want to analyse the data from multiple runs to identify the slowest ones. You calculate the median (50th percentile) and 90th percentile response times for each test run and only keep results where the 90th percentile response time is greater than 100 milliseconds.</p>
 <blockquote>
-<p><em>This example chapter uses a slightly modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">macro function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can re-use this chapter's <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents.</em></p>
+<p><em>For MongoDB version 5.1 and earlier, the example will use a modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can re-use this chapter's custom <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents. For MongoDB version 5.2 and greater, you can instead use MongoDB's new <a href="https://docs.mongodb.com/v5.2/reference/operator/aggregation/sortArray/">$sortArray</a> operator.</em></p>
 </blockquote>
 <h2 id="sample-data-population-16"><a class="header" href="#sample-data-population-16">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate the test run results documents:</p>
@@ -4761,8 +4762,9 @@ db.performance_test_results.insertMany([
 ]);
 </code></pre>
 <h2 id="aggregation-pipeline-16"><a class="header" href="#aggregation-pipeline-16">Aggregation Pipeline</a></h2>
-<p>Define the new <code>sortArray()</code> function for inline sorting of the contents of an array field, ready for you to use in a pipeline:</p>
+<p>If you are using version 5.1 or earlier of MongoDB, you need to define the following custom <code>sortArray()</code> function for inline sorting of the contents of an array field, ready for you to use in a pipeline:</p>
 <pre><code class="language-javascript">// Macro function to generate a complex aggregation expression for sorting an array
+// This function isn't required for MongoDB version 5.2+ due to the new $sortArray operator
 function sortArray(sourceArrayField) {
   return {
     // GENERATE BRAND NEW ARRAY TO CONTAIN THE ELEMENTS FROM SOURCE ARRAY BUT NOW SORTED
@@ -4826,13 +4828,15 @@ function sortArray(sourceArrayField) {
   };
 }
 </code></pre>
-<p>Define the new arrayElemAtPercentile(n) function for capturing the element of a sorted array at the nth percentile position:</p>
+<p>Define the new <code>arrayElemAtPercentile()</code> function for capturing the element of a sorted array at the nth percentile position:</p>
 <pre><code class="language-javascript">// Macro function to find nth percentile element of a sorted version of an array
 function arrayElemAtPercentile(sourceArrayField, percentile) {
   return {    
     &quot;$let&quot;: {
       &quot;vars&quot;: {
         &quot;sortedArray&quot;: sortArray(sourceArrayField), 
+        // Comment out the line above and uncomment the line below if running MDB 5.2 or greater
+        // &quot;sortedArray&quot;: {&quot;$sortArray&quot;: {&quot;input&quot;: sourceArrayField, &quot;sortBy&quot;: 1}},        
       },
       &quot;in&quot;: {         
         &quot;$arrayElemAt&quot;: [  // FIND ELEMENT OF ARRAY AT NTH PERCENTILE POSITION
@@ -4852,11 +4856,16 @@ function arrayElemAtPercentile(sourceArrayField, percentile) {
   };
 }
 </code></pre>
+<blockquote>
+<p><em>If running MongoDB version 5.2 or greater, you can instead comment/uncomment the specific lines indicated in the code above to leverage MongoDB's new <code>$sortArray</code> operator</em></p>
+</blockquote>
 <p>Define the pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Capture new fields for the ordered array + various percentiles
   {&quot;$set&quot;: {
     &quot;sortedResponseTimesMillis&quot;: sortArray(&quot;$responseTimesMillis&quot;),
+    // Comment out the line above and uncomment the line below if running MDB 5.2 or greater
+    // &quot;sortedResponseTimesMillis&quot;: {&quot;$sortArray&quot;: {&quot;input&quot;: &quot;$responseTimesMillis&quot;, &quot;sortBy&quot;: 1}},
     &quot;medianTimeMillis&quot;: arrayElemAtPercentile(&quot;$responseTimesMillis&quot;, 50),
     &quot;ninetiethPercentileTimeMillis&quot;: arrayElemAtPercentile(&quot;$responseTimesMillis&quot;, 90),
   }},
@@ -4874,6 +4883,9 @@ function arrayElemAtPercentile(sourceArrayField, percentile) {
   ]},    
 ];
 </code></pre>
+<blockquote>
+<p><em>If running MongoDB version 5.2 or greater, you can instead comment/uncomment the specific lines indicated in the code above to leverage MongoDB's new <code>$sortArray</code> operator</em></p>
+</blockquote>
 <h2 id="execution-16"><a class="header" href="#execution-16">Execution</a></h2>
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.performance_test_results.aggregate(pipeline);
@@ -4928,21 +4940,13 @@ db.performance_test_results.explain(&quot;executionStats&quot;).aggregate(pipeli
 <h2 id="observations-16"><a class="header" href="#observations-16">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Macro Functions.</strong> In this chapter, you employ two functions, <code>sortArray()</code> and <code>arrayElemAtPercentile()</code>, to generate portions of aggregation <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>. These functions are essentially <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macros</a>. You invoke these functions from within the pipeline you create in the MongoDB Shell. Each function you invoke embeds the returned boilerplate code into the pipeline's code. You can see this in action by typing the text <code>pipeline</code> into the Shell and pressing <em>enter</em>. Note, you may first have to increase the depth displayed in <em>mongosh</em> by issuing the command <code>config.set(&quot;inspectDepth&quot;, 100)</code> in <em>mongosh</em>. This action will display a single large piece of code representing the whole pipeline, including the macro-generated code. The aggregation runtime never sees or runs the functions <code>sortArray()</code> and <code>arrayElemAtPercentile()</code> directly. Of course, you won't use JavaScript functions to generate composite expressions if you use a different programming language and <a href="https://docs.mongodb.com/drivers/">MongoDB Driver</a>. You will use the relevant features of your specific programming language to assemble composite expression objects.</p>
+<p><strong>Macro Functions.</strong> In this chapter, you employ two functions, <code>sortArray()</code> and <code>arrayElemAtPercentile()</code>, to generate portions of aggregation <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>. These functions are essentially <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macros</a>. You invoke these functions from within the pipeline you create in the MongoDB Shell. Each function you invoke embeds the returned boilerplate code into the pipeline's code. You can see this in action by typing the text <code>pipeline</code> into the Shell and pressing <em>enter</em>. Note, you may first have to increase the depth displayed in <em>mongosh</em> by issuing the <em>mongosh</em> command <code>config.set(&quot;inspectDepth&quot;, 100)</code>. This action will display a single large piece of code representing the whole pipeline, including the macro-generated code. The aggregation runtime never sees or runs the custom functions <code>sortArray()</code> and <code>arrayElemAtPercentile()</code> directly. Of course, you won't use JavaScript functions to generate composite expressions if you use a different programming language and <a href="https://docs.mongodb.com/drivers/">MongoDB Driver</a>. You will use the relevant features of your specific programming language to assemble composite expression objects.</p>
 </li>
 <li>
-<p><strong>Sorting On Primitives Only.</strong> The sort function in this chapter will correctly sort arrays containing just primitive values, such as integers, floats, date-times and strings. However, if an array's members are objects (i.e. each has its own fields and values), the code will not sort the array correctly. It is possible to construct a function to enable the sorting of an array of objects, but such a function will be more complex and beyond the scope of this chapter.</p>
+<p><strong>Sorting On Primitives Only.</strong> The custom <code>sortArray()</code> function used for MongoDB versions 5.1 and earlier will sort arrays containing just primitive values, such as integers, floats, date-times and strings. However, if an array's members are objects (i.e. each has its own fields and values), the code will not sort the array correctly. It is possible to enhance the function to enable sorting an array of objects, but this enhancement is not covered here. For MongoDB versions 5.2 and greater, the new <code>$sortArray</code> operator provides options to easily sort an array of objects.</p>
 </li>
 <li>
-<p><strong>Comparison With Classic Sorting Algorithms.</strong> Despite being more optimal than unwinding and re-grouping arrays to bring them back into the same documents, the sorting code will be slow compared with commonly recognised computer science <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a>. This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with a small number of elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance is likely to be more profound.</p>
-</li>
-<li>
-<p><strong>Why Isn’t There A Native <em>$sortArray</em> Operator?.</strong> As you've seen, the composite set of expressions you must generate to perform an inline sort operation on an array is complex, in addition to being computationally suboptimal. If you are writing aggregations using JavaScript for the MongoDB Shell, you can copy the function provided in this chapter. However, in most &quot;production&quot; situations, you will be using a different programming language. Consequently, you would first need to port the example macro function to your chosen programming language. Ideally, the Aggregation Framework would provide a native and optimised array operator expression for this (e.g.  called <code>$sortArray</code>), and this operator would take optional parameters to:</p>
-<ol>
-<li>Indicate whether the ordering should be ascending or descending (defaulting to ascending)</li>
-<li>Name a field (or fields) in each array element to sort by, rather than the default of sorting by each array element &quot;as a whole&quot;</li>
-</ol>
-<p>You can upvote the MongoDB enhancement request &quot;<a href="https://jira.mongodb.org/browse/SERVER-29425">Add an expression to sort an array</a>&quot; if you would like to register your desire for a native sort array operator expression.</p>
+<p><strong>Comparison With Classic Sorting Algorithms.</strong> Despite being more optimal than unwinding and re-grouping arrays to bring them back into the same documents, the custom sorting code will be slower than commonly recognised computer science <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a>. This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with few elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance will be more profound. For MongoDB versions 5.2 and greater, the new <code>$sortArray</code> operator leverages a fully optimised sorting algorithm under the covers to avoid this issue.</p>
 </li>
 </ul>
 <h1 id="appendices"><a class="header" href="#appendices">Appendices</a></h1>
@@ -4950,27 +4954,28 @@ db.performance_test_results.explain(&quot;executionStats&quot;).aggregate(pipeli
 <h1 id="stages-cheatsheet"><a class="header" href="#stages-cheatsheet">Stages Cheatsheet</a></h1>
 <p>A simple example for each <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">stage in the MongoDB Aggregation Framework</a>. </p>
 <h4 id="stages"><a class="header" href="#stages">Stages:</a></h4>
-<table><thead><tr><th align="left">Query</th><th align="left">Mutate</th><th align="left">Summarise/Itemise</th><th align="left">Join</th><th align="left">Output</th></tr></thead><tbody>
-<tr><td align="left"><a href="appendices/cheatsheet.html#stage_geoNear">$geoNear</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_addFields">$addFields</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_bucket">$bucket</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_graphLookup">$graphLookup</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_merge">$merge</a></td></tr>
-<tr><td align="left"><a href="appendices/cheatsheet.html#stage_limit">$limit</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_project">$project</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_bucketAuto">$bucketAuto</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_lookup">$lookup</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_out">$out</a></td></tr>
-<tr><td align="left"><a href="appendices/cheatsheet.html#stage_match">$match</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_redact">$redact</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_count">$count</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_unionWith">$unionWith</a></td><td align="left"></td></tr>
-<tr><td align="left"><a href="appendices/cheatsheet.html#stage_sample">$sample</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_replaceRoot">$replaceRoot</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_facet">$facet</a></td><td align="left"></td><td align="left"></td></tr>
-<tr><td align="left"><a href="appendices/cheatsheet.html#stage_skip">$skip</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_replaceWith">$replaceWith</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_group">$group</a></td><td align="left"></td><td align="left"></td></tr>
-<tr><td align="left"><a href="appendices/cheatsheet.html#stage_sort">$sort</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_set">$set</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_sortByCount">$sortByCount</a></td><td align="left"></td><td align="left"></td></tr>
-<tr><td align="left"></td><td align="left"><a href="appendices/cheatsheet.html#stage_setWindowFields">$setWindowFields</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_unwind">$unwind</a></td><td align="left"></td><td align="left"></td></tr>
+<table><thead><tr><th align="left">Query</th><th align="left">Mutate</th><th align="left">Summarise/Itemise</th><th align="left">Join</th><th align="left">Input/Output</th></tr></thead><tbody>
+<tr><td align="left"><a href="appendices/cheatsheet.html#stage_geoNear">$geoNear</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_addFields">$addFields</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_bucket">$bucket</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_graphLookup">$graphLookup</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_documents">$documents</a></td></tr>
+<tr><td align="left"><a href="appendices/cheatsheet.html#stage_limit">$limit</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_densify">$densify</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_bucketAuto">$bucketAuto</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_lookup">$lookup</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_merge">$merge</a></td></tr>
+<tr><td align="left"><a href="appendices/cheatsheet.html#stage_match">$match</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_project">$project</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_count">$count</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_unionWith">$unionWith</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_out">$out</a></td></tr>
+<tr><td align="left"><a href="appendices/cheatsheet.html#stage_sample">$sample</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_redact">$redact</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_facet">$facet</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"><a href="appendices/cheatsheet.html#stage_skip">$skip</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_replaceRoot">$replaceRoot</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_group">$group</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"><a href="appendices/cheatsheet.html#stage_sort">$sort</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_replaceWith">$replaceWith</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_sortByCount">$sortByCount</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"></td><td align="left"><a href="appendices/cheatsheet.html#stage_set">$set</a></td><td align="left"><a href="appendices/cheatsheet.html#stage_unwind">$unwind</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"></td><td align="left"><a href="appendices/cheatsheet.html#stage_setWindowFields">$setWindowFields</a></td><td align="left"></td><td align="left"></td><td align="left"></td></tr>
 <tr><td align="left"></td><td align="left"><a href="appendices/cheatsheet.html#stage_unset">$unset</a></td><td align="left"></td><td align="left"></td><td align="left"></td></tr>
 </tbody></table>
 <blockquote>
-<p><em>The following stages are not included because they are unrelated to aggregating business data or rely on external systems:  <code>$collStats</code>, <code>$indexStats</code>, <code>$listSessions</code>, <code>$planCacheStats</code>, <code>$currentOp</code>, <code>$listLocalSessions</code>, <code>$search</code></em></p>
+<p><em>The following stages are not included because they are unrelated to aggregating business data or rely on external systems:  <code>$collStats</code>, <code>$indexStats</code>, <code>$listSessions</code>, <code>$planCacheStats</code>, <code>$currentOp</code>, <code>$listLocalSessions</code>, <code>$search</code>, <code>$searchMeta</code></em></p>
 </blockquote>
 <h4 id="input-collections"><a class="header" href="#input-collections">Input Collections:</a></h4>
 <pre><code class="language-javascript">// shapes
-{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
 
 // lists
 {_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
@@ -4989,32 +4994,32 @@ db.performance_test_results.explain(&quot;executionStats&quot;).aggregate(pipeli
 <hr />
 <p><a name="stage_addFields"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationaddfieldsaddfieldsa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationaddfieldsaddfieldsa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $addFields: {z: &quot;●&quot;}      
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11, z: '●'}
-{_id: '◑', x: '■', y: '■', val: 74, z: '●'}
-{_id: '◒', x: '●', y: '■', val: 79, z: '●'}
-{_id: '◓', x: '▲', y: '▲', val: 81, z: '●'}
-{_id: '◔', x: '■', y: '▲', val: 83, z: '●'}
-{_id: '◕', x: '●', y: '■', val: 85, z: '●'}
+{_id: '◐', x: '■', y: '▲', val: 10, z: '●'}
+{_id: '◑', x: '■', y: '■', val: 60, z: '●'}
+{_id: '◒', x: '●', y: '■', val: 80, z: '●'}
+{_id: '◓', x: '▲', y: '▲', val: 85, z: '●'}
+{_id: '◔', x: '■', y: '▲', val: 90, z: '●'}
+{_id: '◕', x: '●', y: '■', val: 95, z: '●'}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_bucket"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketbucketa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketbucketa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/">$bucket</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $bucket: {
   groupBy: &quot;$val&quot;,
@@ -5030,29 +5035,29 @@ $bucket: {
 <hr />
 <p><a name="stage_bucketAuto"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketautobucketautoa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketautobucketautoa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/">$bucketAuto</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $bucketAuto: {groupBy: &quot;$val&quot;, buckets: 3}
    ⬇︎      
-{_id: {min: 11, max: 79}, count: 2}
-{_id: {min: 79, max: 83}, count: 2}
-{_id: {min: 83, max: 85}, count: 2}   
+{_id: {min: 10, max: 80}, count: 2}
+{_id: {min: 80, max: 90}, count: 2}
+{_id: {min: 90, max: 95}, count: 2}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_count"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationcountcounta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationcountcounta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/count/">$count</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $count: &quot;amount&quot;
    ⬇︎      
@@ -5060,14 +5065,61 @@ $count: &quot;amount&quot;
 </code></pre>
 <p> </p>
 <hr />
+<p><a name="stage_densify"></a></p>
+<h2 id="a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdensifydensifya"><a class="header" href="#a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdensifydensifya"><a href="https://docs.mongodb.com/v5.2/reference/operator/aggregation/densify/">$densify</a></a></h2>
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
+   ⬇︎      
+$densify: {
+  field: &quot;val&quot;,
+  partitionByFields: [&quot;x&quot;],
+  range: {bounds: &quot;full&quot;, step: 25}
+}
+   ⬇︎      
+{_id: '◐', x: '■', y: '▲', val: 10}
+{x: '■', val: 35}
+{_id: '◑', x: '■', y: '■', val: 60}
+{x: '●', val: 10}
+{x: '●', val: 35}
+{x: '●', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{x: '▲', val: 10}
+{x: '▲', val: 35}
+{x: '▲', val: 60}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{x: '■', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{x: '●', val: 85}
+{_id: '◕', x: '●', y: '■', val: 95}
+</code></pre>
+<p> </p>
+<hr />
+<p><a name="stage_documents"></a></p>
+<h2 id="a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdocumentsdocumentsa"><a class="header" href="#a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdocumentsdocumentsa"><a href="https://docs.mongodb.com/v5.2/reference/operator/aggregation/documents/">$documents</a></a></h2>
+<pre><code class="language-javascript">[     ]
+   ⬇︎      
+$documents: {
+  {p: &quot;▭&quot;, q: &quot;▯&quot;},
+  {p: &quot;▯&quot;, q: &quot;▭&quot;}
+}
+   ⬇︎      
+{p: '▭', q: '▯'}
+{p: '▯', q: '▭'}
+</code></pre>
+<p> </p>
+<hr />
 <p><a name="stage_facet"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationfacetfaceta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationfacetfaceta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/facet/">$facet</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $facet: {
   X_CIRCLE_FACET: [{$match: {x: &quot;●&quot;}}],
@@ -5076,12 +5128,12 @@ $facet: {
    ⬇︎      
 {
   X_CIRCLE_FACET: [
-    {_id: '◒', x: '●', y: '■', val: 79},
-    {_id: '◕', x: '●', y: '■', val: 85}
+    {_id: '◒', x: '●', y: '■', val: 80},
+    {_id: '◕', x: '●', y: '■', val: 95}
   ],
   FIRST_TWO_FACET: [
-    {_id: '◐', x: '■', y: '▲', val: 11},
-    {_id: '◑', x: '■', y: '■', val: 74}
+    {_id: '◐', x: '■', y: '▲', val: 10},
+    {_id: '◑', x: '■', y: '■', val: 60}
   ]
 }   
 </code></pre>
@@ -5112,12 +5164,12 @@ $geoNear: {
 <hr />
 <p><a name="stage_graphLookup"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgraphlookupgraphlookupa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgraphlookupgraphlookupa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $graphLookup: {
   from: &quot;shapes&quot;,
@@ -5140,12 +5192,12 @@ $project: {connections_count: {$size: &quot;$connections&quot;}}
 <hr />
 <p><a name="stage_group"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgroupgroupa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgroupgroupa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/">$group</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $group: {_id: &quot;$x&quot;, ylist: {$push: &quot;$y&quot;}}
    ⬇︎   
@@ -5157,28 +5209,28 @@ $group: {_id: &quot;$x&quot;, ylist: {$push: &quot;$y&quot;}}
 <hr />
 <p><a name="stage_limit"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlimitlimita"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlimitlimita"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/limit/">$limit</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $limit: 2
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_lookup"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlookuplookupa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlookuplookupa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ✚
 {_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
@@ -5193,25 +5245,25 @@ $lookup: {
   as: &quot;refs&quot;
 }
    ⬇︎         
-{_id: '◐', x: '■', y: '▲', val: 11, refs: [
+{_id: '◐', x: '■', y: '▲', val: 10, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◑', x: '■', y: '■', val: 74, refs: [
+{_id: '◑', x: '■', y: '■', val: 60, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}
-{_id: '◒', x: '●', y: '■', val: 79, refs: [
+{_id: '◒', x: '●', y: '■', val: 80, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}
-{_id: '◓', x: '▲', y: '▲', val: 81, refs: [
+{_id: '◓', x: '▲', y: '▲', val: 85, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◔', x: '■', y: '▲', val: 83, refs: [
+{_id: '◔', x: '■', y: '▲', val: 90, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◕', x: '●', y: '■', val: 85, refs: [
+{_id: '◕', x: '●', y: '■', val: 95, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}   
 </code></pre>
@@ -5219,71 +5271,71 @@ $lookup: {
 <hr />
 <p><a name="stage_match"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmatchmatcha"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmatchmatcha"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/">$match</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $match: {y: &quot;▲&quot;}  
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_merge"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmergemergea"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmergemergea"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/merge/">$merge</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $merge: {into: &quot;results&quot;}
    ⬇︎      
 db.results.find()   
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_out"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationoutouta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationoutouta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/out/">$out</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $out: &quot;results&quot;
    ⬇︎      
 db.results.find()   
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_project"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationprojectprojecta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationprojectprojecta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $project: {x: 1}
    ⬇︎      
@@ -5358,49 +5410,49 @@ $replaceWith: {
 <hr />
 <p><a name="stage_sample"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsamplesamplea"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsamplesamplea"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sample/">$sample</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $sample: {size: 3}
    ⬇︎     
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◑', x: '■', y: '■', val: 74}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◑', x: '■', y: '■', val: 60}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_set"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetseta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetseta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $set: {y: &quot;▲&quot;}
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '▲', val: 74}
-{_id: '◒', x: '●', y: '▲', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '▲', val: 85}        
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '▲', val: 60}
+{_id: '◒', x: '●', y: '▲', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '▲', val: 95}        
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_setWindowFields"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetwindowfieldssetwindowfieldsa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetwindowfieldssetwindowfieldsa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/">$setWindowFields</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $setWindowFields: {
   partitionBy: &quot;$x&quot;,
@@ -5415,58 +5467,58 @@ $setWindowFields: {
  }
 }
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11, cumulativeValShapeX: 11}
-{_id: '◑', x: '■', y: '■', val: 74, cumulativeValShapeX: 85}
-{_id: '◔', x: '■', y: '▲', val: 83, cumulativeValShapeX: 168}
-{_id: '◓', x: '▲', y: '▲', val: 81, cumulativeValShapeX: 81}
-{_id: '◒', x: '●', y: '■', val: 79, cumulativeValShapeX: 79}
-{_id: '◕', x: '●', y: '■', val: 85, cumulativeValShapeX: 164}
+{_id: '◐', x: '■', y: '▲', val: 10, cumulativeValShapeX: 10}
+{_id: '◑', x: '■', y: '■', val: 60, cumulativeValShapeX: 70}
+{_id: '◔', x: '■', y: '▲', val: 90, cumulativeValShapeX: 160}
+{_id: '◓', x: '▲', y: '▲', val: 85, cumulativeValShapeX: 85}
+{_id: '◒', x: '●', y: '■', val: 80, cumulativeValShapeX: 80}
+{_id: '◕', x: '●', y: '■', val: 95, cumulativeValShapeX: 175}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_skip"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationskipskipa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationskipskipa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/skip/">$skip</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $skip: 5
    ⬇︎      
-{_id: '◕', x: '●', y: '■', val: 85}
+{_id: '◕', x: '●', y: '■', val: 95}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_sort"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortsorta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortsorta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $sort: {x: 1, y: 1}
    ⬇︎      
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◕', x: '●', y: '■', val: 95}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_sortByCount"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortbycountsortbycounta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortbycountsortbycounta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/">$sortByCount</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $sortByCount: &quot;$x&quot;
    ⬇︎    
@@ -5478,12 +5530,12 @@ $sortByCount: &quot;$x&quot;
 <hr />
 <p><a name="stage_unionWith"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunionwithunionwitha"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunionwithunionwitha"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/">$unionWith</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ✚
 {_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
@@ -5493,12 +5545,12 @@ $sortByCount: &quot;$x&quot;
    ⬇︎      
 $unionWith: {coll: &quot;lists&quot;} 
    ⬇︎    
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}
 {_id: '▤', a: '●', b: ['◰', '◱']}
 {_id: '▥', a: '▲', b: ['◲']}
 {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
@@ -5509,21 +5561,21 @@ $unionWith: {coll: &quot;lists&quot;}
 <hr />
 <p><a name="stage_unset"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunsetunseta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunsetunseta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $unset: [&quot;x&quot;] 
    ⬇︎  
-{_id: '◐', y: '▲', val: 11}
-{_id: '◑', y: '■', val: 74}
-{_id: '◒', y: '■', val: 79}
-{_id: '◓', y: '▲', val: 81}
-{_id: '◔', y: '▲', val: 83}
-{_id: '◕', y: '■', val: 85}       
+{_id: '◐', y: '▲', val: 10}
+{_id: '◑', y: '■', val: 60}
+{_id: '◒', y: '■', val: 80}
+{_id: '◓', y: '▲', val: 85}
+{_id: '◔', y: '▲', val: 90}
+{_id: '◕', y: '■', val: 95}       
 </code></pre>
 <p> </p>
 <hr />
@@ -5559,12 +5611,12 @@ db.places.createIndex({loc: &quot;2dsphere&quot;});
 
 // 'shapes' collection
 db.shapes.insertMany([
-  {_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11},
-  {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74},
-  {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79},
-  {_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81},
-  {_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83},
-  {_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85},
+  {_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10},
+  {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60},
+  {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80},
+  {_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85},
+  {_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90},
+  {_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95},
 ]);
 
 // 'lists' collection
@@ -5611,6 +5663,25 @@ db.shapes.aggregate([
 // $count  (v3.4)
 db.shapes.aggregate([
   {&quot;$count&quot;: &quot;amount&quot;}
+]);
+
+
+// $densify  (v5.1)
+db.shapes.aggregate([
+  {&quot;$densify&quot;: {
+    &quot;field&quot;: &quot;val&quot;, 
+    &quot;partitionByFields&quot;: [&quot;x&quot;], 
+    &quot;range&quot;: {&quot;bounds&quot;: &quot;full&quot;, &quot;step&quot;: 25}
+  }}
+]);
+
+
+// $documents  (v5.1)
+db.aggregate([
+  {&quot;$documents&quot;: [
+    {&quot;p&quot;: &quot;▭&quot;, &quot;q&quot;: &quot;▯&quot;},
+    {&quot;p&quot;: &quot;▯&quot;, &quot;q&quot;: &quot;▭&quot;},
+  ]}
 ]);
 
 

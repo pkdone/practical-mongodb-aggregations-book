@@ -176,9 +176,9 @@
                         <h1 id="array-sorting--percentiles"><a class="header" href="#array-sorting--percentiles">Array Sorting &amp; Percentiles</a></h1>
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
-<p>You have been conducting performance testing of an application's API with the results of each &quot;test run&quot; captured in a document in a database. Each &quot;test run&quot; document contains an array of multiple response times that the test recorded during its execution. You need to analyse the recorded data to identify the slow tests. To achieve this, you want to calculate the <a href="https://en.wikipedia.org/wiki/Median">median</a> (50th percentile) and 90th <a href="https://en.wikipedia.org/wiki/Percentile">percentile</a> response times for each recorded &quot;test run&quot; and then only keep documents where the 90th percentile response time is greater than 100 milliseconds.</p>
+<p>You've conducted performance testing of an application with the results of each &quot;test run&quot; captured in a database. Each record contains a set of response times for the test run. You want to analyse the data from multiple runs to identify the slowest ones. You calculate the median (50th percentile) and 90th percentile response times for each test run and only keep results where the 90th percentile response time is greater than 100 milliseconds.</p>
 <blockquote>
-<p><em>This example chapter uses a slightly modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">macro function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can re-use this chapter's <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents.</em></p>
+<p><em>For MongoDB version 5.1 and earlier, the example will use a modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can re-use this chapter's custom <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents. For MongoDB version 5.2 and greater, you can instead use MongoDB's new <a href="https://docs.mongodb.com/v5.2/reference/operator/aggregation/sortArray/">$sortArray</a> operator.</em></p>
 </blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate the test run results documents:</p>
@@ -240,8 +240,9 @@ db.performance_test_results.insertMany([
 ]);
 </code></pre>
 <h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
-<p>Define the new <code>sortArray()</code> function for inline sorting of the contents of an array field, ready for you to use in a pipeline:</p>
+<p>If you are using version 5.1 or earlier of MongoDB, you need to define the following custom <code>sortArray()</code> function for inline sorting of the contents of an array field, ready for you to use in a pipeline:</p>
 <pre><code class="language-javascript">// Macro function to generate a complex aggregation expression for sorting an array
+// This function isn't required for MongoDB version 5.2+ due to the new $sortArray operator
 function sortArray(sourceArrayField) {
   return {
     // GENERATE BRAND NEW ARRAY TO CONTAIN THE ELEMENTS FROM SOURCE ARRAY BUT NOW SORTED
@@ -305,13 +306,15 @@ function sortArray(sourceArrayField) {
   };
 }
 </code></pre>
-<p>Define the new arrayElemAtPercentile(n) function for capturing the element of a sorted array at the nth percentile position:</p>
+<p>Define the new <code>arrayElemAtPercentile()</code> function for capturing the element of a sorted array at the nth percentile position:</p>
 <pre><code class="language-javascript">// Macro function to find nth percentile element of a sorted version of an array
 function arrayElemAtPercentile(sourceArrayField, percentile) {
   return {    
     &quot;$let&quot;: {
       &quot;vars&quot;: {
         &quot;sortedArray&quot;: sortArray(sourceArrayField), 
+        // Comment out the line above and uncomment the line below if running MDB 5.2 or greater
+        // &quot;sortedArray&quot;: {&quot;$sortArray&quot;: {&quot;input&quot;: sourceArrayField, &quot;sortBy&quot;: 1}},        
       },
       &quot;in&quot;: {         
         &quot;$arrayElemAt&quot;: [  // FIND ELEMENT OF ARRAY AT NTH PERCENTILE POSITION
@@ -331,11 +334,16 @@ function arrayElemAtPercentile(sourceArrayField, percentile) {
   };
 }
 </code></pre>
+<blockquote>
+<p><em>If running MongoDB version 5.2 or greater, you can instead comment/uncomment the specific lines indicated in the code above to leverage MongoDB's new <code>$sortArray</code> operator</em></p>
+</blockquote>
 <p>Define the pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Capture new fields for the ordered array + various percentiles
   {&quot;$set&quot;: {
     &quot;sortedResponseTimesMillis&quot;: sortArray(&quot;$responseTimesMillis&quot;),
+    // Comment out the line above and uncomment the line below if running MDB 5.2 or greater
+    // &quot;sortedResponseTimesMillis&quot;: {&quot;$sortArray&quot;: {&quot;input&quot;: &quot;$responseTimesMillis&quot;, &quot;sortBy&quot;: 1}},
     &quot;medianTimeMillis&quot;: arrayElemAtPercentile(&quot;$responseTimesMillis&quot;, 50),
     &quot;ninetiethPercentileTimeMillis&quot;: arrayElemAtPercentile(&quot;$responseTimesMillis&quot;, 90),
   }},
@@ -353,6 +361,9 @@ function arrayElemAtPercentile(sourceArrayField, percentile) {
   ]},    
 ];
 </code></pre>
+<blockquote>
+<p><em>If running MongoDB version 5.2 or greater, you can instead comment/uncomment the specific lines indicated in the code above to leverage MongoDB's new <code>$sortArray</code> operator</em></p>
+</blockquote>
 <h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.performance_test_results.aggregate(pipeline);
@@ -407,21 +418,13 @@ db.performance_test_results.explain(&quot;executionStats&quot;).aggregate(pipeli
 <h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Macro Functions.</strong> In this chapter, you employ two functions, <code>sortArray()</code> and <code>arrayElemAtPercentile()</code>, to generate portions of aggregation <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>. These functions are essentially <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macros</a>. You invoke these functions from within the pipeline you create in the MongoDB Shell. Each function you invoke embeds the returned boilerplate code into the pipeline's code. You can see this in action by typing the text <code>pipeline</code> into the Shell and pressing <em>enter</em>. Note, you may first have to increase the depth displayed in <em>mongosh</em> by issuing the command <code>config.set(&quot;inspectDepth&quot;, 100)</code> in <em>mongosh</em>. This action will display a single large piece of code representing the whole pipeline, including the macro-generated code. The aggregation runtime never sees or runs the functions <code>sortArray()</code> and <code>arrayElemAtPercentile()</code> directly. Of course, you won't use JavaScript functions to generate composite expressions if you use a different programming language and <a href="https://docs.mongodb.com/drivers/">MongoDB Driver</a>. You will use the relevant features of your specific programming language to assemble composite expression objects.</p>
+<p><strong>Macro Functions.</strong> In this chapter, you employ two functions, <code>sortArray()</code> and <code>arrayElemAtPercentile()</code>, to generate portions of aggregation <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>. These functions are essentially <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macros</a>. You invoke these functions from within the pipeline you create in the MongoDB Shell. Each function you invoke embeds the returned boilerplate code into the pipeline's code. You can see this in action by typing the text <code>pipeline</code> into the Shell and pressing <em>enter</em>. Note, you may first have to increase the depth displayed in <em>mongosh</em> by issuing the <em>mongosh</em> command <code>config.set(&quot;inspectDepth&quot;, 100)</code>. This action will display a single large piece of code representing the whole pipeline, including the macro-generated code. The aggregation runtime never sees or runs the custom functions <code>sortArray()</code> and <code>arrayElemAtPercentile()</code> directly. Of course, you won't use JavaScript functions to generate composite expressions if you use a different programming language and <a href="https://docs.mongodb.com/drivers/">MongoDB Driver</a>. You will use the relevant features of your specific programming language to assemble composite expression objects.</p>
 </li>
 <li>
-<p><strong>Sorting On Primitives Only.</strong> The sort function in this chapter will correctly sort arrays containing just primitive values, such as integers, floats, date-times and strings. However, if an array's members are objects (i.e. each has its own fields and values), the code will not sort the array correctly. It is possible to construct a function to enable the sorting of an array of objects, but such a function will be more complex and beyond the scope of this chapter.</p>
+<p><strong>Sorting On Primitives Only.</strong> The custom <code>sortArray()</code> function used for MongoDB versions 5.1 and earlier will sort arrays containing just primitive values, such as integers, floats, date-times and strings. However, if an array's members are objects (i.e. each has its own fields and values), the code will not sort the array correctly. It is possible to enhance the function to enable sorting an array of objects, but this enhancement is not covered here. For MongoDB versions 5.2 and greater, the new <code>$sortArray</code> operator provides options to easily sort an array of objects.</p>
 </li>
 <li>
-<p><strong>Comparison With Classic Sorting Algorithms.</strong> Despite being more optimal than unwinding and re-grouping arrays to bring them back into the same documents, the sorting code will be slow compared with commonly recognised computer science <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a>. This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with a small number of elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance is likely to be more profound.</p>
-</li>
-<li>
-<p><strong>Why Isn’t There A Native <em>$sortArray</em> Operator?.</strong> As you've seen, the composite set of expressions you must generate to perform an inline sort operation on an array is complex, in addition to being computationally suboptimal. If you are writing aggregations using JavaScript for the MongoDB Shell, you can copy the function provided in this chapter. However, in most &quot;production&quot; situations, you will be using a different programming language. Consequently, you would first need to port the example macro function to your chosen programming language. Ideally, the Aggregation Framework would provide a native and optimised array operator expression for this (e.g.  called <code>$sortArray</code>), and this operator would take optional parameters to:</p>
-<ol>
-<li>Indicate whether the ordering should be ascending or descending (defaulting to ascending)</li>
-<li>Name a field (or fields) in each array element to sort by, rather than the default of sorting by each array element &quot;as a whole&quot;</li>
-</ol>
-<p>You can upvote the MongoDB enhancement request &quot;<a href="https://jira.mongodb.org/browse/SERVER-29425">Add an expression to sort an array</a>&quot; if you would like to register your desire for a native sort array operator expression.</p>
+<p><strong>Comparison With Classic Sorting Algorithms.</strong> Despite being more optimal than unwinding and re-grouping arrays to bring them back into the same documents, the custom sorting code will be slower than commonly recognised computer science <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">sorting algorithms</a>. This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with few elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance will be more profound. For MongoDB versions 5.2 and greater, the new <code>$sortArray</code> operator leverages a fully optimised sorting algorithm under the covers to avoid this issue.</p>
 </li>
 </ul>
 

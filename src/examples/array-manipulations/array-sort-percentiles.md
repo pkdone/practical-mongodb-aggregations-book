@@ -76,7 +76,7 @@ db.performance_test_results.insertMany([
 
 ## Aggregation Pipeline
 
-If you are using version 5.1 or earlier of MongoDB, you need to define a custom `sortArray()` function for inline sorting of the contents of an array field, ready for you to use in a pipeline:
+If you are using version 5.1 or earlier of MongoDB, you need to define the following custom `sortArray()` function for inline sorting of the contents of an array field, ready for you to use in a pipeline:
 
 ```javascript
 // Macro function to generate a complex aggregation expression for sorting an array

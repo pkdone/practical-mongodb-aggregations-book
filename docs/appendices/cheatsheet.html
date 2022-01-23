@@ -186,27 +186,28 @@
                         <h1 id="stages-cheatsheet"><a class="header" href="#stages-cheatsheet">Stages Cheatsheet</a></h1>
 <p>A simple example for each <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">stage in the MongoDB Aggregation Framework</a>. </p>
 <h4 id="stages"><a class="header" href="#stages">Stages:</a></h4>
-<table><thead><tr><th align="left">Query</th><th align="left">Mutate</th><th align="left">Summarise/Itemise</th><th align="left">Join</th><th align="left">Output</th></tr></thead><tbody>
-<tr><td align="left"><a href="#stage_geoNear">$geoNear</a></td><td align="left"><a href="#stage_addFields">$addFields</a></td><td align="left"><a href="#stage_bucket">$bucket</a></td><td align="left"><a href="#stage_graphLookup">$graphLookup</a></td><td align="left"><a href="#stage_merge">$merge</a></td></tr>
-<tr><td align="left"><a href="#stage_limit">$limit</a></td><td align="left"><a href="#stage_project">$project</a></td><td align="left"><a href="#stage_bucketAuto">$bucketAuto</a></td><td align="left"><a href="#stage_lookup">$lookup</a></td><td align="left"><a href="#stage_out">$out</a></td></tr>
-<tr><td align="left"><a href="#stage_match">$match</a></td><td align="left"><a href="#stage_redact">$redact</a></td><td align="left"><a href="#stage_count">$count</a></td><td align="left"><a href="#stage_unionWith">$unionWith</a></td><td align="left"></td></tr>
-<tr><td align="left"><a href="#stage_sample">$sample</a></td><td align="left"><a href="#stage_replaceRoot">$replaceRoot</a></td><td align="left"><a href="#stage_facet">$facet</a></td><td align="left"></td><td align="left"></td></tr>
-<tr><td align="left"><a href="#stage_skip">$skip</a></td><td align="left"><a href="#stage_replaceWith">$replaceWith</a></td><td align="left"><a href="#stage_group">$group</a></td><td align="left"></td><td align="left"></td></tr>
-<tr><td align="left"><a href="#stage_sort">$sort</a></td><td align="left"><a href="#stage_set">$set</a></td><td align="left"><a href="#stage_sortByCount">$sortByCount</a></td><td align="left"></td><td align="left"></td></tr>
-<tr><td align="left"></td><td align="left"><a href="#stage_setWindowFields">$setWindowFields</a></td><td align="left"><a href="#stage_unwind">$unwind</a></td><td align="left"></td><td align="left"></td></tr>
+<table><thead><tr><th align="left">Query</th><th align="left">Mutate</th><th align="left">Summarise/Itemise</th><th align="left">Join</th><th align="left">Input/Output</th></tr></thead><tbody>
+<tr><td align="left"><a href="#stage_geoNear">$geoNear</a></td><td align="left"><a href="#stage_addFields">$addFields</a></td><td align="left"><a href="#stage_bucket">$bucket</a></td><td align="left"><a href="#stage_graphLookup">$graphLookup</a></td><td align="left"><a href="#stage_documents">$documents</a></td></tr>
+<tr><td align="left"><a href="#stage_limit">$limit</a></td><td align="left"><a href="#stage_densify">$densify</a></td><td align="left"><a href="#stage_bucketAuto">$bucketAuto</a></td><td align="left"><a href="#stage_lookup">$lookup</a></td><td align="left"><a href="#stage_merge">$merge</a></td></tr>
+<tr><td align="left"><a href="#stage_match">$match</a></td><td align="left"><a href="#stage_project">$project</a></td><td align="left"><a href="#stage_count">$count</a></td><td align="left"><a href="#stage_unionWith">$unionWith</a></td><td align="left"><a href="#stage_out">$out</a></td></tr>
+<tr><td align="left"><a href="#stage_sample">$sample</a></td><td align="left"><a href="#stage_redact">$redact</a></td><td align="left"><a href="#stage_facet">$facet</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"><a href="#stage_skip">$skip</a></td><td align="left"><a href="#stage_replaceRoot">$replaceRoot</a></td><td align="left"><a href="#stage_group">$group</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"><a href="#stage_sort">$sort</a></td><td align="left"><a href="#stage_replaceWith">$replaceWith</a></td><td align="left"><a href="#stage_sortByCount">$sortByCount</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"></td><td align="left"><a href="#stage_set">$set</a></td><td align="left"><a href="#stage_unwind">$unwind</a></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"></td><td align="left"><a href="#stage_setWindowFields">$setWindowFields</a></td><td align="left"></td><td align="left"></td><td align="left"></td></tr>
 <tr><td align="left"></td><td align="left"><a href="#stage_unset">$unset</a></td><td align="left"></td><td align="left"></td><td align="left"></td></tr>
 </tbody></table>
 <blockquote>
-<p><em>The following stages are not included because they are unrelated to aggregating business data or rely on external systems:  <code>$collStats</code>, <code>$indexStats</code>, <code>$listSessions</code>, <code>$planCacheStats</code>, <code>$currentOp</code>, <code>$listLocalSessions</code>, <code>$search</code></em></p>
+<p><em>The following stages are not included because they are unrelated to aggregating business data or rely on external systems:  <code>$collStats</code>, <code>$indexStats</code>, <code>$listSessions</code>, <code>$planCacheStats</code>, <code>$currentOp</code>, <code>$listLocalSessions</code>, <code>$search</code>, <code>$searchMeta</code></em></p>
 </blockquote>
 <h4 id="input-collections"><a class="header" href="#input-collections">Input Collections:</a></h4>
 <pre><code class="language-javascript">// shapes
-{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
 
 // lists
 {_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
@@ -225,32 +226,32 @@
 <hr />
 <p><a name="stage_addFields"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationaddfieldsaddfieldsa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationaddfieldsaddfieldsa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $addFields: {z: &quot;●&quot;}      
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11, z: '●'}
-{_id: '◑', x: '■', y: '■', val: 74, z: '●'}
-{_id: '◒', x: '●', y: '■', val: 79, z: '●'}
-{_id: '◓', x: '▲', y: '▲', val: 81, z: '●'}
-{_id: '◔', x: '■', y: '▲', val: 83, z: '●'}
-{_id: '◕', x: '●', y: '■', val: 85, z: '●'}
+{_id: '◐', x: '■', y: '▲', val: 10, z: '●'}
+{_id: '◑', x: '■', y: '■', val: 60, z: '●'}
+{_id: '◒', x: '●', y: '■', val: 80, z: '●'}
+{_id: '◓', x: '▲', y: '▲', val: 85, z: '●'}
+{_id: '◔', x: '■', y: '▲', val: 90, z: '●'}
+{_id: '◕', x: '●', y: '■', val: 95, z: '●'}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_bucket"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketbucketa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketbucketa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/">$bucket</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $bucket: {
   groupBy: &quot;$val&quot;,
@@ -266,29 +267,29 @@ $bucket: {
 <hr />
 <p><a name="stage_bucketAuto"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketautobucketautoa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationbucketautobucketautoa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/">$bucketAuto</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $bucketAuto: {groupBy: &quot;$val&quot;, buckets: 3}
    ⬇︎      
-{_id: {min: 11, max: 79}, count: 2}
-{_id: {min: 79, max: 83}, count: 2}
-{_id: {min: 83, max: 85}, count: 2}   
+{_id: {min: 10, max: 80}, count: 2}
+{_id: {min: 80, max: 90}, count: 2}
+{_id: {min: 90, max: 95}, count: 2}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_count"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationcountcounta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationcountcounta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/count/">$count</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $count: &quot;amount&quot;
    ⬇︎      
@@ -296,14 +297,61 @@ $count: &quot;amount&quot;
 </code></pre>
 <p> </p>
 <hr />
+<p><a name="stage_densify"></a></p>
+<h2 id="a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdensifydensifya"><a class="header" href="#a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdensifydensifya"><a href="https://docs.mongodb.com/v5.2/reference/operator/aggregation/densify/">$densify</a></a></h2>
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
+   ⬇︎      
+$densify: {
+  field: &quot;val&quot;,
+  partitionByFields: [&quot;x&quot;],
+  range: {bounds: &quot;full&quot;, step: 25}
+}
+   ⬇︎      
+{_id: '◐', x: '■', y: '▲', val: 10}
+{x: '■', val: 35}
+{_id: '◑', x: '■', y: '■', val: 60}
+{x: '●', val: 10}
+{x: '●', val: 35}
+{x: '●', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{x: '▲', val: 10}
+{x: '▲', val: 35}
+{x: '▲', val: 60}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{x: '■', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{x: '●', val: 85}
+{_id: '◕', x: '●', y: '■', val: 95}
+</code></pre>
+<p> </p>
+<hr />
+<p><a name="stage_documents"></a></p>
+<h2 id="a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdocumentsdocumentsa"><a class="header" href="#a-hrefhttpsdocsmongodbcomv52referenceoperatoraggregationdocumentsdocumentsa"><a href="https://docs.mongodb.com/v5.2/reference/operator/aggregation/documents/">$documents</a></a></h2>
+<pre><code class="language-javascript">[     ]
+   ⬇︎      
+$documents: {
+  {p: &quot;▭&quot;, q: &quot;▯&quot;},
+  {p: &quot;▯&quot;, q: &quot;▭&quot;}
+}
+   ⬇︎      
+{p: '▭', q: '▯'}
+{p: '▯', q: '▭'}
+</code></pre>
+<p> </p>
+<hr />
 <p><a name="stage_facet"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationfacetfaceta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationfacetfaceta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/facet/">$facet</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $facet: {
   X_CIRCLE_FACET: [{$match: {x: &quot;●&quot;}}],
@@ -312,12 +360,12 @@ $facet: {
    ⬇︎      
 {
   X_CIRCLE_FACET: [
-    {_id: '◒', x: '●', y: '■', val: 79},
-    {_id: '◕', x: '●', y: '■', val: 85}
+    {_id: '◒', x: '●', y: '■', val: 80},
+    {_id: '◕', x: '●', y: '■', val: 95}
   ],
   FIRST_TWO_FACET: [
-    {_id: '◐', x: '■', y: '▲', val: 11},
-    {_id: '◑', x: '■', y: '■', val: 74}
+    {_id: '◐', x: '■', y: '▲', val: 10},
+    {_id: '◑', x: '■', y: '■', val: 60}
   ]
 }   
 </code></pre>
@@ -348,12 +396,12 @@ $geoNear: {
 <hr />
 <p><a name="stage_graphLookup"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgraphlookupgraphlookupa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgraphlookupgraphlookupa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $graphLookup: {
   from: &quot;shapes&quot;,
@@ -376,12 +424,12 @@ $project: {connections_count: {$size: &quot;$connections&quot;}}
 <hr />
 <p><a name="stage_group"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgroupgroupa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationgroupgroupa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/">$group</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $group: {_id: &quot;$x&quot;, ylist: {$push: &quot;$y&quot;}}
    ⬇︎   
@@ -393,28 +441,28 @@ $group: {_id: &quot;$x&quot;, ylist: {$push: &quot;$y&quot;}}
 <hr />
 <p><a name="stage_limit"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlimitlimita"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlimitlimita"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/limit/">$limit</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $limit: 2
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_lookup"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlookuplookupa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationlookuplookupa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ✚
 {_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
@@ -429,25 +477,25 @@ $lookup: {
   as: &quot;refs&quot;
 }
    ⬇︎         
-{_id: '◐', x: '■', y: '▲', val: 11, refs: [
+{_id: '◐', x: '■', y: '▲', val: 10, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◑', x: '■', y: '■', val: 74, refs: [
+{_id: '◑', x: '■', y: '■', val: 60, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}
-{_id: '◒', x: '●', y: '■', val: 79, refs: [
+{_id: '◒', x: '●', y: '■', val: 80, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}
-{_id: '◓', x: '▲', y: '▲', val: 81, refs: [
+{_id: '◓', x: '▲', y: '▲', val: 85, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◔', x: '■', y: '▲', val: 83, refs: [
+{_id: '◔', x: '■', y: '▲', val: 90, refs: [
   {_id: '▥', a: '▲', b: ['◲']},
   {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
 ]}
-{_id: '◕', x: '●', y: '■', val: 85, refs: [
+{_id: '◕', x: '●', y: '■', val: 95, refs: [
   {_id: '▨', a: '■', b: ['◳', '◱']}
 ]}   
 </code></pre>
@@ -455,71 +503,71 @@ $lookup: {
 <hr />
 <p><a name="stage_match"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmatchmatcha"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmatchmatcha"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/">$match</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $match: {y: &quot;▲&quot;}  
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_merge"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmergemergea"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationmergemergea"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/merge/">$merge</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $merge: {into: &quot;results&quot;}
    ⬇︎      
 db.results.find()   
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_out"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationoutouta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationoutouta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/out/">$out</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $out: &quot;results&quot;
    ⬇︎      
 db.results.find()   
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_project"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationprojectprojecta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationprojectprojecta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $project: {x: 1}
    ⬇︎      
@@ -594,49 +642,49 @@ $replaceWith: {
 <hr />
 <p><a name="stage_sample"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsamplesamplea"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsamplesamplea"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sample/">$sample</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $sample: {size: 3}
    ⬇︎     
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◑', x: '■', y: '■', val: 74}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◑', x: '■', y: '■', val: 60}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_set"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetseta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetseta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $set: {y: &quot;▲&quot;}
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '▲', val: 74}
-{_id: '◒', x: '●', y: '▲', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '▲', val: 85}        
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '▲', val: 60}
+{_id: '◒', x: '●', y: '▲', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '▲', val: 95}        
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_setWindowFields"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetwindowfieldssetwindowfieldsa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsetwindowfieldssetwindowfieldsa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/">$setWindowFields</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $setWindowFields: {
   partitionBy: &quot;$x&quot;,
@@ -651,58 +699,58 @@ $setWindowFields: {
  }
 }
    ⬇︎      
-{_id: '◐', x: '■', y: '▲', val: 11, cumulativeValShapeX: 11}
-{_id: '◑', x: '■', y: '■', val: 74, cumulativeValShapeX: 85}
-{_id: '◔', x: '■', y: '▲', val: 83, cumulativeValShapeX: 168}
-{_id: '◓', x: '▲', y: '▲', val: 81, cumulativeValShapeX: 81}
-{_id: '◒', x: '●', y: '■', val: 79, cumulativeValShapeX: 79}
-{_id: '◕', x: '●', y: '■', val: 85, cumulativeValShapeX: 164}
+{_id: '◐', x: '■', y: '▲', val: 10, cumulativeValShapeX: 10}
+{_id: '◑', x: '■', y: '■', val: 60, cumulativeValShapeX: 70}
+{_id: '◔', x: '■', y: '▲', val: 90, cumulativeValShapeX: 160}
+{_id: '◓', x: '▲', y: '▲', val: 85, cumulativeValShapeX: 85}
+{_id: '◒', x: '●', y: '■', val: 80, cumulativeValShapeX: 80}
+{_id: '◕', x: '●', y: '■', val: 95, cumulativeValShapeX: 175}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_skip"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationskipskipa"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationskipskipa"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/skip/">$skip</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $skip: 5
    ⬇︎      
-{_id: '◕', x: '●', y: '■', val: 85}
+{_id: '◕', x: '●', y: '■', val: 95}
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_sort"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortsorta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortsorta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $sort: {x: 1, y: 1}
    ⬇︎      
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◕', x: '●', y: '■', val: 85}   
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◕', x: '●', y: '■', val: 95}   
 </code></pre>
 <p> </p>
 <hr />
 <p><a name="stage_sortByCount"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortbycountsortbycounta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationsortbycountsortbycounta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/">$sortByCount</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $sortByCount: &quot;$x&quot;
    ⬇︎    
@@ -714,12 +762,12 @@ $sortByCount: &quot;$x&quot;
 <hr />
 <p><a name="stage_unionWith"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunionwithunionwitha"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunionwithunionwitha"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/">$unionWith</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ✚
 {_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
@@ -729,12 +777,12 @@ $sortByCount: &quot;$x&quot;
    ⬇︎      
 $unionWith: {coll: &quot;lists&quot;} 
    ⬇︎    
-{_id: '◐', x: '■', y: '▲', val: 11}
-{_id: '◑', x: '■', y: '■', val: 74}
-{_id: '◒', x: '●', y: '■', val: 79}
-{_id: '◓', x: '▲', y: '▲', val: 81}
-{_id: '◔', x: '■', y: '▲', val: 83}
-{_id: '◕', x: '●', y: '■', val: 85}
+{_id: '◐', x: '■', y: '▲', val: 10}
+{_id: '◑', x: '■', y: '■', val: 60}
+{_id: '◒', x: '●', y: '■', val: 80}
+{_id: '◓', x: '▲', y: '▲', val: 85}
+{_id: '◔', x: '■', y: '▲', val: 90}
+{_id: '◕', x: '●', y: '■', val: 95}
 {_id: '▤', a: '●', b: ['◰', '◱']}
 {_id: '▥', a: '▲', b: ['◲']}
 {_id: '▦', a: '▲', b: ['◰', '◳', '◱']}
@@ -745,21 +793,21 @@ $unionWith: {coll: &quot;lists&quot;}
 <hr />
 <p><a name="stage_unset"></a></p>
 <h2 id="a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunsetunseta"><a class="header" href="#a-hrefhttpsdocsmongodbcommanualreferenceoperatoraggregationunsetunseta"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a></a></h2>
-<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11}
-{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74}
-{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79}
-{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81}
-{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83}
-{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85}
+<pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10}
+{_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
+{_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
+{_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85}
+{_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90}
+{_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95}
    ⬇︎      
 $unset: [&quot;x&quot;] 
    ⬇︎  
-{_id: '◐', y: '▲', val: 11}
-{_id: '◑', y: '■', val: 74}
-{_id: '◒', y: '■', val: 79}
-{_id: '◓', y: '▲', val: 81}
-{_id: '◔', y: '▲', val: 83}
-{_id: '◕', y: '■', val: 85}       
+{_id: '◐', y: '▲', val: 10}
+{_id: '◑', y: '■', val: 60}
+{_id: '◒', y: '■', val: 80}
+{_id: '◓', y: '▲', val: 85}
+{_id: '◔', y: '▲', val: 90}
+{_id: '◕', y: '■', val: 95}       
 </code></pre>
 <p> </p>
 <hr />

@@ -183,12 +183,12 @@ db.places.createIndex({loc: &quot;2dsphere&quot;});
 
 // 'shapes' collection
 db.shapes.insertMany([
-  {_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 11},
-  {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 74},
-  {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 79},
-  {_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 81},
-  {_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 83},
-  {_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 85},
+  {_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10},
+  {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60},
+  {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80},
+  {_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85},
+  {_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90},
+  {_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95},
 ]);
 
 // 'lists' collection
@@ -235,6 +235,25 @@ db.shapes.aggregate([
 // $count  (v3.4)
 db.shapes.aggregate([
   {&quot;$count&quot;: &quot;amount&quot;}
+]);
+
+
+// $densify  (v5.1)
+db.shapes.aggregate([
+  {&quot;$densify&quot;: {
+    &quot;field&quot;: &quot;val&quot;, 
+    &quot;partitionByFields&quot;: [&quot;x&quot;], 
+    &quot;range&quot;: {&quot;bounds&quot;: &quot;full&quot;, &quot;step&quot;: 25}
+  }}
+]);
+
+
+// $documents  (v5.1)
+db.aggregate([
+  {&quot;$documents&quot;: [
+    {&quot;p&quot;: &quot;▭&quot;, &quot;q&quot;: &quot;▯&quot;},
+    {&quot;p&quot;: &quot;▯&quot;, &quot;q&quot;: &quot;▭&quot;},
+  ]}
 ]);
 
 
