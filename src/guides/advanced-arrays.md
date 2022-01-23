@@ -504,7 +504,7 @@ var pipeline = [
 db.orders.aggregate(pipeline);
 ```
 
-This pipeline produces the same output as the previous "hardcoded field names" pipeline, but with the advantage being sympathetic to new types of fields appearing in the source array in the future. 
+This pipeline produces the same output as the previous "hardcoded field names" pipeline, but with the advantage of being sympathetic to new types of fields appearing in the source array in the future.
 
 Instead of using `$mergeObjects`, there is an alternative and slightly more verbose combination of three different array operator expressions that you can similarly employ to retain all existing array item fields and add new ones. These three operators are:
 

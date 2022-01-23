@@ -1650,7 +1650,7 @@ db.orders.aggregate(pipeline);
 
 db.orders.aggregate(pipeline);
 </code></pre>
-<p>This pipeline produces the same output as the previous &quot;hardcoded field names&quot; pipeline, but with the advantage being sympathetic to new types of fields appearing in the source array in the future. </p>
+<p>This pipeline produces the same output as the previous &quot;hardcoded field names&quot; pipeline, but with the advantage of being sympathetic to new types of fields appearing in the source array in the future.</p>
 <p>Instead of using <code>$mergeObjects</code>, there is an alternative and slightly more verbose combination of three different array operator expressions that you can similarly employ to retain all existing array item fields and add new ones. These three operators are:</p>
 <ul>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/objectToArray/"><code>$objectToArray</code></a>. This converts an object containing different field key/value pairs into an array of objects where each object has two fields: <code>k</code>, holding the field's name, and <code>v</code>, holding the field's value. For example: <code>{height: 170, weight: 60}</code> becomes <code>[{k: 'height', v: 170}, {k: 'weight', v: 60}]</code></li>
