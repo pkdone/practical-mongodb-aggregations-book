@@ -12,12 +12,12 @@ db.places.createIndex({loc: "2dsphere"});
 
 // 'shapes' collection
 db.shapes.insertMany([
-  {_id: "◐", x: "■", y: "▲", val: 10},
+  {_id: "◐", x: "■", y: "▲", val: 10, ord: 0},
   {_id: "◑", x: "■", y: "■", val: 60},
   {_id: "◒", x: "●", y: "■", val: 80},
   {_id: "◓", x: "▲", y: "▲", val: 85},
   {_id: "◔", x: "■", y: "▲", val: 90},
-  {_id: "◕", x: "●", y: "■", val: 95},
+  {_id: "◕", x: "●", y: "■", val: 95, ord: 100},
 ]);
 
 // 'lists' collection
@@ -41,7 +41,7 @@ db.places.insertMany([
 
 ## Aggregation Stage Examples
 
-> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running an earlier version, first comment out the appropriate "JavaScript stage sections" before executing the code._
+> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running a version earlier than 5.3, first comment out the appropriate "JavaScript stage sections" before executing the code._
 
 ```javascript
 // $addFields  (v3.4)
@@ -94,6 +94,17 @@ db.shapes.aggregate([
   {"$facet": {
     "X_CIRCLE_FACET": [{"$match": {"x": "●"}}],
     "FIRST_TWO_FACET" : [{"$limit": 2}],
+  }}
+]);
+
+
+// $fill  (v5.3)
+db.shapes.aggregate([
+  {"$fill": {
+    "sortBy": {"val": 1},        
+    "output": {
+      "ord": {"method": "linear"}, 
+    }
   }}
 ]);
 

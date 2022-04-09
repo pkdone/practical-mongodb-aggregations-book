@@ -183,12 +183,12 @@ db.places.createIndex({loc: &quot;2dsphere&quot;});
 
 // 'shapes' collection
 db.shapes.insertMany([
-  {_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10},
+  {_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0},
   {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60},
   {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80},
   {_id: &quot;◓&quot;, x: &quot;▲&quot;, y: &quot;▲&quot;, val: 85},
   {_id: &quot;◔&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 90},
-  {_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95},
+  {_id: &quot;◕&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 95, ord: 100},
 ]);
 
 // 'lists' collection
@@ -210,7 +210,7 @@ db.places.insertMany([
 </code></pre>
 <h2 id="aggregation-stage-examples"><a class="header" href="#aggregation-stage-examples">Aggregation Stage Examples</a></h2>
 <blockquote>
-<p><em>Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running an earlier version, first comment out the appropriate &quot;JavaScript stage sections&quot; before executing the code.</em></p>
+<p><em>Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running a version earlier than 5.3, first comment out the appropriate &quot;JavaScript stage sections&quot; before executing the code.</em></p>
 </blockquote>
 <pre><code class="language-javascript">// $addFields  (v3.4)
 db.shapes.aggregate([
@@ -262,6 +262,17 @@ db.shapes.aggregate([
   {&quot;$facet&quot;: {
     &quot;X_CIRCLE_FACET&quot;: [{&quot;$match&quot;: {&quot;x&quot;: &quot;●&quot;}}],
     &quot;FIRST_TWO_FACET&quot; : [{&quot;$limit&quot;: 2}],
+  }}
+]);
+
+
+// $fill  (v5.3)
+db.shapes.aggregate([
+  {&quot;$fill&quot;: {
+    &quot;sortBy&quot;: {&quot;val&quot;: 1},        
+    &quot;output&quot;: {
+      &quot;ord&quot;: {&quot;method&quot;: &quot;linear&quot;}, 
+    }
   }}
 ]);
 

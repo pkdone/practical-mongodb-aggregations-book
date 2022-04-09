@@ -73,7 +73,7 @@ var pipeline = [
                 {"case": {"$eq": ["$$month", "DEC"]}, "then": "12"},
                ], "default": "ERROR"}},
               "-20",  // Add hyphen + hardcoded century 2 digits
-              {"$substrCP": ["$$txt", 7, 15]}  // Use remaining 3 millis (ignore last 6 nanosecs)
+              {"$substrCP": ["$$txt", 7, 15]}  // Use time up to 3 millis (ignore last 6 nanosecs)
             ]
           }}                  
         }

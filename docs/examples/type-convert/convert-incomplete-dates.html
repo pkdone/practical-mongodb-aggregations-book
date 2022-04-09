@@ -234,7 +234,7 @@ db.payments.insertMany([
                 {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;DEC&quot;]}, &quot;then&quot;: &quot;12&quot;},
                ], &quot;default&quot;: &quot;ERROR&quot;}},
               &quot;-20&quot;,  // Add hyphen + hardcoded century 2 digits
-              {&quot;$substrCP&quot;: [&quot;$$txt&quot;, 7, 15]}  // Use remaining 3 millis (ignore last 6 nanosecs)
+              {&quot;$substrCP&quot;: [&quot;$$txt&quot;, 7, 15]}  // Use time up to 3 millis (ignore last 6 nanosecs)
             ]
           }}                  
         }
