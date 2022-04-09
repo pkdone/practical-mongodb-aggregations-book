@@ -103,7 +103,7 @@ db.shapes.aggregate([
   {"$fill": {
     "sortBy": {"val": 1},        
     "output": {
-      "ord": {"method": "linear"}, 
+      "ord": {"method": "linear"}
     }
   }}
 ]);

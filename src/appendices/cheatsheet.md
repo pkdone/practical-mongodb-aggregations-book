@@ -219,7 +219,7 @@ $facet: {
 {
   X_CIRCLE_FACET: [
     {_id: '◒', x: '●', y: '■', val: 80},
-    {_id: '◕', x: '●', y: '■', val: 95 ord: 100}
+    {_id: '◕', x: '●', y: '■', val: 95, ord: 100}
   ],
   FIRST_TWO_FACET: [
     {_id: '◐', x: '■', y: '▲', val: 10, ord: 0},
