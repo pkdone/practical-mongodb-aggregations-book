@@ -48,11 +48,14 @@
         - [Summarising Arrays For First, Last, Min, Max & Average](examples/array-manipulations/array-high-low-avg.md)
         - [Pivot Array Items By A Key](examples/array-manipulations/pivot-array-items.md)
         - [Array Sorting & Percentiles](examples/array-manipulations/array-sort-percentiles.md)
+    - [Full Text Search Examples](examples/full-text-search/full-text-search.md)
+        - [Compound Text Search Criteria](examples/full-text-search/compound-text-search.md)
 
 ## Appendices
 - [Appendices](appendices/appendices.md)
     - [Appendix: Stages Cheatsheet](appendices/cheatsheet.md)
     - [Appendix: Stages Cheatsheet Source](appendices/cheatsheet-source.md)
+    - [Appendix: Create Atlas Search Index](appendices/create-search-index.md)
     - [Appendix: Book Version History](appendices/book-history.md)
 
 [](back-cover.md)

@@ -4,11 +4,11 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 3.04
+Version: 4.00-beta01
 
-Last Updated: April 2022
+Last Updated: May 2022
 
-MongoDB Versions Supported: 4.2 → 5.3
+MongoDB Versions Supported: 4.2 → 6.0
 
 Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 
