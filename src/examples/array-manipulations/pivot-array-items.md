@@ -54,7 +54,7 @@ db.weather_measurements.insertMany([
 
 ## Aggregation Pipeline
 
-Define a single pipeline ready to perform the aggregation that groups the weather readings by device. 
+Define a pipeline ready to perform the aggregation that groups the weather readings by device. 
 
 ```javascript
 var pipeline = [

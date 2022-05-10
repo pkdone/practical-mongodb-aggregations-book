@@ -63,7 +63,7 @@ db.payments.insertMany([
 
 ## Aggregation Pipeline
 
-Define a single pipeline ready to perform the aggregation:
+Define a pipeline ready to perform the aggregation:
 
 ```javascript
 var pipeline = [
