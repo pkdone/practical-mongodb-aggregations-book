@@ -2,10 +2,10 @@
 
 A summary of the significant additions in each _major_ version of this book.
 
-__Version 4.0 (released in TODO 2022)__
-* TODO example chapter
-* TODO example chapter
-* TODO appendix
+__Version 4.0 (released in June 2022)__
+* Compound Text Search Criteria example chapter
+* Facets Count Text Search example chapter
+* Create Atlas Search Index appendix
 
 __Version 3.0 (released in October 2021)__
 * Advanced Use Of Expressions For Array Processing guide chapter

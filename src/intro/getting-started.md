@@ -5,7 +5,7 @@ For developing aggregation pipelines effectively, and also to try the examples i
  1. A __MongoDB database__, __version 4.2 or greater__, running somewhere which is network accessible from your workstation
  2. A __MongoDB client tool__ running on your workstation with which to submit aggregation execution requests and to view the results
 
-Note that each example aggregation pipeline shown in the second major part of this book is marked with the minimum version of MongoDB that you must use to execute the provided pipeline. Some example pipelines use aggregation features that MongoDB introduced in versions greater than 4.2. Where this is the case, the exact version number required is called out. For MongoDB versions 4.0 and earlier, some examples may work unchanged. Some examples may work with minor alterations, and some may not work at all due to fundamental dependencies on features added in MongoDB versions after 4.0.
+Note that each example aggregation pipeline shown in the second major part of this book is marked with the minimum version of MongoDB that you must use to execute the provided pipeline. Some example pipelines use aggregation features that MongoDB introduced in versions greater than 4.2. The exact version number required is called out where this is the case. For MongoDB versions 4.0 and earlier, some examples may work unchanged. Some examples may work with minor alterations, and some may not work at all due to fundamental dependencies on features added in MongoDB versions after 4.0.
 
 
 ## Database
@@ -16,6 +16,8 @@ If you don't already have access to a MongoDB database, the two most accessible 
 
  1. [Provision a Free Tier MongoDB Cluster](https://www.mongodb.com/cloud/atlas) in MongoDB Atlas, which is MongoDB Inc.'s cloud-based Database-as-a-Service (once deployed, in the Atlas Console, there is a button you can click to copy the URL of the cluster)
  2. [Install and run a MongoDB single server](https://docs.mongodb.com/guides/server/install/) locally on your workstation
+
+Note that the aggregation pipelines in the [Full-Text Search Examples](../examples/full-text-search/full-text-search.md) section leverage [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/). Consequently, you must use Atlas for your database deployment if you want to run those examples.
 
 
 ## Client Tool
@@ -38,7 +40,7 @@ Here is an example of how you can start the _modern_ Shell to connect to an Atla
 mongosh "mongodb+srv://mycluster.a123b.mongodb.net/test" --username myuser
 ```
 
-Note before running the command above, ensure
+Note before running the command above, ensure:
  1. You have [added your workstation's IP address](https://docs.atlas.mongodb.com/security/add-ip-address-to-list/) to the Atlas Access List
  2. You have [created a database user](https://docs.atlas.mongodb.com/tutorial/create-mongodb-user-for-cluster/) for the deployed Atlas cluster, with rights to create, read and write to any database
  3. You have changed the dummy URL and username text, shown in the above example command, to match your real cluster's details (these details are accessible via the cluster's `Connect` button in the Atlas Console)
