@@ -50,6 +50,7 @@
         - [Array Sorting & Percentiles](examples/array-manipulations/array-sort-percentiles.md)
     - [Full Text Search Examples](examples/full-text-search/full-text-search.md)
         - [Compound Text Search Criteria](examples/full-text-search/compound-text-search.md)
+        - [Facets Count Text Search](examples/full-text-search/facets-count-text-search.md)
 
 ## Appendices
 - [Appendices](appendices/appendices.md)

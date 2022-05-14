@@ -16,7 +16,7 @@ Drop any old version of the database (if it exists) and then populate a new _pro
 
 ```javascript
 use book-compound-text-search;
-db.dropDatabase();
+db.products.remove({});
 
 // Insert 7 records into the products collection
 db.products.insertMany([
@@ -130,7 +130,7 @@ db.products.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-Three documents should be returned, showing products which are post-apocalyptic themed DVDs:
+Three documents should be returned, showing products which are post-apocalyptic themed DVDs, as shown below:
 
 ```javascript
 [
@@ -160,7 +160,7 @@ Note, if you don't see any results, double-check that the name of the _Search In
 
 ## Observations
 
- * __Search Stage.__ The [$search](https://www.mongodb.com/docs/manual/reference/operator/aggregation/search/) stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/). A `$search` stage must be the first stage of an aggregation pipeline, and [under the covers](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture), it instructs the system to execute a text search operation against an externally synchronised _Lucene_ full-text index. Inside the `$search` stage, you can only use one of a small set of [text-search specific pipeline operators](https://www.mongodb.com/docs/atlas/atlas-search/operators-and-collectors/). In this example, the pipeline uses a [$compound](https://www.mongodb.com/docs/atlas/atlas-search/compound/#std-label-compound-ref) operator to define a combination of multiple [$text](https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref) text-search operators.
+ * __Search Stage.__ The [$search](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/) stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/). A `$search` stage must be the first stage of an aggregation pipeline, and [under the covers](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture), it instructs the system to execute a text search operation against an externally synchronised _Lucene_ full-text index. Inside the `$search` stage, you can only use one of a small set of [text-search specific pipeline operators](https://www.mongodb.com/docs/atlas/atlas-search/operators-and-collectors/). In this example, the pipeline uses a [$compound](https://www.mongodb.com/docs/atlas/atlas-search/compound/) operator to define a combination of multiple [$text](https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref) text-search operators.
 
  * __Results & Relevancy Explanation.__ The executed pipeline ignores four of the seven input documents and sorts the remaining three documents by highest relevancy first. The pipeline excludes two _book_ related records because the `filter` option executes a `$text` match on just `DVD` in the _category_ field. The pipeline ignores the "28 Days Later" DVD record because the `mustNot` option's `$text` matches "zombie" in the _description_ field. The pipeline excludes the movie "Thirteen Days" because even though its description contains two of the optional terms ("nuclear" and "survives"), it doesn't contain the mandatory term "apocalyptic". The system deduces the score of the remaining records based on the ratio of the number of matching terms ("apocalyptic", "nuclear", and "survives") versus the number of non-matched terms in each description field.
 
