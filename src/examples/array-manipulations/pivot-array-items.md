@@ -96,7 +96,9 @@ Execute the aggregation using the defined pipeline and also view its explain pla
 
 ```javascript
 db.weather_measurements.aggregate(pipeline);
+```
 
+```javascript
 db.weather_measurements.explain("executionStats").aggregate(pipeline);
 ```
 

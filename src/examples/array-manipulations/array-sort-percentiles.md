@@ -213,7 +213,9 @@ Execute the aggregation using the defined pipeline and also view its explain pla
 
 ```javascript
 db.performance_test_results.aggregate(pipeline);
+```
 
+```javascript
 db.performance_test_results.explain("executionStats").aggregate(pipeline);
 ```
 

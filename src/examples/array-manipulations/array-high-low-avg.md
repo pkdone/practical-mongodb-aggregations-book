@@ -80,7 +80,9 @@ Execute the aggregation using the defined pipeline and also view its explain pla
 
 ```javascript
 db.currency_pair_values.aggregate(pipeline);
+```
 
+```javascript
 db.currency_pair_values.explain("executionStats").aggregate(pipeline);
 ```
 

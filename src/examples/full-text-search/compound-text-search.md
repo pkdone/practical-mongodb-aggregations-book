@@ -123,7 +123,9 @@ Execute the aggregation using the defined pipeline and also view its explain pla
 
 ```javascript
 db.products.aggregate(pipeline);
+```
 
+```javascript
 db.products.explain("executionStats").aggregate(pipeline);
 ```
 
