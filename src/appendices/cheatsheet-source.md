@@ -39,9 +39,9 @@ db.places.insertMany([
 ```
 
 
-## Aggregation Stage Examples
+## Aggregation Stage Examples Execution
 
-> _If you are running a MongoDB version earlier than 6.0, and if you have not configured an [Atlas Search index](#configuring-the-required-atlas-search-index), some of the unsupported stages in the code you execute below will show an error or empty result. A code comment marks each stage with the minimum required MongoDB version and if it mandates an Atlas Search index._
+> _If you are running a MongoDB version earlier than 6.0, and if you have not configured an [Atlas Search index](#configuring-the-required-atlas-search-index), some of the unsupported stages in the code you execute below will show an error or empty result. A code comment marks each stage with the minimum necessary MongoDB version and indicates if the stage requires an Atlas Search index._
 
 ```javascript
 // $addFields  (v3.4)

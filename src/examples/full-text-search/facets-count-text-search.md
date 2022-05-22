@@ -8,7 +8,7 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of the [facet](https:
 
 You help run a bank's call centre and want to analyse the summary descriptions of customer telephone enquiries recorded by call centre staff. You want to look for customer calls that mention _fraud_ and understand what periods of a specific day these fraud-related calls occur. This insight will help the bank plan its future staffing rotas for the fraud department.
 
-> _To execute this example, you need to be using an Atlas Cluster rather than a self-installed MongoDB deployment. The simplest way to achieve this is to [provision a Free Tier Atlas Cluster](https://www.mongodb.com/cloud/atlas)._
+> _To execute this example, you need to be using an Atlas Cluster rather than a self-managed MongoDB deployment. The simplest way to achieve this is to [provision a Free Tier Atlas Cluster](https://www.mongodb.com/cloud/atlas)._
 
 
 ## Sample Data Population
@@ -76,15 +76,18 @@ db.enquiries.insertMany([
 
 &nbsp;
 
-Now, using the simple procedure described in the [Create Atlas Search Index](../../appendices/create-search-index.md) appendix, configure a **Search Index** for this new collection with the following settings:
+Now, using the simple procedure described in the [Create Atlas Search Index](../../appendices/create-search-index.md) appendix, define a **Search Index**. Select the new database collection **book-facets-text-search.enquiries** and enter the following JSON search index definition:
 
-| Setting         | Value                     |
-| :---------------| :-------------------------|
-| Index Name      | _enquiries-text-index_    |
-| Database        | _book-facets-text-search_ |
-| Collection      | _enquiries_               |
-| Index Analyzer  | _lucene-english_          |
-| Search Analyzer | _lucene-english_          |
+```javascript
+{
+  "searchAnalyzer": "lucene.english",
+  "mappings": {
+    "dynamic": true
+  }
+}
+```
+
+Note, this definition indicates that the index should use the _lucene-english_ index and search analyzers and include all document fields in the search index.
 
 
 ## Aggregation Pipeline
@@ -95,7 +98,7 @@ Define a pipeline ready to perform the aggregation:
 var pipeline = [
   // For 1 day match 'fraud' enquiries, grouped into periods of the day, counting them
   {"$searchMeta": {
-    "index": "enquiries-text-index",    
+    "index": "default",    
     "facet": {
       "operator": {
         "compound": {
@@ -178,7 +181,7 @@ The results should show the pipeline matched 6 documents for a specific day on t
 ]
 ```
 
-Note, if you don't see any facet results and the value of `count` is zero, double-check that the name of the _Search Index_ you defined is _enquiries-text-index_.
+If you don't see any facet results and the value of `count` is zero, double-check that the system has finished generating your new index.
 
 
 ## Observations

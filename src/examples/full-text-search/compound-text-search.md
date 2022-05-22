@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 You want to search a collection of e-commerce products to find specific movie DVDs. Based on each DVD's full-text plot description, you want movies with a _post-apocalyptic_ theme, especially those related to a _nuclear_ disaster where some people _survive_. However, you aren't interested in seeing movies involving _zombies_.
 
-> _To execute this example, you need to be using an Atlas Cluster rather than a self-installed MongoDB deployment. The simplest way to achieve this is to [provision a Free Tier Atlas Cluster](https://www.mongodb.com/cloud/atlas)._
+> _To execute this example, you need to be using an Atlas Cluster rather than a self-managed MongoDB deployment. The simplest way to achieve this is to [provision a Free Tier Atlas Cluster](https://www.mongodb.com/cloud/atlas)._
 
 
 ## Sample Data Population
@@ -60,15 +60,18 @@ db.products.insertMany([
 
 &nbsp;
 
-Now, using the simple procedure described in the [Create Atlas Search Index](../../appendices/create-search-index.md) appendix, configure a **Search Index** for this new collection with the following settings:
+Now, using the simple procedure described in the [Create Atlas Search Index](../../appendices/create-search-index.md) appendix, define a **Search Index**. Select the new database collection **book-compound-text-search.products** and enter the following JSON search index definition:
 
-| Setting         | Value                       |
-| :---------------| :---------------------------|
-| Index Name      | _prod-text-index_           |
-| Database        | _book-compound-text-search_ |
-| Collection      | _products_                  |
-| Index Analyzer  | _lucene-english_            |
-| Search Analyzer | _lucene-english_            |
+```javascript
+{
+  "searchAnalyzer": "lucene.english",
+  "mappings": {
+    "dynamic": true
+  }
+}
+```
+
+Note, this definition indicates that the index should use the _lucene-english_ index and search analyzers and include all document fields in the search index.
 
 
 ## Aggregation Pipeline
@@ -79,7 +82,7 @@ Define a pipeline ready to perform the aggregation:
 var pipeline = [
   // Search for DVDs where the description must contain "apocalyptic" but not "zombie"
   {"$search": {
-    "index": "prod-text-index",    
+    "index": "default",    
     "compound": {
       "must": [
         {"text": {
@@ -157,7 +160,7 @@ Three documents should be returned, showing products which are post-apocalyptic 
 ]
 ```
 
-Note, if you don't see any results, double-check that the name of the _Search Index_ you defined is _prod-text-index_.
+If you don't see any results, double-check that the system has finished generating your new index.
 
 
 ## Observations
