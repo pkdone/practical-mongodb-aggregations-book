@@ -41,7 +41,7 @@ db.places.insertMany([
 
 ## Aggregation Stage Examples
 
-> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 6.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running a version earlier than 6.0, first comment out the appropriate "JavaScript stage sections" before executing the code._
+> _If you are running a MongoDB version earlier than 6.0, and if you have not configured an [Atlas Search index](#configuring-the-required-atlas-search-index), some of the unsupported stages in the code you execute below will show an error or empty result. A code comment marks each stage with the minimum required MongoDB version and if it mandates an Atlas Search index._
 
 ```javascript
 // $addFields  (v3.4)
@@ -210,8 +210,7 @@ db.shapes.aggregate([
 ]);
 
 
-/* 
-// $search  (v4.2 - Atlas Search only)
+// $search  (v4.2 - requires an Atlas Search index)
 db.places.aggregate([
   {"$search": {
     "text": {
@@ -220,11 +219,9 @@ db.places.aggregate([
     }
   }}
 ]);
-*/
 
 
-/* 
-// $searchMeta  (v4.2 - Atlas Search only)
+// $search  (v4.2 - requires an Atlas Search index)
 db.places.aggregate([
   {"$searchMeta": {
    "facet": {
@@ -243,7 +240,6 @@ db.places.aggregate([
     }             
   }}
 ]);
-*/
 
 
 // $set  (v4.2)
@@ -305,10 +301,10 @@ db.lists.aggregate([
 ]);
 ```
 
-&nbsp;
 
+## Configuring The Required Atlas Search Index
 
-The example code comments out the stages `$search` and `$searchMeta` because these only work when you are using [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/). To use these two stages, first, follow the procedure described in the [Create Atlas Search Index](./create-search-index.md) appendix and define a **Search Index** for the collection **cheatsheet.places**, with the following JSON rule:
+The `$search` and `$searchMeta` stages require that you first configure an [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/) index. Follow the procedure described in the [Create Atlas Search Index](./create-search-index.md) appendix to define a **Search Index** for the collection **cheatsheet.places**, with the following JSON rule:
 
 ```javascript
 {
