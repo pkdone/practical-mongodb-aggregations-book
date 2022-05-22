@@ -8,40 +8,40 @@ To test all the aggregation stage examples shown in the [Cheatsheet](cheatsheet.
 // DB configuration
 use cheatsheet;
 db.dropDatabase();
-db.places.createIndex({loc: "2dsphere"});
+db.places.createIndex({"loc": "2dsphere"});
 
 // 'shapes' collection
 db.shapes.insertMany([
-  {_id: "◐", x: "■", y: "▲", val: 10, ord: 0},
-  {_id: "◑", x: "■", y: "■", val: 60},
-  {_id: "◒", x: "●", y: "■", val: 80},
-  {_id: "◓", x: "▲", y: "▲", val: 85},
-  {_id: "◔", x: "■", y: "▲", val: 90},
-  {_id: "◕", x: "●", y: "■", val: 95, ord: 100},
+  {"_id": "◐", "x": "■", "y": "▲", "val": 10, "ord": 0},
+  {"_id": "◑", "x": "■", "y": "■", "val": 60},
+  {"_id": "◒", "x": "●", "y": "■", "val": 80},
+  {"_id": "◓", "x": "▲", "y": "▲", "val": 85},
+  {"_id": "◔", "x": "■", "y": "▲", "val": 90},
+  {"_id": "◕", "x": "●", "y": "■", "val": 95, "ord": 100},
 ]);
 
 // 'lists' collection
 db.lists.insertMany([
-  {_id: "▤", a: "●", b: ["◰", "◱"]},
-  {_id: "▥", a: "▲", b: ["◲"]},
-  {_id: "▦", a: "▲", b: ["◰", "◳", "◱"]},
-  {_id: "▧", a: "●", b: ["◰"]},
-  {_id: "▨", a: "■", b: ["◳", "◱"]},
+  {"_id": "▤", "a": "●", "b": ["◰", "◱"]},
+  {"_id": "▥", "a": "▲", "b": ["◲"]},
+  {"_id": "▦", "a": "▲", "b": ["◰", "◳", "◱"]},
+  {"_id": "▧", "a": "●", "b": ["◰"]},
+  {"_id": "▨", "a": "■", "b": ["◳", "◱"]},
 ]);
 
 // 'places' collection
 db.places.insertMany([
-  {_id: "◧", loc: {type: "Point", coordinates: [1,1]}},
-  {_id: "◨", loc: {type: "Point", coordinates: [3,3]}},
-  {_id: "◩", loc: {type: "Point", coordinates: [5,5]}},
-  {_id: "◪", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}},
+  {"_id": "Bigtown", "loc": {"type": "Point", "coordinates": [1,1]}},
+  {"_id": "Smalltown", "loc": {"type": "Point", "coordinates": [3,3]}},
+  {"_id": "Happytown", "loc": {"type": "Point", "coordinates": [5,5]}},
+  {"_id": "Sadtown", "loc": {"type": "LineString", "coordinates": [[7,7],[8,8]]}},
 ]);
 ```
 
 
 ## Aggregation Stage Examples
 
-> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 5.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running a version earlier than 5.3, first comment out the appropriate "JavaScript stage sections" before executing the code._
+> _Some of these stages apply to later versions of MongoDB only (e.g. 4.4, 6.0). Each stage is marked with the minimum version of MongoDB (shown in brackets). Therefore if you are running a version earlier than 6.0, first comment out the appropriate "JavaScript stage sections" before executing the code._
 
 ```javascript
 // $addFields  (v3.4)
@@ -210,6 +210,42 @@ db.shapes.aggregate([
 ]);
 
 
+/* 
+// $search  (v4.2 - Atlas Search only)
+db.places.aggregate([
+  {"$search": {
+    "text": {
+      "path": "_id",
+      "query": "Bigtown Happytown",
+    }
+  }}
+]);
+*/
+
+
+/* 
+// $searchMeta  (v4.2 - Atlas Search only)
+db.places.aggregate([
+  {"$searchMeta": {
+   "facet": {
+      "operator": {
+        "exists": {
+          "path": "_id"
+        }      
+      },   
+      "facets": {        
+        "geotypes": {
+          "type" : "string",
+          "path" : "loc.type",
+          "numBuckets" : 2,
+        }            
+      }        
+    }             
+  }}
+]);
+*/
+
+
 // $set  (v4.2)
 db.shapes.aggregate([
   {"$set": {"y": "▲"}}
@@ -267,5 +303,28 @@ db.shapes.aggregate([
 db.lists.aggregate([
   {"$unwind": {"path": "$b"}}
 ]);
+```
+
+&nbsp;
+
+
+The example code comments out the stages `$search` and `$searchMeta` because these only work when you are using [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/). To use these two stages, first, follow the procedure described in the [Create Atlas Search Index](./create-search-index.md) appendix and define a **Search Index** for the collection **cheatsheet.places**, with the following JSON rule:
+
+```javascript
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "loc": {
+        "fields": {
+          "type": {
+            "type": "stringFacet"
+          }
+        },
+        "type": "document"
+      }
+    }
+  }
+}
 ```
 

@@ -5,7 +5,7 @@ For developing aggregation pipelines effectively, and also to try the examples i
  1. A __MongoDB database__, __version 4.2 or greater__, running somewhere which is network accessible from your workstation
  2. A __MongoDB client tool__ running on your workstation with which to submit aggregation execution requests and to view the results
 
-Note that each example aggregation pipeline shown in the second major part of this book is marked with the minimum version of MongoDB that you must use to execute the provided pipeline. Some example pipelines use aggregation features that MongoDB introduced in versions greater than 4.2. The exact version number required is called out where this is the case. For MongoDB versions 4.0 and earlier, some examples may work unchanged. Some examples may work with minor alterations, and some may not work at all due to fundamental dependencies on features added in MongoDB versions after 4.0.
+Note that each example aggregation pipeline shown in the second major part of this book is marked with the minimum version of MongoDB that you must use to execute the pipeline. A few of the example pipelines use aggregation features that MongoDB introduced in versions greater than 4.2.
 
 
 ## Database

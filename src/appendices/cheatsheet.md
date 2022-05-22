@@ -5,21 +5,21 @@ A simple example for each [stage in the MongoDB Aggregation Framework](https://d
 
 #### Stages:
 
-| Query                      | Mutate                                     | Summarise/Itemise                  | Join                               | Input/Output                   |
-| :--------------------------| :------------------------------------------| :----------------------------------| :----------------------------------| :------------------------------|
-| [$geoNear](#stage_geoNear) | [$addFields](#stage_addFields)             | [$bucket](#stage_bucket)           | [$graphLookup](#stage_graphLookup) | [$documents](#stage_documents) |
-| [$limit](#stage_limit)     | [$densify](#stage_densify)                 | [$bucketAuto](#stage_bucketAuto)   | [$lookup](#stage_lookup)           | [$merge](#stage_merge)         |
-| [$match](#stage_match)     | [$fill](#stage_fill)                       | [$count](#stage_count)             | [$unionWith](#stage_unionWith)     | [$out](#stage_out)             |
-| [$sample](#stage_sample)   | [$project](#stage_project)                 | [$facet](#stage_facet)             |                                    |                                |
-| [$skip](#stage_skip)       | [$redact](#stage_redact)                   | [$group](#stage_group)             |                                    |                                |
-| [$sort](#stage_sort)       | [$replaceRoot](#stage_replaceRoot)         | [$sortByCount](#stage_sortByCount) |                                    |                                |
-|                            | [$replaceWith](#stage_replaceWith)         | [$unwind](#stage_unwind)           |                                    |                                |
-|                            | [$set](#stage_set)                         |                                    |                                    |                                |
-|                            | [$setWindowFields](#stage_setWindowFields) |                                    |                                    |                                |
-|                            | [$unset](#stage_unset)                     |                                    |                                    |                                |
+| Query                            | Mutate                                     | Summarise/Itemise                  | Join                               | Input/Output                   |
+| :--------------------------------| :------------------------------------------| :----------------------------------| :----------------------------------| :------------------------------|
+| [$geoNear](#stage_geoNear)       | [$addFields](#stage_addFields)             | [$bucket](#stage_bucket)           | [$graphLookup](#stage_graphLookup) | [$documents](#stage_documents) |
+| [$limit](#stage_limit)           | [$densify](#stage_densify)                 | [$bucketAuto](#stage_bucketAuto)   | [$lookup](#stage_lookup)           | [$merge](#stage_merge)         |
+| [$match](#stage_match)           | [$fill](#stage_fill)                       | [$count](#stage_count)             | [$unionWith](#stage_unionWith)     | [$out](#stage_out)             |
+| [$sample](#stage_sample)         | [$project](#stage_project)                 | [$facet](#stage_facet)             |                                    |                                |
+| [$search](#stage_search)         | [$redact](#stage_redact)                   | [$group](#stage_group)             |                                    |                                |
+| [$searchMeta](#stage_searchmeta) | [$replaceRoot](#stage_replaceRoot)         | [$sortByCount](#stage_sortByCount) |                                    |                                |
+| [$skip](#stage_skip)             | [$replaceWith](#stage_replaceWith)         | [$unwind](#stage_unwind)           |                                    |                                |
+| [$sort](#stage_sort)             | [$set](#stage_set)                         |                                    |                                    |                                |
+|                                  | [$setWindowFields](#stage_setWindowFields) |                                    |                                    |                                |
+|                                  | [$unset](#stage_unset)                     |                                    |                                    |                                |
 
 
-> _The following stages are not included because they are unrelated to aggregating business data or rely on external systems: &nbsp;`$collStats`, `$indexStats`, `$listSessions`, `$planCacheStats`, `$currentOp`, `$listLocalSessions`, `$search`, `$searchMeta`_
+> _The following stages are not included because they are unrelated to aggregating business data: &nbsp;`$collStats`, `$indexStats`, `$listSessions`, `$planCacheStats`, `$currentOp`, `$listLocalSessions`_
 
 #### Input Collections:
 
@@ -40,10 +40,10 @@ A simple example for each [stage in the MongoDB Aggregation Framework](https://d
 {_id: "▨", a: "■", b: ["◳", "◱"]}
 
 // places
-{_id: "◧", loc: {type: "Point", coordinates: [1,1]}}
-{_id: "◨", loc: {type: "Point", coordinates: [3,3]}}
-{_id: "◩", loc: {type: "Point", coordinates: [5,5]}}
-{_id: "◪", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
+{_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
+{_id: "Smalltown", loc: {type: "Point", coordinates: [3,3]}}
+{_id: "Happytown", loc: {type: "Point", coordinates: [5,5]}}
+{_id: "Sadtown", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
 ```
 
 &nbsp;
@@ -266,23 +266,23 @@ $fill: {
 ## [$geoNear](https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/)
 
 ```javascript
-{_id: "◧", loc: {type: "Point", coordinates: [1,1]}}
-{_id: "◨", loc: {type: "Point", coordinates: [3,3]}}
-{_id: "◩", loc: {type: "Point", coordinates: [5,5]}}
-{_id: "◪", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
+{_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
+{_id: "Smalltown", loc: {type: "Point", coordinates: [3,3]}}
+{_id: "Happytown", loc: {type: "Point", coordinates: [5,5]}}
+{_id: "Sadtown", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
    ⬇︎      
 $geoNear: {
   near: {type: "Point", coordinates: [9,9]}, 
   distanceField: "distance"
 }
    ⬇︎      
-{_id: '◪', loc: { type: 'LineString', coordinates: [[7,7], [8,8]]}
+{_id: 'Sadtown', loc: { type: 'LineString', coordinates: [[7,7], [8,8]]}
       distance: 156565.32902203742}
-{_id: '◩', loc: { type: 'Point', coordinates: [5,5]}
+{_id: 'Happytown', loc: { type: 'Point', coordinates: [5,5]}
       distance: 627304.9320885336}
-{_id: '◨', loc: { type: 'Point', coordinates: [3,3]}
+{_id: 'Smalltown', loc: { type: 'Point', coordinates: [3,3]}
       distance: 941764.4675092621}
-{_id: '◧', loc: { type: 'Point', coordinates: [1,1]}
+{_id: 'Bigtown', loc: { type: 'Point', coordinates: [1,1]}
       distance: 1256510.3666236876}   
 ```
 
@@ -520,10 +520,10 @@ $project: {x: 1}
 ## [$redact](https://docs.mongodb.com/manual/reference/operator/aggregation/redact/)
 
 ```javascript
-{_id: "◧", loc: {type: "Point", coordinates: [1,1]}}
-{_id: "◨", loc: {type: "Point", coordinates: [3,3]}}
-{_id: "◩", loc: {type: "Point", coordinates: [5,5]}}
-{_id: "◪", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
+{_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
+{_id: "Smalltown", loc: {type: "Point", coordinates: [3,3]}}
+{_id: "Happytown", loc: {type: "Point", coordinates: [5,5]}}
+{_id: "Sadtown", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
    ⬇︎      
 $redact: {$cond: {
   if  : {$eq: ["$type", "LineString"]},
@@ -531,10 +531,10 @@ $redact: {$cond: {
   else: "$$DESCEND"
 }}
    ⬇︎      
-{_id: '◧', loc: { type: 'Point', coordinates: [1,1]}}
-{_id: '◨', loc: { type: 'Point', coordinates: [3,3]}}
-{_id: '◩', loc: { type: 'Point', coordinates: [5,5]}}
-{_id: '◪'}   
+{_id: 'Bigtown', loc: { type: 'Point', coordinates: [1,1]}}
+{_id: 'Smalltown', loc: { type: 'Point', coordinates: [3,3]}}
+{_id: 'Happytown', loc: { type: 'Point', coordinates: [5,5]}}
+{_id: 'Sadtown'}   
 ```
 
 &nbsp;
@@ -608,6 +608,75 @@ $sample: {size: 3}
 {_id: '◓', x: '▲', y: '▲', val: 85}
 {_id: '◑', x: '■', y: '■', val: 60}
 ```
+
+&nbsp;
+
+---
+
+<a name="stage_search"></a>
+## [$search](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-search)
+
+```javascript
+{_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
+{_id: "Smalltown", loc: {type: "Point", coordinates: [3,3]}}
+{_id: "Happytown", loc: {type: "Point", coordinates: [5,5]}}
+{_id: "Sadtown", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
+   ⬇︎      
+$search: {
+  text: {
+    path: "_id",
+    query: "Bigtown Happytown"
+  }
+}
+   ⬇︎      
+{_id: 'Bigtown', loc: {type: 'Point', coordinates: [1, 1]}}
+{_id: 'Happytown', loc: {type: 'Point', coordinates: [5, 5]}}
+```
+
+
+&nbsp;
+
+---
+
+<a name="stage_searchmeta"></a>
+## [$searchMeta](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-searchmeta)
+
+```javascript
+{_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
+{_id: "Smalltown", loc: {type: "Point", coordinates: [3,3]}}
+{_id: "Happytown", loc: {type: "Point", coordinates: [5,5]}}
+{_id: "Sadtown", loc: {type: "LineString", coordinates: [[7,7],[8,8]]}}
+   ⬇︎      
+$searchMeta: {
+  facet: {
+    operator: {
+      exists: {
+        path: "_id"
+      }      
+    },   
+    facets: {        
+      geotypes: {
+        type: "string",
+        path: "loc.type",
+        numBuckets : 2
+      }            
+    }        
+  }             
+}
+   ⬇︎      
+{
+  count: {lowerBound: 4},
+  facet: {
+    geotypes: {
+      buckets: [
+        {_id: 'Point', count: 3},
+        {_id: 'LineString', count: 1}
+      ]
+    }
+  }
+}
+```
+
 
 &nbsp;
 
