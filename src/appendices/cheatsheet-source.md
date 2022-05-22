@@ -304,7 +304,7 @@ db.lists.aggregate([
 
 ## Configuring The Required Atlas Search Index
 
-The `$search` and `$searchMeta` stages require that you first configure an [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/) index. Follow the procedure described in the [Create Atlas Search Index](./create-search-index.md) appendix to define a **Search Index** for the collection **cheatsheet.places**, with the following JSON rule:
+The `$search` and `$searchMeta` stages require you to first configure an [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/) index. Follow the procedure described in the [Create Atlas Search Index](./create-search-index.md) appendix to define a search index for the collection **cheatsheet.places**, with the following JSON configuration:
 
 ```javascript
 {

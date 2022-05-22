@@ -87,7 +87,7 @@ Now, using the simple procedure described in the [Create Atlas Search Index](../
 }
 ```
 
-Note, this definition indicates that the index should use the _lucene-english_ index and search analyzers and include all document fields in the search index.
+Note, this definition indicates that the index should use the _lucene-english_ analyzer and include all document fields to be searchable with their inferred data types.
 
 
 ## Aggregation Pipeline
@@ -190,5 +190,5 @@ If you don't see any facet results and the value of `count` is zero, double-chec
  
  * __Date Range Filter.__ The pipeline uses a [$text](https://www.mongodb.com/docs/atlas/atlas-search/text/) operator for matching descriptions containing the term _fraud_. Additionally, the search criteria includes a [$range](https://www.mongodb.com/docs/atlas/atlas-search/return-stored-source/) operator. The `$range` operator allows you to match records between two numbers or two dates. The example pipeline applies a date range, only including documents where each `datetime` field's value is _30-January-2022_. 
 
- * __Facet Boundaries & Counts.__ The pipeline uses a `facet` _collector_ to group metadata results by date range boundaries. Each boundary in the example defines a 6-hour period of the same specific day for a document's `datetime` field. A single pipeline can declare multiple facets; hence you give each facet a different name. The pipeline only defines one facet in this example, labelling it _fraudEnquiryPeriods_. When the pipeline executes, it returns the total count of matched documents and the count of matches in each facet grouping. There was no _fraud_ related enquiries between midnight and 6am, indicating that perhaps the fraud department only requires "skeleton-staffing" for such periods. In contrast, the period between 6am and midday shows the highest number of fraud-related enquiries, suggesting the bank dedicates additional staff to those periods.
+ * __Facet Boundaries & Counts.__ The pipeline uses a `facet` _collector_ to group metadata results by date range boundaries. Each boundary in the example defines a 6-hour period of the same specific day for a document's `datetime` field. A single pipeline can declare multiple facets; hence you give each facet a different name. The pipeline only defines one facet in this example, labelling it _fraudEnquiryPeriods_. When the pipeline executes, it returns the total count of matched documents and the count of matches in each facet grouping. There were no _fraud-related_ enquiries between midnight and 6am, indicating that perhaps the fraud department only requires "skeleton-staffing" for such periods. In contrast, the period between 6am and midday shows the highest number of fraud-related enquiries, suggesting the bank dedicates additional staff to those periods.
 

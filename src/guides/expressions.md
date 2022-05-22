@@ -23,7 +23,7 @@ You can combine these three categories of aggregation expressions when operating
 ```javascript
 "customer_info": {"$cond": {
                     "if":   {"$eq": ["$customer_info.category", "SENSITIVE"]}, 
-                    "then": "$$REMOVE",     
+                    "then": "$$REMOVE", 
                     "else": "$customer_info",
                  }}
 ```
@@ -102,7 +102,7 @@ In most cases, only one of the listed stages needs to be more expressive: the `$
 
 The previously stated generalisation about `$match` not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the [$expr operator](https://docs.mongodb.com/manual/reference/operator/query/expr/), which you can embed within a `$match` stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's `$match`) to re-use expressions provided by MongoDB's aggregation runtime.
 
-Inside an  `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables. A few situations demand having to use `$expr` from inside a `$match` stage. Examples include:
+Inside a `$expr` operator, you can include any composite expression fashioned from `$` operator functions, `$` field paths and `$$` variables. A few situations demand having to use `$expr` from inside a `$match` stage. Examples include:
 
  * A requirement to compare two fields from the same record to determine whether to keep the record based on the comparison's outcome
  
@@ -126,7 +126,7 @@ What if you wanted to run an aggregation pipeline to only return rectangles with
 var pipeline = [
   {"$match": {
     "$expr": {"$gt": [{"$multiply": ["$width", "$height"]}, 12]},
-  }},      
+  }},
 ];
 ```
 

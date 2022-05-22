@@ -4,7 +4,7 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 4.00-beta02
+Version: 4.00-beta03
 
 Last Updated: May 2022
 
@@ -23,7 +23,8 @@ Acknowledgements - many thanks to the following people for their valuable feedba
  * Asya Kamsky
  * Mat Keep
  * Brian Leonard
-
+ * Ethan Steininger
+ 
 ---
 
 Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.pexels.com/photo/red-steel-pipe-2420294/) under the [Pexels License](https://www.pexels.com/license/) _(free to use & modify)_

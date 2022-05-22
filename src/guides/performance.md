@@ -23,7 +23,7 @@ The diagram below highlights the nature of streaming and blocking stages. Stream
 When considering `$sort` and `$group` stages, it becomes evident why they have to block. The following examples illustrate why this is the case:
 
  1. __*$sort* blocking example__: A pipeline must sort _people_ in ascending order of _age_. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. 
-  
+
  2. __*$group* blocking example__: A pipeline must group _employees_ by one of two _work departments_ (either the _sales_ or _manufacturing_ departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. 
 
 These often unavoidable blocking stages don't just increase aggregation execution time by reducing concurrency. If used without careful forethought, the throughput and latency of a pipeline will slow dramatically due to significantly increased memory consumption. The following sub-sections explore why this occurs and tactics to mitigate this.
@@ -41,7 +41,7 @@ To circumvent the aggregation needing to manifest the whole data set in memory o
  2. __Use Limit With Sort__. If you only need the first subset of records from the sorted set of data, add a `$limit` stage directly after the `$sort` stage, limiting the results to the fixed amount you require (e.g. 10). At runtime, the aggregation engine will collapse the `$sort` and `$limit` into a single special internal sort stage which performs both actions together. The in-flight sort process only has to track the ten records in memory, which currently satisfy the executing sort/limit rule. It does not have to hold the whole data set in memory to execute the sort successfully.
  
  3. __Reduce Records To Sort__. Move the `$sort` stage to as late as possible in your pipeline and ensure earlier stages significantly reduce the number of records streaming into this late blocking `$sort` stage. This blocking stage will have fewer records to process and less thirst for RAM.
-  
+
 ### _$group_ Memory Consumption And Mitigation
 
 Like the `$sort` stage, the `$group` stage has the potential to consume a large amount of memory. The aggregation pipeline's 100 MB RAM limit equally applies to the `$group` stage. As with sorting, you can use the pipeline's `allowDiskUse:true` option to avoid this limit for heavyweight grouping operations, but with the same downsides.
@@ -156,7 +156,7 @@ var pipeline = [
   // Group by product type
   {"$group": {
     "_id": "$_id",
-    "products": {"$push": "$products"},    
+    "products": {"$push": "$products"},
   }},
 ];
 ```
@@ -175,7 +175,7 @@ var pipeline = [
         "as": "product",
         "cond": {"$gt": ["$$product.price", NumberDecimal("15.00")]},
       }
-    },    
+    },
   }},
 ];
 ```
@@ -231,11 +231,11 @@ var pipeline = [
   {"$unset": [
     "_id",
     "value",
-  ]},         
+  ]},
 
   {"$match": {
     "value_dollars": {"$gte": 100},  // Peforms a dollar check
-  }},    
+  }},
 ];
 ```
 
@@ -253,12 +253,12 @@ var pipeline = [
   
   {"$match": {                // Moved to before the $unset
     "value": {"$gte": 10000},   // Changed to perform a cents check
-  }},    
+  }},
 
   {"$unset": [
     "_id",
     "value",
-  ]},         
+  ]}, 
 ];
 ```
 

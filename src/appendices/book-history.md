@@ -1,8 +1,8 @@
 # Book Version History
 
-A summary of the significant additions in each _major_ version of this book.
+A summary of the significant additions in each major version of this book.
 
-__Version 4.0 (released in June 2022)__
+__Version 4.0 (released in July 2022)__
 * Compound Text Search Criteria example chapter
 * Facets Count Text Search example chapter
 * Create Atlas Search Index appendix

@@ -230,10 +230,10 @@ The result of running the `find()` against the _view_ with the filter `"gender":
 ## Observations
 
  * __Expr & Indexes.__ The ["NOW" system variable](https://docs.mongodb.com/manual/reference/aggregation-variables/) used here returns the current system date-time. However, you can only access this system variable via an [aggregation expression](https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions) and not directly via the regular MongoDB query syntax used by MQL and `$match`. You must wrap an expression using `$$NOW` inside an `$expr` operator. As described in the section _[Restrictions When Using Expressions](../../guides/expressions.md#restrictions-when-using-expressions-with-match)_ in an earlier chapter, if you use an [$expr query operator](https://docs.mongodb.com/manual/reference/operator/query/expr/) to perform a range comparison, you can't make use of an index in versions of MongoDB earlier then 5.0. Therefore, in this example, unless you use MongoDB 5.0 or greater, the aggregation will not take advantage of an index on `dateofbirth`. For a view, because you specify the pipeline earlier than it is ever run, you cannot obtain the current date-time at runtime by other means.
-   
+
  * __View Finds & Indexes.__ Even for versions of MongoDB before 5.0, the explain plan for the _gender query_ run against the view shows an index has been used (the index defined for the `gender` field). At runtime, a view is essentially just an aggregation pipeline defined "ahead of time". When `db.adults.find({"gender": "FEMALE"})` is executed, the database engine dynamically appends a new `$match` stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the new `$match` stage to the pipeline's start. Finally, it adds the filter extracted from the new `$match` stage to the aggregation's initial query, and hence it can then leverage an index containing the `gender` field. The following two excerpts, from an explain plan from a MongoDB version before 5.0, illustrate how the filter on `gender` and the filter on `dateofbirth` combine at runtime and how the index for `gender` is used to avoid a full collection scan:
 
-    ```javascript  
+    ```javascript
     '$cursor': {
       queryPlanner: {
         plannerVersion: 1,
