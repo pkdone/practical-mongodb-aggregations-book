@@ -178,7 +178,7 @@ _Note, the order of fields shown for each document may vary._
  
  * __Renaming Group.__ Towards the end of the pipeline, you will see what is a typical pattern for pipelines that use `$group`, consisting of a combination of `$set`+`$unset` stages, to essentially take the group's key (which is always called `_id`) and substitute it with a more meaningful name (`customer_id`).
  
- * __Lossless Decimals.__ You may notice the pipeline uses a `NumberDecimal()` function to ensure the order amounts in the inserted records are using a lossless decimal type, [IEEE 754 decimal128](https://docs.mongodb.com/manual/tutorial/model-monetary-data/). In this example, if you use a JSON _float_ or _double_ type instead, the order totals will suffer from a loss of precision. For instance, for the customer `elise_smith@myemail.com`, if you use a _double_ type, the `total_value` result will have the value shown in the second line below, rather than the first line:
+ * __High-Precision Decimals__. You may notice the pipeline uses a `NumberDecimal()` function to ensure the order amounts in the inserted records are using a high-precision decimal type, [IEEE 754 decimal128](https://docs.mongodb.com/manual/tutorial/model-monetary-data/). In this example, if you use a JSON _float_ or _double_ type instead, the order totals will significantly lose precision. For instance, for the customer `elise_smith@myemail.com`, if you use a _double_ type, the `total_value` result will have the value shown in the second line below, rather than the first line:
  
      ```javascript
      // Desired result achieved by using decimal128 types

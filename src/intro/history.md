@@ -36,5 +36,5 @@ Below is a summary of the evolution of the Aggregation Framework in terms of sig
 * __MongoDB 5.1 (November 2021)__: Support for lookup & graph-lookup stages joining to sharded collections, documents and densify stages
 * __MongoDB 5.2 (January 2022)__: An array sorting operator, operators to get a subset of ordered arrays and a subset of ordered grouped documents
 * __MongoDB 5.3 (April 2022)__: A fill stage, a linearFill operator
-* __MongoDB 6.0 (July 2022)__: TODO
+* __MongoDB 6.0 (July 2022)__: Consolidation of the new features from the "rapid releases" of versiona 5.1 to 5.3
 

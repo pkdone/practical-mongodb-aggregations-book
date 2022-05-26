@@ -71,7 +71,7 @@ Now, using the simple procedure described in the [Create Atlas Search Index](../
 }
 ```
 
-> _TThis definition indicates that the index should use the _lucene-english_ analyzer and include all document fields to be searchable with their inferred data types._
+> _This definition indicates that the index should use the _lucene-english_ analyzer and include all document fields to be searchable with their inferred data types._
 
 
 ## Aggregation Pipeline

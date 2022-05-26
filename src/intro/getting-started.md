@@ -25,7 +25,7 @@ Note that the aggregation pipelines in the [Full-Text Search Examples](../exampl
 There are many options for the client tool, four of which are:
 
  1. __*Modern* Shell__. Install the modern version of MongoDB's command-line tool, the [MongoDB Shell](https://www.mongodb.com/try/download/shell): `mongosh`
- 2. __*Legacy* Shell__. Install the legacy version of MongoDB's command-line tool, the [Mongo Shell](https://docs.mongodb.com/manual/mongo/): `mongo` (you will often find this binary bundled with a MongoDB database installation or you can download it from the Atlas console)
+ 2. __*Legacy* Shell__. Install the legacy version of MongoDB's command-line tool, the [Mongo Shell](https://docs.mongodb.com/manual/mongo/): `mongo` (you will often find this binary bundled with a MongoDB database installation)
  3. __Compass__. Install the _official_ MongoDB Inc. provided graphical user interface (GUI) tool, [MongoDB Compass](https://www.mongodb.com/products/compass)
  4. __Studio 3T__. Install the _3rd party_ 3T Software Labs provided graphical user interface (GUI) tool, [Studio 3T](https://studio3t.com/download/)
  
