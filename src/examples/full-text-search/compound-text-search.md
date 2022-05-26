@@ -71,7 +71,7 @@ Now, using the simple procedure described in the [Create Atlas Search Index](../
 }
 ```
 
-Note, this definition indicates that the index should use the _lucene-english_ analyzer and include all document fields to be searchable with their inferred data types.
+> _TThis definition indicates that the index should use the _lucene-english_ analyzer and include all document fields to be searchable with their inferred data types._
 
 
 ## Aggregation Pipeline
@@ -165,9 +165,13 @@ If you don't see any results, double-check that the system has finished generati
 
 ## Observations
 
- * __Search Stage.__ The [$search](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/) stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/). A `$search` stage must be the first stage of an aggregation pipeline, and [under the covers](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture), it instructs the system to execute a text search operation against an externally synchronised _Lucene_ full-text index. Inside the `$search` stage, you can only use one of a small set of [text-search specific pipeline operators](https://www.mongodb.com/docs/atlas/atlas-search/operators-and-collectors/). In this example, the pipeline uses a [$compound](https://www.mongodb.com/docs/atlas/atlas-search/compound/) operator to define a combination of multiple [$text](https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref) text-search operators.
+ * __Search Stage.__ The [$search](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/) stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/). A `$search` stage must be the first stage of an aggregation pipeline, and [under the covers](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture), it instructs the system to execute a text search operation against an internally synchronised _Lucene_ full-text index. Inside the `$search` stage, you can only use one of a small set of [text-search specific pipeline operators](https://www.mongodb.com/docs/atlas/atlas-search/operators-and-collectors/). In this example, the pipeline uses a [$compound](https://www.mongodb.com/docs/atlas/atlas-search/compound/) operator to define a combination of multiple [$text](https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref) text-search operators.
 
- * __Results & Relevancy Explanation.__ The executed pipeline ignores four of the seven input documents and sorts the remaining three documents by highest relevancy first. The pipeline excludes two _book-related_ records because the `filter` option executes a `$text` match on just `DVD` in the _category_ field. The pipeline ignores the "28 Days Later" DVD record because the `mustNot` option's `$text` matches "zombie" in the _description_ field. The pipeline excludes the movie "Thirteen Days" because even though its description contains two of the optional terms ("nuclear" and "survives"), it doesn't contain the mandatory term "apocalyptic". The system deduces the score of the remaining records based on the ratio of the number of matching terms ("apocalyptic", "nuclear", and "survives") versus the number of non-matched terms in each description field.
+ * __Results & Relevancy Explanation.__ The executed pipeline ignores four of the seven input documents and sorts the remaining three documents by highest relevancy first. It achieves this by applying the following actions:
+    - It excludes two _book-related_ records because the `filter` option executes a `$text` match on just `DVD` in the _category_ field.
+    - It ignores the "28 Days Later" DVD record because the `mustNot` option's `$text` matches "zombie" in the _description_ field.
+    - It excludes the movie "Thirteen Days" because even though its description contains two of the optional terms ("nuclear" and "survives"), it doesn't include the mandatory term "apocalyptic".
+    - It deduces the score of the remaining records based on the ratio of the number of matching terms ("apocalyptic", "nuclear", and "survives") in each document's `description` field versus how infrequently those terms appear in other documents in the same collection.
 
  * __English Language Analyzer.__ Atlas Search provides [multiple _Analyzer_ options](https://www.mongodb.com/docs/atlas/atlas-search/analyzers/) for breaking down generated text indexes and executing text queries into searchable tokens. The default analyzer, _Standard_, is not used here because the pipeline needs to match variations of the same English words. For example, "survives" and "surviving" need to refer to the same term, and hence the text index uses the _lucene.english_ analyzer.
 

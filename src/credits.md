@@ -4,9 +4,9 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 4.00-beta03
+Version: 4.00-beta04
 
-Last Updated: May 2022
+Last Updated: June 2022
 
 MongoDB Versions Supported: 4.2 → 6.0
 
@@ -23,6 +23,8 @@ Acknowledgements - many thanks to the following people for their valuable feedba
  * Asya Kamsky
  * Mat Keep
  * Brian Leonard
+ * Marcus Eagan
+ * Elle Shwer
  * Ethan Steininger
  
 ---

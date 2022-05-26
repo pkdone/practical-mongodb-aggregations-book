@@ -221,7 +221,7 @@ db.places.aggregate([
 ]);
 
 
-// $search  (v4.2 - requires an Atlas Search index)
+// $searchMeta  (v4.2 - requires an Atlas Search index)
 db.places.aggregate([
   {"$searchMeta": {
    "facet": {

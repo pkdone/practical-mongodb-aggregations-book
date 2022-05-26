@@ -1,4 +1,4 @@
-# Facets Count Text Search
+# Facets And Counts Text Search
 
 __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of the [facet](https://www.mongodb.com/docs/atlas/atlas-search/facet/) option in the [$searchMeta](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/) stage)_
 
@@ -80,14 +80,21 @@ Now, using the simple procedure described in the [Create Atlas Search Index](../
 
 ```javascript
 {
+  "analyzer": "lucene.english",
   "searchAnalyzer": "lucene.english",
   "mappings": {
-    "dynamic": true
+    "dynamic": true,
+    "fields": {
+      "datetime": [
+        {"type": "date"},
+        {"type": "dateFacet"}
+      ]
+    }
   }
 }
 ```
 
-Note, this definition indicates that the index should use the _lucene-english_ analyzer and include all document fields to be searchable with their inferred data types.
+> _This definition indicates that the index should use the _lucene-english_ analyzer. It includes an explicit mapping for the `datetime` field to ask for the field to be indexed in two ways to simultaneously support a date range filter and faceting from the same pipeline. The mapping indicates that all other document fields will be searchable with inferred data types._
 
 
 ## Aggregation Pipeline
@@ -186,9 +193,17 @@ If you don't see any facet results and the value of `count` is zero, double-chec
 
 ## Observations
 
- * __SearchMeta Stage.__ The [$searchMeta](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/) stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/). A `$searchMeta` stage must be the first stage of an aggregation pipeline, and [under the covers](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture), it performs a text search operation against an externally synchronised Lucene full-text index. However, it is different from the `$search` operator used in the [earlier search example chapter](compound-text-search.md). Instead, you use `$searchMeta` to ask the system to return metadata about the text search you executed, such as the match count, rather than returning the search result records. The `$searchMeta` stage takes a `facet` option, which takes two options, `operator` and `facet`, which you use to define the text search criteria and categorise the results in groups.
+ * __Search Metadata Stage.__ The [$searchMeta](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/) stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/). A `$searchMeta` stage must be the first stage of an aggregation pipeline, and [under the covers](https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture), it performs a text search operation against an internally synchronised Lucene full-text index. However, it is different from the `$search` operator used in the [earlier search example chapter](compound-text-search.md). Instead, you use `$searchMeta` to ask the system to return metadata about the text search you executed, such as the match count, rather than returning the search result records. The `$searchMeta` stage takes a `facet` option, which takes two options, `operator` and `facet`, which you use to define the text search criteria and categorise the results in groups.
  
- * __Date Range Filter.__ The pipeline uses a [$text](https://www.mongodb.com/docs/atlas/atlas-search/text/) operator for matching descriptions containing the term _fraud_. Additionally, the search criteria includes a [$range](https://www.mongodb.com/docs/atlas/atlas-search/return-stored-source/) operator. The `$range` operator allows you to match records between two numbers or two dates. The example pipeline applies a date range, only including documents where each `datetime` field's value is _30-January-2022_. 
+ * __Date Range Filter.__ The pipeline uses a [$text](https://www.mongodb.com/docs/atlas/atlas-search/text/) operator for matching descriptions containing the term _fraud_. Additionally, the search criteria include a [$range](https://www.mongodb.com/docs/atlas/atlas-search/return-stored-source/) operator. The `$range` operator allows you to match records between two numbers or two dates. The example pipeline applies a date range, only including documents where each `datetime` field's value is _30-January-2022_. 
 
- * __Facet Boundaries & Counts.__ The pipeline uses a `facet` _collector_ to group metadata results by date range boundaries. Each boundary in the example defines a 6-hour period of the same specific day for a document's `datetime` field. A single pipeline can declare multiple facets; hence you give each facet a different name. The pipeline only defines one facet in this example, labelling it _fraudEnquiryPeriods_. When the pipeline executes, it returns the total count of matched documents and the count of matches in each facet grouping. There were no _fraud-related_ enquiries between midnight and 6am, indicating that perhaps the fraud department only requires "skeleton-staffing" for such periods. In contrast, the period between 6am and midday shows the highest number of fraud-related enquiries, suggesting the bank dedicates additional staff to those periods.
+ * __Facet Boundaries.__ The pipeline uses a `facet` _collector_ to group metadata results by date range boundaries. Each boundary in the example defines a 6-hour period of the same specific day for a document's `datetime` field. A single pipeline can declare multiple facets; hence you give each facet a different name. The pipeline only defines one facet in this example, labelling it _fraudEnquiryPeriods_. When the pipeline executes, it returns the total count of matched documents and the count of matches in each facet grouping. There were no _fraud-related_ enquiries between midnight and 6am, indicating that perhaps the fraud department only requires "skeleton-staffing" for such periods. In contrast, the period between 6am and midday shows the highest number of fraud-related enquiries, suggesting the bank dedicates additional staff to those periods.
 
+ * __Faster Facet Counts.__ A faceted index is a special type of Lucence index optimised to compute counts of dataset classifications. An application can leverage the index to offload much of the work required to analyse facets ahead of time, thus avoiding some of the latency costs when invoking a [faceted search](https://en.wikipedia.org/wiki/Faceted_search) at runtime. Therefore use the Atlas faceted search capability if you are in a position to adopt [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/), rather than using MongoDB's general-purpose faceted search capability described in an [earlier example in this book](../trend-analysis/faceted-classifications.md).
+ 
+ * __Combining A Search Operation With Metadata.__ In this example, a pipeline uses `$searchMeta` to obtain metadata from a search (counts and facets). What if you also want the actual search results from running`$search` similar to the [previous example](./compound-text-search.md)? You could invoke two operations from your client application, one to retrieve the search results and one to retrieve the metadata results. However, Atlas Search provides a way of obtaining both aspects within a single aggregation. Instead of using a `$searchMeta` stage, you use a `$search` stage. The pipeline [automatically stores its metadata](https://www.mongodb.com/docs/atlas/atlas-search/facet/#search_meta-aggregation-variable) in the `$$SEARCH_META` variable, ready for you to access it via subsequent stages in the same pipeline. For example: 
+
+     ```javascript
+     {"$set": {"mymetadata": "$$SEARCH_META"}}
+     ```
+ 
