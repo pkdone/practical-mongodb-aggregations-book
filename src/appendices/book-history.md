@@ -4,7 +4,7 @@ A summary of the significant additions in each major version of this book.
 
 __Version 4.0 (released in June 2022)__
 * Compound Text Search Criteria example chapter
-* Facets Count Text Search example chapter
+* Facets And Counts Text Search example chapter
 * Create Atlas Search Index appendix
 
 __Version 3.0 (released in October 2021)__

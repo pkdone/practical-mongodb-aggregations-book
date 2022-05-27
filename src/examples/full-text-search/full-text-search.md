@@ -10,7 +10,7 @@ The examples leverage Lucene-based search indexes delivered by [Atlas Search](ht
 
 &nbsp;
 
-Atlas Search makes adding fast relevance-based full-text search to your applications easy. Atlas Search deploys an Apache Lucene index next to your database, automatically handling data and schema synchronisation between the source collection and this new search index. Atlas Search provides fuzzy matching; auto-complete; fast facets and counts; highlighting; relevance scoring; geospatial queries; and synonyms, all backed by support for multiple language analysers. You reduce your cognitive load by invoking searches via the regular MongoDB drivers and aggregations API rather than a 3rd party Lucene API.
+Atlas Search makes adding fast relevance-based full-text search to your applications easy. Atlas Search deploys an Apache Lucene index next to your database, automatically handling data and schema synchronisation between the source collection and this new search index. Atlas Search provides fuzzy matching; auto-complete; fast facets and counts; highlighting; relevance scoring; geospatial queries; and synonyms, all backed by support for multiple language analysers. You reduce your cognitive load by invoking searches via the regular MongoDB drivers and Aggregations API rather than a 3rd party Lucene API.
  
 With the Atlas platform's integration of database, search engine, and synchronisation pipeline into a single, unified, and fully managed service, you can quickly build search features into your applications. Consequently, this ease of use and its performance and functionality advantages mean you should use Atlas Search over MongoDB's `$text` and `$regex` query operators when running your database in Atlas.
 
