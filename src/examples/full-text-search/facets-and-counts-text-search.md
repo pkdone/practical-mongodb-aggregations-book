@@ -1,6 +1,6 @@
 # Facets And Counts Text Search
 
-__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of the [facet](https://www.mongodb.com/docs/atlas/atlas-search/facet/) option in the [$searchMeta](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/) stage)_
+__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of the [facet](https://www.mongodb.com/docs/atlas/atlas-search/facet/) option in the [$searchMeta](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-searchMeta) stage)_
 
 
 
