@@ -97,22 +97,22 @@ Two documents should be returned, now showing the daily summary open, low, high,
     currencyPair: 'USD/GBP',
     day: ISODate("2021-07-05T00:00:00.000Z"),
     summary: {
-      open: Decimal128("0.71903411"),
-      low: Decimal128("0.71903411"),
-      high: Decimal128("0.76783263"),
-      close: Decimal128("0.74998835"),
-      average: Decimal128("0.74275533")
+      open: NumberDecimal("0.71903411"),
+      low: NumberDecimal("0.71903411"),
+      high: NumberDecimal("0.76783263"),
+      close: NumberDecimal("0.74998835"),
+      average: NumberDecimal("0.74275533")
     }
   },
   {
     currencyPair: 'EUR/GBP',
     day: ISODate("2021-07-05T00:00:00.000Z"),
     summary: {
-      open: Decimal128("0.86739394"),
-      low: Decimal128("0.84647462"),
-      high: Decimal128("0.88002736"),
-      close: Decimal128("0.84811122"),
-      average: Decimal128("0.86186929875")
+      open: NumberDecimal("0.86739394"),
+      low: NumberDecimal("0.84647462"),
+      high: NumberDecimal("0.88002736"),
+      close: NumberDecimal("0.84811122"),
+      average: NumberDecimal("0.86186929875")
     }
   }
 ]
