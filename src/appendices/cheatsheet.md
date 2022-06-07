@@ -144,7 +144,7 @@ $count: "amount"
 ---
 
 <a name="stage_densify"></a>
-## [$densify](https://docs.mongodb.com/v5.3/reference/operator/aggregation/densify/)
+## [$densify](https://docs.mongodb.com/v6.0/reference/operator/aggregation/densify/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -182,7 +182,7 @@ $densify: {
 ---
 
 <a name="stage_documents"></a>
-## [$documents](https://docs.mongodb.com/v5.3/reference/operator/aggregation/documents/)
+## [$documents](https://docs.mongodb.com/v6.0/reference/operator/aggregation/documents/)
 
 ```javascript
 [     ]
@@ -233,7 +233,7 @@ $facet: {
 ---
 
 <a name="stage_fill"></a>
-## [$fill](https://docs.mongodb.com/v5.3/reference/operator/aggregation/fill/)
+## [$fill](https://docs.mongodb.com/v6.0/reference/operator/aggregation/fill/)
            
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}

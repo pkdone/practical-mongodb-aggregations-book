@@ -1,0 +1,360 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Compound Text Search Criteria - Practical MongoDB Aggregations Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Learn how to develop effective and optimal data manipulation and analytics pipelines with this book, using the MongoDB Aggregation Framework">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-D0T2GQ8R19"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-D0T2GQ8R19');
+        </script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/restricted-view.html"><strong aria-hidden="true">3.5.1.</strong> Restricted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html" class="active"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Practical MongoDB Aggregations Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="compound-text-search-criteria"><a class="header" href="#compound-text-search-criteria">Compound Text Search Criteria</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.2</p>
+<h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
+<p>You want to search a collection of e-commerce products to find specific movie DVDs. Based on each DVD's full-text plot description, you want movies with a <em>post-apocalyptic</em> theme, especially those related to a <em>nuclear</em> disaster where some people <em>survive</em>. However, you aren't interested in seeing movies involving <em>zombies</em>.</p>
+<blockquote>
+<p><em>To execute this example, you need to be using an Atlas Cluster rather than a self-managed MongoDB deployment. The simplest way to achieve this is to <a href="https://www.mongodb.com/cloud/atlas">provision a Free Tier Atlas Cluster</a>.</em></p>
+</blockquote>
+<h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
+<p>Drop any old version of the database (if it exists) and then populate a new <em>products</em> collection with some <em>DVD</em> and <em>Book</em> records:</p>
+<pre><code class="language-javascript">use book-compound-text-search;
+db.products.remove({});
+
+// Insert 7 records into the products collection
+db.products.insertMany([
+  {
+    &quot;name&quot;: &quot;The Road&quot;,
+    &quot;category&quot;: &quot;DVD&quot;,
+    &quot;description&quot;: &quot;In a dangerous post-apocalyptic world, a dying father protects his surviving son as they try to reach the coast&quot;,
+  },
+  {
+    &quot;name&quot;: &quot;The Day Of The Triffids&quot;,
+    &quot;category&quot;: &quot;BOOK&quot;,
+    &quot;description&quot;: &quot;Post-apocalyptic disaster where most people are blinded by a meteor shower and then die at the hands of a new type of plant&quot;,
+  },
+  {
+    &quot;name&quot;: &quot;The Road&quot;,
+    &quot;category&quot;: &quot;BOOK&quot;,
+    &quot;description&quot;: &quot;In a dangerous post-apocalyptic world, a dying father protects his surviving son as they try to reach the coast&quot;,
+  },  
+  {
+    &quot;name&quot;: &quot;The Day the Earth Caught Fire&quot;,
+    &quot;category&quot;: &quot;DVD&quot;,
+    &quot;description&quot;: &quot;A series of nuclear explosions cause fires and earthquakes to ravage cities, with some of those that survive trying to rescue the post-apocalyptic world&quot;,
+  },
+  {
+    &quot;name&quot;: &quot;28 Days Later&quot;,
+    &quot;category&quot;: &quot;DVD&quot;,
+    &quot;description&quot;: &quot;A caged chimp infected with a virus is freed from a lab, and the infection spreads to people who become zombie-like with just a few surviving in a post-apocalyptic country&quot;,
+  },  
+  {
+    &quot;name&quot;: &quot;Don't Look Up&quot;,
+    &quot;category&quot;: &quot;DVD&quot;,
+    &quot;description&quot;: &quot;Pre-apocalyptic situation where some astronomers warn humankind of an approaching comet that will destroy planet Earth&quot;,
+  },
+  {
+    &quot;name&quot;: &quot;Thirteen Days&quot;,
+    &quot;category&quot;: &quot;DVD&quot;,
+    &quot;description&quot;: &quot;Based on the true story of the Cuban nuclear misile threat, crisis is averted at the last minute and the workd survives&quot;,
+  },
+]); 
+</code></pre>
+<p> </p>
+<p>Now, using the simple procedure described in the <a href="../../appendices/create-search-index.html">Create Atlas Search Index</a> appendix, define a <strong>Search Index</strong>. Select the new database collection <strong>book-compound-text-search.products</strong> and enter the following JSON search index definition:</p>
+<pre><code class="language-javascript">{
+  &quot;searchAnalyzer&quot;: &quot;lucene.english&quot;,
+  &quot;mappings&quot;: {
+    &quot;dynamic&quot;: true
+  }
+}
+</code></pre>
+<blockquote>
+<p><em>This definition indicates that the index should use the <em>lucene-english</em> analyzer and include all document fields to be searchable with their inferred data types.</em></p>
+</blockquote>
+<h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
+<p>Define a pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Search for DVDs where the description must contain &quot;apocalyptic&quot; but not &quot;zombie&quot;
+  {&quot;$search&quot;: {
+    &quot;index&quot;: &quot;default&quot;,    
+    &quot;compound&quot;: {
+      &quot;must&quot;: [
+        {&quot;text&quot;: {
+          &quot;path&quot;: &quot;description&quot;,
+          &quot;query&quot;: &quot;apocalyptic&quot;,
+        }},
+      ],
+      &quot;should&quot;: [
+        {&quot;text&quot;: {
+          &quot;path&quot;: &quot;description&quot;,
+          &quot;query&quot;: &quot;nuclear survives&quot;,
+        }},
+      ],
+      &quot;mustNot&quot;: [
+        {&quot;text&quot;: {
+          &quot;path&quot;: &quot;description&quot;,
+          &quot;query&quot;: &quot;zombie&quot;,
+        }},
+      ],
+      &quot;filter&quot;: [
+        {&quot;text&quot;: {
+          &quot;path&quot;: &quot;category&quot;,
+          &quot;query&quot;: &quot;DVD&quot;,
+        }},      
+      ],
+    }
+  }},
+
+  // Capture the search relevancy score in the output and omit the _id field
+  {&quot;$set&quot;: {
+    &quot;score&quot;: {&quot;$meta&quot;: &quot;searchScore&quot;},
+    &quot;_id&quot;: &quot;$$REMOVE&quot;,
+  }},
+];
+</code></pre>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.products.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.products.explain(&quot;executionStats&quot;).aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
+<p>Three documents should be returned, showing products which are post-apocalyptic themed DVDs, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    name: 'The Day the Earth Caught Fire',
+    category: 'DVD',
+    description: 'A series of nuclear explosions cause fires and earthquakes to ravage cities, with some of those that survive trying to rescue the post-apocalyptic world',
+    score: 0.8468831181526184
+  },
+  {
+    name: 'The Road',
+    category: 'DVD',
+    description: 'In a dangerous post-apocalyptic world, a dying father protects his surviving son as they try to reach the coast',
+    score: 0.3709350824356079
+  },
+  {
+    name: &quot;Don't Look Up&quot;,
+    category: 'DVD',
+    description: 'Pre-apocalyptic situation where some astronomers warn humankind of an approaching comet that will destroy planet Earth',
+    score: 0.09836573898792267
+  }
+]
+</code></pre>
+<p>If you don't see any results, double-check that the system has finished generating your new index.</p>
+<h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
+<ul>
+<li>
+<p><strong>Search Stage.</strong> The <a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/">$search</a> stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages <a href="https://www.mongodb.com/docs/atlas/atlas-search/">Atlas Search</a>. A <code>$search</code> stage must be the first stage of an aggregation pipeline, and <a href="https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture">under the covers</a>, it instructs the system to execute a text search operation against an internally synchronised <em>Lucene</em> full-text index. Inside the <code>$search</code> stage, you can only use one of a small set of <a href="https://www.mongodb.com/docs/atlas/atlas-search/operators-and-collectors/">text-search specific pipeline operators</a>. In this example, the pipeline uses a <a href="https://www.mongodb.com/docs/atlas/atlas-search/compound/">$compound</a> operator to define a combination of multiple <a href="https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref">$text</a> text-search operators.</p>
+</li>
+<li>
+<p><strong>Results &amp; Relevancy Explanation.</strong> The executed pipeline ignores four of the seven input documents and sorts the remaining three documents by highest relevancy first. It achieves this by applying the following actions:</p>
+<ul>
+<li>It excludes two <em>book-related</em> records because the <code>filter</code> option executes a <code>$text</code> match on just <code>DVD</code> in the <em>category</em> field.</li>
+<li>It ignores the &quot;28 Days Later&quot; DVD record because the <code>mustNot</code> option's <code>$text</code> matches &quot;zombie&quot; in the <em>description</em> field.</li>
+<li>It excludes the movie &quot;Thirteen Days&quot; because even though its description contains two of the optional terms (&quot;nuclear&quot; and &quot;survives&quot;), it doesn't include the mandatory term &quot;apocalyptic&quot;.</li>
+<li>It deduces the score of the remaining records based on the ratio of the number of matching terms (&quot;apocalyptic&quot;, &quot;nuclear&quot;, and &quot;survives&quot;) in each document's <code>description</code> field versus how infrequently those terms appear in other documents in the same collection.</li>
+</ul>
+</li>
+<li>
+<p><strong>English Language Analyzer.</strong> Atlas Search provides <a href="https://www.mongodb.com/docs/atlas/atlas-search/analyzers/">multiple <em>Analyzer</em> options</a> for breaking down generated text indexes and executing text queries into searchable tokens. The default analyzer, <em>Standard</em>, is not used here because the pipeline needs to match variations of the same English words. For example, &quot;survives&quot; and &quot;surviving&quot; need to refer to the same term, and hence the text index uses the <em>lucene.english</em> analyzer.</p>
+</li>
+<li>
+<p><strong>Meta Operator.</strong> The <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/meta/">$meta</a> operator provides supplementary metadata about the results of a text search performed earlier in a pipeline. When leveraging an Atlas Search based text search, the pipeline can look up a <code>searchScore</code> field in the metadata to access the relevancy score attributed to each text search result. This example uses <code>searchScore</code> to help you understand why the results are in a particular order, with some records having higher relevancy than others. In this example, it serves no other purpose, and you can omit it. However, in a different situation, you might want to use the search score to filter out low relevancy results in a later <code>$match</code> stage of a pipeline, for example.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../examples/full-text-search/full-text-search.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../examples/full-text-search/facets-and-counts-text-search.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../examples/full-text-search/full-text-search.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../examples/full-text-search/facets-and-counts-text-search.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
