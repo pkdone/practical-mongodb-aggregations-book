@@ -726,7 +726,7 @@ This pipeline’s output now provides a far more comprehensible summary, as show
 
 This result highlights that the `telNums` field can have one of two different data types within documents.
 
-The main drawback of this rudimentary schema analysis pipeline is its inability to descend through layers of arrays and sub-documents hanging off each top-level document. This challenge is indeed solvable using a pure aggregation pipeline, but the code involved is far more complex and beyond the scope of this chapter. If you are interested in exploring this further, you can customise the ["graphDescend" GitHub example project](https://github.com/pkdone/mongo-agg-graph-descend). That project shows you how to traverse through hierarchically structured documents using a single aggregation pipeline.
+The main drawback of this rudimentary schema analysis pipeline is its inability to descend through layers of arrays and sub-documents hanging off each top-level document. This challenge is indeed solvable using a pure aggregation pipeline, but the code involved is far more complex and beyond the scope of this chapter. If you are interested in exploring this further, the ["mongo-agg-schema-analyzer" GitHub project](https://github.com/pkdone/mongo-agg-schema-analyzer) solves this problem. That project shows you how to traverse through hierarchically structured documents using a single aggregation pipeline to infer the schema.
 
 
 ## Further Array Manipulation Examples
