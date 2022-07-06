@@ -71,7 +71,7 @@ var pipeline = [
             "$filter": {
               "input": "$readings",  // Iterate the "readings" array field
               "as": "reading",  // Name the current array element "reading"
-              "cond": {  // Only include device properties matching the current dervice
+              "cond": {  // Only include device properties matching the current device
                 "$eq": ["$$reading.device", "$$device"]
               }
             }
