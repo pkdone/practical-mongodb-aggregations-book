@@ -127,7 +127,7 @@ var pipeline = [
       "facets": {        
         "fraudEnquiryPeriods": {
           "type": "date",
-          "path" : "datetime",
+          "path": "datetime",
           "boundaries": [
             ISODate("2022-01-30T00:00:00.000Z"),
             ISODate("2022-01-30T06:00:00.000Z"),
