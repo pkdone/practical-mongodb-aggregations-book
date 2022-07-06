@@ -66,6 +66,7 @@ The Aggregation Framework is versatile and used for many different data processi
 * Performing the Transform (T) part of an Extract-Load-Transform ([ELT](https://en.wikipedia.org/wiki/Extract,_load,_transform)) workload
 * Data quality reporting and cleansing
 * Updating a materialised view with the results of the most recent source data changes
+* Performing [full-text search](https://www.mongodb.com/docs/atlas/atlas-search/)
 * Representing data ready to be exposed via SQL/ODBC/JDBC (using MongoDB's [BI Connector](https://docs.mongodb.com/bi-connector/))
 * Supporting machine learning frameworks for efficient data analysis (e.g. via MongoDB's [Spark Connector](https://docs.mongodb.com/spark-connector))
 * _...and many more_
