@@ -6,7 +6,7 @@ __Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$rand](https://do
 ## Scenario
 
 You want to perform irreversible masking on the sensitive fields of a collection of _credit card payments_, ready to provide the output data set to a 3rd party for analysis, without exposing sensitive information to the 3rd party. The specific changes that you need to make to the payments' fields are:
- * Partially obfuscate the carder holder's name
+ * Partially obfuscate the card holder's name
  * Obfuscate the first 12 digits of the card's number, retaining only the final 4 digits
  * Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 30 days (~1 month)
  * Replace the card's 3 digit security code with a random set of 3 digits
