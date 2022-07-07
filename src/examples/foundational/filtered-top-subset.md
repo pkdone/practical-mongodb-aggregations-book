@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 You want to query a collection of people to find the three youngest people who have a job in engineering, sorted by the youngest person first.
 
-This example is the only one in the book that you can also achieve entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines.
+> _This example is the only one in the book that you can also achieve entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines._
 
 
 ## Sample Data Population

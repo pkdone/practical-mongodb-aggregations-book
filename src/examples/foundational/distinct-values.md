@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 You want to query a collection of persons where each document contains data on one or more languages spoken by the person. The query result should be an alphabetically sorted list of unique languages that a developer can subsequently use to populate a list of values in a user interface's "drop-down" widget.
 
-This example is the equivalent of a _SELECT DISTINCT_ statement in [SQL](https://en.wikipedia.org/wiki/SQL).
+> _This example is the equivalent of a _SELECT DISTINCT_ statement in [SQL](https://en.wikipedia.org/wiki/SQL)._
 
 
 ## Sample Data Population

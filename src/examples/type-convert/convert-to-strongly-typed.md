@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 A 3rd party has imported a set of _retail orders_ into a MongoDB collection but with all data typing lost (it stored all field values as strings). You want to re-establish correct typing for all the documents and copy them into a new "cleaned" collection. You can incorporate such type transformation logic in the aggregation pipeline because you know the type each field had in the original record structure.
 
-Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.
+> _Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application._
 
 
 ## Sample Data Population

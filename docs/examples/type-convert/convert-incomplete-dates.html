@@ -186,7 +186,7 @@ db.payments.insertMany([
 <h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
-  // Change field from a string to a date, filling in the missing gaps
+  // Change field from a string to a date, filling in the gaps
   {&quot;$set&quot;: {
     &quot;payment_date&quot;: {    
       &quot;$let&quot;: {

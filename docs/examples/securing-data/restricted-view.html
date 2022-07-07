@@ -160,7 +160,9 @@
 <li>Only show people aged 18 and over (by checking each person's <code>dateofbirth</code> field)</li>
 <li>Exclude each person's <code>social_security_num</code> field from results</li>
 </ol>
-<p>Essentially, this is an illustration of achieving &quot;record-level&quot; access control in MongoDB.</p>
+<blockquote>
+<p><em>Essentially, this is an illustration of achieving &quot;record-level&quot; access control in MongoDB.</em></p>
+</blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists), create an index and populate the new <code>persons</code> collections with 5 records:</p>
 <pre><code class="language-javascript">use book-restricted-view;

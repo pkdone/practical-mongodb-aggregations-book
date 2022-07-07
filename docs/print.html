@@ -157,8 +157,8 @@
 <div style="break-before: page; page-break-before: always;"></div><p> </p>
 <h1 id="practical-mongodb-aggregations"><a class="header" href="#practical-mongodb-aggregations">Practical MongoDB Aggregations</a></h1>
 <p>Author: Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</p>
-<p>Version: 4.00</p>
-<p>Last Updated: June 2022</p>
+<p>Version: 4.01</p>
+<p>Last Updated: July 2022</p>
 <p>MongoDB Versions Supported: 4.2 → 6.0</p>
 <p>Book published at: <a href="https://www.practical-mongodb-aggregations.com">www.practical-mongodb-aggregations.com</a></p>
 <p>Content created &amp; assembled at: <a href="https://github.com/pkdone/practical-mongodb-aggregations-book">github.com/pkdone/practical-mongodb-aggregations-book</a></p>
@@ -173,6 +173,7 @@
 <li>Marcus Eagan</li>
 <li>Elle Shwer</li>
 <li>Ethan Steininger</li>
+<li>Andrew Morgan</li>
 </ul>
 <hr />
 <p>Front cover image adapted from a <a href="https://www.pexels.com/photo/red-steel-pipe-2420294/">Photo by Henry &amp; Co. from Pexels</a> under the <a href="https://www.pexels.com/license/">Pexels License</a> <em>(free to use &amp; modify)</em></p>
@@ -216,7 +217,7 @@
 </ol>
 <p>The following diagram illustrates these two elements and their inter-relationship:</p>
 <p><img src="intro/./pics/aggregation-components.png" alt="MongoDB Aggregation Framework components - Driver API and Database Aggregation Runtime" /></p>
-<p>The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation Framework. In the database, the Aggregation Runtime re-uses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.</p>
+<p>The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation Framework. In the database, the Aggregation Runtime reuses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.</p>
 <h2 id="what-is-mongodbs-aggregations-language"><a class="header" href="#what-is-mongodbs-aggregations-language">What Is MongoDB's Aggregations Language?</a></h2>
 <p>MongoDB's aggregation pipeline language is somewhat of a paradox. It can appear daunting, yet it is straightforward. It can seem verbose, yet it is lean and to the point. It is <a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing complete</a> and able to solve any business problem <strong>*</strong>. Conversely, it is a strongly opinionated <a href="https://en.wikipedia.org/wiki/Domain-specific_language">Domain Specific Language (DSL)</a>, where, if you attempt to veer away from its core purpose of mass data manipulation, it will try its best to resist you.</p>
 <blockquote>
@@ -224,7 +225,7 @@
 </blockquote>
 <p>Invariably, for beginners, the Aggregation Framework seems difficult to understand and comes with an initially steep learning curve that you must overcome to become productive. In some programming languages, you only need to master a small set of the language's aspects to be largely effective. With MongoDB aggregations, the initial effort you must invest is slightly greater. However, once mastered, users find it provides an elegant, natural and efficient solution to breaking down a complex set of data manipulations into a series of simple easy to understand steps. This is the point when users achieve the Zen of MongoDB Aggregations, and it is a lovely place to be.</p>
 <p>MongoDB's aggregation pipeline language is focused on data-oriented problem-solving rather than business process problem-solving. Depending on how you squint, it can be regarded as a <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming language</a> rather than a <a href="https://en.wikipedia.org/wiki/Procedural_programming">procedural programming language</a>. Why? Well, an aggregation pipeline is an ordered series of statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side effects. This functional nature is probably why many users regard the Aggregation Framework as having a steeper learning curve than many languages. Not because it is inherently more difficult to understand but because most developers come from a procedural programming background and not a functional one. Most developers also have to learn how to think like a functional programmer to learn the Aggregation Framework.</p>
-<p>The Aggregation Framework's functional characteristics ultimately make it especially powerful for processing massive data sets. Users focus more on defining &quot;the what&quot; in terms of the required outcome. Users focus less on &quot;the how&quot; of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, &quot;is this stage for performing a filter or is this stage for grouping on some fields?&quot;. With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to re-order stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.</p>
+<p>The Aggregation Framework's functional characteristics ultimately make it especially powerful for processing massive data sets. Users focus more on defining &quot;the what&quot; in terms of the required outcome. Users focus less on &quot;the how&quot; of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, &quot;is this stage for performing a filter or is this stage for grouping on some fields?&quot;. With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to reorder stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.</p>
 <p><img src="intro/./pics/optimise.png" alt="MongoDB Aggregation Framework developer vs database engine optimizations comparison" /></p>
 <p>Last and by far least in terms of importance is a discussion about syntax. So far, MongoDB aggregations have been described here as a programming language, which it is (a Domain Specific Language). However, with what syntax is a MongoDB aggregation pipeline constructed? The answer is &quot;it depends&quot;, and the answer is mostly irrelevant. This book will highlight pipeline examples using MongoDB's Shell and the JavaScript interpreter it runs in. The book will express aggregation pipelines using a <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> based syntax. However, if you are using one of the many <a href="https://docs.mongodb.com/drivers/">programming language drivers</a> that MongoDB provides, you will be using that language to construct an aggregation pipeline, not JSON. An aggregation is specified as an array of objects, regardless of how the programming language may facilitate this. This programmatic rather than textual format has a couple of advantages compared to querying with a string. It has a low vulnerability to <a href="https://en.wikipedia.org/wiki/SQL_injection">injection attacks</a>, and it is highly <a href="https://en.wikipedia.org/wiki/Composability">composable</a>.</p>
 <h2 id="whats-in-a-name"><a class="header" href="#whats-in-a-name">What's In A Name?</a></h2>
@@ -257,6 +258,7 @@
 <li>Performing the Transform (T) part of an Extract-Load-Transform (<a href="https://en.wikipedia.org/wiki/Extract,_load,_transform">ELT</a>) workload</li>
 <li>Data quality reporting and cleansing</li>
 <li>Updating a materialised view with the results of the most recent source data changes</li>
+<li>Performing full-text search (using MongoDB's <a href="https://www.mongodb.com/docs/atlas/atlas-search/">Atlas Search</a>)</li>
 <li>Representing data ready to be exposed via SQL/ODBC/JDBC (using MongoDB's <a href="https://docs.mongodb.com/bi-connector/">BI Connector</a>)</li>
 <li>Supporting machine learning frameworks for efficient data analysis (e.g. via MongoDB's <a href="https://docs.mongodb.com/spark-connector">Spark Connector</a>)</li>
 <li><em>...and many more</em></li>
@@ -268,7 +270,7 @@
 <ol>
 <li>The database has to bolt in an inherently slow JavaScript engine to execute users' Map-Reduce code.</li>
 <li>Users have to provide two sets of JavaScript logic, a <em>map</em> (or matching) function and a <em>reduce</em> (or grouping) function. Neither is very intuitive to develop, lacking a solid data-oriented bias.</li>
-<li>At runtime, the lack of ability to explicitly associate a specific intent to an arbitrary piece of logic means that the database engine has no opportunity to identify and apply optimisations. It is hard for it to target indexes or re-order some logic for more efficient processing. The database has to be conservative, executing the workload with minimal concurrency and employing locks at various times to prevent race conditions and inconsistent results.</li>
+<li>At runtime, the lack of ability to explicitly associate a specific intent to an arbitrary piece of logic means that the database engine has no opportunity to identify and apply optimisations. It is hard for it to target indexes or reorder some logic for more efficient processing. The database has to be conservative, executing the workload with minimal concurrency and employing locks at various times to prevent race conditions and inconsistent results.</li>
 <li>Poor scalability because the monolithic and opaque nature of Map-Reduce logic means the database engine can't break parts of it up and execute these parts in parallel across multiple shards.</li>
 </ol>
 <p>Over the following two years, as user behaviour with Map-Reduce became more understood, MongoDB engineers started to envision a better solution. Also, users were increasingly trying to use Map-Reduce to perform mass data processing given MongoDB's ability to hold large data sets. They were hitting the same Map-Reduce limitations. Users desired a more targeted capability leveraging a data-oriented Domain Specific Language (DSL). The engineers saw how to deliver a framework enabling a developer to define a series of data manipulation steps with valuable composability characteristics. Each step would have a clear advertised intent, allowing the database engine to apply optimisations at runtime. The engineers could also design a framework that would execute &quot;natively&quot; in the database and not require a JavaScript engine. In August 2012, this solution, called the Aggregation Framework, was introduced in the 2.2 version of MongoDB. MongoDB's Aggregation Framework provided a far more powerful, efficient, scalable and easy to use replacement to Map-Reduce.</p>
@@ -316,6 +318,7 @@
 <li><strong><em>Modern</em> Shell</strong>. Install the modern version of MongoDB's command-line tool, the <a href="https://www.mongodb.com/try/download/shell">MongoDB Shell</a>: <code>mongosh</code></li>
 <li><strong><em>Legacy</em> Shell</strong>. Install the legacy version of MongoDB's command-line tool, the <a href="https://docs.mongodb.com/manual/mongo/">Mongo Shell</a>: <code>mongo</code> (you will often find this binary bundled with a MongoDB database installation)</li>
 <li><strong>Compass</strong>. Install the <em>official</em> MongoDB Inc. provided graphical user interface (GUI) tool, <a href="https://www.mongodb.com/products/compass">MongoDB Compass</a></li>
+<li><strong>VS Code</strong>. <a href="https://www.mongodb.com/docs/mongodb-vscode/install/">Install MongoDB for VS Cose</a>, and use the <a href="https://www.mongodb.com/docs/mongodb-vscode/playgrounds/">Playgrounds</a> feature</li>
 <li><strong>Studio 3T</strong>. Install the <em>3rd party</em> 3T Software Labs provided graphical user interface (GUI) tool, <a href="https://studio3t.com/download/">Studio 3T</a></li>
 </ol>
 <p>The book's examples present code in such a way to make it easy to copy and paste into MongoDB's Shell (<code>mongosh</code> or <code>mongo</code>) to execute. All subsequent instructions in this book assume you are using the Shell. However, you will find it straightforward to use one of the mentioned GUI tools instead to consume the code examples. Of the two Shell versions, is it is easier to use and view results with the <em>modern</em> Shell.</p>
@@ -450,7 +453,7 @@ var pipeline = [
 <p>Furthermore, some developers may take additional steps if they do not intend to transfer the prototyped pipeline to a different programming language:</p>
 <ul>
 <li>They may choose to decompose elements inside a stage into additional JavaScript variables to avoid code &quot;typos&quot;. For instance, to prevent one part of a pipeline incorrectly referencing a field computed earlier in the pipeline due to a misspelling.</li>
-<li>They may choose to factor out the generation of some <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>, representing a complex set of expressions, from part of a pipeline into a separate JavaScript function. This new function is essentially a <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macro</a>. They can then re-use this function from multiple places within the main pipeline's code. Whenever the pipeline invokes this function, the pipeline's body directly embeds the returned boilerplate code. The <a href="guides/../examples/array-manipulations/array-sort-percentiles.html#aggregation-pipeline">Array Sorting &amp; Percentiles</a> chapter, later in this book, provides an example of this approach.</li>
+<li>They may choose to factor out the generation of some <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate code</a>, representing a complex set of expressions, from part of a pipeline into a separate JavaScript function. This new function is essentially a <a href="https://en.wikipedia.org/wiki/Macro_(computer_science)">macro</a>. They can then reuse this function from multiple places within the main pipeline's code. Whenever the pipeline invokes this function, the pipeline's body directly embeds the returned boilerplate code. The <a href="guides/../examples/array-manipulations/array-sort-percentiles.html#aggregation-pipeline">Array Sorting &amp; Percentiles</a> chapter, later in this book, provides an example of this approach.</li>
 </ul>
 <p>In summary, this book is not advocating a multi-variable approach over a single-variable approach when you define a pipeline. The book is just highlighting two highly composable options. Ultimately it is a personal choice concerning which you find most comfortable and productive. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="better-alternatives-to-a-project-stage"><a class="header" href="#better-alternatives-to-a-project-stage">Better Alternatives To A Project Stage</a></h1>
@@ -737,7 +740,7 @@ db.coll.explain(&quot;allPlansExecution&quot;).aggregate(pipeline);
 <p>To optimise the aggregation, the database engine has reordered the pipeline positioning the filter belonging to the <code>$match</code> to the top of the pipeline. The database engine moves the content of <code>$match</code> ahead of the <code>$unwind</code> stage without changing the aggregation's functional behaviour or outcome.</p>
 </li>
 <li>
-<p>The first stage of the database optimised version of the pipeline is an <em>internal</em> <code>$cursor</code> stage, regardless of the order you placed the pipeline stages in. The <code>$cursor</code> <em>runtime</em> stage is always the first action executed for any aggregation. Under the covers, the aggregation engine re-uses the MQL query engine to perform a &quot;regular&quot; query against the collection, with a filter based on the aggregation's <code>$match</code> contents. The aggregation runtime uses the resulting query cursor to pull batches of records. This is similar to how a client application with a MongoDB driver uses a query cursor when remotely invoking an MQL query to pull batches. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense. In this case an index is indeed leveraged, as is visible in the embedded <code>$queryPlanner</code> metadata, showing the <code>&quot;stage&quot; : &quot;IXSCAN&quot;</code> element and the index used, <code>&quot;indexName&quot; : &quot;customer_id_1&quot;</code>.</p>
+<p>The first stage of the database optimised version of the pipeline is an <em>internal</em> <code>$cursor</code> stage, regardless of the order you placed the pipeline stages in. The <code>$cursor</code> <em>runtime</em> stage is always the first action executed for any aggregation. Under the covers, the aggregation engine reuses the MQL query engine to perform a &quot;regular&quot; query against the collection, with a filter based on the aggregation's <code>$match</code> contents. The aggregation runtime uses the resulting query cursor to pull batches of records. This is similar to how a client application with a MongoDB driver uses a query cursor when remotely invoking an MQL query to pull batches. As with a normal MQL query, the regular database query engine will try to use an index if it makes sense. In this case an index is indeed leveraged, as is visible in the embedded <code>$queryPlanner</code> metadata, showing the <code>&quot;stage&quot; : &quot;IXSCAN&quot;</code> element and the index used, <code>&quot;indexName&quot; : &quot;customer_id_1&quot;</code>.</p>
 </li>
 <li>
 <p>To further optimise the aggregation, the database engine has collapsed the <code>$sort</code> and <code>$limit</code> into a single <em>special internal sort stage</em> which can perform both actions in one go. In this situation, during the sorting process, the aggregation engine only has to track the current three most expensive orders in memory. It does not have to hold the whole data set in memory when sorting, which may otherwise be resource prohibitive in many scenarios, requiring more RAM than is available.</p>
@@ -1086,11 +1089,11 @@ var pipeline = [
 <li><code>$lookup</code></li>
 <li><code>$out</code></li>
 </ul>
-<p>Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider <code>$match</code> to be the most surprising item in this list. The content of a <code>$match</code> stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine re-uses the MQL query engine to perform a &quot;regular&quot; query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the <code>$match</code> stage at the top of the pipeline. Therefore, the <code>$match</code> filter must use the same syntax as MQL. </p>
+<p>Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider <code>$match</code> to be the most surprising item in this list. The content of a <code>$match</code> stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine reuses the MQL query engine to perform a &quot;regular&quot; query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the <code>$match</code> stage at the top of the pipeline. Therefore, the <code>$match</code> filter must use the same syntax as MQL. </p>
 <p>In most of the stages that are unable to leverage expressions, it doesn't usually make sense for their behaviour to be dynamic, based on the pipeline data entering the stage. For a client application that paginates results, you might define a value of <code>20</code> for the <code>$limit</code> stage. However, maybe you want to dynamically bind a value to the <code>$limit</code> stage, sourced by a <code>$lookup</code> stage earlier in the pipeline. The lookup operation might pull in the user's preferred &quot;page list size&quot; value from a &quot;user preferences&quot; collection. Nonetheless, the Aggregation Framework does not support this today for the listed stage types to avoid the overhead of the extra checks it would need to perform for what are essentially rare cases.</p>
 <p>In most cases, only one of the listed stages needs to be more expressive: the <code>$match</code> stage, but this stage is already flexible by being based on MQL query conditions. However, sometimes, even MQL isn't expressive enough to sufficiently define a rule to identify records to retain in an aggregation. The remainder of this chapter explores these challenges and how they are solved.</p>
 <h2 id="what-is-using-expr-inside-match-all-about"><a class="header" href="#what-is-using-expr-inside-match-all-about">What Is Using <em>$expr</em> Inside <em>$match</em> All About?</a></h2>
-<p>The previously stated generalisation about <code>$match</code> not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr operator</a>, which you can embed within a <code>$match</code> stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's <code>$match</code>) to re-use expressions provided by MongoDB's aggregation runtime.</p>
+<p>The previously stated generalisation about <code>$match</code> not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr operator</a>, which you can embed within a <code>$match</code> stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's <code>$match</code>) to reuse expressions provided by MongoDB's aggregation runtime.</p>
 <p>Inside a <code>$expr</code> operator, you can include any composite expression fashioned from <code>$</code> operator functions, <code>$</code> field paths and <code>$$</code> variables. A few situations demand having to use <code>$expr</code> from inside a <code>$match</code> stage. Examples include:</p>
 <ul>
 <li>
@@ -1837,7 +1840,9 @@ db.customers.aggregate(pipeline);
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
 <p>You want to query a collection of people to find the three youngest people who have a job in engineering, sorted by the youngest person first.</p>
-<p>This example is the only one in the book that you can also achieve entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines.</p>
+<blockquote>
+<p><em>This example is the only one in the book that you can also achieve entirely using MQL and serves as a helpful comparison between MQL and Aggregation Pipelines.</em></p>
+</blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>persons</code> collection with 5 person documents:</p>
 <pre><code class="language-javascript">use book-filtered-top-subset;
@@ -2315,7 +2320,9 @@ db.orders.insertMany([
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario-3"><a class="header" href="#scenario-3">Scenario</a></h2>
 <p>You want to query a collection of persons where each document contains data on one or more languages spoken by the person. The query result should be an alphabetically sorted list of unique languages that a developer can subsequently use to populate a list of values in a user interface's &quot;drop-down&quot; widget.</p>
-<p>This example is the equivalent of a <em>SELECT DISTINCT</em> statement in <a href="https://en.wikipedia.org/wiki/SQL">SQL</a>.</p>
+<blockquote>
+<p><em>This example is the equivalent of a <em>SELECT DISTINCT</em> statement in <a href="https://en.wikipedia.org/wiki/SQL">SQL</a>.</em></p>
+</blockquote>
 <h2 id="sample-data-population-3"><a class="header" href="#sample-data-population-3">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>persons</code> collection with 9 documents:</p>
 <pre><code class="language-javascript">use book-distinct-values;
@@ -2599,7 +2606,9 @@ db.orders.insertMany([
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario-5"><a class="header" href="#scenario-5">Scenario</a></h2>
 <p>You want to generate a report to list all the orders made for each product in 2020. To achieve this, you need to take a shop's <em>products</em> collection and join each product record to all its orders stored in an <em>orders</em> collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like <code>product_id</code> (which doesn't exist in this data set), you need to use two common fields to join (<code>product_name</code> and <code>product_variation</code>). </p>
-<p>Note that the requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.</p>
+<blockquote>
+<p><em>The requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.</em></p>
+</blockquote>
 <h2 id="sample-data-population-5"><a class="header" href="#sample-data-population-5">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021 (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):</p>
 <p> <strong>-Part 1-</strong></p>
@@ -2685,7 +2694,7 @@ db.orders.insertMany([
 <h2 id="aggregation-pipeline-5"><a class="header" href="#aggregation-pipeline-5">Aggregation Pipeline</a></h2>
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
-  // Join by 2 fields in in products collection to 2 fields in orders collection
+  // Join by 2 fields in products collection to 2 fields in orders collection
   {&quot;$lookup&quot;: {
     &quot;from&quot;: &quot;orders&quot;,
     &quot;let&quot;: {
@@ -2790,7 +2799,9 @@ db.orders.insertMany([
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario-6"><a class="header" href="#scenario-6">Scenario</a></h2>
 <p>A 3rd party has imported a set of <em>retail orders</em> into a MongoDB collection but with all data typing lost (it stored all field values as strings). You want to re-establish correct typing for all the documents and copy them into a new &quot;cleaned&quot; collection. You can incorporate such type transformation logic in the aggregation pipeline because you know the type each field had in the original record structure.</p>
-<p>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.</p>
+<blockquote>
+<p><em>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.</em></p>
+</blockquote>
 <h2 id="sample-data-population-6"><a class="header" href="#sample-data-population-6">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>orders</code> collection with three orders documents, where each order has text fields only (note, the second document is intentionality missing the field <code>reported</code> in the sub-document <code>further_info</code>):</p>
 <pre><code class="language-javascript">use book-convert-to-strongly-typed;
@@ -2942,7 +2953,7 @@ db.payments.insertMany([
 <h2 id="aggregation-pipeline-7"><a class="header" href="#aggregation-pipeline-7">Aggregation Pipeline</a></h2>
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
-  // Change field from a string to a date, filling in the missing gaps
+  // Change field from a string to a date, filling in the gaps
   {&quot;$set&quot;: {
     &quot;payment_date&quot;: {    
       &quot;$let&quot;: {
@@ -3359,7 +3370,9 @@ db.products.insertMany([
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario-9"><a class="header" href="#scenario-9">Scenario</a></h2>
 <p>Your organisation wants to know the best targets for a new marketing campaign based on a social network database similar to <em>Twitter</em>. You want to search the collection of social network users, each holding a user's name and the names of other people who follow them. You will execute an aggregation pipeline that walks each user record's <code>followed_by</code> array to determine which user has the largest <em>network reach</em>.</p>
-<p>Note this example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using <code>$graphLookup</code> at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: <a href="https://github.com/mongodb-labs/socialite">Socialite</a></p>
+<blockquote>
+<p><em>This example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using <code>$graphLookup</code> at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: <a href="https://github.com/mongodb-labs/socialite">Socialite</a>.</em></p>
+</blockquote>
 <h2 id="sample-data-population-9"><a class="header" href="#sample-data-population-9">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>users</code> collection with 10 social network users documents, plus an index to help optimise the <em>graph traversal</em>:</p>
 <pre><code class="language-javascript">use book-largest-graph-network;
@@ -3501,7 +3514,9 @@ db.users.insertMany([
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario-10"><a class="header" href="#scenario-10">Scenario</a></h2>
 <p>You have a set of <em>shop orders</em> accumulated over many years, with the retail channel adding new order records continuously to the <em>orders</em> collection throughout each trading day. You want to frequently generate a summary report so management can understand the state of the business and react to changing business trends. Over the years, it takes increasingly longer to generate the report of all daily sums and averages because there is increasingly more days' worth of data to process. From now on, to address this problem, you will only generate each new day's summary analysis at the end of the day and store it in a different collection which accumulates the daily summary records over time.</p>
-<p>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.</p>
+<blockquote>
+<p><em>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.</em></p>
+</blockquote>
 <h2 id="sample-data-population-10"><a class="header" href="#sample-data-population-10">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then add 9 documents to the <code>orders</code> collection representing 5 orders for 01-Feb-2021 and 4 orders for 02-Feb-2021:</p>
 <pre><code class="language-javascript">use book-incremental-analytics;
@@ -3715,7 +3730,9 @@ db.daily_orders_summary.find()
 <li>Only show people aged 18 and over (by checking each person's <code>dateofbirth</code> field)</li>
 <li>Exclude each person's <code>social_security_num</code> field from results</li>
 </ol>
-<p>Essentially, this is an illustration of achieving &quot;record-level&quot; access control in MongoDB.</p>
+<blockquote>
+<p><em>Essentially, this is an illustration of achieving &quot;record-level&quot; access control in MongoDB.</em></p>
+</blockquote>
 <h2 id="sample-data-population-11"><a class="header" href="#sample-data-population-11">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists), create an index and populate the new <code>persons</code> collections with 5 records:</p>
 <pre><code class="language-javascript">use book-restricted-view;
@@ -3936,7 +3953,7 @@ db.persons.insertMany([
 <h2 id="scenario-12"><a class="header" href="#scenario-12">Scenario</a></h2>
 <p>You want to perform irreversible masking on the sensitive fields of a collection of <em>credit card payments</em>, ready to provide the output data set to a 3rd party for analysis, without exposing sensitive information to the 3rd party. The specific changes that you need to make to the payments' fields are:</p>
 <ul>
-<li>Partially obfuscate the carder holder's name</li>
+<li>Partially obfuscate the card holder's name</li>
 <li>Obfuscate the first 12 digits of the card's number, retaining only the final 4 digits</li>
 <li>Adjust the card's expiry date-time by adding or subtracting a random amount up to a maximum of 30 days (~1 month)</li>
 <li>Replace the card's 3 digit security code with a random set of 3 digits</li>
@@ -4606,7 +4623,7 @@ db.weather_measurements.insertMany([
             &quot;$filter&quot;: {
               &quot;input&quot;: &quot;$readings&quot;,  // Iterate the &quot;readings&quot; array field
               &quot;as&quot;: &quot;reading&quot;,  // Name the current array element &quot;reading&quot;
-              &quot;cond&quot;: {  // Only include device properties matching the current dervice
+              &quot;cond&quot;: {  // Only include device properties matching the current device
                 &quot;$eq&quot;: [&quot;$$reading.device&quot;, &quot;$$device&quot;]
               }
             }
@@ -4687,7 +4704,7 @@ db.weather_measurements.insertMany([
 <h2 id="scenario-16"><a class="header" href="#scenario-16">Scenario</a></h2>
 <p>You've conducted performance testing of an application with the results of each &quot;test run&quot; captured in a database. Each record contains a set of response times for the test run. You want to analyse the data from multiple runs to identify the slowest ones. You calculate the median (50th percentile) and 90th percentile response times for each test run and only keep results where the 90th percentile response time is greater than 100 milliseconds.</p>
 <blockquote>
-<p><em>For MongoDB version 5.1 and earlier, the example will use a modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can re-use this chapter's custom <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents. For MongoDB version 5.2 and greater, you can instead use MongoDB's new <a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/sortArray/">$sortArray</a> operator.</em></p>
+<p><em>For MongoDB version 5.1 and earlier, the example will use a modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can reuse this chapter's custom <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents. For MongoDB version 5.2 and greater, you can instead use MongoDB's new <a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/sortArray/">$sortArray</a> operator.</em></p>
 </blockquote>
 <h2 id="sample-data-population-16"><a class="header" href="#sample-data-population-16">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate the test run results documents:</p>
@@ -5211,7 +5228,7 @@ db.enquiries.insertMany([
       &quot;facets&quot;: {        
         &quot;fraudEnquiryPeriods&quot;: {
           &quot;type&quot;: &quot;date&quot;,
-          &quot;path&quot; : &quot;datetime&quot;,
+          &quot;path&quot;: &quot;datetime&quot;,
           &quot;boundaries&quot;: [
             ISODate(&quot;2022-01-30T00:00:00.000Z&quot;),
             ISODate(&quot;2022-01-30T06:00:00.000Z&quot;),

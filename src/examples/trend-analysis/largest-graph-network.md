@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 Your organisation wants to know the best targets for a new marketing campaign based on a social network database similar to _Twitter_. You want to search the collection of social network users, each holding a user's name and the names of other people who follow them. You will execute an aggregation pipeline that walks each user record's `followed_by` array to determine which user has the largest _network reach_.
 
-Note this example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using `$graphLookup` at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: [Socialite](https://github.com/mongodb-labs/socialite)
+> _This example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using `$graphLookup` at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: [Socialite](https://github.com/mongodb-labs/socialite)._
 
 
 ## Sample Data Population

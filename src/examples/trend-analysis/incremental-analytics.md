@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 You have a set of _shop orders_ accumulated over many years, with the retail channel adding new order records continuously to the _orders_ collection throughout each trading day. You want to frequently generate a summary report so management can understand the state of the business and react to changing business trends. Over the years, it takes increasingly longer to generate the report of all daily sums and averages because there is increasingly more days' worth of data to process. From now on, to address this problem, you will only generate each new day's summary analysis at the end of the day and store it in a different collection which accumulates the daily summary records over time.
 
-Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.
+> _Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application._
 
 
 ## Sample Data Population

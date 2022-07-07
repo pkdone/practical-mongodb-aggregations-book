@@ -156,7 +156,9 @@
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
 <p>You want to generate a report to list all the orders made for each product in 2020. To achieve this, you need to take a shop's <em>products</em> collection and join each product record to all its orders stored in an <em>orders</em> collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like <code>product_id</code> (which doesn't exist in this data set), you need to use two common fields to join (<code>product_name</code> and <code>product_variation</code>). </p>
-<p>Note that the requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.</p>
+<blockquote>
+<p><em>The requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.</em></p>
+</blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021 (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):</p>
 <p> <strong>-Part 1-</strong></p>
@@ -242,7 +244,7 @@ db.orders.insertMany([
 <h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
-  // Join by 2 fields in in products collection to 2 fields in orders collection
+  // Join by 2 fields in products collection to 2 fields in orders collection
   {&quot;$lookup&quot;: {
     &quot;from&quot;: &quot;orders&quot;,
     &quot;let&quot;: {

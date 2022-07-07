@@ -12,7 +12,7 @@ The following diagram illustrates these two elements and their inter-relationshi
 
 ![MongoDB Aggregation Framework components - Driver API and Database Aggregation Runtime](./pics/aggregation-components.png)
 
-The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation Framework. In the database, the Aggregation Runtime re-uses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.
+The driver provides APIs to enable an application to use both the MongoDB Query Language (MQL) and the Aggregation Framework. In the database, the Aggregation Runtime reuses the Query Runtime to efficiently execute the query part of an aggregation workload that typically appears at the start of an aggregation pipeline.
 
 
 ## What Is MongoDB's Aggregations Language?
@@ -25,7 +25,7 @@ Invariably, for beginners, the Aggregation Framework seems difficult to understa
 
 MongoDB's aggregation pipeline language is focused on data-oriented problem-solving rather than business process problem-solving. Depending on how you squint, it can be regarded as a [functional programming language](https://en.wikipedia.org/wiki/Functional_programming) rather than a [procedural programming language](https://en.wikipedia.org/wiki/Procedural_programming). Why? Well, an aggregation pipeline is an ordered series of statements, called stages, where the entire output of one stage forms the entire input of the next stage, and so on, with no side effects. This functional nature is probably why many users regard the Aggregation Framework as having a steeper learning curve than many languages. Not because it is inherently more difficult to understand but because most developers come from a procedural programming background and not a functional one. Most developers also have to learn how to think like a functional programmer to learn the Aggregation Framework.
 
-The Aggregation Framework's functional characteristics ultimately make it especially powerful for processing massive data sets. Users focus more on defining "the what" in terms of the required outcome. Users focus less on "the how" of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, "is this stage for performing a filter or is this stage for grouping on some fields?". With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to re-order stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.
+The Aggregation Framework's functional characteristics ultimately make it especially powerful for processing massive data sets. Users focus more on defining "the what" in terms of the required outcome. Users focus less on "the how" of specifying the exact logic to apply to achieve each transformation. You provide one specific and clear advertised purpose for each stage in the pipeline. At runtime, the database engine can then understand the exact intent of each stage. For example, the database engine can obtain clear answers to the questions it asks, such as, "is this stage for performing a filter or is this stage for grouping on some fields?". With this knowledge, the database engine has the opportunity to optimise the pipeline at runtime. The diagram below shows an example of the database performing a pipeline optimisation. It may decide to reorder stages to optimally leverage an index whilst ensuring that the output isn't changed. Or, it may choose to execute some steps in parallel against subsets of the data in different shards, reducing response time whilst again ensuring the output is never changed.
 
 ![MongoDB Aggregation Framework developer vs database engine optimizations comparison](./pics/optimise.png)
 
@@ -66,7 +66,7 @@ The Aggregation Framework is versatile and used for many different data processi
 * Performing the Transform (T) part of an Extract-Load-Transform ([ELT](https://en.wikipedia.org/wiki/Extract,_load,_transform)) workload
 * Data quality reporting and cleansing
 * Updating a materialised view with the results of the most recent source data changes
-* Performing [full-text search](https://www.mongodb.com/docs/atlas/atlas-search/)
+* Performing full-text search (using MongoDB's [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/))
 * Representing data ready to be exposed via SQL/ODBC/JDBC (using MongoDB's [BI Connector](https://docs.mongodb.com/bi-connector/))
 * Supporting machine learning frameworks for efficient data analysis (e.g. via MongoDB's [Spark Connector](https://docs.mongodb.com/spark-connector))
 * _...and many more_

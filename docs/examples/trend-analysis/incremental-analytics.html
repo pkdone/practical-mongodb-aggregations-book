@@ -156,7 +156,9 @@
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
 <p>You have a set of <em>shop orders</em> accumulated over many years, with the retail channel adding new order records continuously to the <em>orders</em> collection throughout each trading day. You want to frequently generate a summary report so management can understand the state of the business and react to changing business trends. Over the years, it takes increasingly longer to generate the report of all daily sums and averages because there is increasingly more days' worth of data to process. From now on, to address this problem, you will only generate each new day's summary analysis at the end of the day and store it in a different collection which accumulates the daily summary records over time.</p>
-<p>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.</p>
+<blockquote>
+<p><em>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.</em></p>
+</blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then add 9 documents to the <code>orders</code> collection representing 5 orders for 01-Feb-2021 and 4 orders for 02-Feb-2021:</p>
 <pre><code class="language-javascript">use book-incremental-analytics;

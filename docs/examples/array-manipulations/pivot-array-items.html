@@ -212,7 +212,7 @@ db.weather_measurements.insertMany([
             &quot;$filter&quot;: {
               &quot;input&quot;: &quot;$readings&quot;,  // Iterate the &quot;readings&quot; array field
               &quot;as&quot;: &quot;reading&quot;,  // Name the current array element &quot;reading&quot;
-              &quot;cond&quot;: {  // Only include device properties matching the current dervice
+              &quot;cond&quot;: {  // Only include device properties matching the current device
                 &quot;$eq&quot;: [&quot;$$reading.device&quot;, &quot;$$device&quot;]
               }
             }

@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 4.2
 
 You want to generate a report to list all the orders made for each product in 2020. To achieve this, you need to take a shop's _products_ collection and join each product record to all its orders stored in an _orders_ collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like `product_id` (which doesn't exist in this data set), you need to use two common fields to join (`product_name` and `product_variation`). 
 
-Note that the requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.
+> _The requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place._
 
 
 ## Sample Data Population

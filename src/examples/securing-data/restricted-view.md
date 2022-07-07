@@ -10,7 +10,7 @@ You have a _persons_ collection, where a particular client application shouldn't
  1. Only show people aged 18 and over (by checking each person's `dateofbirth` field)
  2. Exclude each person's `social_security_num` field from results
 
-Essentially, this is an illustration of achieving "record-level" access control in MongoDB.
+> _Essentially, this is an illustration of achieving "record-level" access control in MongoDB._
 
 
 ## Sample Data Population
