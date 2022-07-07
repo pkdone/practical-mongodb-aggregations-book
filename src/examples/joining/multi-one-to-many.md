@@ -107,7 +107,7 @@ Define a pipeline ready to perform the aggregation:
 
 ```javascript
 var pipeline = [
-  // Join by 2 fields in in products collection to 2 fields in orders collection
+  // Join by 2 fields in products collection to 2 fields in orders collection
   {"$lookup": {
     "from": "orders",
     "let": {

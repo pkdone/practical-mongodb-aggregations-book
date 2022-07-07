@@ -46,7 +46,7 @@ Define a pipeline ready to perform the aggregation:
 
 ```javascript
 var pipeline = [
-  // Change field from a string to a date, filling in the missing gaps
+  // Change field from a string to a date, filling in the gaps
   {"$set": {
     "payment_date": {    
       "$let": {
