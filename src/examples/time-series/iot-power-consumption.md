@@ -1,6 +1,6 @@
 # IoT Power Consumption
 
-__Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of [time series collections](https://docs.mongodb.com/manual/core/timeseries-collections/), [$setWindowFields](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/) stage & [$integral](https://docs.mongodb.com/manual/reference/operator/aggregation/integral/) operator)_
+__Minimum MongoDB Version:__ 5.0 &nbsp;&nbsp; _(due to use of [time series collections](https://docs.mongodb.com/manual/core/timeseries-collections/), [`$setWindowFields`](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/) stage & [`$integral`](https://docs.mongodb.com/manual/reference/operator/aggregation/integral/) operator)_
 
 
 ## Scenario

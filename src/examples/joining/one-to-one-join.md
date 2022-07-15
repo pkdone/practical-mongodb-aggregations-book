@@ -1,6 +1,6 @@
 # One-to-One Join
 
-__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$first](https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/) array operator)_
+__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [`$first`](https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/) array operator)_
 
 
 ## Scenario

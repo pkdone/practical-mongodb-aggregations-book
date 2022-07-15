@@ -5,18 +5,18 @@ A simple example for each [stage in the MongoDB Aggregation Framework](https://d
 
 #### Stages:
 
-| Query                            | Mutate                                     | Summarise/Itemise                  | Join                               | Input/Output                   |
-| :--------------------------------| :------------------------------------------| :----------------------------------| :----------------------------------| :------------------------------|
-| [$geoNear](#stage_geoNear)       | [$addFields](#stage_addFields)             | [$bucket](#stage_bucket)           | [$graphLookup](#stage_graphLookup) | [$documents](#stage_documents) |
-| [$limit](#stage_limit)           | [$densify](#stage_densify)                 | [$bucketAuto](#stage_bucketAuto)   | [$lookup](#stage_lookup)           | [$merge](#stage_merge)         |
-| [$match](#stage_match)           | [$fill](#stage_fill)                       | [$count](#stage_count)             | [$unionWith](#stage_unionWith)     | [$out](#stage_out)             |
-| [$sample](#stage_sample)         | [$project](#stage_project)                 | [$facet](#stage_facet)             |                                    |                                |
-| [$search](#stage_search)         | [$redact](#stage_redact)                   | [$group](#stage_group)             |                                    |                                |
-| [$searchMeta](#stage_searchmeta) | [$replaceRoot](#stage_replaceRoot)         | [$sortByCount](#stage_sortByCount) |                                    |                                |
-| [$skip](#stage_skip)             | [$replaceWith](#stage_replaceWith)         | [$unwind](#stage_unwind)           |                                    |                                |
-| [$sort](#stage_sort)             | [$set](#stage_set)                         |                                    |                                    |                                |
-|                                  | [$setWindowFields](#stage_setWindowFields) |                                    |                                    |                                |
-|                                  | [$unset](#stage_unset)                     |                                    |                                    |                                |
+| Query                              | Mutate                                       | Summarise/Itemise                    | Join                                 | Input/Output                     |
+| :----------------------------------| :--------------------------------------------| :------------------------------------| :------------------------------------| :--------------------------------|
+| [`$geoNear`](#stage_geoNear)       | [`$addFields`](#stage_addFields)             | [`$bucket`](#stage_bucket)           | [`$graphLookup`](#stage_graphLookup) | [`$documents`](#stage_documents) |
+| [`$limit`](#stage_limit)           | [`$densify`](#stage_densify)                 | [`$bucketAuto`](#stage_bucketAuto)   | [`$lookup`](#stage_lookup)           | [`$merge`](#stage_merge)         |
+| [`$match`](#stage_match)           | [`$fill`](#stage_fill)                       | [`$count`](#stage_count)             | [`$unionWith`](#stage_unionWith)     | [`$out`](#stage_out)             |
+| [`$sample`](#stage_sample)         | [`$project`](#stage_project)                 | [`$facet`](#stage_facet)             |                                      |                                  |
+| [`$search`](#stage_search)         | [`$redact`](#stage_redact)                   | [`$group`](#stage_group)             |                                      |                                  |
+| [`$searchMeta`](#stage_searchmeta) | [`$replaceRoot`](#stage_replaceRoot)         | [`$sortByCount`](#stage_sortByCount) |                                      |                                  |
+| [`$skip`](#stage_skip)             | [`$replaceWith`](#stage_replaceWith)         | [`$unwind`](#stage_unwind)           |                                      |                                  |
+| [`$sort`](#stage_sort)             | [`$set`](#stage_set)                         |                                      |                                      |                                  |
+|                                    | [`$setWindowFields`](#stage_setWindowFields) |                                      |                                      |                                  |
+|                                    | [`$unset`](#stage_unset)                     |                                      |                                      |                                  |
 
 
 > _The following stages are not included because they are unrelated to aggregating business data: &nbsp;`$collStats`, `$indexStats`, `$listSessions`, `$planCacheStats`, `$currentOp`, `$listLocalSessions`_
@@ -51,7 +51,7 @@ A simple example for each [stage in the MongoDB Aggregation Framework](https://d
 ---
 
 <a name="stage_addFields"></a>
-## [$addFields](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/)
+## [`$addFields`](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -76,7 +76,7 @@ $addFields: {z: "●"}
 ---
 
 <a name="stage_bucket"></a>
-## [$bucket](https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/)
+## [`$bucket`](https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -102,7 +102,7 @@ $bucket: {
 ---
 
 <a name="stage_bucketAuto"></a>
-## [$bucketAuto](https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/)
+## [`$bucketAuto`](https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -124,7 +124,7 @@ $bucketAuto: {groupBy: "$val", buckets: 3}
 ---
 
 <a name="stage_count"></a>
-## [$count](https://docs.mongodb.com/manual/reference/operator/aggregation/count/)
+## [`$count`](https://docs.mongodb.com/manual/reference/operator/aggregation/count/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -144,7 +144,7 @@ $count: "amount"
 ---
 
 <a name="stage_densify"></a>
-## [$densify](https://docs.mongodb.com/v6.0/reference/operator/aggregation/densify/)
+## [`$densify`](https://docs.mongodb.com/v6.0/reference/operator/aggregation/densify/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -182,7 +182,7 @@ $densify: {
 ---
 
 <a name="stage_documents"></a>
-## [$documents](https://docs.mongodb.com/v6.0/reference/operator/aggregation/documents/)
+## [`$documents`](https://docs.mongodb.com/v6.0/reference/operator/aggregation/documents/)
 
 ```javascript
 [     ]
@@ -201,7 +201,7 @@ $documents: {
 ---
 
 <a name="stage_facet"></a>
-## [$facet](https://docs.mongodb.com/manual/reference/operator/aggregation/facet/)
+## [`$facet`](https://docs.mongodb.com/manual/reference/operator/aggregation/facet/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -233,7 +233,7 @@ $facet: {
 ---
 
 <a name="stage_fill"></a>
-## [$fill](https://docs.mongodb.com/v6.0/reference/operator/aggregation/fill/)
+## [`$fill`](https://docs.mongodb.com/v6.0/reference/operator/aggregation/fill/)
            
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -263,7 +263,7 @@ $fill: {
 ---
 
 <a name="stage_geoNear"></a>
-## [$geoNear](https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/)
+## [`$geoNear`](https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/)
 
 ```javascript
 {_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
@@ -291,7 +291,7 @@ $geoNear: {
 ---
 
 <a name="stage_graphLookup"></a>
-## [$graphLookup](https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/)
+## [`$graphLookup`](https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -324,7 +324,7 @@ $project: {connections_count: {$size: "$connections"}}
 ---
 
 <a name="stage_group"></a>
-## [$group](https://docs.mongodb.com/manual/reference/operator/aggregation/group/)
+## [`$group`](https://docs.mongodb.com/manual/reference/operator/aggregation/group/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -346,7 +346,7 @@ $group: {_id: "$x", ylist: {$push: "$y"}}
 ---
 
 <a name="stage_limit"></a>
-## [$limit](https://docs.mongodb.com/manual/reference/operator/aggregation/limit/)
+## [`$limit`](https://docs.mongodb.com/manual/reference/operator/aggregation/limit/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -367,7 +367,7 @@ $limit: 2
 ---
 
 <a name="stage_lookup"></a>
-## [$lookup](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/)
+## [`$lookup`](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -418,7 +418,7 @@ $lookup: {
 ---
 
 <a name="stage_match"></a>
-## [$match](https://docs.mongodb.com/manual/reference/operator/aggregation/match/)
+## [`$match`](https://docs.mongodb.com/manual/reference/operator/aggregation/match/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -440,7 +440,7 @@ $match: {y: "▲"}
 ---
 
 <a name="stage_merge"></a>
-## [$merge](https://docs.mongodb.com/manual/reference/operator/aggregation/merge/)
+## [`$merge`](https://docs.mongodb.com/manual/reference/operator/aggregation/merge/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -466,7 +466,7 @@ db.results.find()
 ---
 
 <a name="stage_out"></a>
-## [$out](https://docs.mongodb.com/manual/reference/operator/aggregation/out/)
+## [`$out`](https://docs.mongodb.com/manual/reference/operator/aggregation/out/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -492,7 +492,7 @@ db.results.find()
 ---
 
 <a name="stage_project"></a>
-## [$project](https://docs.mongodb.com/manual/reference/operator/aggregation/project/)
+## [`$project`](https://docs.mongodb.com/manual/reference/operator/aggregation/project/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -517,7 +517,7 @@ $project: {x: 1}
 ---
 
 <a name="stage_redact"></a>
-## [$redact](https://docs.mongodb.com/manual/reference/operator/aggregation/redact/)
+## [`$redact`](https://docs.mongodb.com/manual/reference/operator/aggregation/redact/)
 
 ```javascript
 {_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
@@ -542,7 +542,7 @@ $redact: {$cond: {
 ---
 
 <a name="stage_replaceRoot"></a>
-## [$replaceRoot](https://docs.mongodb.com/manual/reference/operator/aggregation/replaceRoot/)
+## [`$replaceRoot`](https://docs.mongodb.com/manual/reference/operator/aggregation/replaceRoot/)
 
 ```javascript
 {_id: "▤", a: "●", b: ["◰", "◱"]}
@@ -567,7 +567,7 @@ $replaceRoot: {
 ---
 
 <a name="stage_replaceWith"></a>
-## [$replaceWith](https://docs.mongodb.com/manual/reference/operator/aggregation/replaceWith/)
+## [`$replaceWith`](https://docs.mongodb.com/manual/reference/operator/aggregation/replaceWith/)
 
 ```javascript
 {_id: "▤", a: "●", b: ["◰", "◱"]}
@@ -592,7 +592,7 @@ $replaceWith: {
 ---
 
 <a name="stage_sample"></a>
-## [$sample](https://docs.mongodb.com/manual/reference/operator/aggregation/sample/)
+## [`$sample`](https://docs.mongodb.com/manual/reference/operator/aggregation/sample/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -614,7 +614,7 @@ $sample: {size: 3}
 ---
 
 <a name="stage_search"></a>
-## [$search](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-search)
+## [`$search`](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-search)
 
 ```javascript
 {_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
@@ -639,7 +639,7 @@ $search: {
 ---
 
 <a name="stage_searchmeta"></a>
-## [$searchMeta](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-searchmeta)
+## [`$searchMeta`](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-searchmeta)
 
 ```javascript
 {_id: "Bigtown", loc: {type: "Point", coordinates: [1,1]}}
@@ -683,7 +683,7 @@ $searchMeta: {
 ---
 
 <a name="stage_set"></a>
-## [$set](https://docs.mongodb.com/manual/reference/operator/aggregation/set/)
+## [`$set`](https://docs.mongodb.com/manual/reference/operator/aggregation/set/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -708,7 +708,7 @@ $set: {y: "▲"}
 ---
 
 <a name="stage_setWindowFields"></a>
-## [$setWindowFields](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/)
+## [`$setWindowFields`](https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -744,7 +744,7 @@ $setWindowFields: {
 ---
 
 <a name="stage_skip"></a>
-## [$skip](https://docs.mongodb.com/manual/reference/operator/aggregation/skip/)
+## [`$skip`](https://docs.mongodb.com/manual/reference/operator/aggregation/skip/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -764,7 +764,7 @@ $skip: 5
 ---
 
 <a name="stage_sort"></a>
-## [$sort](https://docs.mongodb.com/manual/reference/operator/aggregation/sort/)
+## [`$sort`](https://docs.mongodb.com/manual/reference/operator/aggregation/sort/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -789,7 +789,7 @@ $sort: {x: 1, y: 1}
 ---
 
 <a name="stage_sortByCount"></a>
-## [$sortByCount](https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/)
+## [`$sortByCount`](https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -811,7 +811,7 @@ $sortByCount: "$x"
 ---
 
 <a name="stage_unionWith"></a>
-## [$unionWith](https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/)
+## [`$unionWith`](https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -847,7 +847,7 @@ $unionWith: {coll: "lists"}
 ---
 
 <a name="stage_unset"></a>
-## [$unset](https://docs.mongodb.com/manual/reference/operator/aggregation/unset/)
+## [`$unset`](https://docs.mongodb.com/manual/reference/operator/aggregation/unset/)
 
 ```javascript
 {_id: "◐", x: "■", y: "▲", val: 10, ord: 0}
@@ -872,7 +872,7 @@ $unset: ["x"]
 ---
 
 <a name="stage_unwind"></a>
-## [$unwind](https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/)
+## [`$unwind`](https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/)
 
 ```javascript
 {_id: "▤", a: "●", b: ["◰", "◱"]}

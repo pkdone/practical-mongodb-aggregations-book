@@ -1,6 +1,6 @@
 # Summarising Arrays For First, Last, Minimum, Maximum & Average Values
 
-__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [$first](https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/) and [$last](https://docs.mongodb.com/manual/reference/operator/aggregation/last-array-element/) array operators)_
+__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [`$first`](https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/) and [`$last`](https://docs.mongodb.com/manual/reference/operator/aggregation/last-array-element/) array operators)_
 
 
 ## Scenario
@@ -122,7 +122,7 @@ Two documents should be returned, now showing the daily summary open, low, high,
 
 ## Observations
 
- * __*$first* & *$last* For Earlier MongoDB Versions.__ MongoDB only introduced the `$first` and `$last` array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the `$arrayElemAt` operator. Below are the alternatives you can use instead of `$first` and `$last` to operate correctly in MongoDB versions before 4.4:
+ * __`$first` & `$last` For Earlier MongoDB Versions.__ MongoDB only introduced the `$first` and `$last` array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the `$arrayElemAt` operator. Below are the alternatives you can use instead of `$first` and `$last` to operate correctly in MongoDB versions before 4.4:
 
      ```javascript
      // $first equivalent

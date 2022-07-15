@@ -22,13 +22,13 @@ The diagram below highlights the nature of streaming and blocking stages. Stream
 
 When considering `$sort` and `$group` stages, it becomes evident why they have to block. The following examples illustrate why this is the case:
 
- 1. __*$sort* blocking example__: A pipeline must sort _people_ in ascending order of _age_. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. 
+ 1. __`$sort` blocking example__: A pipeline must sort _people_ in ascending order of _age_. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. 
 
- 2. __*$group* blocking example__: A pipeline must group _employees_ by one of two _work departments_ (either the _sales_ or _manufacturing_ departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. 
+ 2. __`$group` blocking example__: A pipeline must group _employees_ by one of two _work departments_ (either the _sales_ or _manufacturing_ departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. 
 
 These often unavoidable blocking stages don't just increase aggregation execution time by reducing concurrency. If used without careful forethought, the throughput and latency of a pipeline will slow dramatically due to significantly increased memory consumption. The following sub-sections explore why this occurs and tactics to mitigate this.
 
-### _$sort_ Memory Consumption And Mitigation
+### `$sort` Memory Consumption And Mitigation
  
 Used naïvely, a `$sort` stage will need to see all the input records at once, and so the host server must have enough capacity to hold all the input data in memory. The amount of memory required depends heavily on the initial data size and the degree to which the prior stages can reduce the size. Also, multiple instances of the aggregation pipeline may be in-flight at any one time, in addition to other database workloads. These all compete for the same finite memory. Suppose the source data set is many gigabytes or even terabytes in size, and earlier pipeline stages have not reduced this size significantly. It will be unlikely that the host machine has sufficient memory to support the pipeline's blocking `$sort` stage. Therefore, MongoDB enforces every stage is limited to 100 MB of consumed RAM. The database throws an error if it exceeds this limit.
 
@@ -42,7 +42,7 @@ To circumvent the aggregation needing to manifest the whole data set in memory o
  
  3. __Reduce Records To Sort__. Move the `$sort` stage to as late as possible in your pipeline and ensure earlier stages significantly reduce the number of records streaming into this late blocking `$sort` stage. This blocking stage will have fewer records to process and less thirst for RAM.
 
-### _$group_ Memory Consumption And Mitigation
+### `$group` Memory Consumption And Mitigation
 
 Like the `$sort` stage, the `$group` stage has the potential to consume a large amount of memory. The aggregation pipeline's 100 MB RAM limit equally applies to the `$group` stage. As with sorting, you can use the pipeline's `allowDiskUse:true` option to avoid this limit for heavyweight grouping operations, but with the same downsides.
 
