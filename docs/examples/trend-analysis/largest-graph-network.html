@@ -157,7 +157,7 @@
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
 <p>Your organisation wants to know the best targets for a new marketing campaign based on a social network database similar to <em>Twitter</em>. You want to search the collection of social network users, each holding a user's name and the names of other people who follow them. You will execute an aggregation pipeline that walks each user record's <code>followed_by</code> array to determine which user has the largest <em>network reach</em>.</p>
 <blockquote>
-<p><em>This example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using <code>$graphLookup</code> at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: <a href="https://github.com/mongodb-labs/socialite">Socialite</a>.</em></p>
+<p><em>This example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/graphLookup/"><code>$graphLookup</code></a> at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: <a href="https://github.com/mongodb-labs/socialite">Socialite</a>.</em></p>
 </blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>users</code> collection with 10 social network users documents, plus an index to help optimise the <em>graph traversal</em>:</p>

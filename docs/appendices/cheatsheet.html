@@ -166,16 +166,16 @@
 <p>A simple example for each <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">stage in the MongoDB Aggregation Framework</a>. </p>
 <h4 id="stages"><a class="header" href="#stages">Stages:</a></h4>
 <table><thead><tr><th style="text-align: left">Query</th><th style="text-align: left">Mutate</th><th style="text-align: left">Summarise/Itemise</th><th style="text-align: left">Join</th><th style="text-align: left">Input/Output</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="#stage_geoNear">$geoNear</a></td><td style="text-align: left"><a href="#stage_addFields">$addFields</a></td><td style="text-align: left"><a href="#stage_bucket">$bucket</a></td><td style="text-align: left"><a href="#stage_graphLookup">$graphLookup</a></td><td style="text-align: left"><a href="#stage_documents">$documents</a></td></tr>
-<tr><td style="text-align: left"><a href="#stage_limit">$limit</a></td><td style="text-align: left"><a href="#stage_densify">$densify</a></td><td style="text-align: left"><a href="#stage_bucketAuto">$bucketAuto</a></td><td style="text-align: left"><a href="#stage_lookup">$lookup</a></td><td style="text-align: left"><a href="#stage_merge">$merge</a></td></tr>
-<tr><td style="text-align: left"><a href="#stage_match">$match</a></td><td style="text-align: left"><a href="#stage_fill">$fill</a></td><td style="text-align: left"><a href="#stage_count">$count</a></td><td style="text-align: left"><a href="#stage_unionWith">$unionWith</a></td><td style="text-align: left"><a href="#stage_out">$out</a></td></tr>
-<tr><td style="text-align: left"><a href="#stage_sample">$sample</a></td><td style="text-align: left"><a href="#stage_project">$project</a></td><td style="text-align: left"><a href="#stage_facet">$facet</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="#stage_search">$search</a></td><td style="text-align: left"><a href="#stage_redact">$redact</a></td><td style="text-align: left"><a href="#stage_group">$group</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="#stage_searchmeta">$searchMeta</a></td><td style="text-align: left"><a href="#stage_replaceRoot">$replaceRoot</a></td><td style="text-align: left"><a href="#stage_sortByCount">$sortByCount</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="#stage_skip">$skip</a></td><td style="text-align: left"><a href="#stage_replaceWith">$replaceWith</a></td><td style="text-align: left"><a href="#stage_unwind">$unwind</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="#stage_sort">$sort</a></td><td style="text-align: left"><a href="#stage_set">$set</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><a href="#stage_setWindowFields">$setWindowFields</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><a href="#stage_unset">$unset</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="#stage_geoNear"><code>$geoNear</code></a></td><td style="text-align: left"><a href="#stage_addFields"><code>$addFields</code></a></td><td style="text-align: left"><a href="#stage_bucket"><code>$bucket</code></a></td><td style="text-align: left"><a href="#stage_graphLookup"><code>$graphLookup</code></a></td><td style="text-align: left"><a href="#stage_documents"><code>$documents</code></a></td></tr>
+<tr><td style="text-align: left"><a href="#stage_limit"><code>$limit</code></a></td><td style="text-align: left"><a href="#stage_densify"><code>$densify</code></a></td><td style="text-align: left"><a href="#stage_bucketAuto"><code>$bucketAuto</code></a></td><td style="text-align: left"><a href="#stage_lookup"><code>$lookup</code></a></td><td style="text-align: left"><a href="#stage_merge"><code>$merge</code></a></td></tr>
+<tr><td style="text-align: left"><a href="#stage_match"><code>$match</code></a></td><td style="text-align: left"><a href="#stage_fill"><code>$fill</code></a></td><td style="text-align: left"><a href="#stage_count"><code>$count</code></a></td><td style="text-align: left"><a href="#stage_unionWith"><code>$unionWith</code></a></td><td style="text-align: left"><a href="#stage_out"><code>$out</code></a></td></tr>
+<tr><td style="text-align: left"><a href="#stage_sample"><code>$sample</code></a></td><td style="text-align: left"><a href="#stage_project"><code>$project</code></a></td><td style="text-align: left"><a href="#stage_facet"><code>$facet</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="#stage_search"><code>$search</code></a></td><td style="text-align: left"><a href="#stage_redact"><code>$redact</code></a></td><td style="text-align: left"><a href="#stage_group"><code>$group</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="#stage_searchmeta"><code>$searchMeta</code></a></td><td style="text-align: left"><a href="#stage_replaceRoot"><code>$replaceRoot</code></a></td><td style="text-align: left"><a href="#stage_sortByCount"><code>$sortByCount</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="#stage_skip"><code>$skip</code></a></td><td style="text-align: left"><a href="#stage_replaceWith"><code>$replaceWith</code></a></td><td style="text-align: left"><a href="#stage_unwind"><code>$unwind</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="#stage_sort"><code>$sort</code></a></td><td style="text-align: left"><a href="#stage_set"><code>$set</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><a href="#stage_setWindowFields"><code>$setWindowFields</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><a href="#stage_unset"><code>$unset</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
 </tbody></table>
 <blockquote>
 <p><em>The following stages are not included because they are unrelated to aggregating business data:  <code>$collStats</code>, <code>$indexStats</code>, <code>$listSessions</code>, <code>$planCacheStats</code>, <code>$currentOp</code>, <code>$listLocalSessions</code></em></p>
@@ -205,7 +205,7 @@
 <p> </p>
 <hr />
 <p><a name="stage_addFields"></a></p>
-<h2 id="addfields"><a class="header" href="#addfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a></a></h2>
+<h2 id="addfields"><a class="header" href="#addfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/"><code>$addFields</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -225,7 +225,7 @@ $addFields: {z: &quot;●&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_bucket"></a></p>
-<h2 id="bucket"><a class="header" href="#bucket"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/">$bucket</a></a></h2>
+<h2 id="bucket"><a class="header" href="#bucket"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/"><code>$bucket</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -246,7 +246,7 @@ $bucket: {
 <p> </p>
 <hr />
 <p><a name="stage_bucketAuto"></a></p>
-<h2 id="bucketauto"><a class="header" href="#bucketauto"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/">$bucketAuto</a></a></h2>
+<h2 id="bucketauto"><a class="header" href="#bucketauto"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/"><code>$bucketAuto</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -263,7 +263,7 @@ $bucketAuto: {groupBy: &quot;$val&quot;, buckets: 3}
 <p> </p>
 <hr />
 <p><a name="stage_count"></a></p>
-<h2 id="count"><a class="header" href="#count"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/count/">$count</a></a></h2>
+<h2 id="count"><a class="header" href="#count"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/count/"><code>$count</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -278,7 +278,7 @@ $count: &quot;amount&quot;
 <p> </p>
 <hr />
 <p><a name="stage_densify"></a></p>
-<h2 id="densify"><a class="header" href="#densify"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/densify/">$densify</a></a></h2>
+<h2 id="densify"><a class="header" href="#densify"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/densify/"><code>$densify</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -311,7 +311,7 @@ $densify: {
 <p> </p>
 <hr />
 <p><a name="stage_documents"></a></p>
-<h2 id="documents"><a class="header" href="#documents"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/documents/">$documents</a></a></h2>
+<h2 id="documents"><a class="header" href="#documents"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/documents/"><code>$documents</code></a></a></h2>
 <pre><code class="language-javascript">[     ]
    ⬇︎      
 $documents: {
@@ -325,7 +325,7 @@ $documents: {
 <p> </p>
 <hr />
 <p><a name="stage_facet"></a></p>
-<h2 id="facet"><a class="header" href="#facet"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/facet/">$facet</a></a></h2>
+<h2 id="facet"><a class="header" href="#facet"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/facet/"><code>$facet</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -352,7 +352,7 @@ $facet: {
 <p> </p>
 <hr />
 <p><a name="stage_fill"></a></p>
-<h2 id="fill"><a class="header" href="#fill"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/fill/">$fill</a></a></h2>
+<h2 id="fill"><a class="header" href="#fill"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/fill/"><code>$fill</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -377,7 +377,7 @@ $fill: {
 <p> </p>
 <hr />
 <p><a name="stage_geoNear"></a></p>
-<h2 id="geonear"><a class="header" href="#geonear"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/">$geoNear</a></a></h2>
+<h2 id="geonear"><a class="header" href="#geonear"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/"><code>$geoNear</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -400,7 +400,7 @@ $geoNear: {
 <p> </p>
 <hr />
 <p><a name="stage_graphLookup"></a></p>
-<h2 id="graphlookup"><a class="header" href="#graphlookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a></a></h2>
+<h2 id="graphlookup"><a class="header" href="#graphlookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/"><code>$graphLookup</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -428,7 +428,7 @@ $project: {connections_count: {$size: &quot;$connections&quot;}}
 <p> </p>
 <hr />
 <p><a name="stage_group"></a></p>
-<h2 id="group"><a class="header" href="#group"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/">$group</a></a></h2>
+<h2 id="group"><a class="header" href="#group"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/"><code>$group</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -445,7 +445,7 @@ $group: {_id: &quot;$x&quot;, ylist: {$push: &quot;$y&quot;}}
 <p> </p>
 <hr />
 <p><a name="stage_limit"></a></p>
-<h2 id="limit"><a class="header" href="#limit"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/limit/">$limit</a></a></h2>
+<h2 id="limit"><a class="header" href="#limit"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/limit/"><code>$limit</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -461,7 +461,7 @@ $limit: 2
 <p> </p>
 <hr />
 <p><a name="stage_lookup"></a></p>
-<h2 id="lookup"><a class="header" href="#lookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a></a></h2>
+<h2 id="lookup"><a class="header" href="#lookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/"><code>$lookup</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -507,7 +507,7 @@ $lookup: {
 <p> </p>
 <hr />
 <p><a name="stage_match"></a></p>
-<h2 id="match"><a class="header" href="#match"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/">$match</a></a></h2>
+<h2 id="match"><a class="header" href="#match"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/"><code>$match</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -524,7 +524,7 @@ $match: {y: &quot;▲&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_merge"></a></p>
-<h2 id="merge"><a class="header" href="#merge"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/merge/">$merge</a></a></h2>
+<h2 id="merge"><a class="header" href="#merge"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/merge/"><code>$merge</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -545,7 +545,7 @@ db.results.find()
 <p> </p>
 <hr />
 <p><a name="stage_out"></a></p>
-<h2 id="out"><a class="header" href="#out"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/out/">$out</a></a></h2>
+<h2 id="out"><a class="header" href="#out"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/out/"><code>$out</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -566,7 +566,7 @@ db.results.find()
 <p> </p>
 <hr />
 <p><a name="stage_project"></a></p>
-<h2 id="project"><a class="header" href="#project"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a></a></h2>
+<h2 id="project"><a class="header" href="#project"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/"><code>$project</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -586,7 +586,7 @@ $project: {x: 1}
 <p> </p>
 <hr />
 <p><a name="stage_redact"></a></p>
-<h2 id="redact"><a class="header" href="#redact"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/redact/">$redact</a></a></h2>
+<h2 id="redact"><a class="header" href="#redact"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/redact/"><code>$redact</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -606,7 +606,7 @@ $redact: {$cond: {
 <p> </p>
 <hr />
 <p><a name="stage_replaceRoot"></a></p>
-<h2 id="replaceroot"><a class="header" href="#replaceroot"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceRoot/">$replaceRoot</a></a></h2>
+<h2 id="replaceroot"><a class="header" href="#replaceroot"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceRoot/"><code>$replaceRoot</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
 {_id: &quot;▦&quot;, a: &quot;▲&quot;, b: [&quot;◰&quot;, &quot;◳&quot;, &quot;◱&quot;]}
@@ -626,7 +626,7 @@ $replaceRoot: {
 <p> </p>
 <hr />
 <p><a name="stage_replaceWith"></a></p>
-<h2 id="replacewith"><a class="header" href="#replacewith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceWith/">$replaceWith</a></a></h2>
+<h2 id="replacewith"><a class="header" href="#replacewith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceWith/"><code>$replaceWith</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
 {_id: &quot;▦&quot;, a: &quot;▲&quot;, b: [&quot;◰&quot;, &quot;◳&quot;, &quot;◱&quot;]}
@@ -646,7 +646,7 @@ $replaceWith: {
 <p> </p>
 <hr />
 <p><a name="stage_sample"></a></p>
-<h2 id="sample"><a class="header" href="#sample"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sample/">$sample</a></a></h2>
+<h2 id="sample"><a class="header" href="#sample"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sample/"><code>$sample</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -663,7 +663,7 @@ $sample: {size: 3}
 <p> </p>
 <hr />
 <p><a name="stage_search"></a></p>
-<h2 id="search"><a class="header" href="#search"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-search">$search</a></a></h2>
+<h2 id="search"><a class="header" href="#search"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-search"><code>$search</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -682,7 +682,7 @@ $search: {
 <p> </p>
 <hr />
 <p><a name="stage_searchmeta"></a></p>
-<h2 id="searchmeta"><a class="header" href="#searchmeta"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-searchmeta">$searchMeta</a></a></h2>
+<h2 id="searchmeta"><a class="header" href="#searchmeta"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-searchmeta"><code>$searchMeta</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -720,7 +720,7 @@ $searchMeta: {
 <p> </p>
 <hr />
 <p><a name="stage_set"></a></p>
-<h2 id="set"><a class="header" href="#set"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a></a></h2>
+<h2 id="set"><a class="header" href="#set"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/"><code>$set</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -740,7 +740,7 @@ $set: {y: &quot;▲&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_setWindowFields"></a></p>
-<h2 id="setwindowfields"><a class="header" href="#setwindowfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/">$setWindowFields</a></a></h2>
+<h2 id="setwindowfields"><a class="header" href="#setwindowfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/"><code>$setWindowFields</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -771,7 +771,7 @@ $setWindowFields: {
 <p> </p>
 <hr />
 <p><a name="stage_skip"></a></p>
-<h2 id="skip"><a class="header" href="#skip"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/skip/">$skip</a></a></h2>
+<h2 id="skip"><a class="header" href="#skip"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/skip/"><code>$skip</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -786,7 +786,7 @@ $skip: 5
 <p> </p>
 <hr />
 <p><a name="stage_sort"></a></p>
-<h2 id="sort"><a class="header" href="#sort"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a></a></h2>
+<h2 id="sort"><a class="header" href="#sort"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/"><code>$sort</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -806,7 +806,7 @@ $sort: {x: 1, y: 1}
 <p> </p>
 <hr />
 <p><a name="stage_sortByCount"></a></p>
-<h2 id="sortbycount"><a class="header" href="#sortbycount"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/">$sortByCount</a></a></h2>
+<h2 id="sortbycount"><a class="header" href="#sortbycount"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/"><code>$sortByCount</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -823,7 +823,7 @@ $sortByCount: &quot;$x&quot;
 <p> </p>
 <hr />
 <p><a name="stage_unionWith"></a></p>
-<h2 id="unionwith"><a class="header" href="#unionwith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/">$unionWith</a></a></h2>
+<h2 id="unionwith"><a class="header" href="#unionwith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/"><code>$unionWith</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -854,7 +854,7 @@ $unionWith: {coll: &quot;lists&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_unset"></a></p>
-<h2 id="unset"><a class="header" href="#unset"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a></a></h2>
+<h2 id="unset"><a class="header" href="#unset"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/"><code>$unset</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -874,7 +874,7 @@ $unset: [&quot;x&quot;]
 <p> </p>
 <hr />
 <p><a name="stage_unwind"></a></p>
-<h2 id="unwind"><a class="header" href="#unwind"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a></a></h2>
+<h2 id="unwind"><a class="header" href="#unwind"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/"><code>$unwind</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
 {_id: &quot;▦&quot;, a: &quot;▲&quot;, b: [&quot;◰&quot;, &quot;◳&quot;, &quot;◱&quot;]}

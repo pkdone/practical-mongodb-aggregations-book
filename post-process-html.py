@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 ##
 # Post-process mdbook generated HTML files to add Google Analytics tag and optionally cheatsheet
-# pre style tag
+# pre style tag + other page specific HTML title additions
 ##
 import glob
 import re
@@ -39,7 +39,7 @@ select_distinct_prefix_html_snippet = start_title_html_target + 'SQL SELECT DIST
 
 
 ####
-# Main function finding each HTML file and sending it to have tag added
+# Main function finding each HTML file and sending it to have tags and metadata added
 ####
 def main():
     print('Starting to post-process HTML files')

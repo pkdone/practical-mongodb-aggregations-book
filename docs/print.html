@@ -157,7 +157,7 @@
 <div style="break-before: page; page-break-before: always;"></div><p> </p>
 <h1 id="practical-mongodb-aggregations"><a class="header" href="#practical-mongodb-aggregations">Practical MongoDB Aggregations</a></h1>
 <p>Author: Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</p>
-<p>Version: 4.01</p>
+<p>Version: 4.02</p>
 <p>Last Updated: July 2022</p>
 <p>MongoDB Versions Supported: 4.2 → 6.0</p>
 <p>Book published at: <a href="https://www.practical-mongodb-aggregations.com">www.practical-mongodb-aggregations.com</a></p>
@@ -266,17 +266,17 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="history-of-mongodb-aggregations"><a class="header" href="#history-of-mongodb-aggregations">History Of MongoDB Aggregations</a></h1>
 <h2 id="the-emergence-of-aggregations"><a class="header" href="#the-emergence-of-aggregations">The Emergence Of Aggregations</a></h2>
 <p>MongoDB's developers released the first major version of the database (version 1.0) in February 2009. Back then, both users and the predominant company behind the database, <a href="https://en.wikipedia.org/wiki/MongoDB_Inc.">MongoDB Inc.</a> (called <em>10gen</em> at the time) were still establishing the sort of use cases that the database would excel at and where the critical gaps were. Within half a year of this first major release, MongoDB's engineering team had identified a need to enable materialised views to be generated on-demand. Users needed this capability to maintain counts, sums, and averages for their real-time client applications to query. In December 2009, in time for the following major release (1.2), the database engineers introduced a quick tactical solution to address this gap. This solution involved embedding a JavaScript engine in the database and allowing client applications to submit and execute &quot;server-side&quot; logic using a simple <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce</a> API.</p>
-<p>A <a href="https://en.wikipedia.org/wiki/MapReduce">Map-Reduce</a> workload essentially does two things. Firstly it scans the entire data set, looking for the matching subset of records required for the given scenario. This phase may also transform or exclude the fields of each record. This is the &quot;map&quot; action. Secondly, it condenses the subset of matched data into grouped, totalled, and averaged result summaries. This is the &quot;reduce&quot; action. Functionally, MongoDB's <em>Map-Reduce</em> capability provides a solution to users' typical data processing requirements, but it comes with the following drawbacks:</p>
+<p>A <a href="https://en.wikipedia.org/wiki/MapReduce">Map-Reduce</a> workload essentially does two things. Firstly it scans the data set, looking for the matching subset of records required for the given scenario. This phase may also transform or exclude the fields of each record. This is the &quot;map&quot; action. Secondly, it condenses the subset of matched data into grouped, totalled, and averaged result summaries. This is the &quot;reduce&quot; action. Functionally, MongoDB's <em>Map-Reduce</em> capability provides a solution to users' typical data processing requirements, but it comes with the following drawbacks:</p>
 <ol>
 <li>The database has to bolt in an inherently slow JavaScript engine to execute users' Map-Reduce code.</li>
 <li>Users have to provide two sets of JavaScript logic, a <em>map</em> (or matching) function and a <em>reduce</em> (or grouping) function. Neither is very intuitive to develop, lacking a solid data-oriented bias.</li>
 <li>At runtime, the lack of ability to explicitly associate a specific intent to an arbitrary piece of logic means that the database engine has no opportunity to identify and apply optimisations. It is hard for it to target indexes or reorder some logic for more efficient processing. The database has to be conservative, executing the workload with minimal concurrency and employing locks at various times to prevent race conditions and inconsistent results.</li>
-<li>Poor scalability because the monolithic and opaque nature of Map-Reduce logic means the database engine can't break parts of it up and execute these parts in parallel across multiple shards.</li>
+<li>If returning the response to the client application, rather than sending the output to a collection, the response payload must be less than 16MB.</li>
 </ol>
 <p>Over the following two years, as user behaviour with Map-Reduce became more understood, MongoDB engineers started to envision a better solution. Also, users were increasingly trying to use Map-Reduce to perform mass data processing given MongoDB's ability to hold large data sets. They were hitting the same Map-Reduce limitations. Users desired a more targeted capability leveraging a data-oriented Domain Specific Language (DSL). The engineers saw how to deliver a framework enabling a developer to define a series of data manipulation steps with valuable composability characteristics. Each step would have a clear advertised intent, allowing the database engine to apply optimisations at runtime. The engineers could also design a framework that would execute &quot;natively&quot; in the database and not require a JavaScript engine. In August 2012, this solution, called the Aggregation Framework, was introduced in the 2.2 version of MongoDB. MongoDB's Aggregation Framework provided a far more powerful, efficient, scalable and easy to use replacement to Map-Reduce.</p>
 <p>Within its first year, the Aggregation Framework rapidly became the go-to tool for processing large volumes of data in MongoDB. Now, a decade on, it is like the Aggregation Framework has always been part of MongoDB. It feels like part of the database's core DNA. MongoDB still supports Map-Reduce, but developers rarely use it nowadays. MongoDB aggregation pipelines are always the correct answer for processing data in the database!</p>
 <blockquote>
-<p><em>It is not widely known, but MongoDB's engineering team re-implemented the Map-Reduce &quot;back-end&quot; in MongoDB 4.4 to execute within the aggregation's runtime. They had to develop additional aggregation stages and operators to fill some gaps. For the most part, these are internal-only stages or operators that the Aggregation Framework does not surface for developers to use in regular aggregations. The two exceptions are the new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/function/">$function</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/accumulator/">$accumulator</a> 4.4 operators, which the refactoring work influenced and which now serve as two helpful operators for use in any aggregation pipeline. In MongoDB 4.4, each Map-Reduce &quot;aggregation&quot; still uses JavaScript for certain phases, and so it will not achieve the performance of a native aggregation for an equivalent workload. Nor does this change magically address the other drawbacks of Map-Reduce workloads concerning composability, concurrency, scalability and opportunities for runtime optimisation. The primary purpose of the change was for the database engineers to eliminate redundancy and promote resiliency in the database's codebase. MongoDB version 5.0 deprecated Map-Reduce, and it is likely to be removed in a future version of MongoDB.</em></p>
+<p><em>It is not widely known, but MongoDB's engineering team re-implemented the Map-Reduce &quot;back-end&quot; in MongoDB 4.4 to execute within the aggregation's runtime. They had to develop additional aggregation stages and operators to fill some gaps. For the most part, these are internal-only stages or operators that the Aggregation Framework does not surface for developers to use in regular aggregations. The two exceptions are the new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/function/"><code>$function</code></a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/accumulator/"><code>$accumulator</code></a> 4.4 operators, which the refactoring work influenced and which now serve as two helpful operators for use in any aggregation pipeline. In MongoDB 4.4, each Map-Reduce &quot;aggregation&quot; still uses JavaScript for certain phases, and so it will not achieve the performance of a native aggregation for an equivalent workload. Nor does this change magically address the other drawbacks of Map-Reduce workloads concerning composability, concurrency, scalability and opportunities for runtime optimisation. The primary purpose of the change was for the database engineers to eliminate redundancy and promote resiliency in the database's codebase. MongoDB version 5.0 deprecated Map-Reduce, and it is likely to be removed in a future version of MongoDB.</em></p>
 </blockquote>
 <h2 id="key-releases--capabilities"><a class="header" href="#key-releases--capabilities">Key Releases &amp; Capabilities</a></h2>
 <p>Below is a summary of the evolution of the Aggregation Framework in terms of significant capabilities added in each major release:</p>
@@ -457,21 +457,21 @@ var pipeline = [
 </ul>
 <p>In summary, this book is not advocating a multi-variable approach over a single-variable approach when you define a pipeline. The book is just highlighting two highly composable options. Ultimately it is a personal choice concerning which you find most comfortable and productive. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="better-alternatives-to-a-project-stage"><a class="header" href="#better-alternatives-to-a-project-stage">Better Alternatives To A Project Stage</a></h1>
-<p>The quintessential tool used in MongoDB's Query Language (MQL) to define or restrict fields to return is a <em>projection</em>. In the MongoDB Aggregation Framework, the analogous facility for specifying fields to include or exclude is the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> stage. For many earlier versions of MongoDB, this was the only tool to define which fields to keep or omit. However, <code>$project</code> comes with a few usability challenges: </p>
+<p>The quintessential tool used in MongoDB's Query Language (MQL) to define or restrict fields to return is a <em>projection</em>. In the MongoDB Aggregation Framework, the analogous facility for specifying fields to include or exclude is the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/"><code>$project</code></a> stage. For many earlier versions of MongoDB, this was the only tool to define which fields to keep or omit. However, <code>$project</code> comes with a few usability challenges: </p>
 <ol>
 <li>
-<p><strong><em>$project</em> is confusing and non-intuitive</strong>. You can only choose to include fields or exclude fields in a single stage, but not both. There is one exception, though, where you can exclude the _id field yet still define other fields to include (this only applies to the _id field). It's as if <code>$project</code> has an identity crisis.</p>
+<p><strong><code>$project</code> is confusing and non-intuitive</strong>. You can only choose to include fields or exclude fields in a single stage, but not both. There is one exception, though, where you can exclude the _id field yet still define other fields to include (this only applies to the _id field). It's as if <code>$project</code> has an identity crisis.</p>
 </li>
 <li>
-<p><strong><em>$project</em> is verbose and inflexible</strong>. If you want to define one new field or revise one field, you will have to name all other fields in the projection to include. If each input record has 100 fields and the pipeline needs to employ a <code>$project</code> stage for the first time, things become tiresome. To include a new 101st field, you now also have to name all the original 100 fields in this new <code>$project</code> stage too. You will find this irritating if you have an evolving data model, where additional new fields appear in some records over time. Because you use a <code>$project</code> for inclusion, then each time a new field appears in the data set, you must go back to the old aggregation pipeline to modify it to name the new field explicitly for inclusion in the results. This is the antithesis of flexibility and agility.</p>
+<p><strong><code>$project</code> is verbose and inflexible</strong>. If you want to define one new field or revise one field, you will have to name all other fields in the projection to include. If each input record has 100 fields and the pipeline needs to employ a <code>$project</code> stage for the first time, things become tiresome. To include a new 101st field, you now also have to name all the original 100 fields in this new <code>$project</code> stage too. You will find this irritating if you have an evolving data model, where additional new fields appear in some records over time. Because you use a <code>$project</code> for inclusion, then each time a new field appears in the data set, you must go back to the old aggregation pipeline to modify it to name the new field explicitly for inclusion in the results. This is the antithesis of flexibility and agility.</p>
 </li>
 </ol>
-<p>In MongoDB version 4.2, the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a> stages were introduced, which, in most cases, are preferable to using <code>$project</code> for declaring field inclusion and exclusion. They make the code's intent much clearer, lead to less verbose pipelines, and, critically, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use <code>$set</code> &amp; <code>$unset</code> stages is described in the section <em><a href="guides/project.html#when-to-use-set--unset">When To Use Set &amp; Unset</a></em>, further below.</p>
+<p>In MongoDB version 4.2, the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/"><code>$set</code></a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/"><code>$unset</code></a> stages were introduced, which, in most cases, are preferable to using <code>$project</code> for declaring field inclusion and exclusion. They make the code's intent much clearer, lead to less verbose pipelines, and, critically, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use <code>$set</code> &amp; <code>$unset</code> stages is described in the section <em><a href="guides/project.html#when-to-use-set--unset">When To Use Set &amp; Unset</a></em>, further below.</p>
 <p>Despite the challenges, though, there are some specific situations where using <code>$project</code> is advantageous over <code>$set</code>/<code>$unset</code>. These situations are described in the section <em><a href="guides/project.html#when-to-use-project">When To Use Project</a></em> further below. </p>
 <blockquote>
-<p><em>MongoDB version 3.4 addressed some of the disadvantages of <code>$project</code> by introducing a new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a> stage, which has the same behaviour as <code>$set</code>. <code>$set</code> came later than <code>$addFields</code>and <code>$set</code> is actually just an alias for <code>$addFields</code>. However, back then, the Aggregation Framework provided no direct equivalent to <code>$unset</code>. Both <code>$set</code> and <code>$unset</code> stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (<code>$set</code> Vs <code>$unset</code>). The name <code>$addFields</code> doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers <code>$set</code> over <code>$addFields</code> to help promote consistency and avoid any confusion of intent. However, if you are wedded to <code>$addFields</code>, use that instead, as there is no behavioural difference.</em></p>
+<p><em>MongoDB version 3.4 addressed some of the disadvantages of <code>$project</code> by introducing a new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/"><code>$addFields</code></a> stage, which has the same behaviour as <code>$set</code>. <code>$set</code> came later than <code>$addFields</code>and <code>$set</code> is actually just an alias for <code>$addFields</code>. However, back then, the Aggregation Framework provided no direct equivalent to <code>$unset</code>. Both <code>$set</code> and <code>$unset</code> stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (<code>$set</code> Vs <code>$unset</code>). The name <code>$addFields</code> doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers <code>$set</code> over <code>$addFields</code> to help promote consistency and avoid any confusion of intent. However, if you are wedded to <code>$addFields</code>, use that instead, as there is no behavioural difference.</em></p>
 </blockquote>
-<h2 id="when-to-use-set--unset"><a class="header" href="#when-to-use-set--unset">When To Use <em>$set</em> &amp; <em>$unset</em></a></h2>
+<h2 id="when-to-use-set--unset"><a class="header" href="#when-to-use-set--unset">When To Use <code>$set</code> &amp; <code>$unset</code></a></h2>
 <p>You should use <code>$set</code> &amp; <code>$unset</code> stages when you need to retain most of the fields in the input records, and you want to add, modify or remove a minority subset of fields. This is the case for most uses of aggregation pipelines.</p>
 <p>For example, imagine there is a collection of credit card payment documents similar to the following:</p>
 <pre><code class="language-javascript">// INPUT  (a record from the source collection to be operated on by an aggregation)
@@ -547,7 +547,7 @@ var pipeline = [
 ]
 </code></pre>
 <p>This time, when you need to add new documents to the collection of existing payments, which include additional new fields, e.g. <code>settlement_date</code> &amp; <code>settlement_curncy_code</code>, no changes are required. The existing aggregation pipeline allows these new fields to appear in the results automatically. However, when using <code>$project</code>, each time the possibility of a new field arises, a developer must first refactor the pipeline to incorporate an additional inclusion declaration (e.g. <code>&quot;settlement_date&quot;: 1</code>, or <code>&quot;settlement_curncy_code&quot;: 1</code>).</p>
-<h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use <em>$project</em></a></h2>
+<h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use <code>$project</code></a></h2>
 <p>It is best to use a <code>$project</code> stage when the required shape of output documents is very different from the input documents' shape. This situation often arises when you do not need to include most of the original fields.</p>
 <p>This time for the same input payments collection, let us imagine you require a new aggregation pipeline to produce result documents. You need each output document's structure to be very different from the input structure, and you need to retain far fewer original fields, similar to the following:</p>
 <pre><code class="language-javascript">// OUTPUT  (a record in the results of the executed aggregation)
@@ -798,14 +798,14 @@ db.coll.explain(&quot;allPlansExecution&quot;).aggregate(pipeline);
 <p>When considering <code>$sort</code> and <code>$group</code> stages, it becomes evident why they have to block. The following examples illustrate why this is the case:</p>
 <ol>
 <li>
-<p><strong><em>$sort</em> blocking example</strong>: A pipeline must sort <em>people</em> in ascending order of <em>age</em>. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. </p>
+<p><strong><code>$sort</code> blocking example</strong>: A pipeline must sort <em>people</em> in ascending order of <em>age</em>. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. </p>
 </li>
 <li>
-<p><strong><em>$group</em> blocking example</strong>: A pipeline must group <em>employees</em> by one of two <em>work departments</em> (either the <em>sales</em> or <em>manufacturing</em> departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. </p>
+<p><strong><code>$group</code> blocking example</strong>: A pipeline must group <em>employees</em> by one of two <em>work departments</em> (either the <em>sales</em> or <em>manufacturing</em> departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. </p>
 </li>
 </ol>
 <p>These often unavoidable blocking stages don't just increase aggregation execution time by reducing concurrency. If used without careful forethought, the throughput and latency of a pipeline will slow dramatically due to significantly increased memory consumption. The following sub-sections explore why this occurs and tactics to mitigate this.</p>
-<h3 id="sort-memory-consumption-and-mitigation"><a class="header" href="#sort-memory-consumption-and-mitigation"><em>$sort</em> Memory Consumption And Mitigation</a></h3>
+<h3 id="sort-memory-consumption-and-mitigation"><a class="header" href="#sort-memory-consumption-and-mitigation"><code>$sort</code> Memory Consumption And Mitigation</a></h3>
 <p>Used naïvely, a <code>$sort</code> stage will need to see all the input records at once, and so the host server must have enough capacity to hold all the input data in memory. The amount of memory required depends heavily on the initial data size and the degree to which the prior stages can reduce the size. Also, multiple instances of the aggregation pipeline may be in-flight at any one time, in addition to other database workloads. These all compete for the same finite memory. Suppose the source data set is many gigabytes or even terabytes in size, and earlier pipeline stages have not reduced this size significantly. It will be unlikely that the host machine has sufficient memory to support the pipeline's blocking <code>$sort</code> stage. Therefore, MongoDB enforces every stage is limited to 100 MB of consumed RAM. The database throws an error if it exceeds this limit.</p>
 <p>To avoid the memory limit obstacle, you can set the <code>allowDiskUse:true</code> option for the overall aggregation for handling large result data sets. Consequently, the pipeline's <em>sort</em> operation spills to disk if required, and the 100 MB limit no longer constrains the pipeline. However, the sacrifice here is significantly higher latency, and the execution time is likely to increase by orders of magnitude.</p>
 <p>To circumvent the aggregation needing to manifest the whole data set in memory or overspill to disk, attempt to refactor your pipeline to incorporate one of the following approaches (in order of most effective first):</p>
@@ -820,7 +820,7 @@ db.coll.explain(&quot;allPlansExecution&quot;).aggregate(pipeline);
 <p><strong>Reduce Records To Sort</strong>. Move the <code>$sort</code> stage to as late as possible in your pipeline and ensure earlier stages significantly reduce the number of records streaming into this late blocking <code>$sort</code> stage. This blocking stage will have fewer records to process and less thirst for RAM.</p>
 </li>
 </ol>
-<h3 id="group-memory-consumption-and-mitigation"><a class="header" href="#group-memory-consumption-and-mitigation"><em>$group</em> Memory Consumption And Mitigation</a></h3>
+<h3 id="group-memory-consumption-and-mitigation"><a class="header" href="#group-memory-consumption-and-mitigation"><code>$group</code> Memory Consumption And Mitigation</a></h3>
 <p>Like the <code>$sort</code> stage, the <code>$group</code> stage has the potential to consume a large amount of memory. The aggregation pipeline's 100 MB RAM limit equally applies to the <code>$group</code> stage. As with sorting, you can use the pipeline's <code>allowDiskUse:true</code> option to avoid this limit for heavyweight grouping operations, but with the same downsides.</p>
 <p>In reality, most grouping scenarios focus on accumulating summary data such as totals, counts, averages, highs and lows, and not itemised data. In these situations, considerably reduced result data sets are produced, requiring far less processing memory than a <code>$sort</code> stage. Contrary to many sorting scenarios, grouping operations will typically demand a fraction of the host's RAM.</p>
 <p>To ensure you avoid excessive memory consumption when you are looking to use a <code>$group</code> stage, adopt the following principles:</p>
@@ -1092,8 +1092,8 @@ var pipeline = [
 <p>Some of these stages may be a surprise to you if you've never really thought about it before. You might well consider <code>$match</code> to be the most surprising item in this list. The content of a <code>$match</code> stage is just a set of query conditions with the same syntax as MQL rather than an aggregation expression. There is a good reason for this. The aggregation engine reuses the MQL query engine to perform a &quot;regular&quot; query against the collection, enabling the query engine to use all its usual optimisations. The query conditions are taken as-is from the <code>$match</code> stage at the top of the pipeline. Therefore, the <code>$match</code> filter must use the same syntax as MQL. </p>
 <p>In most of the stages that are unable to leverage expressions, it doesn't usually make sense for their behaviour to be dynamic, based on the pipeline data entering the stage. For a client application that paginates results, you might define a value of <code>20</code> for the <code>$limit</code> stage. However, maybe you want to dynamically bind a value to the <code>$limit</code> stage, sourced by a <code>$lookup</code> stage earlier in the pipeline. The lookup operation might pull in the user's preferred &quot;page list size&quot; value from a &quot;user preferences&quot; collection. Nonetheless, the Aggregation Framework does not support this today for the listed stage types to avoid the overhead of the extra checks it would need to perform for what are essentially rare cases.</p>
 <p>In most cases, only one of the listed stages needs to be more expressive: the <code>$match</code> stage, but this stage is already flexible by being based on MQL query conditions. However, sometimes, even MQL isn't expressive enough to sufficiently define a rule to identify records to retain in an aggregation. The remainder of this chapter explores these challenges and how they are solved.</p>
-<h2 id="what-is-using-expr-inside-match-all-about"><a class="header" href="#what-is-using-expr-inside-match-all-about">What Is Using <em>$expr</em> Inside <em>$match</em> All About?</a></h2>
-<p>The previously stated generalisation about <code>$match</code> not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr operator</a>, which you can embed within a <code>$match</code> stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's <code>$match</code>) to reuse expressions provided by MongoDB's aggregation runtime.</p>
+<h2 id="what-is-using-expr-inside-match-all-about"><a class="header" href="#what-is-using-expr-inside-match-all-about">What Is Using <code>$expr</code> Inside <code>$match</code> All About?</a></h2>
+<p>The previously stated generalisation about <code>$match</code> not supporting expressions is actually inaccurate. Version 3.6 of MongoDB introduced the <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/"><code>$expr</code></a> operator, which you can embed within a <code>$match</code> stage (or in MQL) to leverage aggregation expressions when filtering records. Essentially, this enables MongoDB's query runtime (which executes an aggregation's <code>$match</code>) to reuse expressions provided by MongoDB's aggregation runtime.</p>
 <p>Inside a <code>$expr</code> operator, you can include any composite expression fashioned from <code>$</code> operator functions, <code>$</code> field paths and <code>$$</code> variables. A few situations demand having to use <code>$expr</code> from inside a <code>$match</code> stage. Examples include:</p>
 <ul>
 <li>
@@ -1125,7 +1125,7 @@ var pipeline = [
 ]
 </code></pre>
 <p>As you can see, the second of the three shapes is not output because its area is only <code>12</code> (<code>3 x 4</code>).</p>
-<h3 id="restrictions-when-using-expressions-with-match"><a class="header" href="#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions with <em>$match</em></a></h3>
+<h3 id="restrictions-when-using-expressions-with-match"><a class="header" href="#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions with <code>$match</code></a></h3>
 <p>You should be aware that there are restrictions on when the runtime can benefit from an index when using a <code>$expr</code> operator inside a <code>$match</code> stage. This partly depends on the version of MongoDB you are running. Using <code>$expr</code>, you can leverage a <code>$eq</code> comparison operator with some constraints, including an inability to use a <a href="https://docs.mongodb.com/manual/core/index-multikey/">multi-key index</a>. For MongoDB versions before 5.0, if you use a &quot;range&quot; comparison operator (<code>$gt</code>, <code>$gte</code>, <code>$lt</code> and <code>$lte</code>), an index cannot be employed to match the field, but this works fine in version 5.0 and greater.</p>
 <p>There are also subtle differences when ordering values for a specific field across multiple documents when some values have different types. MongoDB's query runtime (which executes regular MQL and <code>$match</code> filters) and MongoDB's aggregation runtime (which implements <code>$expr</code>) can apply different ordering rules when filtering, referred to as &quot;type bracketing&quot;. Consequently, a range query may not yield the same result with <code>$expr</code> as it does with MQL if some values have different types.</p>
 <p>Due to the potential challenges outlined, only use a <code>$expr</code> operator in a <code>$match</code> stage if there is no other way of assembling the filter criteria using regular MQL syntax.</p>
@@ -2444,7 +2444,7 @@ db.persons.insertMany([
 <div style="break-before: page; page-break-before: always;"></div><h1 id="joining-data-examples"><a class="header" href="#joining-data-examples">Joining Data Examples</a></h1>
 <p>This section provides examples for joining a source collection used by an aggregation pipeline with another collection using different approaches.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="one-to-one-join"><a class="header" href="#one-to-one-join">One-to-One Join</a></h1>
-<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/">$first</a> array operator)</em></p>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/"><code>$first</code></a> array operator)</em></p>
 <h2 id="scenario-4"><a class="header" href="#scenario-4">Scenario</a></h2>
 <p>You want to generate a report to list all shop purchases for 2020, showing the product's name and category for each order, rather than the product's id. To achieve this, you need to take the customer <em>orders</em> collection and join each order record to the corresponding product record in the <em>products</em> collection. There is a many:1 relationship between both collections, resulting in a 1:1 join when matching an order to a product. The join will use a single field comparison between both sides, based on the product's id.</p>
 <h2 id="sample-data-population-4"><a class="header" href="#sample-data-population-4">Sample Data Population</a></h2>
@@ -2787,7 +2787,7 @@ db.orders.insertMany([
 <h2 id="observations-5"><a class="header" href="#observations-5">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Multiple Join Fields.</strong> To perform a join of two or more fields between the two collections, you need to use a <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries">let</a> parameter rather than specifying the <code>localField</code> and <code>foreignField</code> parameters used in a single field join. With a <code>let</code> parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded <code>pipeline</code> inside the <code>$lookup</code> stage to match the <em>bind</em> variables with fields in the second collection's records. In this instance, because the <code>$expr</code> operator performs an equality comparison specifically (as opposed to a range comparison), the aggregation runtime can employ an appropriate index for this match.</p>
+<p><strong>Multiple Join Fields.</strong> To perform a join of two or more fields between the two collections, you need to use a <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries"><code>let</code></a> parameter rather than specifying the <code>localField</code> and <code>foreignField</code> parameters used in a single field join. With a <code>let</code> parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded <code>pipeline</code> inside the <code>$lookup</code> stage to match the <em>bind</em> variables with fields in the second collection's records. In this instance, because the <code>$expr</code> operator performs an equality comparison specifically (as opposed to a range comparison), the aggregation runtime can employ an appropriate index for this match.</p>
 </li>
 <li>
 <p><strong>Reducing Array Content.</strong> The presence of an embedded pipeline in the <code>$lookup</code> stage provides an opportunity to filter out three unwanted fields brought in from the second collection. Instead, you could use an <code>$unset</code> stage later in the top-level pipeline to project out these unwanted array elements. If you need to perform more complex array content filtering rules, you can use the approach described in section <em><a href="examples/joining/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">2. Avoid Unwinding &amp; Regrouping Documents Just To Process Array Elements</a></em>&quot; of the <em>Pipeline Performance Considerations</em> chapter.</p>
@@ -3371,7 +3371,7 @@ db.products.insertMany([
 <h2 id="scenario-9"><a class="header" href="#scenario-9">Scenario</a></h2>
 <p>Your organisation wants to know the best targets for a new marketing campaign based on a social network database similar to <em>Twitter</em>. You want to search the collection of social network users, each holding a user's name and the names of other people who follow them. You will execute an aggregation pipeline that walks each user record's <code>followed_by</code> array to determine which user has the largest <em>network reach</em>.</p>
 <blockquote>
-<p><em>This example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using <code>$graphLookup</code> at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: <a href="https://github.com/mongodb-labs/socialite">Socialite</a>.</em></p>
+<p><em>This example uses a simple data model for brevity. However, this is unlikely to be an optimum data model for using <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/graphLookup/"><code>$graphLookup</code></a> at scale for social network users with many followers or running in a sharded environment. For more guidance on such matters, see this reference application: <a href="https://github.com/mongodb-labs/socialite">Socialite</a>.</em></p>
 </blockquote>
 <h2 id="sample-data-population-9"><a class="header" href="#sample-data-population-9">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>users</code> collection with 10 social network users documents, plus an index to help optimise the <em>graph traversal</em>:</p>
@@ -3914,7 +3914,7 @@ db.persons.insertMany([
 <h2 id="observations-11"><a class="header" href="#observations-11">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Expr &amp; Indexes.</strong> The <a href="https://docs.mongodb.com/manual/reference/aggregation-variables/">&quot;NOW&quot; system variable</a> used here returns the current system date-time. However, you can only access this system variable via an <a href="https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions">aggregation expression</a> and not directly via the regular MongoDB query syntax used by MQL and <code>$match</code>. You must wrap an expression using <code>$$NOW</code> inside an <code>$expr</code> operator. As described in the section <em><a href="examples/securing-data/../../guides/expressions.html#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions</a></em> in an earlier chapter, if you use an <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/">$expr query operator</a> to perform a range comparison, you can't make use of an index in versions of MongoDB earlier then 5.0. Therefore, in this example, unless you use MongoDB 5.0 or greater, the aggregation will not take advantage of an index on <code>dateofbirth</code>. For a view, because you specify the pipeline earlier than it is ever run, you cannot obtain the current date-time at runtime by other means.</p>
+<p><strong><code>$expr</code> &amp; Indexes.</strong> The <a href="https://docs.mongodb.com/manual/reference/aggregation-variables/"><code>NOW</code> system variable</a> used here returns the current system date-time. However, you can only access this system variable via an <a href="https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions">aggregation expression</a> and not directly via the regular MongoDB query syntax used by MQL and <code>$match</code>. You must wrap an expression using <code>$$NOW</code> inside an <code>$expr</code> operator. As described in the section <em><a href="examples/securing-data/../../guides/expressions.html#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions</a></em> in an earlier chapter, if you use an <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/"><code>$expr</code></a> query operator to perform a range comparison, you can't make use of an index in versions of MongoDB earlier then 5.0. Therefore, in this example, unless you use MongoDB 5.0 or greater, the aggregation will not take advantage of an index on <code>dateofbirth</code>. For a view, because you specify the pipeline earlier than it is ever run, you cannot obtain the current date-time at runtime by other means.</p>
 </li>
 <li>
 <p><strong>View Finds &amp; Indexes.</strong> Even for versions of MongoDB before 5.0, the explain plan for the <em>gender query</em> run against the view shows an index has been used (the index defined for the <code>gender</code> field). At runtime, a view is essentially just an aggregation pipeline defined &quot;ahead of time&quot;. When <code>db.adults.find({&quot;gender&quot;: &quot;FEMALE&quot;})</code> is executed, the database engine dynamically appends a new <code>$match</code> stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the new <code>$match</code> stage to the pipeline's start. Finally, it adds the filter extracted from the new <code>$match</code> stage to the aggregation's initial query, and hence it can then leverage an index containing the <code>gender</code> field. The following two excerpts, from an explain plan from a MongoDB version before 5.0, illustrate how the filter on <code>gender</code> and the filter on <code>dateofbirth</code> combine at runtime and how the index for <code>gender</code> is used to avoid a full collection scan:</p>
@@ -3949,7 +3949,7 @@ db.persons.insertMany([
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="mask-sensitive-fields"><a class="header" href="#mask-sensitive-fields">Mask Sensitive Fields</a></h1>
-<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/rand/">$rand</a> operator)</em></p>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/rand/"><code>$rand</code></a> operator)</em></p>
 <h2 id="scenario-12"><a class="header" href="#scenario-12">Scenario</a></h2>
 <p>You want to perform irreversible masking on the sensitive fields of a collection of <em>credit card payments</em>, ready to provide the output data set to a 3rd party for analysis, without exposing sensitive information to the 3rd party. The specific changes that you need to make to the payments' fields are:</p>
 <ul>
@@ -4099,7 +4099,10 @@ db.payments.insertMany([
 <p><strong>Targeted Redaction.</strong> The pipeline uses a <code>$cond</code> operator to return the <code>$$REMOVE</code> marker variable if the <code>category</code> field is equal to <code>RESTRICTED</code>. This informs the aggregation engine to exclude the whole <code>customer_info</code> sub-document from the stage's output for the record. Alternatively, the pipeline could have used a <code>$redact</code> stage to achieve the same. However, <code>$redact</code> typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.</p>
 </li>
 <li>
-<p><strong>Regular Expression.</strong> For masking the <code>card_name</code> field, a regular expression operator is used to extract the last word of the field's original value. <code>$regexFind</code> returns metadata into the stage's output records, indicating if the match succeeded and what the matched value is. Therefore, an additional <code>$set</code> stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hard-coded text.</p>
+<p><strong>Regular Expression.</strong> For masking the <code>card_name</code> field, a regular expression operator is used to extract the last word of the field's original value. <code>$regexFind</code> returns metadata into the stage's output records, indicating if the match succeeded and what the matched value is. Therefore, an additional <code>$set</code> stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hard-coded text. MongoDB version 5.0 introduced a new <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/getField/"><code>$getField</code></a> operator, which you can instead use to directly extract the &quot;regex&quot; result field (<code>match</code>). Consequently, if you are using MongoDB 5.0 or greater, you can eliminate the second <code>$set</code> stage from the end of your pipeline and then replace the line of code which sets the masked value of the <code>card_name</code> field to the following: </p>
+<pre><code class="language-javascript">// Prefix with a hard-coded value followed by the regex extracted last word of the card name
+&quot;card_name&quot;: {&quot;$concat&quot;: [&quot;Mx. Xxx &quot;, {&quot;$ifNull&quot;: [{&quot;$getField&quot;: {&quot;field&quot;: &quot;match&quot;, &quot;input&quot;: {&quot;$regexFind&quot;: {&quot;input&quot;: &quot;$card_name&quot;, &quot;regex&quot;: /(\S+)$/}}}}, &quot;Anonymous&quot;]}]},
+</code></pre>
 </li>
 <li>
 <p><strong>Meaningful Insight.</strong> Even though the pipeline is irreversibly obfuscating fields, it doesn't mean that the masked data is useless for performing analytics to gain insight. The pipeline masks some fields by fluctuating the original values by a small but limited random percentage (e.g. <code>card_expiry</code>, <code>transaction_amount</code>), rather than replacing them with completely random values (e.g. <code>card_sec_code</code>). In such cases, if the input data set is sufficiently large, then minor variances will be equalled out. For the fields that are only varied slightly, users can derive similar trends and patterns from analysing the masked data as they would the original data.</p>
@@ -4111,7 +4114,7 @@ db.payments.insertMany([
 <div style="break-before: page; page-break-before: always;"></div><h1 id="time-series-examples"><a class="header" href="#time-series-examples">Time-Series Examples</a></h1>
 <p>This section provides examples of aggregating time-series data, common in use cases involving financial data sets and Internet-of-Things (IoT).</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iot-power-consumption"><a class="header" href="#iot-power-consumption">IoT Power Consumption</a></h1>
-<p><strong>Minimum MongoDB Version:</strong> 5.0    <em>(due to use of <a href="https://docs.mongodb.com/manual/core/timeseries-collections/">time series collections</a>, <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/">$setWindowFields</a> stage &amp; <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/integral/">$integral</a> operator)</em></p>
+<p><strong>Minimum MongoDB Version:</strong> 5.0    <em>(due to use of <a href="https://docs.mongodb.com/manual/core/timeseries-collections/">time series collections</a>, <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/"><code>$setWindowFields</code></a> stage &amp; <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/integral/"><code>$integral</code></a> operator)</em></p>
 <h2 id="scenario-13"><a class="header" href="#scenario-13">Scenario</a></h2>
 <p>You are monitoring various air-conditioning units running in two buildings on an industrial campus. Every 30 minutes, a device in each unit sends the unit's current power consumption reading back to base, which a central database persists. You want to analyse this data to see how much energy in kilowatt-hours (kWh) each air-conditioning unit has consumed over the last hour for each reading received. Furthermore, you want to compute the total energy consumed by all the air-conditioning units combined in each building for every hour.</p>
 <h2 id="sample-data-population-13"><a class="header" href="#sample-data-population-13">Sample Data Population</a></h2>
@@ -4459,7 +4462,7 @@ db.device_readings.insertMany([
 <p>This section provides examples for processing and manipulating array fields contained in documents, without having to <em>unwind</em> and <em>re-group</em> the content of each array.</p>
 <p>You should ensure you have read the <a href="examples/array-manipulations/../../guides/advanced-arrays.html">Advanced Use Of Expressions For Array Processing</a> chapter first before digesting the examples in this book's section.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="summarising-arrays-for-first-last-minimum-maximum--average-values"><a class="header" href="#summarising-arrays-for-first-last-minimum-maximum--average-values">Summarising Arrays For First, Last, Minimum, Maximum &amp; Average Values</a></h1>
-<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/">$first</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/last-array-element/">$last</a> array operators)</em></p>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/"><code>$first</code></a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/last-array-element/"><code>$last</code></a> array operators)</em></p>
 <h2 id="scenario-14"><a class="header" href="#scenario-14">Scenario</a></h2>
 <p>You want to generate daily summaries for the exchange rates of foreign currency &quot;pairs&quot; (e.g. &quot;Euro-to-USDollar&quot;). You need to analyse an array of persisted hourly rates for each currency pair for each day. You will output a daily summary of the open (first), close (last), low (minimum), high (maximum) and average exchange rate values for each currency pair.</p>
 <h2 id="sample-data-population-14"><a class="header" href="#sample-data-population-14">Sample Data Population</a></h2>
@@ -4554,7 +4557,7 @@ db.currency_pair_values.insertMany([
 <h2 id="observations-14"><a class="header" href="#observations-14">Observations</a></h2>
 <ul>
 <li>
-<p><strong><em>$first</em> &amp; <em>$last</em> For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to operate correctly in MongoDB versions before 4.4:</p>
+<p><strong><code>$first</code> &amp; <code>$last</code> For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to operate correctly in MongoDB versions before 4.4:</p>
 <pre><code class="language-javascript">// $first equivalent
 &quot;summary.open&quot;: {&quot;$arrayElemAt&quot;: [&quot;$hour_values&quot;, 0]},
   
@@ -4704,7 +4707,7 @@ db.weather_measurements.insertMany([
 <h2 id="scenario-16"><a class="header" href="#scenario-16">Scenario</a></h2>
 <p>You've conducted performance testing of an application with the results of each &quot;test run&quot; captured in a database. Each record contains a set of response times for the test run. You want to analyse the data from multiple runs to identify the slowest ones. You calculate the median (50th percentile) and 90th percentile response times for each test run and only keep results where the 90th percentile response time is greater than 100 milliseconds.</p>
 <blockquote>
-<p><em>For MongoDB version 5.1 and earlier, the example will use a modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can reuse this chapter's custom <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents. For MongoDB version 5.2 and greater, you can instead use MongoDB's new <a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/sortArray/">$sortArray</a> operator.</em></p>
+<p><em>For MongoDB version 5.1 and earlier, the example will use a modified version of an &quot;expression generator&quot; <a href="https://github.com/asya999/bits-n-pieces/blob/master/scripts/sortArray.js">function for inline sorting of arrays</a> created by <a href="https://twitter.com/asya999">Asya Kamsky</a>. Adopting this approach avoids the need for you to use the combination of <code>$unwind</code>, <code>$sort</code>, and <code>$group</code> stages. Instead, you process each document's array in isolation for <a href="examples/array-manipulations/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimum performance</a>. You can reuse this chapter's custom <code>sortArray()</code> function as-is for your own situations where you need to sort an array field's contents. For MongoDB version 5.2 and greater, you can instead use MongoDB's new <a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/sortArray/"><code>$sortArray</code></a> operator.</em></p>
 </blockquote>
 <h2 id="sample-data-population-16"><a class="header" href="#sample-data-population-16">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate the test run results documents:</p>
@@ -5098,7 +5101,7 @@ db.products.insertMany([
 <h2 id="observations-17"><a class="header" href="#observations-17">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Search Stage.</strong> The <a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/">$search</a> stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages <a href="https://www.mongodb.com/docs/atlas/atlas-search/">Atlas Search</a>. A <code>$search</code> stage must be the first stage of an aggregation pipeline, and <a href="https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture">under the covers</a>, it instructs the system to execute a text search operation against an internally synchronised <em>Lucene</em> full-text index. Inside the <code>$search</code> stage, you can only use one of a small set of <a href="https://www.mongodb.com/docs/atlas/atlas-search/operators-and-collectors/">text-search specific pipeline operators</a>. In this example, the pipeline uses a <a href="https://www.mongodb.com/docs/atlas/atlas-search/compound/">$compound</a> operator to define a combination of multiple <a href="https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref">$text</a> text-search operators.</p>
+<p><strong>Search Stage.</strong> The <a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/"><code>$search</code></a> stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages <a href="https://www.mongodb.com/docs/atlas/atlas-search/">Atlas Search</a>. A <code>$search</code> stage must be the first stage of an aggregation pipeline, and <a href="https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture">under the covers</a>, it instructs the system to execute a text search operation against an internally synchronised <em>Lucene</em> full-text index. Inside the <code>$search</code> stage, you can only use one of a small set of <a href="https://www.mongodb.com/docs/atlas/atlas-search/operators-and-collectors/">text-search specific pipeline operators</a>. In this example, the pipeline uses a <a href="https://www.mongodb.com/docs/atlas/atlas-search/compound/"><code>$compound</code></a> operator to define a combination of multiple <a href="https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref">$text</a> text-search operators.</p>
 </li>
 <li>
 <p><strong>Results &amp; Relevancy Explanation.</strong> The executed pipeline ignores four of the seven input documents and sorts the remaining three documents by highest relevancy first. It achieves this by applying the following actions:</p>
@@ -5113,11 +5116,11 @@ db.products.insertMany([
 <p><strong>English Language Analyzer.</strong> Atlas Search provides <a href="https://www.mongodb.com/docs/atlas/atlas-search/analyzers/">multiple <em>Analyzer</em> options</a> for breaking down generated text indexes and executing text queries into searchable tokens. The default analyzer, <em>Standard</em>, is not used here because the pipeline needs to match variations of the same English words. For example, &quot;survives&quot; and &quot;surviving&quot; need to refer to the same term, and hence the text index uses the <em>lucene.english</em> analyzer.</p>
 </li>
 <li>
-<p><strong>Meta Operator.</strong> The <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/meta/">$meta</a> operator provides supplementary metadata about the results of a text search performed earlier in a pipeline. When leveraging an Atlas Search based text search, the pipeline can look up a <code>searchScore</code> field in the metadata to access the relevancy score attributed to each text search result. This example uses <code>searchScore</code> to help you understand why the results are in a particular order, with some records having higher relevancy than others. In this example, it serves no other purpose, and you can omit it. However, in a different situation, you might want to use the search score to filter out low relevancy results in a later <code>$match</code> stage of a pipeline, for example.</p>
+<p><strong>Meta Operator.</strong> The <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/meta/"><code>$meta</code></a> operator provides supplementary metadata about the results of a text search performed earlier in a pipeline. When leveraging an Atlas Search based text search, the pipeline can look up a <code>searchScore</code> field in the metadata to access the relevancy score attributed to each text search result. This example uses <code>searchScore</code> to help you understand why the results are in a particular order, with some records having higher relevancy than others. In this example, it serves no other purpose, and you can omit it. However, in a different situation, you might want to use the search score to filter out low relevancy results in a later <code>$match</code> stage of a pipeline, for example.</p>
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="facets-and-counts-text-search"><a class="header" href="#facets-and-counts-text-search">Facets And Counts Text Search</a></h1>
-<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of the <a href="https://www.mongodb.com/docs/atlas/atlas-search/facet/">facet</a> option in the <a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-searchMeta">$searchMeta</a> stage)</em></p>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of the <a href="https://www.mongodb.com/docs/atlas/atlas-search/facet/"><code>facet</code></a> option in the <a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-searchMeta"><code>$searchMeta</code></a> stage)</em></p>
 <h2 id="scenario-18"><a class="header" href="#scenario-18">Scenario</a></h2>
 <p>You help run a bank's call centre and want to analyse the summary descriptions of customer telephone enquiries recorded by call centre staff. You want to look for customer calls that mention <em>fraud</em> and understand what periods of a specific day these fraud-related calls occur. This insight will help the bank plan its future staffing rotas for the fraud department.</p>
 <blockquote>
@@ -5281,10 +5284,10 @@ db.enquiries.insertMany([
 <h2 id="observations-18"><a class="header" href="#observations-18">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Search Metadata Stage.</strong> The <a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/">$searchMeta</a> stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages <a href="https://www.mongodb.com/docs/atlas/atlas-search/">Atlas Search</a>. A <code>$searchMeta</code> stage must be the first stage of an aggregation pipeline, and <a href="https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture">under the covers</a>, it performs a text search operation against an internally synchronised Lucene full-text index. However, it is different from the <code>$search</code> operator used in the <a href="examples/full-text-search/compound-text-search.html">earlier search example chapter</a>. Instead, you use <code>$searchMeta</code> to ask the system to return metadata about the text search you executed, such as the match count, rather than returning the search result records. The <code>$searchMeta</code> stage takes a <code>facet</code> option, which takes two options, <code>operator</code> and <code>facet</code>, which you use to define the text search criteria and categorise the results in groups.</p>
+<p><strong>Search Metadata Stage.</strong> The <a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/"><code>$searchMeta</code></a> stage is only available in aggregation pipelines run against an Atlas-based MongoDB database which leverages <a href="https://www.mongodb.com/docs/atlas/atlas-search/">Atlas Search</a>. A <code>$searchMeta</code> stage must be the first stage of an aggregation pipeline, and <a href="https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/#fts-architecture">under the covers</a>, it performs a text search operation against an internally synchronised Lucene full-text index. However, it is different from the <code>$search</code> operator used in the <a href="examples/full-text-search/compound-text-search.html">earlier search example chapter</a>. Instead, you use <code>$searchMeta</code> to ask the system to return metadata about the text search you executed, such as the match count, rather than returning the search result records. The <code>$searchMeta</code> stage takes a <code>facet</code> option, which takes two options, <code>operator</code> and <code>facet</code>, which you use to define the text search criteria and categorise the results in groups.</p>
 </li>
 <li>
-<p><strong>Date Range Filter.</strong> The pipeline uses a <a href="https://www.mongodb.com/docs/atlas/atlas-search/text/">$text</a> operator for matching descriptions containing the term <em>fraud</em>. Additionally, the search criteria include a <a href="https://www.mongodb.com/docs/atlas/atlas-search/return-stored-source/">$range</a> operator. The <code>$range</code> operator allows you to match records between two numbers or two dates. The example pipeline applies a date range, only including documents where each <code>datetime</code> field's value is <em>30-January-2022</em>. </p>
+<p><strong>Date Range Filter.</strong> The pipeline uses a <a href="https://www.mongodb.com/docs/atlas/atlas-search/text/"><code>$text</code></a> operator for matching descriptions containing the term <em>fraud</em>. Additionally, the search criteria include a <a href="https://www.mongodb.com/docs/atlas/atlas-search/return-stored-source/"><code>$range</code></a> operator. The <code>$range</code> operator allows you to match records between two numbers or two dates. The example pipeline applies a date range, only including documents where each <code>datetime</code> field's value is <em>30-January-2022</em>. </p>
 </li>
 <li>
 <p><strong>Facet Boundaries.</strong> The pipeline uses a <code>facet</code> <em>collector</em> to group metadata results by date range boundaries. Each boundary in the example defines a 6-hour period of the same specific day for a document's <code>datetime</code> field. A single pipeline can declare multiple facets; hence you give each facet a different name. The pipeline only defines one facet in this example, labelling it <em>fraudEnquiryPeriods</em>. When the pipeline executes, it returns the total count of matched documents and the count of matches in each facet grouping. There were no <em>fraud-related</em> enquiries between midnight and 6am, indicating that perhaps the fraud department only requires &quot;skeleton-staffing&quot; for such periods. In contrast, the period between 6am and midday shows the highest number of fraud-related enquiries, suggesting the bank dedicates additional staff to those periods.</p>
@@ -5304,16 +5307,16 @@ db.enquiries.insertMany([
 <p>A simple example for each <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">stage in the MongoDB Aggregation Framework</a>. </p>
 <h4 id="stages"><a class="header" href="#stages">Stages:</a></h4>
 <table><thead><tr><th style="text-align: left">Query</th><th style="text-align: left">Mutate</th><th style="text-align: left">Summarise/Itemise</th><th style="text-align: left">Join</th><th style="text-align: left">Input/Output</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_geoNear">$geoNear</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_addFields">$addFields</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_bucket">$bucket</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_graphLookup">$graphLookup</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_documents">$documents</a></td></tr>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_limit">$limit</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_densify">$densify</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_bucketAuto">$bucketAuto</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_lookup">$lookup</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_merge">$merge</a></td></tr>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_match">$match</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_fill">$fill</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_count">$count</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_unionWith">$unionWith</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_out">$out</a></td></tr>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_sample">$sample</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_project">$project</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_facet">$facet</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_search">$search</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_redact">$redact</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_group">$group</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_searchmeta">$searchMeta</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_replaceRoot">$replaceRoot</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_sortByCount">$sortByCount</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_skip">$skip</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_replaceWith">$replaceWith</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_unwind">$unwind</a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_sort">$sort</a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_set">$set</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_setWindowFields">$setWindowFields</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_unset">$unset</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_geoNear"><code>$geoNear</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_addFields"><code>$addFields</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_bucket"><code>$bucket</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_graphLookup"><code>$graphLookup</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_documents"><code>$documents</code></a></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_limit"><code>$limit</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_densify"><code>$densify</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_bucketAuto"><code>$bucketAuto</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_lookup"><code>$lookup</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_merge"><code>$merge</code></a></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_match"><code>$match</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_fill"><code>$fill</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_count"><code>$count</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_unionWith"><code>$unionWith</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_out"><code>$out</code></a></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_sample"><code>$sample</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_project"><code>$project</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_facet"><code>$facet</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_search"><code>$search</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_redact"><code>$redact</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_group"><code>$group</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_searchmeta"><code>$searchMeta</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_replaceRoot"><code>$replaceRoot</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_sortByCount"><code>$sortByCount</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_skip"><code>$skip</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_replaceWith"><code>$replaceWith</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_unwind"><code>$unwind</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_sort"><code>$sort</code></a></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_set"><code>$set</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_setWindowFields"><code>$setWindowFields</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left"><a href="appendices/cheatsheet.html#stage_unset"><code>$unset</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
 </tbody></table>
 <blockquote>
 <p><em>The following stages are not included because they are unrelated to aggregating business data:  <code>$collStats</code>, <code>$indexStats</code>, <code>$listSessions</code>, <code>$planCacheStats</code>, <code>$currentOp</code>, <code>$listLocalSessions</code></em></p>
@@ -5343,7 +5346,7 @@ db.enquiries.insertMany([
 <p> </p>
 <hr />
 <p><a name="stage_addFields"></a></p>
-<h2 id="addfields"><a class="header" href="#addfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/">$addFields</a></a></h2>
+<h2 id="addfields"><a class="header" href="#addfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/"><code>$addFields</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5363,7 +5366,7 @@ $addFields: {z: &quot;●&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_bucket"></a></p>
-<h2 id="bucket"><a class="header" href="#bucket"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/">$bucket</a></a></h2>
+<h2 id="bucket"><a class="header" href="#bucket"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucket/"><code>$bucket</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5384,7 +5387,7 @@ $bucket: {
 <p> </p>
 <hr />
 <p><a name="stage_bucketAuto"></a></p>
-<h2 id="bucketauto"><a class="header" href="#bucketauto"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/">$bucketAuto</a></a></h2>
+<h2 id="bucketauto"><a class="header" href="#bucketauto"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/bucketAuto/"><code>$bucketAuto</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5401,7 +5404,7 @@ $bucketAuto: {groupBy: &quot;$val&quot;, buckets: 3}
 <p> </p>
 <hr />
 <p><a name="stage_count"></a></p>
-<h2 id="count"><a class="header" href="#count"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/count/">$count</a></a></h2>
+<h2 id="count"><a class="header" href="#count"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/count/"><code>$count</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5416,7 +5419,7 @@ $count: &quot;amount&quot;
 <p> </p>
 <hr />
 <p><a name="stage_densify"></a></p>
-<h2 id="densify"><a class="header" href="#densify"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/densify/">$densify</a></a></h2>
+<h2 id="densify"><a class="header" href="#densify"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/densify/"><code>$densify</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5449,7 +5452,7 @@ $densify: {
 <p> </p>
 <hr />
 <p><a name="stage_documents"></a></p>
-<h2 id="documents"><a class="header" href="#documents"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/documents/">$documents</a></a></h2>
+<h2 id="documents"><a class="header" href="#documents"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/documents/"><code>$documents</code></a></a></h2>
 <pre><code class="language-javascript">[     ]
    ⬇︎      
 $documents: {
@@ -5463,7 +5466,7 @@ $documents: {
 <p> </p>
 <hr />
 <p><a name="stage_facet"></a></p>
-<h2 id="facet"><a class="header" href="#facet"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/facet/">$facet</a></a></h2>
+<h2 id="facet"><a class="header" href="#facet"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/facet/"><code>$facet</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5490,7 +5493,7 @@ $facet: {
 <p> </p>
 <hr />
 <p><a name="stage_fill"></a></p>
-<h2 id="fill"><a class="header" href="#fill"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/fill/">$fill</a></a></h2>
+<h2 id="fill"><a class="header" href="#fill"><a href="https://docs.mongodb.com/v6.0/reference/operator/aggregation/fill/"><code>$fill</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5515,7 +5518,7 @@ $fill: {
 <p> </p>
 <hr />
 <p><a name="stage_geoNear"></a></p>
-<h2 id="geonear"><a class="header" href="#geonear"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/">$geoNear</a></a></h2>
+<h2 id="geonear"><a class="header" href="#geonear"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/"><code>$geoNear</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -5538,7 +5541,7 @@ $geoNear: {
 <p> </p>
 <hr />
 <p><a name="stage_graphLookup"></a></p>
-<h2 id="graphlookup"><a class="header" href="#graphlookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a></a></h2>
+<h2 id="graphlookup"><a class="header" href="#graphlookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/"><code>$graphLookup</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5566,7 +5569,7 @@ $project: {connections_count: {$size: &quot;$connections&quot;}}
 <p> </p>
 <hr />
 <p><a name="stage_group"></a></p>
-<h2 id="group"><a class="header" href="#group"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/">$group</a></a></h2>
+<h2 id="group"><a class="header" href="#group"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/"><code>$group</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5583,7 +5586,7 @@ $group: {_id: &quot;$x&quot;, ylist: {$push: &quot;$y&quot;}}
 <p> </p>
 <hr />
 <p><a name="stage_limit"></a></p>
-<h2 id="limit"><a class="header" href="#limit"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/limit/">$limit</a></a></h2>
+<h2 id="limit"><a class="header" href="#limit"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/limit/"><code>$limit</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5599,7 +5602,7 @@ $limit: 2
 <p> </p>
 <hr />
 <p><a name="stage_lookup"></a></p>
-<h2 id="lookup"><a class="header" href="#lookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a></a></h2>
+<h2 id="lookup"><a class="header" href="#lookup"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/"><code>$lookup</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5645,7 +5648,7 @@ $lookup: {
 <p> </p>
 <hr />
 <p><a name="stage_match"></a></p>
-<h2 id="match"><a class="header" href="#match"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/">$match</a></a></h2>
+<h2 id="match"><a class="header" href="#match"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/"><code>$match</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5662,7 +5665,7 @@ $match: {y: &quot;▲&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_merge"></a></p>
-<h2 id="merge"><a class="header" href="#merge"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/merge/">$merge</a></a></h2>
+<h2 id="merge"><a class="header" href="#merge"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/merge/"><code>$merge</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5683,7 +5686,7 @@ db.results.find()
 <p> </p>
 <hr />
 <p><a name="stage_out"></a></p>
-<h2 id="out"><a class="header" href="#out"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/out/">$out</a></a></h2>
+<h2 id="out"><a class="header" href="#out"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/out/"><code>$out</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5704,7 +5707,7 @@ db.results.find()
 <p> </p>
 <hr />
 <p><a name="stage_project"></a></p>
-<h2 id="project"><a class="header" href="#project"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a></a></h2>
+<h2 id="project"><a class="header" href="#project"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/"><code>$project</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5724,7 +5727,7 @@ $project: {x: 1}
 <p> </p>
 <hr />
 <p><a name="stage_redact"></a></p>
-<h2 id="redact"><a class="header" href="#redact"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/redact/">$redact</a></a></h2>
+<h2 id="redact"><a class="header" href="#redact"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/redact/"><code>$redact</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -5744,7 +5747,7 @@ $redact: {$cond: {
 <p> </p>
 <hr />
 <p><a name="stage_replaceRoot"></a></p>
-<h2 id="replaceroot"><a class="header" href="#replaceroot"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceRoot/">$replaceRoot</a></a></h2>
+<h2 id="replaceroot"><a class="header" href="#replaceroot"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceRoot/"><code>$replaceRoot</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
 {_id: &quot;▦&quot;, a: &quot;▲&quot;, b: [&quot;◰&quot;, &quot;◳&quot;, &quot;◱&quot;]}
@@ -5764,7 +5767,7 @@ $replaceRoot: {
 <p> </p>
 <hr />
 <p><a name="stage_replaceWith"></a></p>
-<h2 id="replacewith"><a class="header" href="#replacewith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceWith/">$replaceWith</a></a></h2>
+<h2 id="replacewith"><a class="header" href="#replacewith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/replaceWith/"><code>$replaceWith</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
 {_id: &quot;▦&quot;, a: &quot;▲&quot;, b: [&quot;◰&quot;, &quot;◳&quot;, &quot;◱&quot;]}
@@ -5784,7 +5787,7 @@ $replaceWith: {
 <p> </p>
 <hr />
 <p><a name="stage_sample"></a></p>
-<h2 id="sample"><a class="header" href="#sample"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sample/">$sample</a></a></h2>
+<h2 id="sample"><a class="header" href="#sample"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sample/"><code>$sample</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5801,7 +5804,7 @@ $sample: {size: 3}
 <p> </p>
 <hr />
 <p><a name="stage_search"></a></p>
-<h2 id="search"><a class="header" href="#search"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-search">$search</a></a></h2>
+<h2 id="search"><a class="header" href="#search"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-search"><code>$search</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -5820,7 +5823,7 @@ $search: {
 <p> </p>
 <hr />
 <p><a name="stage_searchmeta"></a></p>
-<h2 id="searchmeta"><a class="header" href="#searchmeta"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-searchmeta">$searchMeta</a></a></h2>
+<h2 id="searchmeta"><a class="header" href="#searchmeta"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#-searchmeta"><code>$searchMeta</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;Bigtown&quot;, loc: {type: &quot;Point&quot;, coordinates: [1,1]}}
 {_id: &quot;Smalltown&quot;, loc: {type: &quot;Point&quot;, coordinates: [3,3]}}
 {_id: &quot;Happytown&quot;, loc: {type: &quot;Point&quot;, coordinates: [5,5]}}
@@ -5858,7 +5861,7 @@ $searchMeta: {
 <p> </p>
 <hr />
 <p><a name="stage_set"></a></p>
-<h2 id="set"><a class="header" href="#set"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/">$set</a></a></h2>
+<h2 id="set"><a class="header" href="#set"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/"><code>$set</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5878,7 +5881,7 @@ $set: {y: &quot;▲&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_setWindowFields"></a></p>
-<h2 id="setwindowfields"><a class="header" href="#setwindowfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/">$setWindowFields</a></a></h2>
+<h2 id="setwindowfields"><a class="header" href="#setwindowfields"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setWindowFields/"><code>$setWindowFields</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5909,7 +5912,7 @@ $setWindowFields: {
 <p> </p>
 <hr />
 <p><a name="stage_skip"></a></p>
-<h2 id="skip"><a class="header" href="#skip"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/skip/">$skip</a></a></h2>
+<h2 id="skip"><a class="header" href="#skip"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/skip/"><code>$skip</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5924,7 +5927,7 @@ $skip: 5
 <p> </p>
 <hr />
 <p><a name="stage_sort"></a></p>
-<h2 id="sort"><a class="header" href="#sort"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a></a></h2>
+<h2 id="sort"><a class="header" href="#sort"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/"><code>$sort</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5944,7 +5947,7 @@ $sort: {x: 1, y: 1}
 <p> </p>
 <hr />
 <p><a name="stage_sortByCount"></a></p>
-<h2 id="sortbycount"><a class="header" href="#sortbycount"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/">$sortByCount</a></a></h2>
+<h2 id="sortbycount"><a class="header" href="#sortbycount"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sortByCount/"><code>$sortByCount</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5961,7 +5964,7 @@ $sortByCount: &quot;$x&quot;
 <p> </p>
 <hr />
 <p><a name="stage_unionWith"></a></p>
-<h2 id="unionwith"><a class="header" href="#unionwith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/">$unionWith</a></a></h2>
+<h2 id="unionwith"><a class="header" href="#unionwith"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unionWith/"><code>$unionWith</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -5992,7 +5995,7 @@ $unionWith: {coll: &quot;lists&quot;}
 <p> </p>
 <hr />
 <p><a name="stage_unset"></a></p>
-<h2 id="unset"><a class="header" href="#unset"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/">$unset</a></a></h2>
+<h2 id="unset"><a class="header" href="#unset"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/"><code>$unset</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;◐&quot;, x: &quot;■&quot;, y: &quot;▲&quot;, val: 10, ord: 0}
 {_id: &quot;◑&quot;, x: &quot;■&quot;, y: &quot;■&quot;, val: 60}
 {_id: &quot;◒&quot;, x: &quot;●&quot;, y: &quot;■&quot;, val: 80}
@@ -6012,7 +6015,7 @@ $unset: [&quot;x&quot;]
 <p> </p>
 <hr />
 <p><a name="stage_unwind"></a></p>
-<h2 id="unwind"><a class="header" href="#unwind"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a></a></h2>
+<h2 id="unwind"><a class="header" href="#unwind"><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/"><code>$unwind</code></a></a></h2>
 <pre><code class="language-javascript">{_id: &quot;▤&quot;, a: &quot;●&quot;, b: [&quot;◰&quot;, &quot;◱&quot;]}
 {_id: &quot;▥&quot;, a: &quot;▲&quot;, b: [&quot;◲&quot;]}
 {_id: &quot;▦&quot;, a: &quot;▲&quot;, b: [&quot;◰&quot;, &quot;◳&quot;, &quot;◱&quot;]}

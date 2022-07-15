@@ -153,7 +153,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="summarising-arrays-for-first-last-minimum-maximum--average-values"><a class="header" href="#summarising-arrays-for-first-last-minimum-maximum--average-values">Summarising Arrays For First, Last, Minimum, Maximum &amp; Average Values</a></h1>
-<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/">$first</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/last-array-element/">$last</a> array operators)</em></p>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/"><code>$first</code></a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/last-array-element/"><code>$last</code></a> array operators)</em></p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
 <p>You want to generate daily summaries for the exchange rates of foreign currency &quot;pairs&quot; (e.g. &quot;Euro-to-USDollar&quot;). You need to analyse an array of persisted hourly rates for each currency pair for each day. You will output a daily summary of the open (first), close (last), low (minimum), high (maximum) and average exchange rate values for each currency pair.</p>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
@@ -248,7 +248,7 @@ db.currency_pair_values.insertMany([
 <h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
 <ul>
 <li>
-<p><strong><em>$first</em> &amp; <em>$last</em> For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to operate correctly in MongoDB versions before 4.4:</p>
+<p><strong><code>$first</code> &amp; <code>$last</code> For Earlier MongoDB Versions.</strong> MongoDB only introduced the <code>$first</code> and <code>$last</code> array operator expressions in version 4.4. However, it is straightforward for you to replace each one in the pipeline with an equivalent solution, using the <code>$arrayElemAt</code> operator. Below are the alternatives you can use instead of <code>$first</code> and <code>$last</code> to operate correctly in MongoDB versions before 4.4:</p>
 <pre><code class="language-javascript">// $first equivalent
 &quot;summary.open&quot;: {&quot;$arrayElemAt&quot;: [&quot;$hour_values&quot;, 0]},
   
