@@ -30,7 +30,7 @@ Acknowledgements - many thanks to the following people for their valuable feedba
  
 ---
 
-Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.pexels.com/photo/red-steel-pipe-2420294/) under the [Pexels License](https://www.pexels.com/license/) _(free to use & modify)_
+Front cover image adapted from a [Photo by Henry & Co. from Pexels](https://www.pexels.com/photo/red-steel-pipe-2420294/) under the [Pexels License](https://www.pexels.com/license/) (free to use & modify)
 
 ---
 
