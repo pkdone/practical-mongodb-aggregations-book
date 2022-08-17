@@ -127,7 +127,7 @@ db.shapes.aggregate([
     "depthField": "depth",
     "as": "connections",
   }},
-  {$project: {"connections_count": {"$size": "$connections"}}}
+  {"$project": {"connections_count": {"$size": "$connections"}}}
 ]);
 
 
