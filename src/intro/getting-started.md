@@ -22,12 +22,12 @@ Note that the aggregation pipelines in the [Full-Text Search Examples](../exampl
 
 ## Client Tool
 
-There are many options for the client tool, four of which are:
+There are many options for the client tool, some of which are:
 
  1. __*Modern* Shell__. Install the modern version of MongoDB's command-line tool, the [MongoDB Shell](https://www.mongodb.com/try/download/shell): `mongosh`
  2. __*Legacy* Shell__. Install the legacy version of MongoDB's command-line tool, the [Mongo Shell](https://docs.mongodb.com/manual/mongo/): `mongo` (you will often find this binary bundled with a MongoDB database installation)
- 3. __Compass__. Install the _official_ MongoDB Inc. provided graphical user interface (GUI) tool, [MongoDB Compass](https://www.mongodb.com/products/compass)
- 4. __VS Code__. [Install MongoDB for VS Cose](https://www.mongodb.com/docs/mongodb-vscode/install/), and use the [Playgrounds](https://www.mongodb.com/docs/mongodb-vscode/playgrounds/) feature
+ 3. __VS Code__. [Install MongoDB for VS Cose](https://www.mongodb.com/docs/mongodb-vscode/install/), and use the [Playgrounds](https://www.mongodb.com/docs/mongodb-vscode/playgrounds/) feature
+ 4. __Compass__. Install the _official_ MongoDB Inc. provided graphical user interface (GUI) tool, [MongoDB Compass](https://www.mongodb.com/products/compass)
  5. __Studio 3T__. Install the _3rd party_ 3T Software Labs provided graphical user interface (GUI) tool, [Studio 3T](https://studio3t.com/download/)
  
 The book's examples present code in such a way to make it easy to copy and paste into MongoDB's Shell (`mongosh` or `mongo`) to execute. All subsequent instructions in this book assume you are using the Shell. However, you will find it straightforward to use one of the mentioned GUI tools instead to consume the code examples. Of the two Shell versions, is it is easier to use and view results with the _modern_ Shell.
@@ -54,6 +54,13 @@ Here is an example of how you can start the _modern_ Shell to connect to a Mongo
 ```bash
 mongosh "mongodb://localhost:27017"
 ```
+
+### MongoDB For VS Code
+
+Using the MongoDB _playground_ tool in VS Code, you can quickly prototype queries and aggregation pipelines and then execute them against a MongoDB database with the results shown in an output tab. Below is a screenshot of the playground tool in action:
+
+![MongoDB For VS Code playground for building and testing database aggregation pipelines](./pics/vscode.png)
+
 
 ### MongoDB Compass GUI
 

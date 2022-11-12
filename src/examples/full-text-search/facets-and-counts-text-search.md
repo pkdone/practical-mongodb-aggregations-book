@@ -54,7 +54,7 @@ db.enquiries.insertMany([
   {
     "acountId": "4542001",
     "datetime": ISODate("2022-01-30T16:55:46Z"),
-    "summary": "Enquiring for loan - approved standard loan for 6000 voer 4 years",
+    "summary": "Enquiring for loan - approved standard loan for 6000 over 4 years",
   },
   {
     "acountId": "7387756",

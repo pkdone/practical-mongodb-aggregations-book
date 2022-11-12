@@ -43,7 +43,7 @@ var pipeline = [
   {"$set": {
     "cost": {
       "$cond": { 
-        "if":   {"$gte": ["$qty", 5 ]}, 
+        "if":   {"$gte": ["$qty", 5]}, 
         "then": {"$multiply": ["$price", "$qty", 0.9]},
         "else": {"$multiply": ["$price", "$qty"]},
       }    
