@@ -1,11 +1,11 @@
-# Two Array Fields Comparison
+# Comparison Of Two Arrays
 
-__Minimum MongoDB Version:__ 4.2  <-- TODO: uses $first
+__Minimum MongoDB Version:__ 4.4 &nbsp;&nbsp; _(due to use of [`$first`](https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/) array operator)_
 
 
 ## Scenario
 
-You TODO.
+You are an IT administrator managing some virtual machine deployments in a data centre to host a critical business application in a few environments (e.g. "Production", "QA"). A database collection captured the configuration state of each virtual machine across two days. You want to generate a report showing what configuration changes people made to the virtual machines (if any) between these two days.  
 
 
 ## Sample Data Population
@@ -13,7 +13,7 @@ You TODO.
 Drop any old version of the database (if it exists) and then populate the deployments documents:
 
 ```javascript
-use('book-two-array-fields-comparison');
+use book-comparison-of-two-arrays;
 db.dropDatabase();
 
 // Insert 5 records into the deployments collection
@@ -176,10 +176,10 @@ var pipeline = [
     },
   }},
 
-  // Add 'state' field and only show 'differences' field if there are differences
+  // Add 'status' field and only show 'differences' field if there are differences
   {"$set": {
-    // Set 'state' to ADDED, REMOVED, MODIFIED or UNCHANGED accordingly
-    "state": {
+    // Set 'status' to ADDED, REMOVED, MODIFIED or UNCHANGED accordingly
+    "status": {
       "$switch": {        
         "branches": [
           {
@@ -247,13 +247,13 @@ db.deployments.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-TODO documents should be returned, TODO, as shown below:
+Five documents should be returned, showing whether anyone added, removed or modified a deployment or left it unchanged, with the deployment's changes shown if modified, as shown below:
 
 ```javascript
 [
   {
     "name": "ProdServer",
-    "state": "MODIFIED",
+    "status": "MODIFIED",
     "differences": [
       {
         "field": "vcpus",
@@ -267,7 +267,7 @@ TODO documents should be returned, TODO, as shown below:
   },
   {
     "name": "QAServer",
-    "state": "MODIFIED",
+    "status": "MODIFIED",
     "differences": [
       {
         "field": "storage",
@@ -285,15 +285,15 @@ TODO documents should be returned, TODO, as shown below:
   },
   {
     "name": "LoadTestServer",
-    "state": "REMOVED"
+    "status": "REMOVED"
   },
   {
     "name": "IntegrationServer",
-    "state": "UNCHANGED"
+    "status": "UNCHANGED"
   },
   {
     "name": "DevServer",
-    "state": "ADDED"
+    "status": "ADDED"
   }
 ]
 ```
@@ -303,5 +303,5 @@ TODO documents should be returned, TODO, as shown below:
 
  * __Macro Functions.__ Like the prevuous example (LINK) todo.
 
- * __Todo.__ TODO.
+ * __Todo.__ TODO - reality would have record per day but would just use $sort + $group to get the data ready for the first input stage of the outline pipeline
 
