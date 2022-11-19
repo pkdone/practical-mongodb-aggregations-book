@@ -158,18 +158,38 @@ Three documents should be returned, representing the three gamers and showing th
 [
   {
     userId: 123456789,
-    coinTypeAwardedCounts: [ { id: 'bronze', count: 2 }, { id: 'silver', count: 1 }, { id: 'gold', count: 3 } ],
-    coinTypeTotals: [ { id: 'bronze', total: 175 }, { id: 'silver', total: 50 }, { id: 'gold', total: 85 } ]
+    coinTypeAwardedCounts: [ 
+      { id: 'bronze', count: 2 },
+      { id: 'silver', count: 1 },
+      { id: 'gold', count: 3 }
+    ],
+    coinTypeTotals: [
+      { id: 'bronze', total: 175 },
+      { id: 'silver', total: 50 },
+      { id: 'gold', total: 85 }
+    ]
   },
   {
     userId: 987654321,
-    coinTypeAwardedCounts: [ { id: 'bronze', count: 2 }, { id: 'silver', count: 3 } ],
-    coinTypeTotals: [ { id: 'bronze', total: 700 }, { id: 'silver', total: 150 } ]
+    coinTypeAwardedCounts: [
+      { id: 'bronze', count: 2 },
+      { id: 'silver', count: 3 }
+    ],
+    coinTypeTotals: [
+      { id: 'bronze', total: 700 },
+      { id: 'silver', total: 150 }
+    ]
   },
   {
     userId: 888888888,
-    coinTypeAwardedCounts: [ { id: 'gold', count: 1 }, { id: 'platinum', count: 1 } ],
-    coinTypeTotals: [ { id: 'gold', total: 500 }, { id: 'platinum', total: 5 } ]
+    coinTypeAwardedCounts: [
+      { id: 'gold', count: 1 },
+      { id: 'platinum', count: 1 }
+    ],
+    coinTypeTotals: [
+      { id: 'gold', total: 500 },
+      { id: 'platinum', total: 5 }
+    ]
   }
 ]
 ```
