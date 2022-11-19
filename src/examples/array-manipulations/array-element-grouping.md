@@ -9,7 +9,7 @@ You want to provide a report for your online game showing the total "coin" rewar
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate the user rewards documents:
+Drop any old version of the database (if it exists) and then populate the user rewards collection:
 
 ```javascript
 use book-array-element-grouping;
@@ -157,81 +157,19 @@ Three documents should be returned, representing the three gamers and showing th
 ```javascript
 [
   {
-    "userId": 123456789,
-    "coinTypeAwardedCounts": [
-      {
-        "id": "bronze",
-        "count": 2
-      },
-      {
-        "id": "gold",
-        "count": 3
-      },
-      {
-        "id": "silver",
-        "count": 1
-      }
-    ],
-    "coinTypeTotals": [
-      {
-        "id": "bronze",
-        "total": 175
-      },
-      {
-        "id": "gold",
-        "total": 85
-      },
-      {
-        "id": "silver",
-        "total": 50
-      }
-    ]
+    userId: 123456789,
+    coinTypeAwardedCounts: [ { id: 'bronze', count: 2 }, { id: 'silver', count: 1 }, { id: 'gold', count: 3 } ],
+    coinTypeTotals: [ { id: 'bronze', total: 175 }, { id: 'silver', total: 50 }, { id: 'gold', total: 85 } ]
   },
   {
-    "userId": 987654321,
-    "coinTypeAwardedCounts": [
-      {
-        "id": "bronze",
-        "count": 2
-      },
-      {
-        "id": "silver",
-        "count": 3
-      }
-    ],
-    "coinTypeTotals": [
-      {
-        "id": "bronze",
-        "total": 700
-      },
-      {
-        "id": "silver",
-        "total": 150
-      }
-    ]
+    userId: 987654321,
+    coinTypeAwardedCounts: [ { id: 'bronze', count: 2 }, { id: 'silver', count: 3 } ],
+    coinTypeTotals: [ { id: 'bronze', total: 700 }, { id: 'silver', total: 150 } ]
   },
   {
-    "userId": 888888888,
-    "coinTypeAwardedCounts": [
-      {
-        "id": "gold",
-        "count": 1
-      },
-      {
-        "id": "platinum",
-        "count": 1
-      }
-    ],
-    "coinTypeTotals": [
-      {
-        "id": "gold",
-        "total": 500
-      },
-      {
-        "id": "platinum",
-        "total": 5
-      }
-    ]
+    userId: 888888888,
+    coinTypeAwardedCounts: [ { id: 'gold', count: 1 }, { id: 'platinum', count: 1 } ],
+    coinTypeTotals: [ { id: 'gold', total: 500 }, { id: 'platinum', total: 5 } ]
   }
 ]
 ```
@@ -239,9 +177,10 @@ Three documents should be returned, representing the three gamers and showing th
 
 ## Observations
 
- * __Macro Functions.__ Like the prevuous example (LINK) todo.
+ * __Reusable Macro Functions.__ As with the [previous example](array-sort-percentiles.md), the aggregation uses macro functions to generate boilerplate code, which it inlines into the pipeline before the aggregation runtime executes it. In this example, both the `arrayGroupByCount()` and `arrayGroupBySum()` macro functions are general-purpose and reusable, which you can employ as-is for any other scenario where array elements need to be grouped and totalled.
 
- * __Grouping Array Elements Without Unwinding First.__ TODO. (not knowing up front what the groups are)
+ * __Grouping Array Elements Without Unwinding First.__ The `$group` stage is the standard tool for grouping elements and producing counts and totals for these groups. However, as discussed in the
+[optimising for performance](../../guides/performance.md#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements) chapter, if you only need to manipulate each document's array field in isolation from other documents, this is inefficient. You must unwind a document's array, process the unpacked data and then regroup each array back into the same parent document. By regrouping, you are introducing a blocking and resource-limited step. This example's two macro functions enable you to avoid this overhead and achieve the array grouping you require, even when the keys you are grouping by are unknown to you ahead of time. The `$setUnion` operator used in both functions produces the set of unique keys to group by.
  
- * __TODO confusion.__ TODO use of JavaScript Template strings.
+ * __Variable Reference And `$$` Potential Confusion.__ You may recall in the [Expressions Explained chapter](../../guides/expressions.md) that for aggregation expressions, field paths begin with `$` (e.g. `$rewards`) and variables begin with `$$` (e.g. `$$currentItem`). Therefore you may be confused by the syntax `` `$${arraySubdocField}` `` used in both functions. This confusion is understandable. Employing `` ` `` backticks is part of the [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) feature of JavaScript. Therefore, before the pipeline executes, the JavaScript interpreter replaces `${arraySubdocField}` with the string `rewards`, which is the value of the `arraySubdocField` parameter passed to the function. So `` `$${arraySubdocField}` `` becomes the field path `"$rewards"` before the macro function embeds it into the larger complex expression it is constructing.
 

@@ -301,7 +301,13 @@ Five documents should be returned, showing whether anyone added, removed or modi
 
 ## Observations
 
- * __Macro Functions.__ Like the prevuous example (LINK) todo.
+ * __Reusable Macro Functions.__ As with many of the other _Array Manipulation Examples_, the aggregation uses macro functions to generate boilerplate code for use in the pipeline. These functions are general-purpose and reusable as-is in other solutions.
 
- * __Todo.__ TODO - reality would have record per day but would just use $sort + $group to get the data ready for the first input stage of the outline pipeline
+ * __Sub-Document Comparison.__ The pipeline provides a generic way to compare the topmost fields hanging off two sub-document fields. The comparison will only work for sub-document fields with primitive values (e.g. String, Double, Null, Date, Boolean, etc.). The comparison will not work if a sub-document's field is an Array or Object. The pipeline finds all the field names ('keys') appearing in either sub-document. For each field name, the pipeline then compares if it exists in both sub-documents, and if the values don't match, it incorporates the two different values in the output.
+
+ * __Potential Need For Earlier Stages.__ The example source documents already embed two fields to compare, each corresponding to the deployment's configuration captured at a different point in time (`beforeTimestamp` and `afterTimestamp`). In real-world data models, these two configuration snapshots would be more likely to correspond to two different records in a collection, not one combined record. However, it doesn't mean that this example is redundant. In such cases, you would include the following additional stages at the start of the example's pipeline: 
+    - `$sort` to sort all records by timestamp regardless of which deployment each corresponds to.
+    - `$group` to group on the name of the deployment. Inside this group stage, you would use a `$first` operator to capture the first document's `config` into a new `beforeConfig` field and a `$last` operator to capture the last document's `config` into a new `afterConfig` field.
+
+    The rest of the pipeline from the example would then be used unchanged.
 
