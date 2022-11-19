@@ -12,7 +12,7 @@ You've conducted performance testing of an application with the results of each 
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate the test run results documents:
+Drop any old version of the database (if it exists) and then populate the test run results collection:
 
 ```javascript
 use book-inline-array-sort-percentile;

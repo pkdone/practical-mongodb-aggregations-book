@@ -10,7 +10,7 @@ You are an IT administrator managing some virtual machine deployments in a data 
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate the deployments documents:
+Drop any old version of the database (if it exists) and then populate the deployments collection:
 
 ```javascript
 use book-comparison-of-two-arrays;

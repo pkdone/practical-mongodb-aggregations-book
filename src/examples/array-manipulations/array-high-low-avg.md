@@ -10,7 +10,7 @@ You want to generate daily summaries for the exchange rates of foreign currency 
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate new _currency-pair daily_ records:
+Drop any old version of the database (if it exists) and then populate new _currency-pair daily_ collection:
 
 ```javascript
 use book-array-high-low-avg;

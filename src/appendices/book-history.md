@@ -2,10 +2,10 @@
 
 A summary of the significant additions in each major version of this book.
 
-__Version 5.0 (released in TODO 2022)__
-* TODO example chapter
-* TODO example chapter
-* TODO example chapter
+__Version 5.0 (released in November 2022)__
+* State Change Boundaries example chapter
+* Array Element Grouping example chapter
+* Comparison Of Two Arrays example chapter
 
 __Version 4.0 (released in June 2022)__
 * Compound Text Search Criteria example chapter
