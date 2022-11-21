@@ -1,0 +1,492 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Comparison Of Two Arrays - Practical MongoDB Aggregations Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Learn how to develop effective and optimal data manipulation and analytics pipelines with this book, using the MongoDB Aggregation Framework">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-D0T2GQ8R19"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-D0T2GQ8R19');
+        </script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/restricted-view.html"><strong aria-hidden="true">3.5.1.</strong> Restricted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html" class="active"><strong aria-hidden="true">3.7.5.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Practical MongoDB Aggregations Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="comparison-of-two-arrays"><a class="header" href="#comparison-of-two-arrays">Comparison Of Two Arrays</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 4.4    <em>(due to use of <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/first-array-element/"><code>$first</code></a> array operator)</em></p>
+<h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
+<p>You are an IT administrator managing some virtual machine deployments in a data centre to host a critical business application in a few environments (e.g. &quot;Production&quot;, &quot;QA&quot;). A database collection captured the configuration state of each virtual machine across two days. You want to generate a report showing what configuration changes people made to the virtual machines (if any) between these two days.</p>
+<h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
+<p>Drop any old version of the database (if it exists) and then populate the deployments collection:</p>
+<pre><code class="language-javascript">use book-comparison-of-two-arrays;
+db.dropDatabase();
+
+// Insert 5 records into the deployments collection
+db.deployments.insertMany([
+  {
+    &quot;name&quot;: &quot;ProdServer&quot;,
+    &quot;beforeTimestamp&quot;: ISODate(&quot;2022-01-01T00:00:00Z&quot;),
+    &quot;afterTimestamp&quot;: ISODate(&quot;2022-01-02T00:00:00Z&quot;),
+    &quot;beforeConfig&quot;: {
+      &quot;vcpus&quot;: 8,
+      &quot;ram&quot;: 128,
+      &quot;storage&quot;: 512,
+      &quot;state&quot;: &quot;running&quot;,
+    },
+    &quot;afterConfig&quot;: {
+      &quot;vcpus&quot;: 16,
+      &quot;ram&quot;: 256,
+      &quot;storage&quot;: 512,
+      &quot;state&quot;: &quot;running&quot;,
+    },    
+  },
+  {
+    &quot;name&quot;: &quot;QAServer&quot;,
+    &quot;beforeTimestamp&quot;: ISODate(&quot;2022-01-01T00:00:00Z&quot;),
+    &quot;afterTimestamp&quot;: ISODate(&quot;2022-01-02T00:00:00Z&quot;),
+    &quot;beforeConfig&quot;: {
+      &quot;vcpus&quot;: 4,
+      &quot;ram&quot;: 64,
+      &quot;storage&quot;: 512,
+      &quot;state&quot;: &quot;paused&quot;,
+    },
+    &quot;afterConfig&quot;: {
+      &quot;vcpus&quot;: 4,
+      &quot;ram&quot;: 64,
+      &quot;storage&quot;: 256,
+      &quot;state&quot;: &quot;running&quot;,
+      &quot;extraParams&quot;: &quot;disableTLS;disableCerts;&quot;
+    },    
+  },
+  {
+    &quot;name&quot;: &quot;LoadTestServer&quot;,
+    &quot;beforeTimestamp&quot;: ISODate(&quot;2022-01-01T00:00:00Z&quot;),
+    &quot;beforeConfig&quot;: {
+      &quot;vcpus&quot;: 8,
+      &quot;ram&quot;: 128,
+      &quot;storage&quot;: 256,
+      &quot;state&quot;: &quot;running&quot;,
+    },
+  },
+  {
+    &quot;name&quot;: &quot;IntegrationServer&quot;,
+    &quot;beforeTimestamp&quot;: ISODate(&quot;2022-01-01T00:00:00Z&quot;),
+    &quot;afterTimestamp&quot;: ISODate(&quot;2022-01-02T00:00:00Z&quot;),
+    &quot;beforeConfig&quot;: {
+      &quot;vcpus&quot;: 4,
+      &quot;ram&quot;: 32,
+      &quot;storage&quot;: 64,
+      &quot;state&quot;: &quot;running&quot;,
+    },
+    &quot;afterConfig&quot;: {
+      &quot;vcpus&quot;: 4,
+      &quot;ram&quot;: 32,
+      &quot;storage&quot;: 64,
+      &quot;state&quot;: &quot;running&quot;,
+    },
+  },
+  {
+    &quot;name&quot;: &quot;DevServer&quot;,
+    &quot;afterTimestamp&quot;: ISODate(&quot;2022-01-02T00:00:00Z&quot;),
+    &quot;afterConfig&quot;: {
+      &quot;vcpus&quot;: 2,
+      &quot;ram&quot;: 16,
+      &quot;storage&quot;: 64,
+      &quot;state&quot;: &quot;running&quot;,
+    },
+  },
+]);
+</code></pre>
+<h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
+<p>You first need to define the following two functions, one to TODO, the other TODO, ready for you to use in a pipeline:</p>
+<pre><code class="language-javascript">// Macro function to generate a complex expression to get all the unique keys
+// from two sub-documents returned as an array of the unique keys
+function getArrayOfTwoSubdocsKeysNoDups(firstArrayRef, secondArrayRef) {
+  return {
+    &quot;$setUnion&quot;: {
+      &quot;$concatArrays&quot;: [
+        {&quot;$map&quot;: {
+          &quot;input&quot;: {&quot;$objectToArray&quot;: firstArrayRef},
+          &quot;in&quot;: &quot;$$this.k&quot;,
+        }},
+        {&quot;$map&quot;: {
+          &quot;input&quot;: {&quot;$objectToArray&quot;: secondArrayRef},
+          &quot;in&quot;: &quot;$$this.k&quot;,
+        }},
+      ]
+    }
+  };
+}
+
+// Macro function to generate a complex expression to get the value of a field
+// in a document where the field's name is only known at runtime 
+function getDynamicField(obj, fieldname) {
+  return {
+    &quot;$first&quot;: [ 
+      {&quot;$map&quot;: { 
+        &quot;input&quot;: {
+          &quot;$filter&quot;: { 
+            &quot;input&quot;: {&quot;$objectToArray&quot;: obj}, 
+            &quot;as&quot;: &quot;currObj&quot;,
+            &quot;cond&quot;: {&quot;$eq&quot;: [&quot;$$currObj.k&quot;, fieldname]} 
+          }
+        }, 
+        in: &quot;$$this.v&quot; 
+      }}, 
+    ]
+  };
+}
+</code></pre>
+<p>Define the pipeline ready to perform the aggregation:</p>
+<pre><code class="language-javascript">var pipeline = [
+  // Compare two different arrays in the same document &amp; get the differences (if any)
+  {&quot;$set&quot;: {
+    &quot;differences&quot;: {
+      &quot;$reduce&quot;: {
+        &quot;input&quot;: getArrayOfTwoSubdocsKeysNoDups(&quot;$beforeConfig&quot;, &quot;$afterConfig&quot;),
+        &quot;initialValue&quot;: [],
+        &quot;in&quot;: {
+          &quot;$concatArrays&quot;: [
+            &quot;$$value&quot;,
+            {&quot;$cond&quot;: {
+              &quot;if&quot;: {
+                &quot;$ne&quot;: [
+                  getDynamicField(&quot;$beforeConfig&quot;, &quot;$$this&quot;),
+                  getDynamicField(&quot;$afterConfig&quot;, &quot;$$this&quot;),
+                ]
+              },
+              &quot;then&quot;: [{
+                &quot;field&quot;: &quot;$$this&quot;,
+                &quot;change&quot;: {
+                  &quot;$concat&quot;: [
+                    {&quot;$ifNull&quot;: [{&quot;$toString&quot;: getDynamicField(&quot;$beforeConfig&quot;, &quot;$$this&quot;)}, &quot;&lt;not-set&gt;&quot;]},
+                    &quot; --&gt; &quot;,
+                    {&quot;$ifNull&quot;: [{&quot;$toString&quot;: getDynamicField(&quot;$afterConfig&quot;, &quot;$$this&quot;)}, &quot;&lt;not-set&gt;&quot;]},
+                  ]
+                },
+              }],
+              &quot;else&quot;: [],
+            }}
+          ]
+        }
+      }
+    },
+  }},
+
+  // Add 'status' field and only show 'differences' field if there are differences
+  {&quot;$set&quot;: {
+    // Set 'status' to ADDED, REMOVED, MODIFIED or UNCHANGED accordingly
+    &quot;status&quot;: {
+      &quot;$switch&quot;: {        
+        &quot;branches&quot;: [
+          {
+            &quot;case&quot;: {
+              &quot;$and&quot;: [
+                {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$differences&quot;}, &quot;null&quot;]},
+                {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$beforeConfig&quot;}, &quot;missing&quot;]},
+              ]
+            },
+            &quot;then&quot;: &quot;ADDED&quot;
+          },
+          {
+            &quot;case&quot;: {
+              &quot;$and&quot;: [
+                {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$differences&quot;}, &quot;null&quot;]},
+                {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$afterConfig&quot;}, &quot;missing&quot;]},
+              ]
+            },
+            &quot;then&quot;: &quot;REMOVED&quot;
+          },
+          {&quot;case&quot;: {&quot;$lte&quot;: [{&quot;$size&quot;: &quot;$differences&quot;}, 0]}, &quot;then&quot;: &quot;UNCHANGED&quot;},
+          {&quot;case&quot;: {&quot;$gt&quot;:  [{&quot;$size&quot;: &quot;$differences&quot;}, 0]}, &quot;then&quot;: &quot;MODIFIED&quot;},
+        ],
+        &quot;default&quot;: &quot;UNKNOWN&quot;,
+      }
+    },
+
+    // If there are differences, keep the differences field, otherwise remove it
+    &quot;differences&quot;: {
+      &quot;$cond&quot;: [
+        {&quot;$or&quot;: [
+          {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$differences&quot;}, &quot;null&quot;]},
+          {&quot;$lte&quot;: [{&quot;$size&quot;: &quot;$differences&quot;}, 0]},
+        ]},
+        &quot;$$REMOVE&quot;, 
+        &quot;$differences&quot;
+      ]
+    },
+  }},         
+
+  // Remove unwanted fields
+  {&quot;$unset&quot;: [
+    &quot;_id&quot;,
+    &quot;beforeTimestamp&quot;,
+    &quot;afterTimestamp&quot;,
+    &quot;beforeConfig&quot;,
+    &quot;afterConfig&quot;,
+  ]},
+];   
+</code></pre>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
+<pre><code class="language-javascript">db.deployments.aggregate(pipeline);
+</code></pre>
+<pre><code class="language-javascript">db.deployments.explain(&quot;executionStats&quot;).aggregate(pipeline);
+</code></pre>
+<h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
+<p>Five documents should be returned, showing whether anyone added, removed or modified a deployment or left it unchanged, with the deployment's changes shown if modified, as shown below:</p>
+<pre><code class="language-javascript">[
+  {
+    &quot;name&quot;: &quot;ProdServer&quot;,
+    &quot;status&quot;: &quot;MODIFIED&quot;,
+    &quot;differences&quot;: [
+      {
+        &quot;field&quot;: &quot;vcpus&quot;,
+        &quot;change&quot;: &quot;8 --&gt; 16&quot;
+      },
+      {
+        &quot;field&quot;: &quot;ram&quot;,
+        &quot;change&quot;: &quot;128 --&gt; 256&quot;
+      }
+    ]
+  },
+  {
+    &quot;name&quot;: &quot;QAServer&quot;,
+    &quot;status&quot;: &quot;MODIFIED&quot;,
+    &quot;differences&quot;: [
+      {
+        &quot;field&quot;: &quot;storage&quot;,
+        &quot;change&quot;: &quot;512 --&gt; 256&quot;
+      },
+      {
+        &quot;field&quot;: &quot;state&quot;,
+        &quot;change&quot;: &quot;paused --&gt; running&quot;
+      },
+      {
+        &quot;field&quot;: &quot;extraParams&quot;,
+        &quot;change&quot;: &quot;&lt;not-set&gt; --&gt; disableTLS;disableCerts;&quot;
+      }
+    ]
+  },
+  {
+    &quot;name&quot;: &quot;LoadTestServer&quot;,
+    &quot;status&quot;: &quot;REMOVED&quot;
+  },
+  {
+    &quot;name&quot;: &quot;IntegrationServer&quot;,
+    &quot;status&quot;: &quot;UNCHANGED&quot;
+  },
+  {
+    &quot;name&quot;: &quot;DevServer&quot;,
+    &quot;status&quot;: &quot;ADDED&quot;
+  }
+]
+</code></pre>
+<h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
+<ul>
+<li>
+<p><strong>Reusable Macro Functions.</strong> As with many of the other <em>Array Manipulation Examples</em>, the aggregation uses macro functions to generate boilerplate code for use in the pipeline. These functions are general-purpose and reusable as-is in other solutions.</p>
+</li>
+<li>
+<p><strong>Sub-Document Comparison.</strong> The pipeline provides a generic way to compare the topmost fields hanging off two sub-document fields. The comparison will only work for sub-document fields with primitive values (e.g. String, Double, Null, Date, Boolean, etc.). The comparison will not work if a sub-document's field is an Array or Object. The pipeline finds all the field names ('keys') appearing in either sub-document. For each field name, the pipeline then compares if it exists in both sub-documents, and if the values don't match, it incorporates the two different values in the output.</p>
+</li>
+<li>
+<p><strong>Potential Need For Earlier Stages.</strong> The example source documents already embed two fields to compare, each corresponding to the deployment's configuration captured at a different point in time (<code>beforeTimestamp</code> and <code>afterTimestamp</code>). In real-world data models, these two configuration snapshots would be more likely to correspond to two different records in a collection, not one combined record. However, it doesn't mean that this example is redundant. In such cases, you would include the following additional stages at the start of the example's pipeline: </p>
+<ul>
+<li><code>$sort</code> to sort all records by timestamp regardless of which deployment each corresponds to.</li>
+<li><code>$group</code> to group on the name of the deployment. Inside this group stage, you would use a <code>$first</code> operator to capture the first document's <code>config</code> into a new <code>beforeConfig</code> field and a <code>$last</code> operator to capture the last document's <code>config</code> into a new <code>afterConfig</code> field.</li>
+</ul>
+<p>The rest of the pipeline from the example would then be used unchanged.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../examples/array-manipulations/array-element-grouping.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../examples/full-text-search/full-text-search.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../examples/array-manipulations/array-element-grouping.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../examples/full-text-search/full-text-search.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
