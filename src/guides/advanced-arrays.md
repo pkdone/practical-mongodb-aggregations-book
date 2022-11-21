@@ -303,6 +303,62 @@ Here the `$reduce` operator is again used to loop and eventually return a single
 
 The "iterator" array expressions have no concept of a _break_ command that procedural programming languages typically provide. Therefore, even though the executing logic may have already located a room of sufficient size, the looping process will continue through the remaining array elements. Consequently, the pipeline logic must include a check during each iteration to avoid overriding the final value (the `$$value` variable) if it already has a value. Naturally, for massive arrays containing a few hundred or more elements, an aggregation pipeline will incur a noticeable latency impact when iterating the remaining array members even though the logic has already identified the required element. 
 
+Suppose you just wanted to return the first matching array element for a room with sufficient floor space, not its index. In that case, the pipeline can be more straightforward, using `$filter` to trim the array elements to only those with sufficient space and then the `$first` operator to grab just the first element from the filter. You would use a pipeline similar to the following:
+
+```javascript
+var pipeline = [
+  {"$set": {
+    "firstLargeEnoughRoom": {
+      "$first": {
+        "$filter": { 
+          "input": "$room_sizes", 
+          "as": "room",
+          "cond": {
+            "$gt": [
+              {"$multiply": ["$$room.width", "$$room.length"]},
+              60
+            ]
+          } 
+        }    
+      }
+    }
+  }}
+];
+
+db.buildings.aggregate(pipeline);
+```
+
+This pipeline produces the following output:
+
+```javascript
+[
+  {
+    _id: ObjectId("637b4b8a86fac07908ef98b3"),
+    building: 'WestAnnex-1',
+    room_sizes: [
+      { width: 9, length: 5 },
+      { width: 8, length: 7 },
+      { width: 7, length: 9 },
+      { width: 9, length: 8 }
+    ],
+    firstLargeEnoughRoom: { width: 7, length: 9 }
+  }
+]
+```
+
+In reality, the array of rooms would be likely to also include an ID for each building's room, for example:
+
+```javascript
+"room_sizes": [
+  {"roomId": "Mercury", "width": 9, "length": 5},
+  {"roomId": "Venus", "width": 8, "length": 7},
+  {"roomId": "Jupiter", "width": 7, "length": 9},
+  {"roomId": "Saturn", "width": 9, "length": 8},
+]
+```
+
+Consequently, `firstLargeEnoughRoom: { roomId: "Jupiter", width: 7, length: 9 }` would be the first element returned from the filtering pipeline stage, giving you the room's ID, so there would be no need to obtain the array's index for this particular use case.  However, the previous example, using the `$reduce` based pipeline, is helpful for more complicated situations where you do need the index of the matching array element.
+
 
 ## Reproducing _$map_ Behaviour Using _$reduce_
 
@@ -313,7 +369,7 @@ Suppose you have captured some sensor readings for a device:
 ```javascript
 db.deviceReadings.insertOne({
   "device": "A1",
-  "readings": [27, 282, 38, 22, 187]
+  "readings": [27, 282, 38, -1, 187]
 });
 ```
 
@@ -322,8 +378,8 @@ Imagine you want to produce a transformed version of the `readings` array, with 
 ```javascript
 {
   device: 'A1',
-  readings: [ 27, 282, 38, 22, 187 ],
-  deviceReadings: [ 'A1:27', 'A1:282', 'A1:38', 'A1:22', 'A1:187' ]
+  readings: [ 27, 282, 38, -1, 187 ],
+  deviceReadings: [ 'A1:27', 'A1:282', 'A1:38', 'A1:-1', 'A1:187' ]
 }
 ```
 
@@ -372,17 +428,7 @@ db.deviceReadings.aggregate(pipeline);
 
 You will see the pipeline has to do more work here, holding the transformed element in a new array and then concatenating this with the "final value" array the logic is accumulating in the `$$value` variable. 
 
-So why would you ever want to use `$reduce` for this requirement and take on this extra complexity? Well, suppose the aggregation output containing the transformed array needed to include the element's array position number in the concatenated string value to yield a result similar to the following:
-
-```javascript
-{
-  device: 'A1',
-  readings: [ 27, 282, 38, 22, 187 ],
-  deviceReadings: [ 'A1-0:27', 'A1-1:282', 'A1-2:38', 'A1-3:22', 'A1-4:187' ]
-}
-```
-
-You cannot achieve this using `$map` because the logic in each iteration does not know the current loop count or input array position. However, you can solve this by using `$reduce` if adopting the pattern where the input is a `$range` generated sequence of incrementing numbers (as covered earlier in this chapter). Consequently, the string concatenating code can include the array position in each transformed element's value (accessed via the `$$this` variable), as shown in the pipeline below:
+So why would you ever want to use `$reduce` for this requirement and take on this extra complexity? Suppose the mapping code in the stage needs to include a condition to omit outlier readings that signify a device sensor faulty reading (i.e., a `-1` reading value). The challenge here when using `$map` is that for 5 input array elements, 5 array elements will need to be output. However, using $reduce, for an input of 5 array elements, 4 array elements can be output using a pipeline similar to the following:
 
 ```javascript
 var pipeline = [
@@ -394,13 +440,11 @@ var pipeline = [
         "in": {
           "$concatArrays": [
             "$$value",
-            [{"$concat": [
-              "$device",
-              "-",
-              {"$toString": "$$this"},
-              ":",
-              {"$toString": {"$arrayElemAt": ["$readings", "$$this"]}},
-            ]}]
+            {"$cond": { 
+              "if": {"$gte": [{"$arrayElemAt": ["$readings", "$$this"]}, 0]},
+              "then": [{"$concat": ["$device", "-", {"$toString": "$$this"}, ":", {"$toString": {"$arrayElemAt": ["$readings", "$$this"]}}]}],  
+              "else": []
+            }}                                    
           ]
         }
       }
@@ -410,6 +454,23 @@ var pipeline = [
 
 db.deviceReadings.aggregate(pipeline);
 ```
+
+This time, the output does not include the faulty device reading (`-1'):
+
+```javascript
+[
+  {
+    _id: ObjectId("637b6fd286fac07908ef98b5"),
+    device: 'A1',
+    readings: [ 27, 282, 38, -1, 187 ],
+    deviceReadings: [ 'A1-0:27', 'A1-1:282', 'A1-2:38', 'A1-4:187' ]
+  }
+]
+```
+
+Of course, this being the aggregation framework, multiple ways exist to solve the same problem. Another approach could be to continue with the `$map` based pipeline and, using a `$cond`, return an empty string (`''`) for each faulty reading. You would then need to wrap the `$map` stage in a `$filter` stage with logic to filter out elements where the element's string length is zero.
+
+In summary, the places you typically use a `$map` stage are when the ratio of input elements to output elements is the same (i.e. _M:M_). You usually employ a `$reduce` stage when the ratio of input elements to output elements is many to 1 (i.e. _M:1_). For situations where the ratio of input elements is many to few (i.e. _M:N_), you may reach for `$reduce` (with the "null array concatenation" trick) instead of `$map`. 
 
 
 ## Adding New Fields To Existing Objects In An Array
