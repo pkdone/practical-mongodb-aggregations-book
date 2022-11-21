@@ -181,6 +181,4 @@ Two documents should be returned, corresponding to the original two source docum
      ```
   
  * __Meaningful Insight.__ Even though the pipeline is irreversibly obfuscating fields, it doesn't mean that the masked data is useless for performing analytics to gain insight. The pipeline masks some fields by fluctuating the original values by a small but limited random percentage (e.g. `card_expiry`, `transaction_amount`), rather than replacing them with completely random values (e.g. `card_sec_code`). In such cases, if the input data set is sufficiently large, then minor variances will be equalled out. For the fields that are only varied slightly, users can derive similar trends and patterns from analysing the masked data as they would the original data.
-
- * __Further Reading.__ This example is based on the output of two blog posts: 1) [MongoDB Irreversible Data Masking](https://pauldone.blogspot.com/2021/02/mongdb-data-masking.html), and 2) [MongoDB Reversible Data Masking](https://pauldone.blogspot.com/2021/02/mongdb-reversible-data-masking.html).
  

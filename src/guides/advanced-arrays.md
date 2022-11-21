@@ -428,21 +428,21 @@ db.deviceReadings.aggregate(pipeline);
 
 You will see the pipeline has to do more work here, holding the transformed element in a new array and then concatenating this with the "final value" array the logic is accumulating in the `$$value` variable. 
 
-So why would you ever want to use `$reduce` for this requirement and take on this extra complexity? Suppose the mapping code in the stage needs to include a condition to omit outlier readings that signify a device sensor faulty reading (i.e., a `-1` reading value). The challenge here when using `$map` is that for 5 input array elements, 5 array elements will need to be output. However, using $reduce, for an input of 5 array elements, 4 array elements can be output using a pipeline similar to the following:
+So why would you ever want to use `$reduce` for this requirement and take on this extra complexity? Suppose the mapping code in the stage needs to include a condition to omit outlier readings that signify a device sensor faulty reading (i.e., a `-1` reading value). The challenge here when using `$map` is that for 5 input array elements, 5 array elements will need to be output. However, using `$reduce`, for an input of 5 array elements, 4 array elements can be output using a pipeline similar to the following:
 
 ```javascript
 var pipeline = [
   {"$set": {
     "deviceReadings": {
       "$reduce": {
-        "input": {"$range": [0, {"$size": "$readings"}]},
+        "input": "$readings",
         "initialValue": [],
         "in": {
           "$concatArrays": [
             "$$value",
             {"$cond": { 
-              "if": {"$gte": [{"$arrayElemAt": ["$readings", "$$this"]}, 0]},
-              "then": [{"$concat": ["$device", "-", {"$toString": "$$this"}, ":", {"$toString": {"$arrayElemAt": ["$readings", "$$this"]}}]}],  
+              "if": {"$gte": ["$$this", 0]},
+              "then": [{"$concat": ["$device", ":", {"$toString": "$$this"}]}],  
               "else": []
             }}                                    
           ]
@@ -451,8 +451,6 @@ var pipeline = [
     }
   }}
 ];
-
-db.deviceReadings.aggregate(pipeline);
 ```
 
 This time, the output does not include the faulty device reading (`-1'):
@@ -460,17 +458,16 @@ This time, the output does not include the faulty device reading (`-1'):
 ```javascript
 [
   {
-    _id: ObjectId("637b6fd286fac07908ef98b5"),
     device: 'A1',
     readings: [ 27, 282, 38, -1, 187 ],
-    deviceReadings: [ 'A1-0:27', 'A1-1:282', 'A1-2:38', 'A1-4:187' ]
+    deviceReadings: [ 'A1:27', 'A1:282', 'A1:38', 'A1:187' ]
   }
 ]
 ```
 
-Of course, this being the aggregation framework, multiple ways exist to solve the same problem. Another approach could be to continue with the `$map` based pipeline and, using a `$cond`, return an empty string (`''`) for each faulty reading. You would then need to wrap the `$map` stage in a `$filter` stage with logic to filter out elements where the element's string length is zero.
+Of course, this being the aggregation framework, multiple ways exist to solve the same problem. Another approach could be to continue with the `$map` based pipeline and, using the `$cond` operator, return an empty string (`''`) for each faulty reading. You would then need to wrap the `$map` stage in a `$filter` stage with logic to filter out elements where the element's string length is zero.
 
-In summary, the places you typically use a `$map` stage are when the ratio of input elements to output elements is the same (i.e. _M:M_). You usually employ a `$reduce` stage when the ratio of input elements to output elements is many to 1 (i.e. _M:1_). For situations where the ratio of input elements is many to few (i.e. _M:N_), you may reach for `$reduce` (with the "null array concatenation" trick) instead of `$map`. 
+In summary, you typically use a `$map` stage when the ratio of input elements to output elements is the same (i.e. many-to-many or _M:M_). You employ a `$reduce` stage when the ratio of input elements to output elements is many-to-one (i.e. _M:1_). For situations where the ratio of input elements is many-to-few (i.e. _M:N_),  instead of `$map`, you will invariably reach for `$reduce` with its "null array concatenation" trick when `$filter` does not suffice.
 
 
 ## Adding New Fields To Existing Objects In An Array

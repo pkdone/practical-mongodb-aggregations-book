@@ -264,5 +264,3 @@ The result of running the `find()` against the _view_ with the filter `"gender":
     
     Note that just because the aggregation runtime moves the `$match` stage from the base of the pipeline to the top of the pipeline, it doesn't imply this optimisation can happen in all pipelines. For example, if the middle part of the pipeline includes a `$group` stage, then the runtime can't move the `$match` stage ahead of the `$group` stage because this would change the functional behaviour and outcome of the pipeline. See the [Aggregation Pipeline Optimization](https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/) documentation for details on what runtime optimisations the MongoDB database engine can apply.
 
- * __Further Reading.__ The ability for _find_ operations on a view to automatically push filters into the view's aggregation pipeline, and then be further optimised, is described in the blog post: [Is Querying A MongoDB View Optimised?](https://pauldone.blogspot.com/2020/11/mongdb-views-optimisations.html)
- 

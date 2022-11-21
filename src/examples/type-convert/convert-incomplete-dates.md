@@ -24,18 +24,18 @@ db.dropDatabase();
 
 // Insert records into the payments collection
 db.payments.insertMany([
-  {"account": "010101", "payment_date": "01-JAN-20 01.01.01.123000000", "amount": 1.01},
-  {"account": "020202", "payment_date": "02-FEB-20 02.02.02.456000000", "amount": 2.02},
-  {"account": "030303", "payment_date": "03-MAR-20 03.03.03.789000000", "amount": 3.03},
-  {"account": "040404", "payment_date": "04-APR-20 04.04.04.012000000", "amount": 4.04},
-  {"account": "050505", "payment_date": "05-MAY-20 05.05.05.345000000", "amount": 5.05},
-  {"account": "060606", "payment_date": "06-JUN-20 06.06.06.678000000", "amount": 6.06},
-  {"account": "070707", "payment_date": "07-JUL-20 07.07.07.901000000", "amount": 7.07},
-  {"account": "080808", "payment_date": "08-AUG-20 08.08.08.234000000", "amount": 8.08},
-  {"account": "090909", "payment_date": "09-SEP-20 09.09.09.567000000", "amount": 9.09},
-  {"account": "101010", "payment_date": "10-OCT-20 10.10.10.890000000", "amount": 10.10},
-  {"account": "111111", "payment_date": "11-NOV-20 11.11.11.111000000", "amount": 11.11},
-  {"account": "121212", "payment_date": "12-DEC-20 12.12.12.999000000", "amount": 12.12}
+  {"account": "010101", "paymentDate": "01-JAN-20 01.01.01.123000000", "amount": 1.01},
+  {"account": "020202", "paymentDate": "02-FEB-20 02.02.02.456000000", "amount": 2.02},
+  {"account": "030303", "paymentDate": "03-MAR-20 03.03.03.789000000", "amount": 3.03},
+  {"account": "040404", "paymentDate": "04-APR-20 04.04.04.012000000", "amount": 4.04},
+  {"account": "050505", "paymentDate": "05-MAY-20 05.05.05.345000000", "amount": 5.05},
+  {"account": "060606", "paymentDate": "06-JUN-20 06.06.06.678000000", "amount": 6.06},
+  {"account": "070707", "paymentDate": "07-JUL-20 07.07.07.901000000", "amount": 7.07},
+  {"account": "080808", "paymentDate": "08-AUG-20 08.08.08.234000000", "amount": 8.08},
+  {"account": "090909", "paymentDate": "09-SEP-20 09.09.09.567000000", "amount": 9.09},
+  {"account": "101010", "paymentDate": "10-OCT-20 10.10.10.890000000", "amount": 10.10},
+  {"account": "111111", "paymentDate": "11-NOV-20 11.11.11.111000000", "amount": 11.11},
+  {"account": "121212", "paymentDate": "12-DEC-20 12.12.12.999000000", "amount": 12.12}
 ]);
 ```
 
@@ -48,11 +48,11 @@ Define a pipeline ready to perform the aggregation:
 var pipeline = [
   // Change field from a string to a date, filling in the gaps
   {"$set": {
-    "payment_date": {    
+    "paymentDate": {    
       "$let": {
         "vars": {
-          "txt": "$payment_date",  // Assign "payment_date" field to variable "txt",
-          "month": {"$substrCP": ["$payment_date", 3, 3]},  // Extract month text
+          "txt": "$paymentDate",  // Assign "paymentDate" field to variable "txt",
+          "month": {"$substrCP": ["$paymentDate", 3, 3]},  // Extract month text
         },
         "in": { 
           "$dateFromString": {"format": "%d-%m-%Y %H.%M.%S.%L", "dateString":
@@ -104,68 +104,68 @@ db.payments.explain("executionStats").aggregate(pipeline);
 
 ## Expected Results
 
-Twelve documents should be returned, corresponding to the original twelve source documents, but this time with the `payment_date` field converted from text values to proper date typed values, as shown below:
+Twelve documents should be returned, corresponding to the original twelve source documents, but this time with the `paymentDate` field converted from text values to proper date typed values, as shown below:
 
 ```javascript
 [
   {
     account: '010101',
-    payment_date: ISODate('2020-01-01T01:01:01.123Z'),
+    paymentDate: ISODate('2020-01-01T01:01:01.123Z'),
     amount: 1.01
   },
   {
     account: '020202',
-    payment_date: ISODate('2020-02-02T02:02:02.456Z'),
+    paymentDate: ISODate('2020-02-02T02:02:02.456Z'),
     amount: 2.02
   },
   {
     account: '030303',
-    payment_date: ISODate('2020-03-03T03:03:03.789Z'),
+    paymentDate: ISODate('2020-03-03T03:03:03.789Z'),
     amount: 3.03
   },
   {
     account: '040404',
-    payment_date: ISODate('2020-04-04T04:04:04.012Z'),
+    paymentDate: ISODate('2020-04-04T04:04:04.012Z'),
     amount: 4.04
   },
   {
     account: '050505',
-    payment_date: ISODate('2020-05-05T05:05:05.345Z'),
+    paymentDate: ISODate('2020-05-05T05:05:05.345Z'),
     amount: 5.05
   },
   {
     account: '060606',
-    payment_date: ISODate('2020-06-06T06:06:06.678Z'),
+    paymentDate: ISODate('2020-06-06T06:06:06.678Z'),
     amount: 6.06
   },
   {
     account: '070707',
-    payment_date: ISODate('2020-07-07T07:07:07.901Z'),
+    paymentDate: ISODate('2020-07-07T07:07:07.901Z'),
     amount: 7.07
   },
   {
     account: '080808',
-    payment_date: ISODate('2020-08-08T08:08:08.234Z'),
+    paymentDate: ISODate('2020-08-08T08:08:08.234Z'),
     amount: 8.08
   },
   {
     account: '090909',
-    payment_date: ISODate('2020-09-09T09:09:09.567Z'),
+    paymentDate: ISODate('2020-09-09T09:09:09.567Z'),
     amount: 9.09
   },
   {
     account: '101010',
-    payment_date: ISODate('2020-10-10T10:10:10.890Z'),
+    paymentDate: ISODate('2020-10-10T10:10:10.890Z'),
     amount: 10.1
   },
   {
     account: '111111',
-    payment_date: ISODate('2020-11-11T11:11:11.111Z'),
+    paymentDate: ISODate('2020-11-11T11:11:11.111Z'),
     amount: 11.11
   },
   {
     account: '121212',
-    payment_date: ISODate('2020-12-12T12:12:12.999Z'),
+    paymentDate: ISODate('2020-12-12T12:12:12.999Z'),
     amount: 12.12
   }
 ]
@@ -179,6 +179,6 @@ Twelve documents should be returned, corresponding to the original twelve source
    - `'12'` _(replacing 'DEC')_
    - `'-20'` _(hard-coded hyphen + hardcoded century)_
    - `'20 12.12.12.999'` _(the rest of input string apart from the last 6 nanosecond digits)_
-   
- * __Further Reading.__ This example is based on the output of the blog post: [Converting Gnarly Date Strings to Proper Date Types Using a MongoDB Aggregation Pipeline](https://pauldone.blogspot.com/2020/05/aggregation-convert-nasty-date-strings.html).
- 
+
+ * __Temporary Reusable Variables.__ The pipeline includes a `$let` operator to define two variables ready to be reused in multiple places in the central part of the data conversion logic belonging to the `$dateFromString` operator. The `txt` variable provides a minor convenience to ensure the main part of the expression logic works regardless of whether the referenced field path is currently named `$paymentDate` or changes in a future version of the source collection (e.g. to `$transactionDate`). The `month` variable is more valuable, ensuring that the pipeline does not have to repeat the same 'substring' logic in multiple places. 
+
