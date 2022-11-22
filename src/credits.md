@@ -6,7 +6,7 @@ Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
 Version: 5.0
 
-Last updated: November 2022
+Last updated: November 2022 &nbsp;&nbsp;&nbsp;(see [Book Version History](appendices/book-history.md))
 
 MongoDB versions supported: 4.2 → 6.1
 
