@@ -96,7 +96,7 @@ db.deployments.insertMany([
 
 ## Aggregation Pipeline
 
-You first need to define the following two functions, one to TODO, the other TODO, ready for you to use in a pipeline:
+You first need to define the following two functions, one to get all the unique keys from two different arrays, the other to get the value of a field only known at runtime, ready for you to use in a pipeline:
 
 ```javascript
 // Macro function to generate a complex expression to get all the unique keys
