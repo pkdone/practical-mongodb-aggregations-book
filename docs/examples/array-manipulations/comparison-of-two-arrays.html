@@ -238,7 +238,7 @@ db.deployments.insertMany([
 ]);
 </code></pre>
 <h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
-<p>You first need to define the following two functions, one to TODO, the other TODO, ready for you to use in a pipeline:</p>
+<p>You first need to define the following two functions, one to get all the unique keys from two different arrays, the other to get the value of a field only known at runtime, ready for you to use in a pipeline:</p>
 <pre><code class="language-javascript">// Macro function to generate a complex expression to get all the unique keys
 // from two sub-documents returned as an array of the unique keys
 function getArrayOfTwoSubdocsKeysNoDups(firstArrayRef, secondArrayRef) {
