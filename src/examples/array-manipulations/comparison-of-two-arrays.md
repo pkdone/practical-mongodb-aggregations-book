@@ -186,7 +186,10 @@ var pipeline = [
             "case": {
               "$and": [
                 {"$eq": [{"$type": "$differences"}, "null"]},
-                {"$eq": [{"$type": "$beforeConfig"}, "missing"]},
+                {"$or": [
+                  {"$eq": [{"$type": "$beforeConfig"}, "null"]},
+                  {"$eq": [{"$type": "$beforeConfig"}, "missing"]},
+                ]},
               ]
             },
             "then": "ADDED"
@@ -195,7 +198,10 @@ var pipeline = [
             "case": {
               "$and": [
                 {"$eq": [{"$type": "$differences"}, "null"]},
-                {"$eq": [{"$type": "$afterConfig"}, "missing"]},
+                {"$or": [
+                  {"$eq": [{"$type": "$afterConfig"}, "null"]},
+                  {"$eq": [{"$type": "$afterConfig"}, "missing"]},
+                ]},
               ]
             },
             "then": "REMOVED"

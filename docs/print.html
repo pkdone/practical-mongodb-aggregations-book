@@ -5580,7 +5580,10 @@ function getDynamicField(obj, fieldname) {
             &quot;case&quot;: {
               &quot;$and&quot;: [
                 {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$differences&quot;}, &quot;null&quot;]},
-                {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$beforeConfig&quot;}, &quot;missing&quot;]},
+                {&quot;$or&quot;: [
+                  {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$beforeConfig&quot;}, &quot;null&quot;]},
+                  {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$beforeConfig&quot;}, &quot;missing&quot;]},
+                ]},
               ]
             },
             &quot;then&quot;: &quot;ADDED&quot;
@@ -5589,7 +5592,10 @@ function getDynamicField(obj, fieldname) {
             &quot;case&quot;: {
               &quot;$and&quot;: [
                 {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$differences&quot;}, &quot;null&quot;]},
-                {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$afterConfig&quot;}, &quot;missing&quot;]},
+                {&quot;$or&quot;: [
+                  {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$afterConfig&quot;}, &quot;null&quot;]},
+                  {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$afterConfig&quot;}, &quot;missing&quot;]},
+                ]},
               ]
             },
             &quot;then&quot;: &quot;REMOVED&quot;
