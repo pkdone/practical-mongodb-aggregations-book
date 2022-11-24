@@ -185,11 +185,8 @@ var pipeline = [
           {
             "case": {
               "$and": [
-                {"$eq": [{"$type": "$differences"}, "null"]},
-                {"$or": [
-                  {"$eq": [{"$type": "$beforeConfig"}, "null"]},
-                  {"$eq": [{"$type": "$beforeConfig"}, "missing"]},
-                ]},
+                {"$in": [{"$type": "$differences"}, ["missing", "null"]]},
+                {"$in": [{"$type": "$beforeConfig"}, ["missing", "null"]]},
               ]
             },
             "then": "ADDED"
@@ -197,11 +194,8 @@ var pipeline = [
           {
             "case": {
               "$and": [
-                {"$eq": [{"$type": "$differences"}, "null"]},
-                {"$or": [
-                  {"$eq": [{"$type": "$afterConfig"}, "null"]},
-                  {"$eq": [{"$type": "$afterConfig"}, "missing"]},
-                ]},
+                {"$in": [{"$type": "$differences"}, ["missing", "null"]]},
+                {"$in": [{"$type": "$afterConfig"}, ["missing", "null"]]},
               ]
             },
             "then": "REMOVED"
@@ -217,7 +211,7 @@ var pipeline = [
     "differences": {
       "$cond": [
         {"$or": [
-          {"$eq": [{"$type": "$differences"}, "null"]},
+          {"$in": [{"$type": "$differences"}, ["missing", "null"]]},
           {"$lte": [{"$size": "$differences"}, 0]},
         ]},
         "$$REMOVE", 
