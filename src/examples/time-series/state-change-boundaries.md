@@ -16,6 +16,16 @@ Drop any old version of the database (if it exists) and then populate the device
 use book-state-change-boundaries;
 db.dropDatabase();
 
+// Use a time-series collection for optimal processing
+// NOTE: This command can be commented out and the full example will still work
+db.createCollection("device_status", {
+  "timeseries": {
+    "timeField": "timestamp",
+    "metaField": "deviceID",
+    "granularity": "minutes"
+  }
+});
+
 // Create compound index for 'partitionBy' & 'sortBy' in first $setWindowFields use
 db.device_status.createIndex({"deviceID": 1, "timestamp": 1});
 
@@ -250,4 +260,6 @@ Six documents should be returned, each of which captures the duration between tw
  * __Peeking At One Document From Another.__ By using the windowing stage (`$setWindowFields`), you can apply aggregation operations that span multiple documents. Combined with its shift operator (`$shift`), you can peek at the content of preceding or following documents and bring some of that other document's content into the current document. In this example, you copy the device's state from the previous document (`-1` offset) and the following document (`+1` offset) into the current document. Capturing these adjacent values enables subsequent stages in your pipeline to determine if the current device has changed state. Using `$shift` relies on the documents already being partitioned (e.g. by device ID) and sorted (e.g. by timestamp), which the containing `$setWindowFields` stage is enforcing.
 
  * __Double Use Of A Windowing Stage.__ The pipeline's first windowing stage and the subsequent matching stage capture device documents where the device's state has changed from `on` to `off` or vice versa. In many cases, this results in adjacent pairs of documents where the first document in the pair captures the first time the device has a new state, and the second document captures the last time it was in that same state before changing again. The example's pipeline requires a later second windowing stage to condense each pair of 'boundary' documents into one document. This second windowing stage again uses a shift operator to bring the timestamp of the pair's second document into a new field in the pair's first document. Consequently, single documents now exist which contain both the start and end timestamps of a particular device's state. Finally, the pipeline employs further logic to clean things up because, in some situations, there won't be a pair of related documents. For example, if a device's recorded state changes and immediately changes again, or it's the last recorded state of the device, there will be no paired document marking the end state.
+ 
+ * __Time Series Collection & Indexes.__ As with the [previous example](iot-power-consumption.md), the aggregation can optionally use a [time series collection](https://docs.mongodb.com/manual/core/timeseries-collections/) to store sequences of device measurements over time for efficient storage and fast querying. Additionally, as with the previous example, the aggregation can leverage an index for `{deviceID: 1, timestamp: 1}` to avoid the `$setWindowFields` stage having to perform a slow in-memory sort operation.
 
