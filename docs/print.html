@@ -4511,6 +4511,16 @@ db.device_readings.insertMany([
 <pre><code class="language-javascript">use book-state-change-boundaries;
 db.dropDatabase();
 
+// Use a time-series collection for optimal processing
+// NOTE: This command can be commented out and the full example will still work
+db.createCollection(&quot;device_status&quot;, {
+  &quot;timeseries&quot;: {
+    &quot;timeField&quot;: &quot;timestamp&quot;,
+    &quot;metaField&quot;: &quot;deviceID&quot;,
+    &quot;granularity&quot;: &quot;minutes&quot;
+  }
+});
+
 // Create compound index for 'partitionBy' &amp; 'sortBy' in first $setWindowFields use
 db.device_status.createIndex({&quot;deviceID&quot;: 1, &quot;timestamp&quot;: 1});
 
@@ -4729,6 +4739,9 @@ db.device_status.insertMany([
 </li>
 <li>
 <p><strong>Double Use Of A Windowing Stage.</strong> The pipeline's first windowing stage and the subsequent matching stage capture device documents where the device's state has changed from <code>on</code> to <code>off</code> or vice versa. In many cases, this results in adjacent pairs of documents where the first document in the pair captures the first time the device has a new state, and the second document captures the last time it was in that same state before changing again. The example's pipeline requires a later second windowing stage to condense each pair of 'boundary' documents into one document. This second windowing stage again uses a shift operator to bring the timestamp of the pair's second document into a new field in the pair's first document. Consequently, single documents now exist which contain both the start and end timestamps of a particular device's state. Finally, the pipeline employs further logic to clean things up because, in some situations, there won't be a pair of related documents. For example, if a device's recorded state changes and immediately changes again, or it's the last recorded state of the device, there will be no paired document marking the end state.</p>
+</li>
+<li>
+<p><strong>Time Series Collection &amp; Indexes.</strong> As with the <a href="examples/time-series/iot-power-consumption.html">previous example</a>, the aggregation can optionally use a <a href="https://docs.mongodb.com/manual/core/timeseries-collections/">time series collection</a> to store sequences of device measurements over time for efficient storage and fast querying. Additionally, as with the previous example, the aggregation can leverage an index for <code>{deviceID: 1, timestamp: 1}</code> to avoid the <code>$setWindowFields</code> stage having to perform a slow in-memory sort operation.</p>
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="array-manipulation-examples"><a class="header" href="#array-manipulation-examples">Array Manipulation Examples</a></h1>
