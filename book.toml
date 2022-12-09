@@ -4,7 +4,7 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Practical MongoDB Aggregations Book"
-description = "Learn how to develop effective and optimal data manipulation and analytics pipelines with this book, using the MongoDB Aggregation Framework"
+description = "Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)"
 
 [output.html]
 cname = "www.practical-mongodb-aggregations.com"
