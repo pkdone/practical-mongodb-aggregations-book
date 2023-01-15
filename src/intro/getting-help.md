@@ -10,7 +10,7 @@ The good news is there is no need for you to try to remember all the stages & op
 To help you get started with the purpose of each stage in the MongoDB Framework, consult the "cheatsheets" in the appendix of this book:
 
  * MongoDB Aggregation [Stages Cheatsheet](../appendices/cheatsheet.md)
- * MongoDB Aggregation [Stages Cheatsheet Source Code](../appendices/cheatsheet_source.md)
+ * MongoDB Aggregation [Stages Cheatsheet Source Code](../appendices/cheatsheet-source.md)
  
 If you are getting stuck with an aggregation pipeline and want some help, an active online community will almost always have the answer. So pose your questions at either:
 
