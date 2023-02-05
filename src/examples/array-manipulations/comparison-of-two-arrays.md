@@ -131,7 +131,7 @@ function getDynamicField(obj, fieldname) {
             "cond": {"$eq": ["$$currObj.k", fieldname]} 
           }
         }, 
-        in: "$$this.v" 
+        "in": "$$this.v" 
       }}, 
     ]
   };
