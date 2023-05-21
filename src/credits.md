@@ -4,11 +4,11 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 5.0
+Version: 5.01
 
-Last updated: November 2022 &nbsp;&nbsp;&nbsp;(see [Book Version History](appendices/book-history.md))
+Last updated: May 2023 &nbsp;&nbsp;&nbsp;(see [Book Version History](appendices/book-history.md))
 
-MongoDB versions supported: 4.2 → 6.1
+MongoDB versions supported: 4.2 → 6.3
 
 Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 
@@ -44,5 +44,5 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareA
 [cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png
 [cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%203.0-lightgrey.svg
 
-Copyright &copy; 2021-2022 MongoDB, Inc.
+Copyright &copy; 2021-2023 MongoDB, Inc.
 

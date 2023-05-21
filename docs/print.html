@@ -157,9 +157,9 @@
 <div style="break-before: page; page-break-before: always;"></div><p> </p>
 <h1 id="practical-mongodb-aggregations"><a class="header" href="#practical-mongodb-aggregations">Practical MongoDB Aggregations</a></h1>
 <p>Author: Paul Done (<a href="https://twitter.com/TheDonester">@TheDonester</a>)</p>
-<p>Version: 5.0</p>
-<p>Last updated: November 2022    (see <a href="appendices/book-history.html">Book Version History</a>)</p>
-<p>MongoDB versions supported: 4.2 → 6.1</p>
+<p>Version: 5.01</p>
+<p>Last updated: May 2023    (see <a href="appendices/book-history.html">Book Version History</a>)</p>
+<p>MongoDB versions supported: 4.2 → 6.3</p>
 <p>Book published at: <a href="https://www.practical-mongodb-aggregations.com">www.practical-mongodb-aggregations.com</a></p>
 <p>Content created &amp; assembled at: <a href="https://github.com/pkdone/practical-mongodb-aggregations-book">github.com/pkdone/practical-mongodb-aggregations-book</a></p>
 <hr />
@@ -181,7 +181,7 @@
 <p><a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%203.0-lightgrey.svg" alt="CC BY-NC-SA 3.0" /></a></p>
 <p>This work is licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License</a></p>
 <p><a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png" alt="CC BY-NC-SA 3.0" /></a></p>
-<p>Copyright © 2021-2022 MongoDB, Inc.</p>
+<p>Copyright © 2021-2023 MongoDB, Inc.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="foreword"><a class="header" href="#foreword">Foreword</a></h1>
 <p><strong>By Asya Kamsky</strong> (<a href="https://twitter.com/asya999">@asya999</a>)</p>
 <p>I've been involved with databases since the early 1990's when I &quot;accidentally&quot; got a job with a small database company. For the next two decades, databases were synonymous with SQL in my mind, until someone asked me what I thought about these new &quot;No SQL&quot; databases, and MongoDB in particular. I tried MongoDB for a small project I was doing on the side, and the rest, as they say, is history. </p>
@@ -194,7 +194,7 @@
 <p>This book is for developers, architects, data analysts, data engineers and data scientists who have some familiarity with MongoDB and have already acquired a small amount of rudimentary experience using the MongoDB Aggregation Framework. If you do not yet have this entry level knowledge, don't worry because there are plenty of getting started guides out there. If you've never used the Aggregation Framework before, you should start with one or more of the following resources before using this book:</p>
 <ul>
 <li>The <a href="https://docs.mongodb.com/manual/">MongoDB Manual</a>, and specifically its <a href="https://docs.mongodb.com/manual/aggregation/">Aggregation</a> section</li>
-<li>The <a href="https://university.mongodb.com/">MongoDB University</a> free online courses, and specifically <a href="https://university.mongodb.com/courses/M121/about">The MongoDB Aggregation Framework (M121)</a> introduction course</li>
+<li>The <a href="https://university.mongodb.com/">MongoDB University</a> free online courses, and specifically the <a href="https://learn.mongodb.com/courses/mongodb-aggregation">MongoDB Aggregation</a> introduction course</li>
 <li>The <a href="https://www.oreilly.com/library/view/mongodb-the-definitive/9781491954454/">MongoDB: The Definitive Guide</a> book by Bradshaw, Brazil &amp; Chodorow, and specifically its section <em>7. Introduction to the Aggregation Framework</em></li>
 </ul>
 <p>This book is not for complete novices, explaining how you should get started on your first MongoDB aggregation pipeline. Neither is this book a comprehensive programming language guide detailing every nuance of the Aggregation Framework and its syntax. This book intends to assist you with two key aspects:</p>
@@ -292,10 +292,7 @@
 <li><strong>MongoDB 4.2 (August 2019)</strong>: A merge stage to insert/update/replace records in existing non-sharded &amp; sharded collections, set &amp; unset stages to address the verbosity/rigidity of project stages, trigonometry operators, regular expression operators, Atlas Search integration</li>
 <li><strong>MongoDB 4.4 (July 2020)</strong>: A union stage, custom JavaScript operator expressions (function &amp; accumulator), first &amp; last array element operators, string replacement operators, a random number operator</li>
 <li><strong>MongoDB 5.0 (July 2021)</strong>: A setWindowFields stage, time-series/window operators, date manipulation operators</li>
-<li><strong>MongoDB 5.1 (November 2021)</strong>: Support for lookup &amp; graph-lookup stages joining to sharded collections, documents and densify stages</li>
-<li><strong>MongoDB 5.2 (January 2022)</strong>: An array sorting operator, operators to get a subset of ordered arrays and a subset of ordered grouped documents</li>
-<li><strong>MongoDB 5.3 (April 2022)</strong>: A fill stage, a linearFill operator</li>
-<li><strong>MongoDB 6.0 (July 2022)</strong>: Consolidation of the new features from the &quot;rapid release&quot; versions 5.1 to 5.3</li>
+<li><strong>MongoDB 6.0 (July 2022)</strong>: Support for lookup &amp; graph-lookup stages joining to sharded collections, new densify, documents &amp; fill stages, new array sorting &amp; linearFill operators, new operators to get a subset of ordered arrays or ordered grouped documents</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
 <p>For developing aggregation pipelines effectively, and also to try the examples in the second half of this book, you need the following two elements:</p>
@@ -359,7 +356,7 @@
 </ul>
 <p>If you are getting stuck with an aggregation pipeline and want some help, an active online community will almost always have the answer. So pose your questions at either:</p>
 <ul>
-<li>The MongoDB Developer Hub - <a href="https://developer.mongodb.com/community/forums/">Community Forums</a></li>
+<li>The <a href="https://www.mongodb.com/community/forums/">MongoDB Community Forums</a></li>
 <li>Stack Overflow - <a href="https://stackoverflow.com/questions/tagged/mongodb">MongoDB Questions</a></li>
 </ul>
 <p>You may be asking for just general advice. However, suppose you want to ask for help on a specific aggregation pipeline under development. In that case, you should provide a sample input document, a copy of your current pipeline code (in its JSON syntax format and not a programming language specific format) and an example of the output that you are trying to achieve. If you provide this extra information, you will have a far greater chance of receiving a timely and optimal response.</p>
@@ -3564,7 +3561,7 @@ db.users.insertMany([
 <h2 id="scenario-10"><a class="header" href="#scenario-10">Scenario</a></h2>
 <p>You have a set of <em>shop orders</em> accumulated over many years, with the retail channel adding new order records continuously to the <em>orders</em> collection throughout each trading day. You want to frequently generate a summary report so management can understand the state of the business and react to changing business trends. Over the years, it takes increasingly longer to generate the report of all daily sums and averages because there is increasingly more days' worth of data to process. From now on, to address this problem, you will only generate each new day's summary analysis at the end of the day and store it in a different collection which accumulates the daily summary records over time.</p>
 <blockquote>
-<p><em>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application.</em></p>
+<p><em>Unlike most examples in this book, the aggregation pipeline writes its output to a collection rather than streaming the results back to the calling application. This approach is sometimes referred to as <strong>On-Demand Materialized Views</strong>.</em></p>
 </blockquote>
 <h2 id="sample-data-population-10"><a class="header" href="#sample-data-population-10">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then add 9 documents to the <code>orders</code> collection representing 5 orders for 01-Feb-2021 and 4 orders for 02-Feb-2021:</p>
