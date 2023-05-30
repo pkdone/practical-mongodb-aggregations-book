@@ -268,7 +268,8 @@ function getDynamicField(obj, fieldname) {
           &quot;$filter&quot;: { 
             &quot;input&quot;: {&quot;$objectToArray&quot;: obj}, 
             &quot;as&quot;: &quot;currObj&quot;,
-            &quot;cond&quot;: {&quot;$eq&quot;: [&quot;$$currObj.k&quot;, fieldname]} 
+            &quot;cond&quot;: {&quot;$eq&quot;: [&quot;$$currObj.k&quot;, fieldname]},
+            &quot;limit&quot;: 1
           }
         }, 
         &quot;in&quot;: &quot;$$this.v&quot; 
