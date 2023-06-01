@@ -160,7 +160,7 @@
 <p><em>This example's pipeline relies on some of the more difficult to understand array operator expressions, like <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/map/"><code>$map</code></a>, <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/mergeObjects/"><code>$mergeObjects</code></a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/filter/"><code>$filter</code></a>. Consequently, ensure you have digested the <a href="../../guides/advanced-arrays.html">Advanced Use Of Expressions For Array Processing</a> chapter first, which explains how to use these operators. The pipeline also uses the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/setUnion/"><code>$setUnion</code></a> operator for finding unique values in an array. The <em>Observations</em> part of this chapter explains this in more detail.</em></p>
 </blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
-<p>Drop any old version of the database (if it exists) and then populate new hourly weather station measurements collection:</p>
+<p>Drop any old version of the database (if it exists) and then populate the new hourly weather station measurements collection:</p>
 <pre><code class="language-javascript">use book-pivot-array-by-key;
 db.dropDatabase();
 

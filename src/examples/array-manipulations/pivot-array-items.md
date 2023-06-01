@@ -12,7 +12,7 @@ You have a set of geographically dispersed weather station zones where each zone
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate new hourly weather station measurements collection:
+Drop any old version of the database (if it exists) and then populate the new hourly weather station measurements collection:
 
 ```javascript
 use book-pivot-array-by-key;
