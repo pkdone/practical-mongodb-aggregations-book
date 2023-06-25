@@ -34,4 +34,5 @@ Below is a summary of the evolution of the Aggregation Framework in terms of sig
 * __MongoDB 4.4 (July 2020)__: A union stage, custom JavaScript operator expressions (function & accumulator), first & last array element operators, string replacement operators, a random number operator
 * __MongoDB 5.0 (July 2021)__: A setWindowFields stage, time-series/window operators, date manipulation operators
 * __MongoDB 6.0 (July 2022)__: Support for lookup & graph-lookup stages joining to sharded collections, new densify, documents & fill stages, new array sorting & linearFill operators, new operators to get a subset of ordered arrays or ordered grouped documents
+* __MongoDB 7.0 (August 2023)__: A user roles system variable for use in pipelines, new median and percentile operators
 

@@ -2,6 +2,12 @@
 
 A summary of the significant additions in each major version of this book.
 
+__Version 7.0 (released in July 2023)__
+* [Array Fields Joining](../examples/array-manipulations/array-fields-joining.md) example chapter
+* TODO
+
+_No version 6.0 existed - skipped straight to version 7.0 to align with the latest MongoDB version_
+
 __Version 5.0 (released in November 2022)__
 * [State Change Boundaries](../examples/time-series/state-change-boundaries.md) example chapter
 * [Array Element Grouping](../examples/array-manipulations/array-element-grouping.md) example chapter

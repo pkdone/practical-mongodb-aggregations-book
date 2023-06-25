@@ -50,6 +50,7 @@
         - [Pivot Array Items By A Key](examples/array-manipulations/pivot-array-items.md)
         - [Array Sorting & Percentiles](examples/array-manipulations/array-sort-percentiles.md)
         - [Array Element Grouping](examples/array-manipulations/array-element-grouping.md)
+        - [Array Fields Joining](examples/array-manipulations/array-fields-joining.md)
         - [Comparison Of Two Arrays](examples/array-manipulations/comparison-of-two-arrays.md)
     - [Full Text Search Examples](examples/full-text-search/full-text-search.md)
         - [Compound Text Search Criteria](examples/full-text-search/compound-text-search.md)

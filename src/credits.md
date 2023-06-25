@@ -4,11 +4,11 @@
 
 Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
-Version: 5.01
+Version: 7.00
 
-Last updated: May 2023 &nbsp;&nbsp;&nbsp;(see [Book Version History](appendices/book-history.md))
+Last updated: July 2023 &nbsp;&nbsp;&nbsp;(see [Book Version History](appendices/book-history.md))
 
-MongoDB versions supported: 4.2 → 6.3
+MongoDB versions supported: 4.2 → 7.0
 
 Book published at: [www.practical-mongodb-aggregations.com](https://www.practical-mongodb-aggregations.com)
 
