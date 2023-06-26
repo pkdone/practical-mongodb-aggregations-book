@@ -12,7 +12,7 @@ You are developing a new dating website application using a database to hold the
 Drop any old version of the database (if it exists) and then populate a new user profiles collection:
 
 ```javascript
-use book-array-fields-joining;
+db = db.getSiblingDB("book-array-fields-joining");
 db.dropDatabase();
 
 // Insert 2 records into the users collection

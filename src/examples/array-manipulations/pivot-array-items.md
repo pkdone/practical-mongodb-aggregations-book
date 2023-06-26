@@ -15,7 +15,7 @@ You have a set of geographically dispersed weather station zones where each zone
 Drop any old version of the database (if it exists) and then populate the new hourly weather station measurements collection:
 
 ```javascript
-use book-pivot-array-by-key;
+db = db.getSiblingDB("book-pivot-array-by-key");
 db.dropDatabase();
 
 // Inserts records into the weather_measurements collection

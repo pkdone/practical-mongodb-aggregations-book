@@ -2,9 +2,9 @@
 
 A summary of the significant additions in each major version of this book.
 
-__Version 7.0 (released in July 2023)__
+__Version 7.0 (released in June 2023)__
 * [Array Fields Joining](../examples/array-manipulations/array-fields-joining.md) example chapter
-* TODO
+* [Role Programmatic Restricted View](../examples/securing-data/role-programmatic-restricted-view.md) example chapter
 
 _No version 6.0 existed - skipped straight to version 7.0 to align with the latest MongoDB version_
 
@@ -52,6 +52,6 @@ __Version 1.0 (released in May 2021)__
 * [Faceted Classification](../examples/trend-analysis/faceted-classifications.md) example chapter
 * [Largest Graph Network](../examples/trend-analysis/largest-graph-network.md) example chapter
 * [Incremental Analytics](../examples/trend-analysis/incremental-analytics.md) example chapter
-* [Restricted View](../examples/securing-data/restricted-view.md) example chapter
+* [Redacted View](../examples/securing-data/redacted-view.md) example chapter
 * [Mask Sensitive Fields](../examples/securing-data/mask-sensitive-fields.md) example chapter
 

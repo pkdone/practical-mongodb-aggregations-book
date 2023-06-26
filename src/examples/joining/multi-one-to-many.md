@@ -17,7 +17,7 @@ Drop any old version of the database (if it exists) and then populate new `produ
 &nbsp;__-Part 1-__
 
 ```javascript
-use book-multi-one-to-many;
+db = db.getSiblingDB("book-multi-one-to-many");
 db.dropDatabase();
 
 // Insert 6 records into the products collection

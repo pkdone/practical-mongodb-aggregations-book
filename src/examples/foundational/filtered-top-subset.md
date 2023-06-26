@@ -15,7 +15,7 @@ You want to query a collection of people to find the three youngest people who h
 Drop any old version of the database (if it exists) and then populate a new `persons` collection with 5 person documents:
 
 ```javascript
-use book-filtered-top-subset;
+db = db.getSiblingDB("book-filtered-top-subset");
 db.dropDatabase();
 
 // Create an index for a persons collection

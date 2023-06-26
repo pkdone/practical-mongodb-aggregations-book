@@ -20,7 +20,7 @@ You want to perform irreversible masking on the sensitive fields of a collection
 Drop any old version of the database (if it exists) and then populate a new `payments` collection with 2 credit card payment documents, containing sensitive data:
 
 ```javascript
-use book-mask-sensitive-fields;
+db = db.getSiblingDB("book-mask-sensitive-fields");
 db.dropDatabase();
 
 // Insert records into the payments collection

@@ -15,7 +15,7 @@ You have a set of _shop orders_ accumulated over many years, with the retail cha
 Drop any old version of the database (if it exists) and then add 9 documents to the `orders` collection representing 5 orders for 01-Feb-2021 and 4 orders for 02-Feb-2021:
 
 ```javascript
-use book-incremental-analytics;
+db = db.getSiblingDB("book-incremental-analytics");
 db.dropDatabase();
 
 // Create index for a daily_orders_summary collection

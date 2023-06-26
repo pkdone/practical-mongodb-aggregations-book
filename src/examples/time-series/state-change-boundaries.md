@@ -13,7 +13,7 @@ You are monitoring various industrial devices (e.g. heaters, fans) contained in 
 Drop any old version of the database (if it exists) and then populate the device status collection:
 
 ```javascript
-use book-state-change-boundaries;
+db = db.getSiblingDB("book-state-change-boundaries");
 db.dropDatabase();
 
 // Use a time-series collection for optimal processing

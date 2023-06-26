@@ -15,7 +15,7 @@ Your organisation wants to know the best targets for a new marketing campaign ba
 Drop any old version of the database (if it exists) and then populate a new `users` collection with 10 social network users documents, plus an index to help optimise the _graph traversal_:
 
 ```javascript
-use book-largest-graph-network;
+db = db.getSiblingDB("book-largest-graph-network");
 db.dropDatabase();
 
 // Create index on field which each graph traversal hop will connect to

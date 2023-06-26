@@ -15,7 +15,7 @@ A 3rd party has imported a set of _retail orders_ into a MongoDB collection but 
 Drop any old version of the database (if it exists) and then populate a new `orders` collection with three orders documents, where each order has text fields only (note, the second document is intentionality missing the field `reported` in the sub-document `further_info`):
 
 ```javascript
-use book-convert-to-strongly-typed;
+db = db.getSiblingDB("book-convert-to-strongly-typed");
 db.dropDatabase();
 
 // Insert orders documents

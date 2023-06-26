@@ -13,7 +13,7 @@ You want to generate a report to show what each shop customer purchased in 2020.
 Drop any old version of the database (if it exists) and then populate a new `orders` collection with 9 order documents spanning 2019-2021, for 3 different unique customers:
 
 ```javascript
-use book-group-and-total;
+db = db.getSiblingDB("book-group-and-total");
 db.dropDatabase();
 
 // Create index for an orders collection

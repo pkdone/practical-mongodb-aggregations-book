@@ -12,7 +12,7 @@ You want to provide a report for your online game showing the total "coin" rewar
 Drop any old version of the database (if it exists) and then populate the user rewards collection:
 
 ```javascript
-use book-array-element-grouping;
+db = db.getSiblingDB("book-array-element-grouping");
 db.dropDatabase();
 
 // Insert 3 records into the user_rewards collection

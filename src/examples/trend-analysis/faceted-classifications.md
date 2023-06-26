@@ -15,7 +15,7 @@ Drop any old version of the database (if it exists) and then populate a new `pro
 &nbsp;__-Part 1-__
 
 ```javascript
-use book-faceted-classfctn;
+db = db.getSiblingDB("book-faceted-classfctn");
 db.dropDatabase();
 
 // Insert first 8 records into the collection

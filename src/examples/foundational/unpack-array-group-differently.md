@@ -13,7 +13,7 @@ You want to generate a retail report to list the total value and quantity of exp
 Drop any old version of the database (if it exists) and then populate a new `orders` collection where each document contains an array of products purchased:
 
 ```javascript
-use book-unpack-array-group-differently;
+db = db.getSiblingDB("book-unpack-array-group-differently");
 db.dropDatabase();
 
 // Insert 4 records into the orders collection each with 1+ product items

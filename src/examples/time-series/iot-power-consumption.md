@@ -12,7 +12,7 @@ You are monitoring various air-conditioning units running in two buildings on an
 Drop any old version of the database (if it exists) and then populate a new `device_readings` collection with device readings spanning 3 hours of a day for air-conditioning units in two different buildings.
 
 ```javascript
-use book-iot-power-consumption;
+db = db.getSiblingDB("book-iot-power-consumption");
 db.dropDatabase();
 
 // Use a time-series collection for optimal processing

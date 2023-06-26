@@ -15,7 +15,7 @@ You want to query a collection of persons where each document contains data on o
 Drop any old version of the database (if it exists) and then populate a new `persons` collection with 9 documents:
 
 ```javascript
-use book-distinct-values;
+db = db.getSiblingDB("book-distinct-values");
 db.dropDatabase();
 
 // Insert records into the persons collection

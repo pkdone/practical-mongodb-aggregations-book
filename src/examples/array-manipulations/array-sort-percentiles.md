@@ -17,7 +17,7 @@ You've conducted performance testing of an application with the results of each 
 Drop any old version of the database (if it exists) and then populate the test run results collection:
 
 ```javascript
-use book-array-sort-percentiles;
+db = db.getSiblingDB("book-array-sort-percentiles");
 db.dropDatabase();
 
 // Insert 7 records into the performance_test_results collection
@@ -278,7 +278,7 @@ Five documents should be returned, representing the subset of documents with a 9
 
  * __Sorting On Primitives Only.__ The custom `sortArray()` function used for MongoDB versions 5.1 and earlier will sort arrays containing just primitive values, such as integers, floats, date-times and strings. However, if an array's members are objects (i.e. each has its own fields and values), the code will not sort the array correctly. It is possible to enhance the function to enable sorting an array of objects, but this enhancement is not covered here. For MongoDB versions 5.2 and greater, the new `$sortArray` operator provides options to easily sort an array of objects.
 
- * __Comparison With Classic Sorting Algorithms.__ Despite being more optimal than unwinding and re-grouping arrays to bring them back into the same documents, the custom sorting code will be slower than commonly recognised computer science [sorting algorithms](https://en.wikipedia.org/wiki/Sorting_algorithm). This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with few elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance will be more profound. For MongoDB versions 5.2 and greater, the new `$sortArray` operator leverages a fully optimised sorting algorithm under the covers to avoid this issue.
+ * __Comparison With Classic Sorting Algorithms.__ Despite being more optimal than unwinding and regrouping arrays to bring them back into the same documents, the custom sorting code will be slower than commonly recognised computer science [sorting algorithms](https://en.wikipedia.org/wiki/Sorting_algorithm). This situation is due to the limitations of the aggregation domain language compared with a general-purpose programming language. The performance difference will be negligible for arrays with few elements (probably up to a few tens of members). For larger arrays containing hundreds of members or more, the degradation in performance will be more profound. For MongoDB versions 5.2 and greater, the new `$sortArray` operator leverages a fully optimised sorting algorithm under the covers to avoid this issue.
 
  * __Simplified Pipeline In MongoDB 7.0.__ Combining the `$sortArray` operator introduced in MongoDB version 5.2 and the `$percentile` and `$median` operators introduced in MongoDB version 7.0, you can employ a significantly simpler pipeline for the solution, without requiring any macros, as shown below:
  

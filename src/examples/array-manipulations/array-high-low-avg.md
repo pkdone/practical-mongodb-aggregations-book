@@ -13,7 +13,7 @@ You want to generate daily summaries for the exchange rates of foreign currency 
 Drop any old version of the database (if it exists) and then populate the new _currency-pair daily_ collection:
 
 ```javascript
-use book-array-high-low-avg;
+db = db.getSiblingDB("book-array-high-low-avg");
 db.dropDatabase();
 
 // Inserts records into the currency_pair_values collection

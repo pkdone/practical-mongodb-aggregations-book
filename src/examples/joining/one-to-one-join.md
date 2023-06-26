@@ -15,7 +15,7 @@ Drop any old version of the database (if it exists) and then populate new `produ
 &nbsp;__-Part 1-__
 
 ```javascript
-use book-one-to-one-join;
+db = db.getSiblingDB("book-one-to-one-join");
 db.dropDatabase();
 
 // Create index for a products collection

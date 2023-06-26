@@ -19,7 +19,7 @@ A simple example for each [stage in the MongoDB Aggregation Framework](https://d
 |                                    | [`$unset`](#stage_unset)                     |                                      |                                      |                                  |
 
 
-> _The following stages are not included because they are unrelated to aggregating business data: &nbsp;`$collStats`, `$indexStats`, `$listSessions`, `$planCacheStats`, `$currentOp`, `$listLocalSessions`_
+> _The following stages are not included because they are unrelated to aggregating business data: &nbsp;`$changeStream`, `$changeStreamSplitLargeEvent`, `$collStats`, `$currentOp`, `$indexStats`, `$listLocalSessions`, `$listSearchIndexes`, `$listSessions`, `$planCacheStats`_
 
 #### Input Collections:
 

@@ -16,7 +16,7 @@ You help run a bank's call centre and want to analyse the summary descriptions o
 Drop any old version of the database (if it exists) and then populate a new _enquiries_ collection with new records:
 
 ```javascript
-use book-facets-text-search;
+db = db.getSiblingDB("book-facets-text-search");
 db.enquiries.remove({});
 
 // Insert records into the enquiries collection

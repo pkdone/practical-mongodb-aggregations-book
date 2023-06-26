@@ -1,16 +1,16 @@
-# Restricted View
+# Redacted View
 
 __Minimum MongoDB Version:__ 4.2
 
 
 ## Scenario
 
-You have a _persons_ collection, where a particular client application shouldn't be allowed to see sensitive information. Consequently, you will provide a read-only view of a filtered subset of peoples' data only. In a real-world situation, you would also use MongoDB's Role-Based Access Control (RBAC) to limit the client application to only be able to access the view and not the original collection. You will use the view (named _adults_) to restrict the personal data for the client application in two ways:
+You have a user management system containing data on various people in a database, and you need to ensure a particular client application cannot view the sensitive parts of the data on each person. Consequently, you will provide a read-only view of peoples' data only. You will use the view (named _adults_) to redact the personal data and expose this view to the client application as the only way to access personal information. The view will apply the following two rules to restrict what data can be accessed:
 
  1. Only show people aged 18 and over (by checking each person's `dateofbirth` field)
  2. Exclude each person's `social_security_num` field from results
 
-> _Essentially, this is an illustration of achieving "record-level" access control in MongoDB._
+> _In a real-world situation, you would also use MongoDB's Role-Based Access Control (RBAC) to limit the client application to only be able to access the view and not the original collection._
 
 
 ## Sample Data Population
@@ -18,7 +18,7 @@ You have a _persons_ collection, where a particular client application shouldn't
 Drop any old version of the database (if it exists), create an index and populate the new `persons` collections with 5 records:
 
 ```javascript
-use book-restricted-view;
+db = db.getSiblingDB("book-redacted-view");
 db.dropDatabase();
 
 // Create index for a persons collection
@@ -237,7 +237,7 @@ The result of running the `find()` against the _view_ with the filter `"gender":
     '$cursor': {
       queryPlanner: {
         plannerVersion: 1,
-        namespace: 'book-restricted-view.persons',
+        namespace: 'book-redacted-view.persons',
         indexFilterSet: false,
         parsedQuery: {
           '$and': [

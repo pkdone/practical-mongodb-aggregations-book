@@ -15,7 +15,7 @@ You want to search a collection of e-commerce products to find specific movie DV
 Drop any old version of the database (if it exists) and then populate a new _products_ collection with some _DVD_ and _Book_ records:
 
 ```javascript
-use book-compound-text-search;
+db = db.getSiblingDB("book-compound-text-search");
 db.products.remove({});
 
 // Insert 7 records into the products collection
