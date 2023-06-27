@@ -5,7 +5,7 @@ __Minimum MongoDB Version:__ 4.2
 
 ## Scenario
 
-You have a user management system containing data on various people in a database, and you need to ensure a particular client application cannot view the sensitive parts of the data on each person. Consequently, you will provide a read-only view of peoples' data only. You will use the view (named _adults_) to redact the personal data and expose this view to the client application as the only way to access personal information. The view will apply the following two rules to restrict what data can be accessed:
+You have a user management system containing data about various people in a database, and you need to ensure a particular client application cannot view the sensitive parts of the data relating to each person. Consequently, you will provide a read-only view of peoples' data. You will use the view (named _adults_) to redact the personal data and expose this view to the client application as the only way it can access personal information. The view will apply the following two rules to restrict what data can be accessed:
 
  1. Only show people aged 18 and over (by checking each person's `dateofbirth` field)
  2. Exclude each person's `social_security_num` field from results
@@ -15,7 +15,7 @@ You have a user management system containing data on various people in a databas
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists), create an index and populate the new `persons` collections with 5 records:
+Drop any old version of the database (if it exists), create an index and populate the new `persons` collection with 5 records:
 
 ```javascript
 db = db.getSiblingDB("book-redacted-view");
