@@ -5,14 +5,14 @@ __Minimum MongoDB Version:__ 7.0 &nbsp;&nbsp; _(due to use of `USER_ROLES` syste
 
 ## Scenario
 
-At a medical establishment, the central IT system holds patient data that you need to surface to different applications (and their users) according to the application's role: Receptionist, Nurse, and Doctor. Consequently, you will provide a read-only view of patient data, but the view will filter out specific sensitive fields depending on the viewer application's role. For example, the Receptionist's application should not be able to display the patient's current weight and medication. However, the Doctor's application needs this information to enable them to perform their job.
+At a medical establishment, the central IT system holds patient data that you need to surface to different applications (and their users) according to the application's role: Receptionist, Nurse, and Doctor. Consequently, you will provide a read-only view of patient data, but the view will filter out specific sensitive fields depending on the application's role. For example, the Receptionist's application should not be able to access the patient's current weight and medication. However, the Doctor's application needs this information to enable them to perform their job.
 
-> _Essentially, this example illustrates applying "field-level" access control in MongoDB. It applies programmatic role-based access control rules rather than declarative ones to enforce what data users can access within a view. Additionally, in a real-world situation, you would use a declarative role to limit the client application to only have access to the view and not the underlying collection._
+> _Essentially, this example illustrates how you can apply both "record-level" (a.k.a. "row-level") and "field-level" access control in MongoDB. Its pipeline applies programmatic role-based access control rules rather than declarative ones to enforce what data users can access within a view. In a real-world situation, you would additionally use a declarative role to limit the client application with access only to the view and not the underlying collection._
 
 
 ## Sample Data Population
 
-If you are using a self-installed MongoDB deployment, run the following commands to drop any old version of the database (if it exists) and create the necessary roles and users to help with implementing programmatic access control:
+If you are using a self-installed MongoDB deployment, run the commands below to create the necessary roles and users to help with implementing programmatic access control:
 
 > _If you are using a [MongoDB Atlas Database Cluster](https://www.mongodb.com/atlas/database), then instead, use the [Atlas console](https://cloud.mongodb.com/) to define the roles and users for your Atlas project and its database cluster._
 
@@ -52,7 +52,7 @@ db.createUser({
 });
 ```
 
-Populate the new `patients` collection with 4 records:
+Populate the new `patients` collection with four records:
 
 ```javascript
 db = db.getSiblingDB("book-role-programmatic-restricted-view");
@@ -138,7 +138,7 @@ db.createView("patients_view", "patients", pipeline);
 
 ## Execution
 
-Authenticate as **front-desk**, which has the **Receptionist** role, and execute a simple query against the view to observe which fields of each record the application can see:
+Authenticate as **front-desk**, which has the **Receptionist** role, and execute a query against the view to observe which fields of each record the application can see:
 
 ```javascript
 db.auth("front-desk", "mno456");
@@ -146,7 +146,7 @@ db.auth("front-desk", "mno456");
 db.patients_view.find();
 ```
 
-Authenticate as **nurse-station**, which has the **Nurse** role, and execute a simple query against the view to observe which fields of each record the application can see:
+Authenticate as **nurse-station**, which has the **Nurse** role, and execute a query against the view to observe which fields of each record the application can see:
 
 ```javascript
 db.auth("nurse-station", "xyz789");
@@ -154,7 +154,7 @@ db.auth("nurse-station", "xyz789");
 db.patients_view.find();
 ```
 
-Authenticate as **exam-room**, which has the **Doctor** role, and execute a simple query against the view to observe which fields of each record the application can see:
+Authenticate as **exam-room**, which has the **Doctor** role, and execute a query against the view to observe which fields of each record the application can see:
 
 ```javascript
 db.auth("exam-room", "abc123");
@@ -171,7 +171,7 @@ db.patients_view.explain("executionStats").find();
 
 ## Expected Results
 
-Running a query on the view for the **front-desk** (**Receptionist**) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields via the view. 
+Running a query on the view for **front-desk** (**Receptionist**) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. 
 
 ```javascript
 [
@@ -202,7 +202,7 @@ Running a query on the view for the **front-desk** (**Receptionist**) includes p
 ]
 ```
 
-Running a query on the view for the **nurse-station** (**Nurse**) includes patient data in the results similar to the previous user, but with the **weight** field also shown for each record.
+Running a query on the view for **nurse-station** (**Nurse**) includes patient data in the results similar to the previous user, but with the **weight** field also shown for each record.
 
 ```javascript
 [
@@ -237,7 +237,7 @@ Running a query on the view for the **nurse-station** (**Nurse**) includes patie
 ]
 ```
 
-Running a query on the view for  **exam-room** (**Doctor**) includes each patient's entire data in the results, including the **weight** and **medication** fields, due to the user having sufficient privileges to access those fields via the view. 
+Running a query on the view for **exam-room** (**Doctor**) includes each patient's entire data in the results, including the **weight** and **medication** fields, due to the user having sufficient privileges to access those fields. 
 
 ```javascript
 [
@@ -279,12 +279,13 @@ Running a query on the view for  **exam-room** (**Doctor**) includes each patien
 
 ## Observations
 
- * __Programmatic Vs Declarative Role-Based Access Control (RBAC).__ MongoDB provides a [Role-Based Access Control](https://www.mongodb.com/docs/manual/core/authorization/) (RBAC) to enable an administrator to govern access to database resources by declaratively granting system users to one or more roles (e.g. `readWrite`, `find`) against one or more resources (e.g. `collectionABC`, `viewXYZ`). However, the example chapter goes further by allowing you to include business logic to enforce programmatic access rules based on the connecting system user's role. In the example shown, these "rules" are captured in Aggregation expressions which use the `$$USER_ROLES` system variable to look up the roles associated with the current requesting system user. In this case, the logic for both `weight` and `medication` uses a condition expression (`$cond`) to see if the connected user is a member of a specific named role, and if not, it removes the field. The entire set of MongoDB Aggregation operators allows you to implement the custom logic for whatever programmatic access controls you like.
+ * __Programmatic Vs Declarative Role-Based Access Control (RBAC).__ MongoDB provides [Role-Based Access Control](https://www.mongodb.com/docs/manual/core/authorization/) (RBAC) to enable an administrator to govern access to database resources. They achieve this by **declaratively** granting system users to one or more roles (e.g. `readWrite`, `find`) against one or more resources (e.g. `collectionABC`, `viewXYZ`). However, this example chapter goes further by allowing you to include business logic to enforce **programmatic** access rules based on the connecting system user's role. In the example, these "rules" are captured in Aggregation expressions which use the `$$USER_ROLES` system variable to look up the roles associated with the current requesting system user. The pipeline's logic for both `weight` and `medication` uses a condition expression (`$cond`) to see if the connected user is a member of a named role, and if not, it removes the field. Given the entire set of MongoDB Aggregation operators at your disposal, you can implement whatever custom access control logic you want.
  
- * __Avoids Proliferation Of Views.__ For this scenario, there is an alternative solution that would rely on purely declarative RBAC rather than introducing the need for programmatic rules, achieved by defining three different "hard-coded" views. There would be one view per role (e.g. `receptionist_patients_view`, `nurse_patients_view`, `doctor_patients_view`). Each view would contain an almost identical aggregation pipeline, varying only in the specific fields they omit. Such an approach introduces redundancy; whenever a developer changes the view's core aggregation pipeline changes, they need to make the changes in three places. This proliferation of views would be exasperated when there are 100s of roles involved in a typical non-trivial application. A programmatic RBAC approach can reduce maintenance costs and friction, impeding change.
+ * __Avoid Proliferation Of Views.__ There is an alternative solution for this example, enabling a purely declarative RBAC approach by defining three different "hard-coded" views rather than mandating that you code programmatic rules in one view. You would specify one view per role (e.g. `receptionist_patients_view`, `nurse_patients_view`, `doctor_patients_view`). Each view would contain an almost identical aggregation pipeline, varying only in the specific fields it omits. However, such an approach introduces duplication; whenever developers change the view's core aggregation pipeline, they must apply the changes in three places. This proliferation of views will be exasperated when there are 100s of roles involved in a non-trivial application. Thus, adding a programmatic RBAC approach to "fine-tune" access rules reduces maintenance costs and friction to increase agility.
 
- * __Filter On View With Index Pushdowns.__ It is not shown here, but as with the [redacted view example](redacted-view.md), the view's aggregation pipeline can leverage an appropriate index, including the ability, in certain circumstances, to push down the filters passed to the `find()` operation run against the view. 
+ * __Filtering On A View With Index Pushdowns.__ As with the [redacted view example](redacted-view.md), the view's aggregation pipeline can leverage an index, including the ability, in certain circumstances, to push down the filters passed to the `find()` operation run against the view. 
 
- * __Potential To Factor Out Logic To Dynamic Metadata.__ This chapter's example uses "hard-coded" logic to enforce access control rules. Every time the business needs a rile to be changed (e.g. what fields Nurse can see), a developer must modify and re-test the code. When such business rules change frequently in dynamic applications, it may be undesirable to mandate a code change and application re-release each time an access control rule changes. Instead, you could factor out metadata to a new collection capturing the mappings of the names of the fields each role can access. A business administrator could dynamically modify these mappings via an administrative user interface. The aggregation pipeline for a view would then use the `$lookup` stage to map the current connect user's role (using `USER_ROLES`) as the filter to the collection being lookup up and then use the list of fields from the `$lookup` operation in the rest of the pipeline to show each field conditionally. 
- 
+ * __Field-Level Vs Record-Level Access Control.__ The example view's pipeline applies field-level access control rules (e.g. the `nurse` role cannot access a document's `medication` field). However, adding logic to the pipeline to filter out specific documents is also straightforward, using the approach highlighted in the [redacted view example](redacted-view.md) to enforce record-level access control. You achieve this by optionally applying a `$match` operator in the pipeline if the user has a specific role (e.g. "receptionist") rather than just filtering based on the value of some fields in each document (e.g. if a document's date field is less than a specific point in time).
+
+ * __Potential To Factor Out Logic To Dynamic Metadata.__ This chapter's example uses "hard-coded" logic to enforce access control rules. Every time the business needs to change a rule (e.g. adjust what fields a Nurse can see), a developer must modify and re-test the code. When such business rules frequently change in dynamic applications, it may be undesirable to mandate a code change and application re-release for each change. Instead, you could factor out metadata into a new collection capturing the mappings of the names of fields each role can access. A business administrator could dynamically modify the mappings in this "special" collection via an administrative user interface. At runtime, the view's pipeline would use a `$lookup` stage to map the current user's role (using `USER_ROLES`) to the fields the role can access. The pipeline would then use this list to conditionally show or omit values of each field in its result.
 
