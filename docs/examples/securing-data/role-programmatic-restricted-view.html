@@ -1,0 +1,458 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Role Programmatic Restricted View - Practical MongoDB Aggregations Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-D0T2GQ8R19"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-D0T2GQ8R19');
+        </script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html" class="active"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Practical MongoDB Aggregations Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="role-programmatic-restricted-view"><a class="header" href="#role-programmatic-restricted-view">Role Programmatic Restricted View</a></h1>
+<p><strong>Minimum MongoDB Version:</strong> 7.0    <em>(due to use of <code>USER_ROLES</code> system variable)</em></p>
+<h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
+<p>At a medical establishment, the central IT system holds patient data that you need to surface to different applications (and their users) according to the application's role: Receptionist, Nurse, and Doctor. Consequently, you will provide a read-only view of patient data, but the view will filter out specific sensitive fields depending on the application's role. For example, the Receptionist's application should not be able to access the patient's current weight and medication. However, the Doctor's application needs this information to enable them to perform their job.</p>
+<blockquote>
+<p><em>Essentially, this example illustrates how you can apply both &quot;record-level&quot; (a.k.a. &quot;row-level&quot;) and &quot;field-level&quot; access control in MongoDB. Its pipeline applies programmatic role-based access control rules rather than declarative ones to enforce what data users can access within a view. In a real-world situation, you would additionally use a declarative role to limit the client application with access only to the view and not the underlying collection.</em></p>
+</blockquote>
+<h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
+<p>If you are using a self-installed MongoDB deployment, run the commands below to create the necessary roles and users to help with implementing programmatic access control:</p>
+<blockquote>
+<p><em>If you are using a <a href="https://www.mongodb.com/atlas/database">MongoDB Atlas Database Cluster</a>, then instead, use the <a href="https://cloud.mongodb.com/">Atlas console</a> to define the roles and users for your Atlas project and its database cluster.</em></p>
+</blockquote>
+<pre><code class="language-javascript">var dbName = &quot;book-role-programmatic-restricted-view&quot;;
+db = db.getSiblingDB(dbName);
+db.dropDatabase();
+db.dropAllRoles();
+db.dropAllUsers();
+
+// Create 3 roles to use for programmatic access control
+db.createRole({&quot;role&quot;: &quot;Doctor&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
+db.createRole({&quot;role&quot;: &quot;Nurse&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
+db.createRole({&quot;role&quot;: &quot;Receptionist&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
+
+// Create 3 users where each user will have a different role
+db.createUser({
+  &quot;user&quot;: &quot;front-desk&quot;,
+  &quot;pwd&quot;: &quot;abc123&quot;,
+  &quot;roles&quot;: [
+     {&quot;role&quot;: &quot;Doctor&quot;, &quot;db&quot;: dbName},
+  ]
+});
+db.createUser({
+  &quot;user&quot;: &quot;nurse-station&quot;,
+  &quot;pwd&quot;: &quot;xyz789&quot;,
+  &quot;roles&quot;: [
+    {&quot;role&quot;: &quot;Nurse&quot;, &quot;db&quot;: dbName},
+  ]
+});
+db.createUser({
+  &quot;user&quot;: &quot;exam-room&quot;,
+  &quot;pwd&quot;: &quot;mno456&quot;,
+  &quot;roles&quot;: [
+    {&quot;role&quot;: &quot;Receptionist&quot;, &quot;db&quot;: dbName},
+  ]
+});
+</code></pre>
+<p>Populate the new <code>patients</code> collection with four records:</p>
+<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-role-programmatic-restricted-view&quot;);
+
+// Insert 4 records into the patients collection
+db.patients.insertMany([
+  {
+    &quot;id&quot;: &quot;D40230&quot;,
+    &quot;first_name&quot;: &quot;Chelsea&quot;,
+    &quot;last_Name&quot;: &quot;Chow&quot;,
+    &quot;birth_date&quot;: ISODate(&quot;1984-11-07T10:12:00Z&quot;),
+    &quot;weight&quot;: 145,
+    &quot;medication&quot;: [&quot;Insulin&quot;, &quot;Methotrexate&quot;],
+  },
+  {
+    &quot;id&quot;: &quot;R83165&quot;,
+    &quot;first_name&quot;: &quot;Pharrell&quot;,
+    &quot;last_Name&quot;: &quot;Phillips&quot;,
+    &quot;birth_date&quot;: ISODate(&quot;1993-05-30T19:44:00Z&quot;),
+    &quot;weight&quot;: 137,
+    &quot;medication&quot;: [&quot;Fluoxetine&quot;],
+  },  
+  {
+    &quot;id&quot;: &quot;X24046&quot;,
+    &quot;first_name&quot;: &quot;Billy&quot;,
+    &quot;last_Name&quot;: &quot;Boaty&quot;,
+    &quot;birth_date&quot;: ISODate(&quot;1976-02-07T23:58:00Z&quot;),
+    &quot;weight&quot;: 223,
+    &quot;medication&quot;: [],
+  },
+  {
+    &quot;id&quot;: &quot;P53212&quot;,
+    &quot;first_name&quot;: &quot;Yazz&quot;,
+    &quot;last_Name&quot;: &quot;Yodeler&quot;,
+    &quot;birth_date&quot;: ISODate(&quot;1999-12-25T12:51:00Z&quot;),
+    &quot;weight&quot;: 156,
+    &quot;medication&quot;: [&quot;Tylenol&quot;, &quot;Naproxen&quot;],
+  }, 
+]);
+</code></pre>
+<h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
+<p>Define an aggregation pipeline ready to be used as the basis of a new view:</p>
+<pre><code class="language-javascript">var pipeline = [
+  {&quot;$set&quot;: {
+    // Exclude weight if user does not have right role
+    &quot;weight&quot;: {
+      &quot;$cond&quot;: {
+        &quot;if&quot;: {
+          &quot;$eq&quot;: [{&quot;$setIntersection&quot;: [&quot;$$USER_ROLES.role&quot;, [&quot;Doctor&quot;, &quot;Nurse&quot;]]}, []]
+        },
+        then: '$$REMOVE',
+        else: '$weight'
+      }
+    },
+      
+    // Exclude weight if user does not have right role
+    &quot;medication&quot;: {
+      &quot;$cond&quot;: {
+        &quot;if&quot;: {
+          &quot;$eq&quot;: [{&quot;$setIntersection&quot;: [&quot;$$USER_ROLES.role&quot;, [&quot;Doctor&quot;]]}, []]
+        },
+        then: '$$REMOVE',
+        else: '$medication'
+      }
+    },
+
+    // Always exclude _id
+    &quot;_id&quot;: &quot;$$REMOVE&quot;,
+  }},
+]
+</code></pre>
+<p>Create a new view called <code>patients_view</code>, which will automatically apply the aggregation pipeline whenever anyone queries the view: </p>
+<pre><code class="language-javascript">db.createView(&quot;patients_view&quot;, &quot;patients&quot;, pipeline);
+</code></pre>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<p>Authenticate as <strong>front-desk</strong>, which has the <strong>Receptionist</strong> role, and execute a query against the view to observe which fields of each record the application can see:</p>
+<pre><code class="language-javascript">db.auth(&quot;front-desk&quot;, &quot;mno456&quot;);
+
+db.patients_view.find();
+</code></pre>
+<p>Authenticate as <strong>nurse-station</strong>, which has the <strong>Nurse</strong> role, and execute a query against the view to observe which fields of each record the application can see:</p>
+<pre><code class="language-javascript">db.auth(&quot;nurse-station&quot;, &quot;xyz789&quot;);
+
+db.patients_view.find();
+</code></pre>
+<p>Authenticate as <strong>exam-room</strong>, which has the <strong>Doctor</strong> role, and execute a query against the view to observe which fields of each record the application can see:</p>
+<pre><code class="language-javascript">db.auth(&quot;exam-room&quot;, &quot;abc123&quot;);
+
+db.patients_view.find();
+</code></pre>
+<p>For completeness, also view the explain plan for the aggregation pipeline:</p>
+<pre><code class="language-javascript">db.patients_view.explain(&quot;executionStats&quot;).find();
+</code></pre>
+<h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
+<p>Running a query on the view for <strong>front-desk</strong> (<strong>Receptionist</strong>) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. </p>
+<pre><code class="language-javascript">[
+  {
+    id: 'D40230',
+    first_name: 'Chelsea',
+    last_Name: 'Chow',
+    birth_date: ISODate(&quot;1984-11-07T10:12:00.000Z&quot;)
+  },
+  {
+    id: 'R83165',
+    first_name: 'Pharrell',
+    last_Name: 'Phillips',
+    birth_date: ISODate(&quot;1993-05-30T19:44:00.000Z&quot;)
+  },
+  {
+    id: 'X24046',
+    first_name: 'Billy',
+    last_Name: 'Boaty',
+    birth_date: ISODate(&quot;1976-02-07T23:58:00.000Z&quot;)
+  },
+  {
+    id: 'P53212',
+    first_name: 'Yazz',
+    last_Name: 'Yodeler',
+    birth_date: ISODate(&quot;1999-12-25T12:51:00.000Z&quot;)
+  }
+]
+</code></pre>
+<p>Running a query on the view for <strong>nurse-station</strong> (<strong>Nurse</strong>) includes patient data in the results similar to the previous user, but with the <strong>weight</strong> field also shown for each record.</p>
+<pre><code class="language-javascript">[
+  {
+    id: 'D40230',
+    first_name: 'Chelsea',
+    last_Name: 'Chow',
+    birth_date: ISODate(&quot;1984-11-07T10:12:00.000Z&quot;),
+    weight: 145
+  },
+  {
+    id: 'R83165',
+    first_name: 'Pharrell',
+    last_Name: 'Phillips',
+    birth_date: ISODate(&quot;1993-05-30T19:44:00.000Z&quot;),
+    weight: 137
+  },
+  {
+    id: 'X24046',
+    first_name: 'Billy',
+    last_Name: 'Boaty',
+    birth_date: ISODate(&quot;1976-02-07T23:58:00.000Z&quot;),
+    weight: 223
+  },
+  {
+    id: 'P53212',
+    first_name: 'Yazz',
+    last_Name: 'Yodeler',
+    birth_date: ISODate(&quot;1999-12-25T12:51:00.000Z&quot;),
+    weight: 156
+  }
+]
+</code></pre>
+<p>Running a query on the view for <strong>exam-room</strong> (<strong>Doctor</strong>) includes each patient's entire data in the results, including the <strong>weight</strong> and <strong>medication</strong> fields, due to the user having sufficient privileges to access those fields. </p>
+<pre><code class="language-javascript">[
+  {
+    id: 'D40230',
+    first_name: 'Chelsea',
+    last_Name: 'Chow',
+    birth_date: ISODate(&quot;1984-11-07T10:12:00.000Z&quot;),
+    weight: 145,
+    medication: [ 'Insulin', 'Methotrexate' ]
+  },
+  {
+    id: 'R83165',
+    first_name: 'Pharrell',
+    last_Name: 'Phillips',
+    birth_date: ISODate(&quot;1993-05-30T19:44:00.000Z&quot;),
+    weight: 137,
+    medication: [ 'Fluoxetine' ]
+  },
+  {
+    id: 'X24046',
+    first_name: 'Billy',
+    last_Name: 'Boaty',
+    birth_date: ISODate(&quot;1976-02-07T23:58:00.000Z&quot;),
+    weight: 223,
+    medication: []
+  },
+  {
+    id: 'P53212',
+    first_name: 'Yazz',
+    last_Name: 'Yodeler',
+    birth_date: ISODate(&quot;1999-12-25T12:51:00.000Z&quot;),
+    weight: 156,
+    medication: [ 'Tylenol', 'Naproxen' ]
+  }
+]
+</code></pre>
+<h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
+<ul>
+<li>
+<p><strong>Programmatic Vs Declarative Role-Based Access Control (RBAC).</strong> MongoDB provides <a href="https://www.mongodb.com/docs/manual/core/authorization/">Role-Based Access Control</a> (RBAC) to enable an administrator to govern access to database resources. They achieve this by <strong>declaratively</strong> granting system users to one or more roles (e.g. <code>readWrite</code>, <code>find</code>) against one or more resources (e.g. <code>collectionABC</code>, <code>viewXYZ</code>). However, this example chapter goes further by allowing you to include business logic to enforce <strong>programmatic</strong> access rules based on the connecting system user's role. In the example, these &quot;rules&quot; are captured in Aggregation expressions which use the <code>$$USER_ROLES</code> system variable to look up the roles associated with the current requesting system user. The pipeline's logic for both <code>weight</code> and <code>medication</code> uses a condition expression (<code>$cond</code>) to see if the connected user is a member of a named role, and if not, it removes the field. Given the entire set of MongoDB Aggregation operators at your disposal, you can implement whatever custom access control logic you want.</p>
+</li>
+<li>
+<p><strong>Avoid Proliferation Of Views.</strong> There is an alternative solution for this example, enabling a purely declarative RBAC approach by defining three different &quot;hard-coded&quot; views rather than mandating that you code programmatic rules in one view. You would specify one view per role (e.g. <code>receptionist_patients_view</code>, <code>nurse_patients_view</code>, <code>doctor_patients_view</code>). Each view would contain an almost identical aggregation pipeline, varying only in the specific fields it omits. However, such an approach introduces duplication; whenever developers change the view's core aggregation pipeline, they must apply the changes in three places. This proliferation of views will be exasperated when there are 100s of roles involved in a non-trivial application. Thus, adding a programmatic RBAC approach to &quot;fine-tune&quot; access rules reduces maintenance costs and friction to increase agility.</p>
+</li>
+<li>
+<p><strong>Filtering On A View With Index Pushdowns.</strong> As with the <a href="redacted-view.html">redacted view example</a>, the view's aggregation pipeline can leverage an index, including the ability, in certain circumstances, to push down the filters passed to the <code>find()</code> operation run against the view. </p>
+</li>
+<li>
+<p><strong>Field-Level Vs Record-Level Access Control.</strong> The example view's pipeline applies field-level access control rules (e.g. the <code>nurse</code> role cannot access a document's <code>medication</code> field). However, adding logic to the pipeline to filter out specific documents is also straightforward, using the approach highlighted in the <a href="redacted-view.html">redacted view example</a> to enforce record-level access control. You achieve this by optionally applying a <code>$match</code> operator in the pipeline if the user has a specific role (e.g. &quot;receptionist&quot;) rather than just filtering based on the value of some fields in each document (e.g. if a document's date field is less than a specific point in time).</p>
+</li>
+<li>
+<p><strong>Potential To Factor Out Logic To Dynamic Metadata.</strong> This chapter's example uses &quot;hard-coded&quot; logic to enforce access control rules. Every time the business needs to change a rule (e.g. adjust what fields a Nurse can see), a developer must modify and re-test the code. When such business rules frequently change in dynamic applications, it may be undesirable to mandate a code change and application re-release for each change. Instead, you could factor out metadata into a new collection capturing the mappings of the names of fields each role can access. A business administrator could dynamically modify the mappings in this &quot;special&quot; collection via an administrative user interface. At runtime, the view's pipeline would use a <code>$lookup</code> stage to map the current user's role (using <code>USER_ROLES</code>) to the fields the role can access. The pipeline would then use this list to conditionally show or omit values of each field in its result.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../examples/securing-data/mask-sensitive-fields.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../examples/time-series/time-series.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../examples/securing-data/mask-sensitive-fields.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../examples/time-series/time-series.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
