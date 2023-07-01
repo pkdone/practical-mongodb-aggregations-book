@@ -127,7 +127,7 @@ db.users.explain().aggregate(pipeline);
 
 ## Expected Results
 
-Two documents should be returned, each showing a new `moodActivities` array field containing descriptions of how a user conducts their preferred hobby for each mood, as shown below::
+Two documents should be returned, each showing a new `moodActivities` array field containing descriptions of how a user conducts their preferred hobby for each mood, as shown below:
 
 ```javascript
 [

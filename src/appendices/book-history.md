@@ -2,7 +2,7 @@
 
 A summary of the significant additions in each major version of this book.
 
-__Version 7.0 (released in June 2023)__
+__Version 7.0 (released in July 2023)__
 * [Array Fields Joining](../examples/array-manipulations/array-fields-joining.md) example chapter
 * [Role Programmatic Restricted View](../examples/securing-data/role-programmatic-restricted-view.md) example chapter
 

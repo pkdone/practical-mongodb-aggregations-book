@@ -36,5 +36,5 @@ It may take a few minutes for the system to generate the text search index.
 &nbsp;
 
 
-> _Note that it is also possible for you to automate [creating a search index using the Atlas Admin API](https://www.mongodb.com/docs/atlas/reference/api/fts-indexes-create-one/#examples)._
+> _Note that it is also possible for you to automate creating a search index by using the [Atlas Admin API](https://www.mongodb.com/docs/atlas/reference/api/fts-indexes-create-one/#examples) in MongoDB version 4.2 and greater, or by using the **createSearchIndexes command** in MongoDB version 7.0 and greater._
 

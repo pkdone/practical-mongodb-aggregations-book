@@ -6,7 +6,7 @@ Author: Paul Done ([@TheDonester](https://twitter.com/TheDonester))
 
 Version: 7.00
 
-Last updated: June 2023 &nbsp;&nbsp;&nbsp;(see [Book Version History](appendices/book-history.md))
+Last updated: July 2023 &nbsp;&nbsp;&nbsp;(see [Book Version History](appendices/book-history.md))
 
 MongoDB versions supported: 4.2 → 7.0
 
