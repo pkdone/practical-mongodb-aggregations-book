@@ -7,7 +7,7 @@ __Minimum MongoDB Version:__ 7.0 &nbsp;&nbsp; _(due to use of `USER_ROLES` syste
 
 At a medical establishment, the central IT system holds patient data that you need to surface to different applications (and their users) according to the application's role: Receptionist, Nurse, and Doctor. Consequently, you will provide a read-only view of patient data, but the view will filter out specific sensitive fields depending on the application's role. For example, the Receptionist's application should not be able to access the patient's current weight and medication. However, the Doctor's application needs this information to enable them to perform their job.
 
-> _Essentially, this example illustrates how you can apply both "record-level" (a.k.a. "row-level") and "field-level" access control in MongoDB. Its pipeline applies programmatic role-based access control rules rather than declarative ones to enforce what data users can access within a view. In a real-world situation, you would additionally use a declarative role to limit the client application with access only to the view and not the underlying collection._
+> _Essentially, this example illustrates how you can apply both "record-level" (a.k.a. "row-level") and "field-level" (a.k.a. "column-level") access control in MongoDB. Its pipeline applies programmatic role-based access control rules rather than declarative ones to enforce what data users can access within a view. In a real-world situation, you would additionally use a declarative role to limit the client application with access only to the view and not the underlying collection._
 
 
 ## Sample Data Population
