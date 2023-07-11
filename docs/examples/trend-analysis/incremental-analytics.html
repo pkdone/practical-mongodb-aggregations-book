@@ -268,7 +268,7 @@ var pipeline = getDayAggPipeline(&quot;2021-02-01T00:00:00Z&quot;, &quot;2021-02
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should be 1 record only)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 </code></pre>
 <p>From the results, you can see that only a single order summary has been generated, for 01-Feb-2021, containing the total value and number of orders for that day.</p>
 <p>Now for the next day only (for 02-Feb-2021 orders), build the pipeline and execute the aggregation: </p>
@@ -279,7 +279,7 @@ var pipeline = getDayAggPipeline(&quot;2021-02-02T00:00:00Z&quot;, &quot;2021-02
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should be 2 record now)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 </code></pre>
 <p>From the results, you can see that order summaries exist for both days.</p>
 <p>To simulate the organisation's occasional need to correct an old order retrospectively, go back and add a new &quot;high value&quot; order for the first day. Then re-run the aggregation for the first day only (01-Feb-2021) to show that you can safely and correctly recalculate the summary for just one day:</p>
@@ -298,7 +298,7 @@ var pipeline = getDayAggPipeline(&quot;2021-02-01T00:00:00Z&quot;, &quot;2021-02
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should still be 2 records but 1st changed)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 </code></pre>
 <p>From the results, you can see that two order summaries still exist, one for each of the two trading days, but the total value and order count for the first day has changed.</p>
 <p>For completeness, also view the explain plan for the aggregation pipeline:</p>

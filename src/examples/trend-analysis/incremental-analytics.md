@@ -131,7 +131,7 @@ var pipeline = getDayAggPipeline("2021-02-01T00:00:00Z", "2021-02-02T00:00:00Z")
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should be 1 record only)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 ```
 
 From the results, you can see that only a single order summary has been generated, for 01-Feb-2021, containing the total value and number of orders for that day.
@@ -146,7 +146,7 @@ var pipeline = getDayAggPipeline("2021-02-02T00:00:00Z", "2021-02-03T00:00:00Z")
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should be 2 record now)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 ```
 
 From the results, you can see that order summaries exist for both days.
@@ -169,7 +169,7 @@ var pipeline = getDayAggPipeline("2021-02-01T00:00:00Z", "2021-02-02T00:00:00Z")
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should still be 2 records but 1st changed)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 ```
 
 From the results, you can see that two order summaries still exist, one for each of the two trading days, but the total value and order count for the first day has changed.

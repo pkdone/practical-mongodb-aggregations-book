@@ -205,14 +205,14 @@ order.cost = (
 <p>The other difference in this comparison and the rest of the comparisons in this chapter is the pipeline will work unchanged when run against a collection of many records, which could feasibly be many billions. The sample JavaScript code only works against one document at a time and would need to be modified to loop through a list of records. This JavaScript code would need to fetch each document from the database back to a client, apply the modifications and then write the result back to the database. Instead, the aggregation pipeline’s logic operates against each document in-situ within the database for far superior performance and efficiency.</p>
 <h2 id="the-power-array-operators"><a class="header" href="#the-power-array-operators">The &quot;Power&quot; Array Operators</a></h2>
 <p>When you want to transform or extract data from an array field, and a single high-level array operator (e.g. <code>$avg</code>, <code>$max</code>, <code>$filter</code>) does not give you what you need, the tools to turn to are the <code>$map</code> and <code>$reduce</code> array operators. These two &quot;power&quot; operators enable you to iterate through an array, perform whatever complexity of logic you need against each array element and collect together the result for inclusion in a stage's output. </p>
-<p>The <code>$map</code> and <code>$reduce</code> operators are the &quot;swiss army knives&quot; of the Aggregation Framework. Do not confuse these two array operators with MongoDB's old <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce API</a>, which was essentially made redundant and obsolete by the <a href="../intro/history.html">emergence of the superior Aggregation Framework in MongoDB</a>. In the old Map-Reduce API, you combine a <code>map()</code> function and a <code>reduce()</code> function to generate a result. In the Aggregation Framework, the <code>$map</code> and <code>$reduce</code> operators are independent of each other. Depending on your specific requirements, you would use one or the other to process an array's field, but not both together. Here's an explanation of these two &quot;power&quot; operators:</p>
+<p>The <code>$map</code> and <code>$reduce</code> operators are the &quot;swiss army knives&quot; of the Aggregation Framework. Do not confuse these two array operators with MongoDB's old <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce API</a>, which was essentially made redundant and obsolete by the <a href="../intro/history.html">emergence of the superior Aggregation Framework in MongoDB</a>. In the old Map-Reduce API, you combine a <code>map()</code> function and a <code>reduce()</code> function to generate a result. In the Aggregation Framework, the <code>$map</code> and <code>$reduce</code> operators are independent of each other. Depending on your specific requirements, you would use one or the other to process an array's field, but not necessarily both together. Here's an explanation of these two &quot;power&quot; operators:</p>
 <ul>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/map/"><code>$map</code></a>. Allows you to specify some logic to perform against each element in the array that the operator iterates, returning an array as the final result. Typically you use <code>$map</code> to mutate each array member and then return this transformed array. The <code>$map</code> operator exposes the current array element's content to your logic via a special variable, with the default name of <code>$$this</code>.</li>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/reduce/"><code>$reduce</code></a>. Similarly, you can specify some logic to execute for each element in an array that the operator iterates but instead returning a single value (rather than an array) as the final result. You typically use <code>$reduce</code> to compute a summary having analysed each array element. For example, you might want to return a number by multiplying together a specific field value from each array's element. Like the <code>$map</code> operator, the <code>$reduce</code> operator provides your logic with access to the current array element via the variable <code>$$this</code>. The operator also provides a second variable, called <code>$$value</code>, for your logic to update when accumulating the single result (e.g. the multiplication result).</li>
 </ul>
 <p>The rest of this chapter explores how these two &quot;power&quot; operators are used to manipulate arrays.</p>
 <h2 id="for-each-looping-to-transform-an-array"><a class="header" href="#for-each-looping-to-transform-an-array">&quot;For-Each&quot; Looping To Transform An Array</a></h2>
-<p>Imagine you wanted to process a list of the products ordered by a customer and convert the array of product names to upper case. In a procedural style of JavaScript, you might write the following code to loop through each product in the array and convert its name to upper case:</p>
+<p>Imagine you wanted to process a list of the products ordered by a customer and convert the array of product names to uppercase. In a procedural style of JavaScript, you might write the following code to loop through each product in the array and convert its name to uppercase:</p>
 <pre><code class="language-javascript">let order = {
   &quot;orderId&quot;: &quot;AB12345&quot;,
   &quot;products&quot;: [&quot;Laptop&quot;, &quot;Kettle&quot;, &quot;Phone&quot;, &quot;Microwave&quot;]
@@ -243,7 +243,7 @@ var pipeline = [
 
 db.orders.aggregate(pipeline);
 </code></pre>
-<p>Here, a <code>$map</code> operator expression is applied to loop through each product name in the input products array and add the upper case version of the product name to the replacement output array.</p>
+<p>Here, a <code>$map</code> operator expression is applied to loop through each product name in the input products array and add the uppercase version of the product name to the replacement output array.</p>
 <p>This pipeline produces the following output with the order document transformed to:</p>
 <pre><code class="language-javascript">{orderId: 'AB12345', products: ['LAPTOP', 'KETTLE', 'PHONE', 'MICROWAVE']}
 </code></pre>
@@ -270,7 +270,7 @@ for (const pos in order.products) {
   order.productList += order.products[pos] + &quot;; &quot;;
 }
 </code></pre>
-<p>This code yields the following output with a new <code>productList</code> string field produced, which contains the names of all the products in the order, delimited by semi-colons:</p>
+<p>This code yields the following output with a new <code>productList</code> string field produced, which contains the names of all the products in the order, delimited by semicolons:</p>
 <pre><code class="language-javascript">{
   orderId: 'AB12345',
   products: [ 'Laptop', 'Kettle', 'Phone', 'Microwave' ],

@@ -291,7 +291,7 @@ db.patients_view.find();
 <pre><code class="language-javascript">db.patients_view.explain(&quot;executionStats&quot;).find();
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
-<p>Running a query on the view for <strong>front-desk</strong> (<strong>Receptionist</strong>) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. </p>
+<p>Running a query on the view for the <strong>front-desk</strong> (<strong>Receptionist</strong>) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. </p>
 <pre><code class="language-javascript">[
   {
     id: 'D40230',
@@ -319,7 +319,7 @@ db.patients_view.find();
   }
 ]
 </code></pre>
-<p>Running a query on the view for <strong>nurse-station</strong> (<strong>Nurse</strong>) includes patient data in the results similar to the previous user, but with the <strong>weight</strong> field also shown for each record.</p>
+<p>Running a query on the view for the <strong>nurse-station</strong> (<strong>Nurse</strong>) includes patient data in the results similar to the previous user, but with the <strong>weight</strong> field also shown for each record.</p>
 <pre><code class="language-javascript">[
   {
     id: 'D40230',
@@ -351,7 +351,7 @@ db.patients_view.find();
   }
 ]
 </code></pre>
-<p>Running a query on the view for <strong>exam-room</strong> (<strong>Doctor</strong>) includes each patient's entire data in the results, including the <strong>weight</strong> and <strong>medication</strong> fields, due to the user having sufficient privileges to access those fields. </p>
+<p>Running a query on the view for the <strong>exam-room</strong> (<strong>Doctor</strong>) includes each patient's entire data in the results, including the <strong>weight</strong> and <strong>medication</strong> fields, due to the user having sufficient privileges to access those fields. </p>
 <pre><code class="language-javascript">[
   {
     id: 'D40230',

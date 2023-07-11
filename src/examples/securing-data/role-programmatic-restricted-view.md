@@ -171,7 +171,7 @@ db.patients_view.explain("executionStats").find();
 
 ## Expected Results
 
-Running a query on the view for **front-desk** (**Receptionist**) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. 
+Running a query on the view for the **front-desk** (**Receptionist**) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. 
 
 ```javascript
 [
@@ -202,7 +202,7 @@ Running a query on the view for **front-desk** (**Receptionist**) includes patie
 ]
 ```
 
-Running a query on the view for **nurse-station** (**Nurse**) includes patient data in the results similar to the previous user, but with the **weight** field also shown for each record.
+Running a query on the view for the **nurse-station** (**Nurse**) includes patient data in the results similar to the previous user, but with the **weight** field also shown for each record.
 
 ```javascript
 [
@@ -237,7 +237,7 @@ Running a query on the view for **nurse-station** (**Nurse**) includes patient d
 ]
 ```
 
-Running a query on the view for **exam-room** (**Doctor**) includes each patient's entire data in the results, including the **weight** and **medication** fields, due to the user having sufficient privileges to access those fields. 
+Running a query on the view for the **exam-room** (**Doctor**) includes each patient's entire data in the results, including the **weight** and **medication** fields, due to the user having sufficient privileges to access those fields. 
 
 ```javascript
 [

@@ -315,7 +315,7 @@
 <ol>
 <li><strong><em>Modern</em> Shell</strong>. Install the modern version of MongoDB's command-line tool, the <a href="https://www.mongodb.com/try/download/shell">MongoDB Shell</a>: <code>mongosh</code></li>
 <li><strong><em>Legacy</em> Shell</strong>. Install the legacy version of MongoDB's command-line tool, the <a href="https://docs.mongodb.com/manual/mongo/">Mongo Shell</a>: <code>mongo</code> (you will often find this binary bundled with a MongoDB database installation)</li>
-<li><strong>VS Code</strong>. <a href="https://www.mongodb.com/docs/mongodb-vscode/install/">Install MongoDB for VS Cose</a>, and use the <a href="https://www.mongodb.com/docs/mongodb-vscode/playgrounds/">Playgrounds</a> feature</li>
+<li><strong>VS Code</strong>. <a href="https://www.mongodb.com/docs/mongodb-vscode/install/">Install MongoDB for VS Code</a>, and use the <a href="https://www.mongodb.com/docs/mongodb-vscode/playgrounds/">Playgrounds</a> feature</li>
 <li><strong>Compass</strong>. Install the <em>official</em> MongoDB Inc. provided graphical user interface (GUI) tool, <a href="https://www.mongodb.com/products/compass">MongoDB Compass</a></li>
 <li><strong>Studio 3T</strong>. Install the <em>3rd party</em> 3T Software Labs provided graphical user interface (GUI) tool, <a href="https://studio3t.com/download/">Studio 3T</a></li>
 </ol>
@@ -608,9 +608,9 @@ var pipeline = [
 <h2 id="main-takeaway"><a class="header" href="#main-takeaway">Main Takeaway</a></h2>
 <p>In summary, you should always look to use <code>$set</code> (or <code>$addFields</code>) and <code>$unset</code> for field inclusion and exclusion, rather than <code>$project</code>. The main exception is if you have an obvious requirement for a very different structure for result documents, where you only need to retain a small subset of the input fields.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-explain-plans"><a class="header" href="#using-explain-plans">Using Explain Plans</a></h1>
-<p>When using the MongoDB Query Language (MQL) to develop queries, it is important to view the <a href="https://docs.mongodb.com/manual/reference/method/db.collection.explain/">explain plan</a> for a query to determine if you've used the appropriate index and if you need to optimise other aspects of the query or the data model. An explain plan allows you to understand fully the performance implications of the query you have created.</p>
+<p>When using the MongoDB Query Language (MQL) to develop queries, it is important to view the <a href="https://docs.mongodb.com/manual/reference/method/db.collection.explain/">explain plan</a> for a query to determine if you've used the appropriate index and if you need to optimise other aspects of the query or the data model. An explain plan allows you to fully understand the performance implications of the query you have created.</p>
 <p>The same applies to aggregation pipelines and the ability to view an <em>explain plan</em> for the executed pipeline. However, with aggregations, an explain plan tends to be even more critical because considerably more complex logic can be assembled and run in the database. There are far more opportunities for performance bottlenecks to occur, requiring optimisation.</p>
-<p>The MongoDB database engine will do its best to apply its own <a href="https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/">aggregation pipeline optimisations</a> at runtime. Nevertheless, there could be some optimisations that only you can make. A database engine should never optimise a pipeline in such a way as to risk changing the functional behaviour and outcome of the pipeline. The database engine doesn't always have the extra context that your brain has, relating to the actual business problem at hand. It may not be able to make some types of judgment calls about what pipeline changes to apply to make it run faster. The availability of an explain plan for aggregations enables you to bridge this gap. It allows you to understand the database engine's applied optimisations and detect further potential optimisations you can manually implement in the pipeline.</p>
+<p>The MongoDB database engine will do its best to apply its own <a href="https://docs.mongodb.com/manual/core/aggregation-pipeline-optimization/">aggregation pipeline optimisations</a> at runtime. Nevertheless, there could be some optimisations that only you can make. A database engine should never optimise a pipeline in such a way as to risk changing the functional behaviour and outcome of the pipeline. The database engine doesn't always have the extra context that your brain has, relating to the actual business problem at hand. It may not be able to make some types of judgement calls about what pipeline changes to apply to make it run faster. The availability of an explain plan for aggregations enables you to bridge this gap. It allows you to understand the database engine's applied optimisations and detect further potential optimisations you can manually implement in the pipeline.</p>
 <h2 id="viewing-an-explain-plan"><a class="header" href="#viewing-an-explain-plan">Viewing An Explain Plan</a></h2>
 <p>To view the explain plan for an aggregation pipeline, you can execute commands such as the following:</p>
 <pre><code class="language-javascript">db.coll.explain().aggregate([{&quot;$match&quot;: {&quot;name&quot;: &quot;Jo&quot;}}]);
@@ -1303,14 +1303,14 @@ order.cost = (
 <p>The other difference in this comparison and the rest of the comparisons in this chapter is the pipeline will work unchanged when run against a collection of many records, which could feasibly be many billions. The sample JavaScript code only works against one document at a time and would need to be modified to loop through a list of records. This JavaScript code would need to fetch each document from the database back to a client, apply the modifications and then write the result back to the database. Instead, the aggregation pipeline’s logic operates against each document in-situ within the database for far superior performance and efficiency.</p>
 <h2 id="the-power-array-operators"><a class="header" href="#the-power-array-operators">The &quot;Power&quot; Array Operators</a></h2>
 <p>When you want to transform or extract data from an array field, and a single high-level array operator (e.g. <code>$avg</code>, <code>$max</code>, <code>$filter</code>) does not give you what you need, the tools to turn to are the <code>$map</code> and <code>$reduce</code> array operators. These two &quot;power&quot; operators enable you to iterate through an array, perform whatever complexity of logic you need against each array element and collect together the result for inclusion in a stage's output. </p>
-<p>The <code>$map</code> and <code>$reduce</code> operators are the &quot;swiss army knives&quot; of the Aggregation Framework. Do not confuse these two array operators with MongoDB's old <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce API</a>, which was essentially made redundant and obsolete by the <a href="guides/../intro/history.html">emergence of the superior Aggregation Framework in MongoDB</a>. In the old Map-Reduce API, you combine a <code>map()</code> function and a <code>reduce()</code> function to generate a result. In the Aggregation Framework, the <code>$map</code> and <code>$reduce</code> operators are independent of each other. Depending on your specific requirements, you would use one or the other to process an array's field, but not both together. Here's an explanation of these two &quot;power&quot; operators:</p>
+<p>The <code>$map</code> and <code>$reduce</code> operators are the &quot;swiss army knives&quot; of the Aggregation Framework. Do not confuse these two array operators with MongoDB's old <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce API</a>, which was essentially made redundant and obsolete by the <a href="guides/../intro/history.html">emergence of the superior Aggregation Framework in MongoDB</a>. In the old Map-Reduce API, you combine a <code>map()</code> function and a <code>reduce()</code> function to generate a result. In the Aggregation Framework, the <code>$map</code> and <code>$reduce</code> operators are independent of each other. Depending on your specific requirements, you would use one or the other to process an array's field, but not necessarily both together. Here's an explanation of these two &quot;power&quot; operators:</p>
 <ul>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/map/"><code>$map</code></a>. Allows you to specify some logic to perform against each element in the array that the operator iterates, returning an array as the final result. Typically you use <code>$map</code> to mutate each array member and then return this transformed array. The <code>$map</code> operator exposes the current array element's content to your logic via a special variable, with the default name of <code>$$this</code>.</li>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/reduce/"><code>$reduce</code></a>. Similarly, you can specify some logic to execute for each element in an array that the operator iterates but instead returning a single value (rather than an array) as the final result. You typically use <code>$reduce</code> to compute a summary having analysed each array element. For example, you might want to return a number by multiplying together a specific field value from each array's element. Like the <code>$map</code> operator, the <code>$reduce</code> operator provides your logic with access to the current array element via the variable <code>$$this</code>. The operator also provides a second variable, called <code>$$value</code>, for your logic to update when accumulating the single result (e.g. the multiplication result).</li>
 </ul>
 <p>The rest of this chapter explores how these two &quot;power&quot; operators are used to manipulate arrays.</p>
 <h2 id="for-each-looping-to-transform-an-array"><a class="header" href="#for-each-looping-to-transform-an-array">&quot;For-Each&quot; Looping To Transform An Array</a></h2>
-<p>Imagine you wanted to process a list of the products ordered by a customer and convert the array of product names to upper case. In a procedural style of JavaScript, you might write the following code to loop through each product in the array and convert its name to upper case:</p>
+<p>Imagine you wanted to process a list of the products ordered by a customer and convert the array of product names to uppercase. In a procedural style of JavaScript, you might write the following code to loop through each product in the array and convert its name to uppercase:</p>
 <pre><code class="language-javascript">let order = {
   &quot;orderId&quot;: &quot;AB12345&quot;,
   &quot;products&quot;: [&quot;Laptop&quot;, &quot;Kettle&quot;, &quot;Phone&quot;, &quot;Microwave&quot;]
@@ -1341,7 +1341,7 @@ var pipeline = [
 
 db.orders.aggregate(pipeline);
 </code></pre>
-<p>Here, a <code>$map</code> operator expression is applied to loop through each product name in the input products array and add the upper case version of the product name to the replacement output array.</p>
+<p>Here, a <code>$map</code> operator expression is applied to loop through each product name in the input products array and add the uppercase version of the product name to the replacement output array.</p>
 <p>This pipeline produces the following output with the order document transformed to:</p>
 <pre><code class="language-javascript">{orderId: 'AB12345', products: ['LAPTOP', 'KETTLE', 'PHONE', 'MICROWAVE']}
 </code></pre>
@@ -1368,7 +1368,7 @@ for (const pos in order.products) {
   order.productList += order.products[pos] + &quot;; &quot;;
 }
 </code></pre>
-<p>This code yields the following output with a new <code>productList</code> string field produced, which contains the names of all the products in the order, delimited by semi-colons:</p>
+<p>This code yields the following output with a new <code>productList</code> string field produced, which contains the names of all the products in the order, delimited by semicolons:</p>
 <pre><code class="language-javascript">{
   orderId: 'AB12345',
   products: [ 'Laptop', 'Kettle', 'Phone', 'Microwave' ],
@@ -2837,7 +2837,7 @@ db.orders.insertMany([
 <p><strong>Multiple Join Fields.</strong> To perform a join of two or more fields between the two collections, you need to use a <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/#join-conditions-and-uncorrelated-sub-queries"><code>let</code></a> parameter rather than specifying the <code>localField</code> and <code>foreignField</code> parameters used in a single field join. With a <code>let</code> parameter, you bind multiple fields from the first collection into variables ready to be used in the joining process. You use an embedded <code>pipeline</code> inside the <code>$lookup</code> stage to match the <em>bind</em> variables with fields in the second collection's records. In this instance, because the <code>$expr</code> operator performs an equality comparison specifically (as opposed to a range comparison), the aggregation runtime can employ an appropriate index for this match.</p>
 </li>
 <li>
-<p><strong>Reducing Array Content.</strong> The presence of an embedded pipeline in the <code>$lookup</code> stage provides an opportunity to filter out three unwanted fields brought in from the second collection. Instead, you could use an <code>$unset</code> stage later in the top-level pipeline to project out these unwanted array elements. If you need to perform more complex array content filtering rules, you can use the approach described in section <em><a href="examples/joining/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">2. Avoid Unwinding &amp; Regrouping Documents Just To Process Array Elements</a></em>&quot; of the <em>Pipeline Performance Considerations</em> chapter.</p>
+<p><strong>Reducing Array Content.</strong> The presence of an embedded pipeline in the <code>$lookup</code> stage provides an opportunity to filter out three unwanted fields brought in from the second collection. Instead, you could use an <code>$unset</code> stage later in the top-level pipeline to project out these unwanted array elements. If you need to perform more complex array content filtering rules, you can use the approach described in section <em><a href="examples/joining/../../guides/performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">2. Avoid Unwinding &amp; Regrouping Documents Just To Process Array Elements</a></em> of the <em>Pipeline Performance Considerations</em> chapter.</p>
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-types-conversion-examples"><a class="header" href="#data-types-conversion-examples">Data Types Conversion Examples</a></h1>
@@ -3673,7 +3673,7 @@ var pipeline = getDayAggPipeline(&quot;2021-02-01T00:00:00Z&quot;, &quot;2021-02
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should be 1 record only)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 </code></pre>
 <p>From the results, you can see that only a single order summary has been generated, for 01-Feb-2021, containing the total value and number of orders for that day.</p>
 <p>Now for the next day only (for 02-Feb-2021 orders), build the pipeline and execute the aggregation: </p>
@@ -3684,7 +3684,7 @@ var pipeline = getDayAggPipeline(&quot;2021-02-02T00:00:00Z&quot;, &quot;2021-02
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should be 2 record now)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 </code></pre>
 <p>From the results, you can see that order summaries exist for both days.</p>
 <p>To simulate the organisation's occasional need to correct an old order retrospectively, go back and add a new &quot;high value&quot; order for the first day. Then re-run the aggregation for the first day only (01-Feb-2021) to show that you can safely and correctly recalculate the summary for just one day:</p>
@@ -3703,7 +3703,7 @@ var pipeline = getDayAggPipeline(&quot;2021-02-01T00:00:00Z&quot;, &quot;2021-02
 db.orders.aggregate(pipeline);
 
 // View the summary collection content (should still be 2 records but 1st changed)
-db.daily_orders_summary.find()
+db.daily_orders_summary.find();
 </code></pre>
 <p>From the results, you can see that two order summaries still exist, one for each of the two trading days, but the total value and order count for the first day has changed.</p>
 <p>For completeness, also view the explain plan for the aggregation pipeline:</p>
@@ -4292,7 +4292,7 @@ db.patients_view.find();
 <pre><code class="language-javascript">db.patients_view.explain(&quot;executionStats&quot;).find();
 </code></pre>
 <h2 id="expected-results-13"><a class="header" href="#expected-results-13">Expected Results</a></h2>
-<p>Running a query on the view for <strong>front-desk</strong> (<strong>Receptionist</strong>) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. </p>
+<p>Running a query on the view for the <strong>front-desk</strong> (<strong>Receptionist</strong>) includes patient data in the results but omits each patient's weight and medication fields because the user's role does not have sufficient privileges to access those fields. </p>
 <pre><code class="language-javascript">[
   {
     id: 'D40230',
@@ -4320,7 +4320,7 @@ db.patients_view.find();
   }
 ]
 </code></pre>
-<p>Running a query on the view for <strong>nurse-station</strong> (<strong>Nurse</strong>) includes patient data in the results similar to the previous user, but with the <strong>weight</strong> field also shown for each record.</p>
+<p>Running a query on the view for the <strong>nurse-station</strong> (<strong>Nurse</strong>) includes patient data in the results similar to the previous user, but with the <strong>weight</strong> field also shown for each record.</p>
 <pre><code class="language-javascript">[
   {
     id: 'D40230',
@@ -4352,7 +4352,7 @@ db.patients_view.find();
   }
 ]
 </code></pre>
-<p>Running a query on the view for <strong>exam-room</strong> (<strong>Doctor</strong>) includes each patient's entire data in the results, including the <strong>weight</strong> and <strong>medication</strong> fields, due to the user having sufficient privileges to access those fields. </p>
+<p>Running a query on the view for the <strong>exam-room</strong> (<strong>Doctor</strong>) includes each patient's entire data in the results, including the <strong>weight</strong> and <strong>medication</strong> fields, due to the user having sufficient privileges to access those fields. </p>
 <pre><code class="language-javascript">[
   {
     id: 'D40230',
@@ -5236,7 +5236,7 @@ db.weather_measurements.insertMany([
 <p><strong>Merging Subset Of Array Elements Into One Item.</strong> For each <code>$map</code> iteration, a <code>$filter</code> operator collects the subset of readings from the original array which match the unique device's name. The <code>$mergeObjects</code> operator then takes this subset of readings and turns it into an object, with the measurement type (e.g. <code>temperature</code>) as the key and the measurement (e.g. <code>21℃</code>) as the value. Suppose more than one reading of the same type exists for a device (e.g. <code>temporature=22</code>, <code>temperature=23</code>). In that case, the <code>$mergeObject</code> operator retains the last value only (e.g. <code>23℃</code>), which is the desired behaviour for this example scenario.</p>
 </li>
 <li>
-<p><strong>Potentially Adopt A Better Data Model.</strong> In this example, the weather station hourly data is just persisted directly into the database in the exact structure that the system receives it. However, if it is possible for you to take control of exactly what structure you persist the data in initially, you should take this opportunity. You want to land the data in the database using a model that lends itself to the optimum way for consuming applications to access it. For the Internet of Things (IoT) type uses case, where time-series data is collected and then analysed downstream, you should be adopting the <a href="https://www.mongodb.com/blog/post/building-with-patterns-the-bucket-pattern">Bucketing pattern</a>. However, if you are fortunate enough to be using MongoDB version 5.0 or greater, you can instead use MongoDB's <em>time series</em> collection feature. This particular type of collection efficiently stores sequences of measurements over time to improve subsequent query efficiency. It automatically adopts a <em>bucketing pattern</em> internally, meaning that you don't have to design your data model for this explicitly.</p>
+<p><strong>Potentially Adopt A Better Data Model.</strong> In this example, the weather station hourly data is just persisted directly into the database in the exact structure that the system receives it. However, if it is possible for you to take control of exactly what structure you persist the data in initially, you should take this opportunity. You want to land the data in the database using a model that lends itself to the optimum way for consuming applications to access it. For the Internet of Things (IoT) type use case, where time-series data is collected and then analysed downstream, you should be adopting the <a href="https://www.mongodb.com/blog/post/building-with-patterns-the-bucket-pattern">Bucketing pattern</a>. However, if you are fortunate enough to be using MongoDB version 5.0 or greater, you can instead use MongoDB's <em>time series</em> collection feature. This particular type of collection efficiently stores sequences of measurements over time to improve subsequent query efficiency. It automatically adopts a <em>bucketing pattern</em> internally, meaning that you don't have to design your data model for this explicitly.</p>
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="array-sorting--percentiles"><a class="header" href="#array-sorting--percentiles">Array Sorting &amp; Percentiles</a></h1>
