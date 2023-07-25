@@ -24,16 +24,16 @@ db.dropAllRoles();
 db.dropAllUsers();
 
 // Create 3 roles to use for programmatic access control
-db.createRole({"role": "Doctor", "roles": [], "privileges": []});
-db.createRole({"role": "Nurse", "roles": [], "privileges": []});
 db.createRole({"role": "Receptionist", "roles": [], "privileges": []});
+db.createRole({"role": "Nurse", "roles": [], "privileges": []});
+db.createRole({"role": "Doctor", "roles": [], "privileges": []});
 
 // Create 3 users where each user will have a different role
 db.createUser({
   "user": "front-desk",
   "pwd": "abc123",
   "roles": [
-     {"role": "Doctor", "db": dbName},
+    {"role": "Receptionist", "db": dbName},
   ]
 });
 db.createUser({
@@ -47,7 +47,7 @@ db.createUser({
   "user": "exam-room",
   "pwd": "mno456",
   "roles": [
-    {"role": "Receptionist", "db": dbName},
+    {"role": "Doctor", "db": dbName},
   ]
 });
 ```
@@ -108,8 +108,8 @@ var pipeline = [
         "if": {
           "$eq": [{"$setIntersection": ["$$USER_ROLES.role", ["Doctor", "Nurse"]]}, []]
         },
-        then: '$$REMOVE',
-        else: '$weight'
+        "then": "$$REMOVE",
+        "else": "$weight"
       }
     },
       
@@ -119,8 +119,8 @@ var pipeline = [
         "if": {
           "$eq": [{"$setIntersection": ["$$USER_ROLES.role", ["Doctor"]]}, []]
         },
-        then: '$$REMOVE',
-        else: '$medication'
+        "then": "$$REMOVE",
+        "else": "$medication"
       }
     },
 
@@ -141,7 +141,7 @@ db.createView("patients_view", "patients", pipeline);
 Authenticate as **front-desk**, which has the **Receptionist** role, and execute a query against the view to observe which fields of each record the application can see:
 
 ```javascript
-db.auth("front-desk", "mno456");
+db.auth("front-desk", "abc123");
 
 db.patients_view.find();
 ```
@@ -157,7 +157,7 @@ db.patients_view.find();
 Authenticate as **exam-room**, which has the **Doctor** role, and execute a query against the view to observe which fields of each record the application can see:
 
 ```javascript
-db.auth("exam-room", "abc123");
+db.auth("exam-room", "mno456");
 
 db.patients_view.find();
 ```

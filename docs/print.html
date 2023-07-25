@@ -4172,16 +4172,16 @@ db.dropAllRoles();
 db.dropAllUsers();
 
 // Create 3 roles to use for programmatic access control
-db.createRole({&quot;role&quot;: &quot;Doctor&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
-db.createRole({&quot;role&quot;: &quot;Nurse&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
 db.createRole({&quot;role&quot;: &quot;Receptionist&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
+db.createRole({&quot;role&quot;: &quot;Nurse&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
+db.createRole({&quot;role&quot;: &quot;Doctor&quot;, &quot;roles&quot;: [], &quot;privileges&quot;: []});
 
 // Create 3 users where each user will have a different role
 db.createUser({
   &quot;user&quot;: &quot;front-desk&quot;,
   &quot;pwd&quot;: &quot;abc123&quot;,
   &quot;roles&quot;: [
-     {&quot;role&quot;: &quot;Doctor&quot;, &quot;db&quot;: dbName},
+    {&quot;role&quot;: &quot;Receptionist&quot;, &quot;db&quot;: dbName},
   ]
 });
 db.createUser({
@@ -4195,7 +4195,7 @@ db.createUser({
   &quot;user&quot;: &quot;exam-room&quot;,
   &quot;pwd&quot;: &quot;mno456&quot;,
   &quot;roles&quot;: [
-    {&quot;role&quot;: &quot;Receptionist&quot;, &quot;db&quot;: dbName},
+    {&quot;role&quot;: &quot;Doctor&quot;, &quot;db&quot;: dbName},
   ]
 });
 </code></pre>
@@ -4248,8 +4248,8 @@ db.patients.insertMany([
         &quot;if&quot;: {
           &quot;$eq&quot;: [{&quot;$setIntersection&quot;: [&quot;$$USER_ROLES.role&quot;, [&quot;Doctor&quot;, &quot;Nurse&quot;]]}, []]
         },
-        then: '$$REMOVE',
-        else: '$weight'
+        &quot;then&quot;: &quot;$$REMOVE&quot;,
+        &quot;else&quot;: &quot;$weight&quot;
       }
     },
       
@@ -4259,8 +4259,8 @@ db.patients.insertMany([
         &quot;if&quot;: {
           &quot;$eq&quot;: [{&quot;$setIntersection&quot;: [&quot;$$USER_ROLES.role&quot;, [&quot;Doctor&quot;]]}, []]
         },
-        then: '$$REMOVE',
-        else: '$medication'
+        &quot;then&quot;: &quot;$$REMOVE&quot;,
+        &quot;else&quot;: &quot;$medication&quot;
       }
     },
 
@@ -4274,7 +4274,7 @@ db.patients.insertMany([
 </code></pre>
 <h2 id="execution-13"><a class="header" href="#execution-13">Execution</a></h2>
 <p>Authenticate as <strong>front-desk</strong>, which has the <strong>Receptionist</strong> role, and execute a query against the view to observe which fields of each record the application can see:</p>
-<pre><code class="language-javascript">db.auth(&quot;front-desk&quot;, &quot;mno456&quot;);
+<pre><code class="language-javascript">db.auth(&quot;front-desk&quot;, &quot;abc123&quot;);
 
 db.patients_view.find();
 </code></pre>
@@ -4284,7 +4284,7 @@ db.patients_view.find();
 db.patients_view.find();
 </code></pre>
 <p>Authenticate as <strong>exam-room</strong>, which has the <strong>Doctor</strong> role, and execute a query against the view to observe which fields of each record the application can see:</p>
-<pre><code class="language-javascript">db.auth(&quot;exam-room&quot;, &quot;abc123&quot;);
+<pre><code class="language-javascript">db.auth(&quot;exam-room&quot;, &quot;mno456&quot;);
 
 db.patients_view.find();
 </code></pre>
