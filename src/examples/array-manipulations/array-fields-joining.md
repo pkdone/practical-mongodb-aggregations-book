@@ -121,7 +121,7 @@ db.users.aggregate(pipeline);
 ```
 
 ```javascript
-db.users.explain().aggregate(pipeline);
+db.users.explain("executionStats").aggregate(pipeline);
 ```
 
 
@@ -156,7 +156,7 @@ Two documents should be returned, each showing a new `moodActivities` array fiel
 
 ## Observations
 
- * __Joining Between Two Fields In Each Record.__ Each user document contains two sub-document fields the pipeline must join: `hobbies` and `moodFavourites`. The `moodFavourites` sub-document properties hold arrays with values mapped to properties of the `hobbies` sub-document, and consequently, there is a many-to-many relationship between the two fields. A user's given hobby can appear as a favourite for more than one of their moods, and each user's mood can have multiple preferred hobbies. The `getValuesOfNamedFieldsAsArray()` function lets the pipeline look up multiple hobbies in one go for each 'mood' that it iterates through 
+ * __Joining Between Two Fields In Each Record.__ Each user document contains two sub-document fields the pipeline must join: `hobbies` and `moodFavourites`. The `moodFavourites` sub-document properties hold arrays with values mapped to properties of the `hobbies` sub-document, and consequently, there is a many-to-many relationship between the two fields. A user's given hobby can appear as a favourite for more than one of their moods, and each user's mood can have multiple preferred hobbies. The `getValuesOfNamedFieldsAsArray()` function lets the pipeline look up multiple hobbies in one go for each 'mood' that it iterates through.
  
 * __Reusable Macro Functions.__ As with many of the other Array Manipulation Examples, the aggregation uses a macro function to generate boilerplate code for use in the pipeline. This is a general-purpose function and reusable as-is in other solutions.
 
