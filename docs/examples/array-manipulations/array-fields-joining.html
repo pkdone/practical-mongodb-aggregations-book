@@ -252,7 +252,7 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.users.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.users.explain().aggregate(pipeline);
+<pre><code class="language-javascript">db.users.explain(&quot;executionStats&quot;).aggregate(pipeline);
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>Two documents should be returned, each showing a new <code>moodActivities</code> array field containing descriptions of how a user conducts their preferred hobby for each mood, as shown below:</p>
@@ -281,7 +281,7 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
 <h2 id="observations"><a class="header" href="#observations">Observations</a></h2>
 <ul>
 <li>
-<p><strong>Joining Between Two Fields In Each Record.</strong> Each user document contains two sub-document fields the pipeline must join: <code>hobbies</code> and <code>moodFavourites</code>. The <code>moodFavourites</code> sub-document properties hold arrays with values mapped to properties of the <code>hobbies</code> sub-document, and consequently, there is a many-to-many relationship between the two fields. A user's given hobby can appear as a favourite for more than one of their moods, and each user's mood can have multiple preferred hobbies. The <code>getValuesOfNamedFieldsAsArray()</code> function lets the pipeline look up multiple hobbies in one go for each 'mood' that it iterates through </p>
+<p><strong>Joining Between Two Fields In Each Record.</strong> Each user document contains two sub-document fields the pipeline must join: <code>hobbies</code> and <code>moodFavourites</code>. The <code>moodFavourites</code> sub-document properties hold arrays with values mapped to properties of the <code>hobbies</code> sub-document, and consequently, there is a many-to-many relationship between the two fields. A user's given hobby can appear as a favourite for more than one of their moods, and each user's mood can have multiple preferred hobbies. The <code>getValuesOfNamedFieldsAsArray()</code> function lets the pipeline look up multiple hobbies in one go for each 'mood' that it iterates through.</p>
 </li>
 <li>
 <p><strong>Reusable Macro Functions.</strong> As with many of the other Array Manipulation Examples, the aggregation uses a macro function to generate boilerplate code for use in the pipeline. This is a general-purpose function and reusable as-is in other solutions.</p>
