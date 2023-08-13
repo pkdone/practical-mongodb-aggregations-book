@@ -167,7 +167,7 @@ db.adults.explain("executionStats").find({"gender": "FEMALE"});
 
 ## Expected Results
 
-The result for both the `aggregate()` command and the `find()` executed on the _view_ should be the same, with three documents returned, representing the three persons who are over 18 but not showing their actual dates of birth, as shown below:
+The result for both the `aggregate()` command and the `find()` executed on the _view_ should be the same, with three documents returned, representing the three persons who are over 18 but not showing their social security numbers, as shown below:
 
 ```javascript
 [

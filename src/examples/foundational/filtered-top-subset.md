@@ -12,7 +12,7 @@ You want to query a collection of people to find the three youngest people who h
 
 ## Sample Data Population
 
-Drop any old version of the database (if it exists) and then populate a new `persons` collection with 5 person documents:
+Drop any old version of the database (if it exists) and then populate a new `persons` collection with 6 person documents:
 
 ```javascript
 db = db.getSiblingDB("book-filtered-top-subset");

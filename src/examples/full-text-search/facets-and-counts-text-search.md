@@ -145,7 +145,7 @@ var pipeline = [
 
 ## Execution
 
-Execute the aggregation using the defined pipeline and also view its explain plan:
+Execute the aggregation using the defined pipeline:
 
 ```javascript
 db.enquiries.aggregate(pipeline);
