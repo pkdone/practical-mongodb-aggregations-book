@@ -2,6 +2,7 @@
 
 [Practical MongoDB Aggregations](front-cover.md)
 [Credits](credits.md)
+[Advert](advert.md)
 [Foreword](foreword.md)
 [Who This Book Is For](who-this-is-for.md)
 
