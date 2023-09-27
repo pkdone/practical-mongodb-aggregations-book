@@ -252,7 +252,7 @@ db.orders.insertMany([
 <h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
-  // Unpack each product from the each order's product as a new separate record
+  // Unpack each product from each order's product as a new separate record
   {&quot;$unwind&quot;: {
     &quot;path&quot;: &quot;$products&quot;,
   }},
