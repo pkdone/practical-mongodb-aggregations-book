@@ -88,7 +88,7 @@ Define a pipeline ready to perform the aggregation:
 
 ```javascript
 var pipeline = [
-  // Unpack each product from the each order's product as a new separate record
+  // Unpack each product from each order's product as a new separate record
   {"$unwind": {
     "path": "$products",
   }},
