@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html" class="active"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -179,89 +186,89 @@
                         <h1 id="multi-field-join--one-to-many"><a class="header" href="#multi-field-join--one-to-many">Multi-Field Join &amp; One-to-Many</a></h1>
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
-<p>You want to generate a report to list all the orders made for each product in 2020. To achieve this, you need to take a shop's <em>products</em> collection and join each product record to all its orders stored in an <em>orders</em> collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like <code>product_id</code> (which doesn't exist in this data set), you need to use two common fields to join (<code>product_name</code> and <code>product_variation</code>). </p>
+<p>You want to generate a report to list all the orders made for each product in 2020. To achieve this, you need to take a shop's <em>products</em> collection and join each product record to all its orders stored in an <em>orders</em> collection. There is a 1:many relationship between both collections, based on a match of two fields on each side. Rather than joining on a single field like <code>product_id</code> (which doesn't exist in this data set), you need to use two common fields to join (<code>product_name</code> and <code>product_variation</code>).</p>
 <blockquote>
 <p><em>The requirement to perform a 1:many join does not mandate the need to join by multiple fields on each side of the join. However, in this example, it has been deemed beneficial to show both of these aspects in one place.</em></p>
 </blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate new <code>products</code> and <code>orders</code> collections with documents spanning 2019-2021 (the database commands have been split in two to enable your clipboard to hold all the text - ensure you copy and execute each of the two sections):</p>
 <p> <strong>-Part 1-</strong></p>
-<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-multi-one-to-many&quot;);
+<pre><code class="language-javascript">db = db.getSiblingDB("book-multi-one-to-many");
 db.dropDatabase();
 
 // Insert 6 records into the products collection
 db.products.insertMany([
   {
-    &quot;name&quot;: &quot;Asus Laptop&quot;,
-    &quot;variation&quot;: &quot;Ultra HD&quot;,
-    &quot;category&quot;: &quot;ELECTRONICS&quot;,
-    &quot;description&quot;: &quot;Great for watching movies&quot;,
+    "name": "Asus Laptop",
+    "variation": "Ultra HD",
+    "category": "ELECTRONICS",
+    "description": "Great for watching movies",
   },
   {
-    &quot;name&quot;: &quot;Asus Laptop&quot;,
-    &quot;variation&quot;: &quot;Normal Display&quot;,
-    &quot;category&quot;: &quot;ELECTRONICS&quot;,
-    &quot;description&quot;: &quot;Good value laptop for students&quot;,
+    "name": "Asus Laptop",
+    "variation": "Normal Display",
+    "category": "ELECTRONICS",
+    "description": "Good value laptop for students",
   },
   {
-    &quot;name&quot;: &quot;The Day Of The Triffids&quot;,
-    &quot;variation&quot;: &quot;1st Edition&quot;,
-    &quot;category&quot;: &quot;BOOKS&quot;,
-    &quot;description&quot;: &quot;Classic post-apocalyptic novel&quot;,
+    "name": "The Day Of The Triffids",
+    "variation": "1st Edition",
+    "category": "BOOKS",
+    "description": "Classic post-apocalyptic novel",
   },
   {
-    &quot;name&quot;: &quot;The Day Of The Triffids&quot;,
-    &quot;variation&quot;: &quot;2nd Edition&quot;,
-    &quot;category&quot;: &quot;BOOKS&quot;,
-    &quot;description&quot;: &quot;Classic post-apocalyptic novel&quot;,
+    "name": "The Day Of The Triffids",
+    "variation": "2nd Edition",
+    "category": "BOOKS",
+    "description": "Classic post-apocalyptic novel",
   },
   {
-    &quot;name&quot;: &quot;Morphy Richards Food Mixer&quot;,
-    &quot;variation&quot;: &quot;Deluxe&quot;,
-    &quot;category&quot;: &quot;KITCHENWARE&quot;,
-    &quot;description&quot;: &quot;Luxury mixer turning good cakes into great&quot;,
+    "name": "Morphy Richards Food Mixer",
+    "variation": "Deluxe",
+    "category": "KITCHENWARE",
+    "description": "Luxury mixer turning good cakes into great",
   },
   {
-    &quot;name&quot;: &quot;Karcher Hose Set&quot;,
-    &quot;variation&quot;: &quot;Full Monty&quot;,
-    &quot;category&quot;: &quot;GARDEN&quot;,
-    &quot;description&quot;: &quot;Hose + nosels + winder for tidy storage&quot;,
+    "name": "Karcher Hose Set",
+    "variation": "Full Monty",
+    "category": "GARDEN",
+    "description": "Hose + nosels + winder for tidy storage",
   },
 ]); 
 </code></pre>
 <p> <strong>-Part 2-</strong></p>
 <pre><code class="language-javascript">// Create index for the orders collection
-db.orders.createIndex({&quot;product_name&quot;: 1, &quot;product_variation&quot;: 1});
+db.orders.createIndex({"product_name": 1, "product_variation": 1});
 
 // Insert 4 records into the orders collection
 db.orders.insertMany([
   {
-    &quot;customer_id&quot;: &quot;elise_smith@myemail.com&quot;,
-    &quot;orderdate&quot;: ISODate(&quot;2020-05-30T08:35:52Z&quot;),
-    &quot;product_name&quot;: &quot;Asus Laptop&quot;,
-    &quot;product_variation&quot;: &quot;Normal Display&quot;,
-    &quot;value&quot;: NumberDecimal(&quot;431.43&quot;),
+    "customer_id": "elise_smith@myemail.com",
+    "orderdate": ISODate("2020-05-30T08:35:52Z"),
+    "product_name": "Asus Laptop",
+    "product_variation": "Normal Display",
+    "value": NumberDecimal("431.43"),
   },
   {
-    &quot;customer_id&quot;: &quot;tj@wheresmyemail.com&quot;,
-    &quot;orderdate&quot;: ISODate(&quot;2019-05-28T19:13:32Z&quot;),
-    &quot;product_name&quot;: &quot;The Day Of The Triffids&quot;,
-    &quot;product_variation&quot;: &quot;2nd Edition&quot;,
-    &quot;value&quot;: NumberDecimal(&quot;5.01&quot;),
+    "customer_id": "tj@wheresmyemail.com",
+    "orderdate": ISODate("2019-05-28T19:13:32Z"),
+    "product_name": "The Day Of The Triffids",
+    "product_variation": "2nd Edition",
+    "value": NumberDecimal("5.01"),
   },  
   {
-    &quot;customer_id&quot;: &quot;oranieri@warmmail.com&quot;,
-    &quot;orderdate&quot;: ISODate(&quot;2020-01-01T08:25:37Z&quot;),
-    &quot;product_name&quot;: &quot;Morphy Richards Food Mixer&quot;,
-    &quot;product_variation&quot;: &quot;Deluxe&quot;,
-    &quot;value&quot;: NumberDecimal(&quot;63.13&quot;),
+    "customer_id": "oranieri@warmmail.com",
+    "orderdate": ISODate("2020-01-01T08:25:37Z"),
+    "product_name": "Morphy Richards Food Mixer",
+    "product_variation": "Deluxe",
+    "value": NumberDecimal("63.13"),
   },
   {
-    &quot;customer_id&quot;: &quot;jjones@tepidmail.com&quot;,
-    &quot;orderdate&quot;: ISODate(&quot;2020-12-26T08:55:46Z&quot;),
-    &quot;product_name&quot;: &quot;Asus Laptop&quot;,
-    &quot;product_variation&quot;: &quot;Normal Display&quot;,
-    &quot;value&quot;: NumberDecimal(&quot;429.65&quot;),
+    "customer_id": "jjones@tepidmail.com",
+    "orderdate": ISODate("2020-12-26T08:55:46Z"),
+    "product_name": "Asus Laptop",
+    "product_variation": "Normal Display",
+    "value": NumberDecimal("429.65"),
   },
 ]);
 </code></pre>
@@ -269,50 +276,50 @@ db.orders.insertMany([
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Join by 2 fields in products collection to 2 fields in orders collection
-  {&quot;$lookup&quot;: {
-    &quot;from&quot;: &quot;orders&quot;,
-    &quot;let&quot;: {
-      &quot;prdname&quot;: &quot;$name&quot;,
-      &quot;prdvartn&quot;: &quot;$variation&quot;,
+  {"$lookup": {
+    "from": "orders",
+    "let": {
+      "prdname": "$name",
+      "prdvartn": "$variation",
     },
     // Embedded pipeline to control how the join is matched
-    &quot;pipeline&quot;: [
+    "pipeline": [
       // Join by two fields in each side
-      {&quot;$match&quot;:
-        {&quot;$expr&quot;:
-          {&quot;$and&quot;: [
-            {&quot;$eq&quot;: [&quot;$product_name&quot;,  &quot;$$prdname&quot;]},
-            {&quot;$eq&quot;: [&quot;$product_variation&quot;,  &quot;$$prdvartn&quot;]},            
+      {"$match":
+        {"$expr":
+          {"$and": [
+            {"$eq": ["$product_name",  "$$prdname"]},
+            {"$eq": ["$product_variation",  "$$prdvartn"]},            
           ]},
         },
       },
 
       // Match only orders made in 2020
-      {&quot;$match&quot;: {
-        &quot;orderdate&quot;: {
-          &quot;$gte&quot;: ISODate(&quot;2020-01-01T00:00:00Z&quot;),
-          &quot;$lt&quot;: ISODate(&quot;2021-01-01T00:00:00Z&quot;),
+      {"$match": {
+        "orderdate": {
+          "$gte": ISODate("2020-01-01T00:00:00Z"),
+          "$lt": ISODate("2021-01-01T00:00:00Z"),
         }
       }},
       
       // Exclude some unwanted fields from the right side of the join
-      {&quot;$unset&quot;: [
-        &quot;_id&quot;,
-        &quot;product_name&quot;,
-        &quot;product_variation&quot;,
+      {"$unset": [
+        "_id",
+        "product_name",
+        "product_variation",
       ]},
     ],
-    as: &quot;orders&quot;,
+    as: "orders",
   }},
 
   // Only show products that have at least one order
-  {&quot;$match&quot;: {
-    &quot;orders&quot;: {&quot;$ne&quot;: []},
+  {"$match": {
+    "orders": {"$ne": []},
   }},
 
   // Omit unwanted fields
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
+  {"$unset": [
+    "_id",
   ]}, 
 ];
 </code></pre>
@@ -320,7 +327,7 @@ db.orders.insertMany([
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.products.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.products.explain(&quot;executionStats&quot;).aggregate(pipeline);
+<pre><code class="language-javascript">db.products.explain("executionStats").aggregate(pipeline);
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>Two documents should be returned, representing the two products that had one or more orders in 2020, with the orders embedded in an array against each product, as shown below:</p>
@@ -376,7 +383,7 @@ db.orders.insertMany([
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../examples/type-convert/type-convert.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../examples/type-convert/type-convert.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -390,7 +397,7 @@ db.orders.insertMany([
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../examples/type-convert/type-convert.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../examples/type-convert/type-convert.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

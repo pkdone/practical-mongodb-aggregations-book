@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html" class="active"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -189,88 +196,88 @@
 </blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists), create an index and populate the new <code>persons</code> collection with 5 records:</p>
-<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-redacted-view&quot;);
+<pre><code class="language-javascript">db = db.getSiblingDB("book-redacted-view");
 db.dropDatabase();
 
 // Create index for a persons collection
-db.persons.createIndex({&quot;dateofbirth&quot;: -1});
+db.persons.createIndex({"dateofbirth": -1});
 
 // Create index for non-$expr part of filter in MongoDB version &lt; 5.0
-db.persons.createIndex({&quot;gender&quot;: 1});
+db.persons.createIndex({"gender": 1});
 
 // Create index for combination of $expr &amp; non-$expr filter in MongoDB version &gt;= 5.0
-db.persons.createIndex({&quot;gender&quot;: 1, &quot;dateofbirth&quot;: -1});
+db.persons.createIndex({"gender": 1, "dateofbirth": -1});
 
 // Insert records into the persons collection
 db.persons.insertMany([
   {
-    &quot;person_id&quot;: &quot;6392529400&quot;,
-    &quot;firstname&quot;: &quot;Elise&quot;,
-    &quot;lastname&quot;: &quot;Smith&quot;,
-    &quot;dateofbirth&quot;: ISODate(&quot;1972-01-13T09:32:07Z&quot;),
-    &quot;gender&quot;: &quot;FEMALE&quot;,
-    &quot;email&quot;: &quot;elise_smith@myemail.com&quot;,
-    &quot;social_security_num&quot;: &quot;507-28-9805&quot;,
-    &quot;address&quot;: { 
-        &quot;number&quot;: 5625,
-        &quot;street&quot;: &quot;Tipa Circle&quot;,
-        &quot;city&quot;: &quot;Wojzinmoj&quot;,
+    "person_id": "6392529400",
+    "firstname": "Elise",
+    "lastname": "Smith",
+    "dateofbirth": ISODate("1972-01-13T09:32:07Z"),
+    "gender": "FEMALE",
+    "email": "elise_smith@myemail.com",
+    "social_security_num": "507-28-9805",
+    "address": { 
+        "number": 5625,
+        "street": "Tipa Circle",
+        "city": "Wojzinmoj",
     },
   },
   {
-    &quot;person_id&quot;: &quot;1723338115&quot;,
-    &quot;firstname&quot;: &quot;Olive&quot;,
-    &quot;lastname&quot;: &quot;Ranieri&quot;,
-    &quot;dateofbirth&quot;: ISODate(&quot;1985-05-12T23:14:30Z&quot;),    
-    &quot;gender&quot;: &quot;FEMALE&quot;,
-    &quot;email&quot;: &quot;oranieri@warmmail.com&quot;,
-    &quot;social_security_num&quot;: &quot;618-71-2912&quot;,
-    &quot;address&quot;: {
-        &quot;number&quot;: 9303,
-        &quot;street&quot;: &quot;Mele Circle&quot;,
-        &quot;city&quot;: &quot;Tobihbo&quot;,
+    "person_id": "1723338115",
+    "firstname": "Olive",
+    "lastname": "Ranieri",
+    "dateofbirth": ISODate("1985-05-12T23:14:30Z"),    
+    "gender": "FEMALE",
+    "email": "oranieri@warmmail.com",
+    "social_security_num": "618-71-2912",
+    "address": {
+        "number": 9303,
+        "street": "Mele Circle",
+        "city": "Tobihbo",
     },
   },
   {
-    &quot;person_id&quot;: &quot;8732762874&quot;,
-    &quot;firstname&quot;: &quot;Toni&quot;,
-    &quot;lastname&quot;: &quot;Jones&quot;,
-    &quot;dateofbirth&quot;: ISODate(&quot;2014-11-23T16:53:56Z&quot;),    
-    &quot;gender&quot;: &quot;FEMALE&quot;,
-    &quot;email&quot;: &quot;tj@wheresmyemail.com&quot;,
-    &quot;social_security_num&quot;: &quot;001-10-3488&quot;,
-    &quot;address&quot;: {
-        &quot;number&quot;: 1,
-        &quot;street&quot;: &quot;High Street&quot;,
-        &quot;city&quot;: &quot;Upper Abbeywoodington&quot;,
+    "person_id": "8732762874",
+    "firstname": "Toni",
+    "lastname": "Jones",
+    "dateofbirth": ISODate("2014-11-23T16:53:56Z"),    
+    "gender": "FEMALE",
+    "email": "tj@wheresmyemail.com",
+    "social_security_num": "001-10-3488",
+    "address": {
+        "number": 1,
+        "street": "High Street",
+        "city": "Upper Abbeywoodington",
     },
   },
   {
-    &quot;person_id&quot;: &quot;7363629563&quot;,
-    &quot;firstname&quot;: &quot;Bert&quot;,
-    &quot;lastname&quot;: &quot;Gooding&quot;,
-    &quot;dateofbirth&quot;: ISODate(&quot;1941-04-07T22:11:52Z&quot;),    
-    &quot;gender&quot;: &quot;MALE&quot;,
-    &quot;email&quot;: &quot;bgooding@tepidmail.com&quot;,
-    &quot;social_security_num&quot;: &quot;230-43-7633&quot;,
-    &quot;address&quot;: {
-        &quot;number&quot;: 13,
-        &quot;street&quot;: &quot;Upper Bold Road&quot;,
-        &quot;city&quot;: &quot;Redringtonville&quot;,
+    "person_id": "7363629563",
+    "firstname": "Bert",
+    "lastname": "Gooding",
+    "dateofbirth": ISODate("1941-04-07T22:11:52Z"),    
+    "gender": "MALE",
+    "email": "bgooding@tepidmail.com",
+    "social_security_num": "230-43-7633",
+    "address": {
+        "number": 13,
+        "street": "Upper Bold Road",
+        "city": "Redringtonville",
     },
   },
   {
-    &quot;person_id&quot;: &quot;1029648329&quot;,
-    &quot;firstname&quot;: &quot;Sophie&quot;,
-    &quot;lastname&quot;: &quot;Celements&quot;,
-    &quot;dateofbirth&quot;: ISODate(&quot;2013-07-06T17:35:45Z&quot;),    
-    &quot;gender&quot;: &quot;FEMALE&quot;,
-    &quot;email&quot;: &quot;sophe@celements.net&quot;,
-    &quot;social_security_num&quot;: &quot;377-30-5364&quot;,
-    &quot;address&quot;: {
-        &quot;number&quot;: 5,
-        &quot;street&quot;: &quot;Innings Close&quot;,
-        &quot;city&quot;: &quot;Basilbridge&quot;,
+    "person_id": "1029648329",
+    "firstname": "Sophie",
+    "lastname": "Celements",
+    "dateofbirth": ISODate("2013-07-06T17:35:45Z"),    
+    "gender": "FEMALE",
+    "email": "sophe@celements.net",
+    "social_security_num": "377-30-5364",
+    "address": {
+        "number": 5,
+        "street": "Innings Close",
+        "city": "Basilbridge",
     },
   },
 ]);
@@ -279,16 +286,16 @@ db.persons.insertMany([
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Filter out any persons aged under 18 ($expr required to reference '$$NOW')
-  {&quot;$match&quot;:
-    {&quot;$expr&quot;:{
-      &quot;$lt&quot;: [&quot;$dateofbirth&quot;, {&quot;$subtract&quot;: [&quot;$$NOW&quot;, 18*365.25*24*60*60*1000]}]
+  {"$match":
+    {"$expr":{
+      "$lt": ["$dateofbirth", {"$subtract": ["$$NOW", 18*365.25*24*60*60*1000]}]
     }},
   },
 
   // Exclude fields to be filtered out by the view
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
-    &quot;social_security_num&quot;,
+  {"$unset": [
+    "_id",
+    "social_security_num",
   ]},    
 ];
 </code></pre>
@@ -296,20 +303,20 @@ db.persons.insertMany([
 <p>Firstly, to test the defined aggregation pipeline (before using it to create a view), execute the aggregation for the pipeline and also observe its explain plan:</p>
 <pre><code class="language-javascript">db.persons.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.persons.explain(&quot;executionStats&quot;).aggregate(pipeline);
+<pre><code class="language-javascript">db.persons.explain("executionStats").aggregate(pipeline);
 </code></pre>
-<p>Now create the new <em>adults</em> view, which will automatically apply the aggregation pipeline whenever anyone queries the view: </p>
-<pre><code class="language-javascript">db.createView(&quot;adults&quot;, &quot;persons&quot;, pipeline);
+<p>Now create the new <em>adults</em> view, which will automatically apply the aggregation pipeline whenever anyone queries the view:</p>
+<pre><code class="language-javascript">db.createView("adults", "persons", pipeline);
 </code></pre>
 <p>Execute a regular MQL query against the view, without any filter criteria, and also observe its explain plan:</p>
 <pre><code class="language-javascript">db.adults.find();
 </code></pre>
-<pre><code class="language-javascript">db.adults.explain(&quot;executionStats&quot;).find();
+<pre><code class="language-javascript">db.adults.explain("executionStats").find();
 </code></pre>
 <p>Execute a MQL query against the view, but this time with a filter to return only adults who are female, and again observe its explain plan to see how the <code>gender</code> filter affects the plan:</p>
-<pre><code class="language-javascript">db.adults.find({&quot;gender&quot;: &quot;FEMALE&quot;});
+<pre><code class="language-javascript">db.adults.find({"gender": "FEMALE"});
 </code></pre>
-<pre><code class="language-javascript">db.adults.explain(&quot;executionStats&quot;).find({&quot;gender&quot;: &quot;FEMALE&quot;});
+<pre><code class="language-javascript">db.adults.explain("executionStats").find({"gender": "FEMALE"});
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>The result for both the <code>aggregate()</code> command and the <code>find()</code> executed on the <em>view</em> should be the same, with three documents returned, representing the three persons who are over 18 but not showing their social security numbers, as shown below:</p>
@@ -343,7 +350,7 @@ db.persons.insertMany([
   }
 ]
 </code></pre>
-<p>The result of running the <code>find()</code> against the <em>view</em> with the filter <code>&quot;gender&quot;: &quot;FEMALE&quot;</code> should be two females records only because the male record has been excluded, as shown below:</p>
+<p>The result of running the <code>find()</code> against the <em>view</em> with the filter <code>"gender": "FEMALE"</code> should be two females records only because the male record has been excluded, as shown below:</p>
 <pre><code class="language-javascript">[
   {
     person_id: '6392529400',
@@ -371,7 +378,7 @@ db.persons.insertMany([
 <p><strong><code>$expr</code> &amp; Indexes.</strong> The <a href="https://docs.mongodb.com/manual/reference/aggregation-variables/"><code>NOW</code> system variable</a> used here returns the current system date-time. However, you can only access this system variable via an <a href="https://docs.mongodb.com/manual/meta/aggregation-quick-reference/#expressions">aggregation expression</a> and not directly via the regular MongoDB query syntax used by MQL and <code>$match</code>. You must wrap an expression using <code>$$NOW</code> inside an <code>$expr</code> operator. As described in the section <em><a href="../../guides/expressions.html#restrictions-when-using-expressions-with-match">Restrictions When Using Expressions</a></em> in an earlier chapter, if you use an <a href="https://docs.mongodb.com/manual/reference/operator/query/expr/"><code>$expr</code></a> query operator to perform a range comparison, you can't make use of an index in versions of MongoDB earlier then 5.0. Therefore, in this example, unless you use MongoDB 5.0 or greater, the aggregation will not take advantage of an index on <code>dateofbirth</code>. For a view, because you specify the pipeline earlier than it is ever run, you cannot obtain the current date-time at runtime by other means.</p>
 </li>
 <li>
-<p><strong>View Finds &amp; Indexes.</strong> Even for versions of MongoDB before 5.0, the explain plan for the <em>gender query</em> run against the view shows an index has been used (the index defined for the <code>gender</code> field). At runtime, a view is essentially just an aggregation pipeline you define &quot;ahead of time&quot;. When <code>db.adults.find({&quot;gender&quot;: &quot;FEMALE&quot;})</code> is executed, the database engine dynamically appends a new <code>$match</code> stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the content of the new <code>$match</code> stage to the pipeline's start, where possible. Finally, it adds the filter extracted from the extended <code>$match</code> stage to the aggregation's initial query, and hence it can leverage an index containing the <code>gender</code> field. The following two excerpts, from an explain plan from a MongoDB version before 5.0, illustrate how the filter on <code>gender</code> and the filter on <code>dateofbirth</code> combine at runtime and how the index for <code>gender</code> is used to avoid a full collection scan:</p>
+<p><strong>View Finds &amp; Indexes.</strong> Even for versions of MongoDB before 5.0, the explain plan for the <em>gender query</em> run against the view shows an index has been used (the index defined for the <code>gender</code> field). At runtime, a view is essentially just an aggregation pipeline you define "ahead of time". When <code>db.adults.find({"gender": "FEMALE"})</code> is executed, the database engine dynamically appends a new <code>$match</code> stage to the end of the pipeline for the gender match. It then optimises the pipeline by moving the content of the new <code>$match</code> stage to the pipeline's start, where possible. Finally, it adds the filter extracted from the extended <code>$match</code> stage to the aggregation's initial query, and hence it can leverage an index containing the <code>gender</code> field. The following two excerpts, from an explain plan from a MongoDB version before 5.0, illustrate how the filter on <code>gender</code> and the filter on <code>dateofbirth</code> combine at runtime and how the index for <code>gender</code> is used to avoid a full collection scan:</p>
 <pre><code class="language-javascript">'$cursor': {
   queryPlanner: {
     plannerVersion: 1,
@@ -393,7 +400,7 @@ db.persons.insertMany([
   keyPattern: { gender: 1 },
   indexName: 'gender_1',
   direction: 'forward',
-  indexBounds: { gender: [ '[&quot;FEMALE&quot;, &quot;FEMALE&quot;]' ] }
+  indexBounds: { gender: [ '["FEMALE", "FEMALE"]' ] }
 }
 </code></pre>
 <p>In MongoDB 5.0 and greater, the explain plan will show the aggregation runtime executing the pipeline more optimally by entirely using the compound index based on both the fields <code>gender</code> and <code>dateofbirth</code>.</p>
@@ -409,7 +416,7 @@ db.persons.insertMany([
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../examples/securing-data/mask-sensitive-fields.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../examples/securing-data/mask-sensitive-fields.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -423,7 +430,7 @@ db.persons.insertMany([
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../examples/securing-data/mask-sensitive-fields.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../examples/securing-data/mask-sensitive-fields.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

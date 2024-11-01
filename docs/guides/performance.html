@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../guides/performance.html" class="active"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -187,17 +194,17 @@
 <li><code>$group</code> *</li>
 </ul>
 <blockquote>
-<p>* <em>actually when stating <code>$group</code>, this also includes other less frequently used &quot;grouping&quot; stages too, specifically:</em><code>$bucket</code>, <code>$bucketAuto</code>, <code>$count</code>, <code>$sortByCount</code> &amp; <code>$facet</code>  <em>(it's a stretch to call <code>$facet</code> a group stage, but in the context of this topic, it's best to think of it that way)</em></p>
+<p>* <em>actually when stating <code>$group</code>, this also includes other less frequently used "grouping" stages too, specifically:</em><code>$bucket</code>, <code>$bucketAuto</code>, <code>$count</code>, <code>$sortByCount</code> &amp; <code>$facet</code>  <em>(it's a stretch to call <code>$facet</code> a group stage, but in the context of this topic, it's best to think of it that way)</em></p>
 </blockquote>
 <p>The diagram below highlights the nature of streaming and blocking stages. Streaming stages allow batches to be processed and then passed through without waiting. Blocking stages wait for the whole of the input data set to arrive and accumulate before processing all this data together.</p>
 <p><img src="./pics/streaming-blocking.png" alt="MongoDB aggregation pipeline streaming Vs blocking stages" /></p>
 <p>When considering <code>$sort</code> and <code>$group</code> stages, it becomes evident why they have to block. The following examples illustrate why this is the case:</p>
 <ol>
 <li>
-<p><strong><code>$sort</code> blocking example</strong>: A pipeline must sort <em>people</em> in ascending order of <em>age</em>. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set. </p>
+<p><strong><code>$sort</code> blocking example</strong>: A pipeline must sort <em>people</em> in ascending order of <em>age</em>. If the stage only sorts each batch's content before passing the batch on to the pipeline's result, only individual batches of output records are sorted by age but not the whole result set.</p>
 </li>
 <li>
-<p><strong><code>$group</code> blocking example</strong>: A pipeline must group <em>employees</em> by one of two <em>work departments</em> (either the <em>sales</em> or <em>manufacturing</em> departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees. </p>
+<p><strong><code>$group</code> blocking example</strong>: A pipeline must group <em>employees</em> by one of two <em>work departments</em> (either the <em>sales</em> or <em>manufacturing</em> departments). If the stage only groups employees for a batch, before passing it on, the final result contains the work departments repeated multiple times. Each duplicate department consists of some but not all of its employees.</p>
 </li>
 </ol>
 <p>These often unavoidable blocking stages don't just increase aggregation execution time by reducing concurrency. If used without careful forethought, the throughput and latency of a pipeline will slow dramatically due to significantly increased memory consumption. The following sub-sections explore why this occurs and tactics to mitigate this.</p>
@@ -233,8 +240,8 @@
 <ul>
 <li>You may need to add together all the values in the array into a total field</li>
 <li>You may need to retain the first and last elements of the array only</li>
-<li>You may need to retain only one recurring field for each sub-document in the array </li>
-<li>...<em>or numerous other array &quot;reduction&quot; scenarios</em></li>
+<li>You may need to retain only one recurring field for each sub-document in the array</li>
+<li>...<em>or numerous other array "reduction" scenarios</em></li>
 </ul>
 <p>To bring this to life, imagine a retail <code>orders</code> collection where each document contains an array of products purchased as part of the order, as shown in the example below:</p>
 <pre><code class="language-javascript">[
@@ -305,21 +312,21 @@
 
 var pipeline = [
   // Unpack each product from the each order's product as a new separate record
-  {&quot;$unwind&quot;: {
-    &quot;path&quot;: &quot;$products&quot;,
+  {"$unwind": {
+    "path": "$products",
   }},
 
   // Match only products valued over 15.00
-  {&quot;$match&quot;: {
-    &quot;products.price&quot;: {
-      &quot;$gt&quot;: NumberDecimal(&quot;15.00&quot;),
+  {"$match": {
+    "products.price": {
+      "$gt": NumberDecimal("15.00"),
     },
   }},
 
   // Group by product type
-  {&quot;$group&quot;: {
-    &quot;_id&quot;: &quot;$_id&quot;,
-    &quot;products&quot;: {&quot;$push&quot;: &quot;$products&quot;},
+  {"$group": {
+    "_id": "$_id",
+    "products": {"$push": "$products"},
   }},
 ];
 </code></pre>
@@ -328,18 +335,18 @@ var pipeline = [
 
 var pipeline = [
   // Filter out products valued 15.00 or less
-  {&quot;$set&quot;: {
-    &quot;products&quot;: {
-      &quot;$filter&quot;: {
-        &quot;input&quot;: &quot;$products&quot;,
-        &quot;as&quot;: &quot;product&quot;,
-        &quot;cond&quot;: {&quot;$gt&quot;: [&quot;$$product.price&quot;, NumberDecimal(&quot;15.00&quot;)]},
+  {"$set": {
+    "products": {
+      "$filter": {
+        "input": "$products",
+        "as": "product",
+        "cond": {"$gt": ["$$product.price", NumberDecimal("15.00")]},
       }
     },
   }},
 ];
 </code></pre>
-<p>Unlike the suboptimal pipeline, the optimal pipeline will include &quot;empty orders&quot; in the results for those orders that contained only inexpensive items. If this is a problem, you can include a simple <code>$match</code> stage at the start of the optimal pipeline with the same content as the <code>$match</code> stage shown in the suboptimal example.</p>
+<p>Unlike the suboptimal pipeline, the optimal pipeline will include "empty orders" in the results for those orders that contained only inexpensive items. If this is a problem, you can include a simple <code>$match</code> stage at the start of the optimal pipeline with the same content as the <code>$match</code> stage shown in the suboptimal example.</p>
 <p>To reiterate, there should never be the need to use an <code>$unwind/$group</code> combination in an aggregation pipeline to transform an array field's elements for each document in isolation. One way to recognise this anti-pattern is if your pipeline contains a <code>$group</code> on a <code>$_id</code> field. Instead, use <em>Array Operators</em> to avoid introducing a blocking stage. Otherwise, you will suffer a magnitude increase in execution time when the blocking group stage in your pipeline handles more than 100 MB of in-flight data. Adopting this best practice may mean the difference between achieving the required business outcome and abandoning the whole task as unachievable.</p>
 <p>The primary use of an <code>$unwind/$group</code> combination is to correlate patterns across many records' arrays rather than transforming the content within each input record's array only. For an illustration of an appropriate use of <code>$unwind/$group</code> refer to this book's <a href="../examples/foundational/unpack-array-group-differently.html">Unpack Array &amp; Group Differently</a> example.</p>
 <h2 id="3-encourage-match-filters-to-appear-early-in-the-pipeline"><a class="header" href="#3-encourage-match-filters-to-appear-early-in-the-pipeline">3. Encourage Match Filters To Appear Early In The Pipeline</a></h2>
@@ -348,7 +355,7 @@ var pipeline = [
 <p>Sometimes, a <code>$match</code> stage is defined later in a pipeline to perform a filter on a field that the pipeline computed in an earlier stage. The computed field isn't present in the pipeline's original input collection. Some examples are:</p>
 <ul>
 <li>
-<p>A pipeline where a <code>$group</code> stage creates a new <code>total</code> field based on an <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/#accumulators-group">accumulator operator</a>. Later in the pipeline, a <code>$match</code> stage filters groups where each group's <code>total</code> is greater than <code>1000</code>. </p>
+<p>A pipeline where a <code>$group</code> stage creates a new <code>total</code> field based on an <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/#accumulators-group">accumulator operator</a>. Later in the pipeline, a <code>$match</code> stage filters groups where each group's <code>total</code> is greater than <code>1000</code>.</p>
 </li>
 <li>
 <p>A pipeline where a <code>$set</code> stage computes a new <code>total</code> field value based on adding up all the elements of an array field in each document. Later in the pipeline, a <code>$match</code> stage filters documents where the <code>total</code> is less than <code>50</code>.</p>
@@ -373,17 +380,17 @@ var pipeline = [
 <pre><code class="language-javascript">// SUBOPTIMAL
 
 var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;value_dollars&quot;: {&quot;$multiply&quot;: [0.01, &quot;$value&quot;]}, // Converts cents to dollars
+  {"$set": {
+    "value_dollars": {"$multiply": [0.01, "$value"]}, // Converts cents to dollars
   }},
   
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
-    &quot;value&quot;,
+  {"$unset": [
+    "_id",
+    "value",
   ]},
 
-  {&quot;$match&quot;: {
-    &quot;value_dollars&quot;: {&quot;$gte&quot;: 100},  // Peforms a dollar check
+  {"$match": {
+    "value_dollars": {"$gte": 100},  // Peforms a dollar check
   }},
 ];
 </code></pre>
@@ -392,21 +399,21 @@ var pipeline = [
 <pre><code class="language-javascript">// OPTIMAL
 
 var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;value_dollars&quot;: {&quot;$multiply&quot;: [0.01, &quot;$value&quot;]},
+  {"$set": {
+    "value_dollars": {"$multiply": [0.01, "$value"]},
   }},
   
-  {&quot;$match&quot;: {                // Moved to before the $unset
-    &quot;value&quot;: {&quot;$gte&quot;: 10000},   // Changed to perform a cents check
+  {"$match": {                // Moved to before the $unset
+    "value": {"$gte": 10000},   // Changed to perform a cents check
   }},
 
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
-    &quot;value&quot;,
+  {"$unset": [
+    "_id",
+    "value",
   ]}, 
 ];
 </code></pre>
-<p>This pipeline produces the same data output. However, when you look at its explain plan, it shows the database engine has pushed the <code>$match</code> filter to the top of the pipeline and used an index on the <code>value</code> field. The aggregation is now optimal because the <code>$match</code> stage is no longer &quot;blocked&quot; by its dependency on the computed field.</p>
+<p>This pipeline produces the same data output. However, when you look at its explain plan, it shows the database engine has pushed the <code>$match</code> filter to the top of the pipeline and used an index on the <code>value</code> field. The aggregation is now optimal because the <code>$match</code> stage is no longer "blocked" by its dependency on the computed field.</p>
 <h3 id="explore-if-bringing-forward-a-partial-match-is-possible"><a class="header" href="#explore-if-bringing-forward-a-partial-match-is-possible">Explore If Bringing Forward A Partial Match Is Possible</a></h3>
 <p>There may be some cases where you can't unravel a computed value in such a manner. However, it may still be possible for you to include an additional <code>$match</code> stage, to perform a <em>partial match</em> targeting the aggregation's query cursor. Suppose you have a pipeline that masks the values of sensitive <code>date_of_birth</code> fields (replaced with computed <code>masked_date</code> fields). The computed field adds a random number of days (one to seven) to each current date. The pipeline already contains a <code>$match</code> stage with the filter <code>masked_date &gt; 01-Jan-2020</code>. The runtime cannot optimise this to the top of the pipeline due to the dependency on a computed value. Nevertheless, you can manually add an extra <code>$match</code> stage at the top of the pipeline, with the filter <code>date_of_birth &gt; 25-Dec-2019</code>. This new <code>$match</code> leverages an index and filters records seven days earlier than the existing <code>$match</code>, but the aggregation's final output is the same. The new <code>$match</code> may pass on a few more records than intended. However, later on, the pipeline applies the existing filter <code>masked_date &gt; 01-Jan-2020</code> that will naturally remove surviving surplus records before the pipeline completes.</p>
 <h3 id="pipeline-match-summary"><a class="header" href="#pipeline-match-summary">Pipeline Match Summary</a></h3>
@@ -420,7 +427,7 @@ var pipeline = [
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../guides/expressions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../guides/expressions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -434,7 +441,7 @@ var pipeline = [
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../guides/expressions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../guides/expressions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

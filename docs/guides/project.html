@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../guides/project.html" class="active"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -177,7 +184,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="better-alternatives-to-a-project-stage"><a class="header" href="#better-alternatives-to-a-project-stage">Better Alternatives To A Project Stage</a></h1>
-<p>The quintessential tool used in MongoDB's Query Language (MQL) to define or restrict fields to return is a <em>projection</em>. In the MongoDB Aggregation Framework, the analogous facility for specifying fields to include or exclude is the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/"><code>$project</code></a> stage. For many earlier versions of MongoDB, this was the only tool to define which fields to keep or omit. However, <code>$project</code> comes with a few usability challenges: </p>
+<p>The quintessential tool used in MongoDB's Query Language (MQL) to define or restrict fields to return is a <em>projection</em>. In the MongoDB Aggregation Framework, the analogous facility for specifying fields to include or exclude is the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/"><code>$project</code></a> stage. For many earlier versions of MongoDB, this was the only tool to define which fields to keep or omit. However, <code>$project</code> comes with a few usability challenges:</p>
 <ol>
 <li>
 <p><strong><code>$project</code> is confusing and non-intuitive</strong>. You can only choose to include fields or exclude fields in a single stage, but not both. There is one exception, though, where you can exclude the _id field yet still define other fields to include (this only applies to the _id field). It's as if <code>$project</code> has an identity crisis.</p>
@@ -187,7 +194,7 @@
 </li>
 </ol>
 <p>In MongoDB version 4.2, the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/set/"><code>$set</code></a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unset/"><code>$unset</code></a> stages were introduced, which, in most cases, are preferable to using <code>$project</code> for declaring field inclusion and exclusion. They make the code's intent much clearer, lead to less verbose pipelines, and, critically, they reduce the need to refactor a pipeline whenever the data model evolves. How this works and guidance on when to use <code>$set</code> &amp; <code>$unset</code> stages is described in the section <em><a href="#when-to-use-set--unset">When To Use Set &amp; Unset</a></em>, further below.</p>
-<p>Despite the challenges, though, there are some specific situations where using <code>$project</code> is advantageous over <code>$set</code>/<code>$unset</code>. These situations are described in the section <em><a href="#when-to-use-project">When To Use Project</a></em> further below. </p>
+<p>Despite the challenges, though, there are some specific situations where using <code>$project</code> is advantageous over <code>$set</code>/<code>$unset</code>. These situations are described in the section <em><a href="#when-to-use-project">When To Use Project</a></em> further below.</p>
 <blockquote>
 <p><em>MongoDB version 3.4 addressed some of the disadvantages of <code>$project</code> by introducing a new <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/"><code>$addFields</code></a> stage, which has the same behaviour as <code>$set</code>. <code>$set</code> came later than <code>$addFields</code>and <code>$set</code> is actually just an alias for <code>$addFields</code>. Both <code>$set</code> and <code>$unset</code> stages are available in modern versions of MongoDB, and their counter purposes are obvious to deduce by their names (<code>$set</code> Vs <code>$unset</code>). The name <code>$addFields</code> doesn't fully reflect that you can modify existing fields rather than just adding new fields. This book prefers <code>$set</code> over <code>$addFields</code> to help promote consistency and avoid any confusion of intent. However, if you are wedded to <code>$addFields</code>, use that instead, as there is no behavioural difference.</em></p>
 </blockquote>
@@ -196,57 +203,57 @@
 <p>For example, imagine there is a collection of credit card payment documents similar to the following:</p>
 <pre><code class="language-javascript">// INPUT  (a record from the source collection to be operated on by an aggregation)
 {
-  _id: ObjectId(&quot;6044faa70b2c21f8705d8954&quot;),
-  card_name: &quot;Mrs. Jane A. Doe&quot;,
-  card_num: &quot;1234567890123456&quot;,
-  card_expiry: &quot;2023-08-31T23:59:59.736Z&quot;,
-  card_sec_code: &quot;123&quot;,
-  card_provider_name: &quot;Credit MasterCard Gold&quot;,
-  transaction_id: &quot;eb1bd77836e8713656d9bf2debba8900&quot;,
-  transaction_date: ISODate(&quot;2021-01-13T09:32:07.000Z&quot;),
-  transaction_curncy_code: &quot;GBP&quot;,
-  transaction_amount: NumberDecimal(&quot;501.98&quot;),
+  _id: ObjectId("6044faa70b2c21f8705d8954"),
+  card_name: "Mrs. Jane A. Doe",
+  card_num: "1234567890123456",
+  card_expiry: "2023-08-31T23:59:59.736Z",
+  card_sec_code: "123",
+  card_provider_name: "Credit MasterCard Gold",
+  transaction_id: "eb1bd77836e8713656d9bf2debba8900",
+  transaction_date: ISODate("2021-01-13T09:32:07.000Z"),
+  transaction_curncy_code: "GBP",
+  transaction_amount: NumberDecimal("501.98"),
   reported: true
 }
 </code></pre>
 <p>Then imagine an aggregation pipeline is required to produce modified versions of the documents, as shown below:</p>
 <pre><code class="language-javascript">// OUTPUT  (a record in the results of the executed aggregation)
 {
-  card_name: &quot;Mrs. Jane A. Doe&quot;,
-  card_num: &quot;1234567890123456&quot;,
-  card_expiry: ISODate(&quot;2023-08-31T23:59:59.736Z&quot;), // Field type converted from text
-  card_sec_code: &quot;123&quot;,
-  card_provider_name: &quot;Credit MasterCard Gold&quot;,
-  transaction_id: &quot;eb1bd77836e8713656d9bf2debba8900&quot;,
-  transaction_date: ISODate(&quot;2021-01-13T09:32:07.000Z&quot;),
-  transaction_curncy_code: &quot;GBP&quot;,
-  transaction_amount: NumberDecimal(&quot;501.98&quot;),
+  card_name: "Mrs. Jane A. Doe",
+  card_num: "1234567890123456",
+  card_expiry: ISODate("2023-08-31T23:59:59.736Z"), // Field type converted from text
+  card_sec_code: "123",
+  card_provider_name: "Credit MasterCard Gold",
+  transaction_id: "eb1bd77836e8713656d9bf2debba8900",
+  transaction_date: ISODate("2021-01-13T09:32:07.000Z"),
+  transaction_curncy_code: "GBP",
+  transaction_amount: NumberDecimal("501.98"),
   reported: true,
-  card_type: &quot;CREDIT&quot;                               // New added literal value field
+  card_type: "CREDIT"                               // New added literal value field
 }
 </code></pre>
-<p>Here, shown by the <code>//</code> comments, there was a requirement to modify each document's structure slightly, to convert the <code>card_expiry</code> text field into a proper date field, and add a new <code>card_type</code> field, set to the value &quot;CREDIT&quot;, for every record.</p>
+<p>Here, shown by the <code>//</code> comments, there was a requirement to modify each document's structure slightly, to convert the <code>card_expiry</code> text field into a proper date field, and add a new <code>card_type</code> field, set to the value "CREDIT", for every record.</p>
 <p>Naively you might decide to build an aggregation pipeline using a <code>$project</code> stage to achieve this transformation, which would probably look similar to the following:</p>
 <pre><code class="language-javascript">// BAD
 [
-  {&quot;$project&quot;: {
+  {"$project": {
     // Modify a field + add a new field
-    &quot;card_expiry&quot;: {&quot;$dateFromString&quot;: {&quot;dateString&quot;: &quot;$card_expiry&quot;}},
-    &quot;card_type&quot;: &quot;CREDIT&quot;,        
+    "card_expiry": {"$dateFromString": {"dateString": "$card_expiry"}},
+    "card_type": "CREDIT",        
 
     // Must now name all the other fields for those fields to be retained
-    &quot;card_name&quot;: 1,
-    &quot;card_num&quot;: 1,
-    &quot;card_sec_code&quot;: 1,
-    &quot;card_provider_name&quot;: 1,
-    &quot;transaction_id&quot;: 1,
-    &quot;transaction_date&quot;: 1,
-    &quot;transaction_curncy_code&quot;: 1,
-    &quot;transaction_amount&quot;: 1,
-    &quot;reported&quot;: 1,                
+    "card_name": 1,
+    "card_num": 1,
+    "card_sec_code": 1,
+    "card_provider_name": 1,
+    "transaction_id": 1,
+    "transaction_date": 1,
+    "transaction_curncy_code": 1,
+    "transaction_amount": 1,
+    "reported": 1,                
     
     // Remove _id field
-    &quot;_id&quot;: 0,
+    "_id": 0,
   }},
 ]
 </code></pre>
@@ -254,75 +261,75 @@
 <p>A better approach to building the aggregation pipeline, to achieve the same results, would be to use <code>$set</code> and <code>$unset</code> instead, as shown below:</p>
 <pre><code class="language-javascript">// GOOD
 [
-  {&quot;$set&quot;: {
+  {"$set": {
     // Modified + new field
-    &quot;card_expiry&quot;: {&quot;$dateFromString&quot;: {&quot;dateString&quot;: &quot;$card_expiry&quot;}},
-    &quot;card_type&quot;: &quot;CREDIT&quot;,        
+    "card_expiry": {"$dateFromString": {"dateString": "$card_expiry"}},
+    "card_type": "CREDIT",        
   }},
   
-  {&quot;$unset&quot;: [
+  {"$unset": [
     // Remove _id field
-    &quot;_id&quot;,
+    "_id",
   ]},
 ]
 </code></pre>
-<p>This time, when you need to add new documents to the collection of existing payments, which include additional new fields, e.g. <code>settlement_date</code> &amp; <code>settlement_curncy_code</code>, no changes are required. The existing aggregation pipeline allows these new fields to appear in the results automatically. However, when using <code>$project</code>, each time the possibility of a new field arises, a developer must first refactor the pipeline to incorporate an additional inclusion declaration (e.g. <code>&quot;settlement_date&quot;: 1</code>, or <code>&quot;settlement_curncy_code&quot;: 1</code>).</p>
+<p>This time, when you need to add new documents to the collection of existing payments, which include additional new fields, e.g. <code>settlement_date</code> &amp; <code>settlement_curncy_code</code>, no changes are required. The existing aggregation pipeline allows these new fields to appear in the results automatically. However, when using <code>$project</code>, each time the possibility of a new field arises, a developer must first refactor the pipeline to incorporate an additional inclusion declaration (e.g. <code>"settlement_date": 1</code>, or <code>"settlement_curncy_code": 1</code>).</p>
 <h2 id="when-to-use-project"><a class="header" href="#when-to-use-project">When To Use <code>$project</code></a></h2>
 <p>It is best to use a <code>$project</code> stage when the required shape of output documents is very different from the input documents' shape. This situation often arises when you do not need to include most of the original fields.</p>
 <p>This time for the same input payments collection, let us imagine you require a new aggregation pipeline to produce result documents. You need each output document's structure to be very different from the input structure, and you need to retain far fewer original fields, similar to the following:</p>
 <pre><code class="language-javascript">// OUTPUT  (a record in the results of the executed aggregation)
 {
   transaction_info: { 
-    date: ISODate(&quot;2021-01-13T09:32:07.000Z&quot;),
-    amount: NumberDecimal(&quot;501.98&quot;)
+    date: ISODate("2021-01-13T09:32:07.000Z"),
+    amount: NumberDecimal("501.98")
   },
-  status: &quot;REPORTED&quot;
+  status: "REPORTED"
 }
 </code></pre>
 <p>Using <code>$set</code>/<code>$unset</code> in the pipeline to achieve this output structure would be verbose and would require naming all the fields (for exclusion this time), as shown below:</p>
 <pre><code class="language-javascript">// BAD
 [
-  {&quot;$set&quot;: {
+  {"$set": {
     // Add some fields
-    &quot;transaction_info.date&quot;: &quot;$transaction_date&quot;,
-    &quot;transaction_info.amount&quot;: &quot;$transaction_amount&quot;,
-    &quot;status&quot;: {&quot;$cond&quot;: {&quot;if&quot;: &quot;$reported&quot;, &quot;then&quot;: &quot;REPORTED&quot;, &quot;else&quot;: &quot;UNREPORTED&quot;}},
+    "transaction_info.date": "$transaction_date",
+    "transaction_info.amount": "$transaction_amount",
+    "status": {"$cond": {"if": "$reported", "then": "REPORTED", "else": "UNREPORTED"}},
   }},
   
-  {&quot;$unset&quot;: [
+  {"$unset": [
     // Remove _id field
-    &quot;_id&quot;,
+    "_id",
 
     // Must name all other existing fields to be omitted
-    &quot;card_name&quot;,
-    &quot;card_num&quot;,
-    &quot;card_expiry&quot;,
-    &quot;card_sec_code&quot;,
-    &quot;card_provider_name&quot;,
-    &quot;transaction_id&quot;,
-    &quot;transaction_date&quot;,
-    &quot;transaction_curncy_code&quot;,
-    &quot;transaction_amount&quot;,
-    &quot;reported&quot;,         
+    "card_name",
+    "card_num",
+    "card_expiry",
+    "card_sec_code",
+    "card_provider_name",
+    "transaction_id",
+    "transaction_date",
+    "transaction_curncy_code",
+    "transaction_amount",
+    "reported",         
   ]}, 
 ]
 </code></pre>
 <p>However, by using <code>$project</code> for this specific aggregation, as shown below, to achieve the same results, the pipeline will be less verbose. The pipeline will have the flexibility of not requiring modification if you ever make subsequent additions to the data model, with new previously unknown fields:</p>
 <pre><code class="language-javascript">// GOOD
 [
-  {&quot;$project&quot;: {
+  {"$project": {
     // Add some fields
-    &quot;transaction_info.date&quot;: &quot;$transaction_date&quot;,
-    &quot;transaction_info.amount&quot;: &quot;$transaction_amount&quot;,
-    &quot;status&quot;: {&quot;$cond&quot;: {&quot;if&quot;: &quot;$reported&quot;, &quot;then&quot;: &quot;REPORTED&quot;, &quot;else&quot;: &quot;UNREPORTED&quot;}},
+    "transaction_info.date": "$transaction_date",
+    "transaction_info.amount": "$transaction_amount",
+    "status": {"$cond": {"if": "$reported", "then": "REPORTED", "else": "UNREPORTED"}},
     
     // Remove _id field
-    &quot;_id&quot;: 0,
+    "_id": 0,
   }},
 ]
 </code></pre>
 <blockquote>
-<p><em>Another potential downside can occur when using <code>$project</code> to define field inclusion, rather than using <code>$set</code> (or <code>$addFields</code>). When using <code>$project</code> to declare all required fields for inclusion, it can be easy for you to carelessly specify more fields from the source data than intended. Later on, if the pipeline contains something like a <code>$group</code> stage, this will cover up your mistake. The final aggregation's output will not include the erroneous field in the output. You might ask, &quot;Why is this a problem?&quot;. Well, what happens if you intended for the aggregation to take advantage of a <a href="https://docs.mongodb.com/manual/core/query-optimization/#covered-query">covered index query</a> for the few fields it requires, to avoid unnecessarily accessing the raw documents. In most cases, MongoDB's aggregation engine can track fields' dependencies throughout a pipeline and, left to its own devices, can understand which fields are not required. However, you would be overriding this capability by explicitly asking for the extra field. A common error is to forget to exclude the <code>_id</code> field in the projection inclusion stage, and so it will be included by default. This mistake will silently kill the potential optimisation. If you must use a <code>$project</code> stage, try to use it as late as possible in the pipeline because it is then clear to you precisely what you are asking for as the aggregation's final output. Also, unnecessary fields like <code>_id</code> may already have been identified by the aggregation engine as no longer required, due to the occurrence of an earlier <code>$group</code> stage, for example.</em></p>
+<p><em>Another potential downside can occur when using <code>$project</code> to define field inclusion, rather than using <code>$set</code> (or <code>$addFields</code>). When using <code>$project</code> to declare all required fields for inclusion, it can be easy for you to carelessly specify more fields from the source data than intended. Later on, if the pipeline contains something like a <code>$group</code> stage, this will cover up your mistake. The final aggregation's output will not include the erroneous field in the output. You might ask, "Why is this a problem?". Well, what happens if you intended for the aggregation to take advantage of a <a href="https://docs.mongodb.com/manual/core/query-optimization/#covered-query">covered index query</a> for the few fields it requires, to avoid unnecessarily accessing the raw documents. In most cases, MongoDB's aggregation engine can track fields' dependencies throughout a pipeline and, left to its own devices, can understand which fields are not required. However, you would be overriding this capability by explicitly asking for the extra field. A common error is to forget to exclude the <code>_id</code> field in the projection inclusion stage, and so it will be included by default. This mistake will silently kill the potential optimisation. If you must use a <code>$project</code> stage, try to use it as late as possible in the pipeline because it is then clear to you precisely what you are asking for as the aggregation's final output. Also, unnecessary fields like <code>_id</code> may already have been identified by the aggregation engine as no longer required, due to the occurrence of an earlier <code>$group</code> stage, for example.</em></p>
 </blockquote>
 <h2 id="main-takeaway"><a class="header" href="#main-takeaway">Main Takeaway</a></h2>
 <p>In summary, you should always look to use <code>$set</code> (or <code>$addFields</code>) and <code>$unset</code> for field inclusion and exclusion, rather than <code>$project</code>. The main exception is if you have an obvious requirement for a very different structure for result documents, where you only need to retain a small subset of the input fields.</p>
@@ -335,7 +342,7 @@
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../guides/explain.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../guides/explain.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -349,7 +356,7 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../guides/explain.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../guides/explain.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

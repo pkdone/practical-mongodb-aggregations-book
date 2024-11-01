@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html" class="active"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -182,68 +189,68 @@
 <p>You are monitoring various industrial devices (e.g. heaters, fans) contained in the business locations of your clients. You want to understand the typical patterns of when these devices are on and off to help you optimise for sustainability by reducing energy costs and carbon footprint. The source database contains periodic readings for every device, capturing whether each is currently on or off. You need a less verbose view that condenses this data, highlighting each device's timespan in a particular on or off state.</p>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate the device status collection:</p>
-<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-state-change-boundaries&quot;);
+<pre><code class="language-javascript">db = db.getSiblingDB("book-state-change-boundaries");
 db.dropDatabase();
 
 // Use a time-series collection for optimal processing
 // NOTE: This command can be commented out and the full example will still work
-db.createCollection(&quot;device_status&quot;, {
-  &quot;timeseries&quot;: {
-    &quot;timeField&quot;: &quot;timestamp&quot;,
-    &quot;metaField&quot;: &quot;deviceID&quot;,
-    &quot;granularity&quot;: &quot;minutes&quot;
+db.createCollection("device_status", {
+  "timeseries": {
+    "timeField": "timestamp",
+    "metaField": "deviceID",
+    "granularity": "minutes"
   }
 });
 
 // Create compound index for 'partitionBy' &amp; 'sortBy' in first $setWindowFields use
-db.device_status.createIndex({&quot;deviceID&quot;: 1, &quot;timestamp&quot;: 1});
+db.device_status.createIndex({"deviceID": 1, "timestamp": 1});
 
 // Insert 9 records into the deployments collection
 db.device_status.insertMany([
   {
-    &quot;deviceID&quot;: &quot;HEATER-111&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:09:00Z&quot;),
-    &quot;state&quot;: &quot;on&quot;,     
+    "deviceID": "HEATER-111",    
+    "timestamp": ISODate("2021-07-03T11:09:00Z"),
+    "state": "on",     
   },
   {
-    &quot;deviceID&quot;: &quot;FAN-999&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:09:00Z&quot;),
-    &quot;state&quot;: &quot;on&quot;,     
+    "deviceID": "FAN-999",    
+    "timestamp": ISODate("2021-07-03T11:09:00Z"),
+    "state": "on",     
   },
   {
-    &quot;deviceID&quot;: &quot;HEATER-111&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:19:00Z&quot;),
-    &quot;state&quot;: &quot;on&quot;,     
+    "deviceID": "HEATER-111",    
+    "timestamp": ISODate("2021-07-03T11:19:00Z"),
+    "state": "on",     
   },
   {
-    &quot;deviceID&quot;: &quot;HEATER-111&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:29:00Z&quot;),
-    &quot;state&quot;: &quot;on&quot;,     
+    "deviceID": "HEATER-111",    
+    "timestamp": ISODate("2021-07-03T11:29:00Z"),
+    "state": "on",     
   },
   {
-    &quot;deviceID&quot;: &quot;FAN-999&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:39:00Z&quot;),
-    &quot;state&quot;: &quot;off&quot;,     
+    "deviceID": "FAN-999",    
+    "timestamp": ISODate("2021-07-03T11:39:00Z"),
+    "state": "off",     
   },
   {
-    &quot;deviceID&quot;: &quot;HEATER-111&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:39:00Z&quot;),
-    &quot;state&quot;: &quot;off&quot;,     
+    "deviceID": "HEATER-111",    
+    "timestamp": ISODate("2021-07-03T11:39:00Z"),
+    "state": "off",     
   },
   {
-    &quot;deviceID&quot;: &quot;HEATER-111&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:49:00Z&quot;),
-    &quot;state&quot;: &quot;off&quot;,     
+    "deviceID": "HEATER-111",    
+    "timestamp": ISODate("2021-07-03T11:49:00Z"),
+    "state": "off",     
   },
   {
-    &quot;deviceID&quot;: &quot;HEATER-111&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:59:00Z&quot;),
-    &quot;state&quot;: &quot;on&quot;,     
+    "deviceID": "HEATER-111",    
+    "timestamp": ISODate("2021-07-03T11:59:00Z"),
+    "state": "on",     
   },
   {
-    &quot;deviceID&quot;: &quot;DEHUMIDIFIER-555&quot;,    
-    &quot;timestamp&quot;: ISODate(&quot;2021-07-03T11:29:00Z&quot;),
-    &quot;state&quot;: &quot;on&quot;,     
+    "deviceID": "DEHUMIDIFIER-555",    
+    "timestamp": ISODate("2021-07-03T11:29:00Z"),
+    "state": "on",     
   },
 ]);
 </code></pre>
@@ -251,66 +258,66 @@ db.device_status.insertMany([
 <p>Define a pipeline ready to perform an aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Capture previous and next records' state into new fields in this current record
-  {&quot;$setWindowFields&quot;: {
-    &quot;partitionBy&quot;: &quot;$deviceID&quot;,
-    &quot;sortBy&quot;: {&quot;timestamp&quot;: 1},    
-    &quot;output&quot;: {
-      &quot;previousState&quot;: {
-        &quot;$shift&quot;: {
-          &quot;output&quot;: &quot;$state&quot;,
-          &quot;by&quot;: -1,
+  {"$setWindowFields": {
+    "partitionBy": "$deviceID",
+    "sortBy": {"timestamp": 1},    
+    "output": {
+      "previousState": {
+        "$shift": {
+          "output": "$state",
+          "by": -1,
         }
       },
-      &quot;nextState&quot;: {
-        &quot;$shift&quot;: {
-          &quot;output&quot;: &quot;$state&quot;,
-          &quot;by&quot;: 1,
+      "nextState": {
+        "$shift": {
+          "output": "$state",
+          "by": 1,
         }
       },
     }
   }},
 
-  // Use current record's timestamp as &quot;startTimestamp&quot; only if state changed from
-  // previous record in series, and only set &quot;endMarkerDate&quot; to current record's
+  // Use current record's timestamp as "startTimestamp" only if state changed from
+  // previous record in series, and only set "endMarkerDate" to current record's
   // timestamp if the state changes between current and next records in the series
-  {&quot;$set&quot;: {
-    &quot;startTimestamp&quot; : {
-      &quot;$cond&quot;: [
-        {&quot;$eq&quot;: [&quot;$state&quot;, &quot;$previousState&quot;]}, 
-        &quot;$$REMOVE&quot;,
-        &quot;$timestamp&quot;,
+  {"$set": {
+    "startTimestamp" : {
+      "$cond": [
+        {"$eq": ["$state", "$previousState"]}, 
+        "$$REMOVE",
+        "$timestamp",
       ]    
     },
-    &quot;endMarkerDate&quot; : {
-      &quot;$cond&quot;: [
-        {&quot;$eq&quot;: [&quot;$state&quot;, &quot;$nextState&quot;]}, 
-        &quot;$$REMOVE&quot;,
-        &quot;$timestamp&quot;,
+    "endMarkerDate" : {
+      "$cond": [
+        {"$eq": ["$state", "$nextState"]}, 
+        "$$REMOVE",
+        "$timestamp",
       ]    
     },
   }},
   
   // Only keep records where state has just changed or is just about to change (so
   // mostly start/end pairs, but not always if state change only lasted one record)
-  {&quot;$match&quot;: {
-    &quot;$expr&quot;: {
-      &quot;$or&quot;: [     
-        {&quot;$ne&quot;: [&quot;$state&quot;, &quot;$previousState&quot;]},
-        {&quot;$ne&quot;: [&quot;$state&quot;, &quot;$nextState&quot;]},
+  {"$match": {
+    "$expr": {
+      "$or": [     
+        {"$ne": ["$state", "$previousState"]},
+        {"$ne": ["$state", "$nextState"]},
       ]
     }
   }},    
   
-  // Set &quot;nextMarkerDate&quot; to the timestamp of the next record in the series (will
+  // Set "nextMarkerDate" to the timestamp of the next record in the series (will
   // be set to 'null' if no next record to indicate 'unbounded')
-  {&quot;$setWindowFields&quot;: {
-    &quot;partitionBy&quot;: &quot;$deviceID&quot;,
-    &quot;sortBy&quot;: {&quot;timestamp&quot;: 1},    
-    &quot;output&quot;: {
-      &quot;nextMarkerDate&quot;: {
-        &quot;$shift&quot;: {
-          &quot;output&quot;: &quot;$timestamp&quot;,
-          &quot;by&quot;: 1,
+  {"$setWindowFields": {
+    "partitionBy": "$deviceID",
+    "sortBy": {"timestamp": 1},    
+    "output": {
+      "nextMarkerDate": {
+        "$shift": {
+          "output": "$timestamp",
+          "by": 1,
         }
       },
     }
@@ -318,41 +325,41 @@ db.device_status.insertMany([
 
   // Only keep records at the start of the state change boundaries (throw away
   // matching pair end records, if any)
-  {&quot;$match&quot;: {
-    &quot;$expr&quot;: {
-      &quot;$ne&quot;: [&quot;$state&quot;, &quot;$previousState&quot;],
+  {"$match": {
+    "$expr": {
+      "$ne": ["$state", "$previousState"],
     }
   }},
     
   // If no boundary after this record (it's the last matching record in the series),
-  // set &quot;endTimestamp&quot; as unbounded (null)
+  // set "endTimestamp" as unbounded (null)
   // Otherwise, if this start boundary record was also an end boundary record (not
-  //  paired - only 1 record before state changed), set &quot;endTimestamp&quot; to end timestamp
-  // Otherwise, set &quot;endTimestamp&quot; to what was the captured timestamp from the original
+  //  paired - only 1 record before state changed), set "endTimestamp" to end timestamp
+  // Otherwise, set "endTimestamp" to what was the captured timestamp from the original
   //  matching pair in the series (where the end paired record has since been removed)
-  {&quot;$set&quot;: {
-    &quot;endTimestamp&quot; : {
-      &quot;$switch&quot;: {
-        &quot;branches&quot;: [
+  {"$set": {
+    "endTimestamp" : {
+      "$switch": {
+        "branches": [
           // Unbounded, so no final timestamp in series
-          {&quot;case&quot;: {&quot;$eq&quot;: [{&quot;$type&quot;: &quot;$nextMarkerDate&quot;}, &quot;null&quot;]}, &quot;then&quot;: null},  
+          {"case": {"$eq": [{"$type": "$nextMarkerDate"}, "null"]}, "then": null},  
           // Use end timestamp from what was same end record as start record 
-          {&quot;case&quot;: {&quot;$ne&quot;: [{&quot;$type&quot;: &quot;$endMarkerDate&quot;}, &quot;missing&quot;]}, &quot;then&quot;: &quot;$endMarkerDate&quot;},  
+          {"case": {"$ne": [{"$type": "$endMarkerDate"}, "missing"]}, "then": "$endMarkerDate"},  
         ],
         // Use timestamp from what was an end record paired with separate start record
-        &quot;default&quot;: &quot;$nextMarkerDate&quot;,  
+        "default": "$nextMarkerDate",  
       }
     },   
   }},
 
   // Remove unwanted fields from the final result
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
-    &quot;timestamp&quot;,
-    &quot;previousState&quot;,
-    &quot;nextState&quot;,
-    &quot;endMarkerDate&quot;,
-    &quot;nextMarkerDate&quot;,
+  {"$unset": [
+    "_id",
+    "timestamp",
+    "previousState",
+    "nextState",
+    "endMarkerDate",
+    "nextMarkerDate",
   ]}
 ];
 </code></pre>
@@ -360,7 +367,7 @@ db.device_status.insertMany([
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.device_status.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.device_status.explain(&quot;executionStats&quot;).aggregate(pipeline);
+<pre><code class="language-javascript">db.device_status.explain("executionStats").aggregate(pipeline);
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>Six documents should be returned, each of which captures the duration between two state change boundaries (<code>on→off</code> or <code>off→on</code>) for a device, as shown below:</p>
@@ -368,37 +375,37 @@ db.device_status.insertMany([
   {
     deviceID: 'DEHUMIDIFIER-555',
     state: 'on',
-    startTimestamp: ISODate(&quot;2021-07-03T11:29:00.000Z&quot;),
+    startTimestamp: ISODate("2021-07-03T11:29:00.000Z"),
     endTimestamp: null
   },
   {
     deviceID: 'FAN-999',
     state: 'on',
-    startTimestamp: ISODate(&quot;2021-07-03T11:09:00.000Z&quot;),
-    endTimestamp: ISODate(&quot;2021-07-03T11:09:00.000Z&quot;)
+    startTimestamp: ISODate("2021-07-03T11:09:00.000Z"),
+    endTimestamp: ISODate("2021-07-03T11:09:00.000Z")
   },
   {
     deviceID: 'FAN-999',
     state: 'off',
-    startTimestamp: ISODate(&quot;2021-07-03T11:39:00.000Z&quot;),
+    startTimestamp: ISODate("2021-07-03T11:39:00.000Z"),
     endTimestamp: null
   },
   {
     deviceID: 'HEATER-111',
     state: 'on',
-    startTimestamp: ISODate(&quot;2021-07-03T11:09:00.000Z&quot;),
-    endTimestamp: ISODate(&quot;2021-07-03T11:29:00.000Z&quot;)
+    startTimestamp: ISODate("2021-07-03T11:09:00.000Z"),
+    endTimestamp: ISODate("2021-07-03T11:29:00.000Z")
   },
   {
     deviceID: 'HEATER-111',
     state: 'off',
-    startTimestamp: ISODate(&quot;2021-07-03T11:39:00.000Z&quot;),
-    endTimestamp: ISODate(&quot;2021-07-03T11:49:00.000Z&quot;)
+    startTimestamp: ISODate("2021-07-03T11:39:00.000Z"),
+    endTimestamp: ISODate("2021-07-03T11:49:00.000Z")
   },
   {
     deviceID: 'HEATER-111',
     state: 'on',
-    startTimestamp: ISODate(&quot;2021-07-03T11:59:00.000Z&quot;),
+    startTimestamp: ISODate("2021-07-03T11:59:00.000Z"),
     endTimestamp: null
   }
 ]
@@ -427,7 +434,7 @@ db.device_status.insertMany([
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../examples/array-manipulations/array-manipulations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../examples/array-manipulations/array-manipulations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -441,7 +448,7 @@ db.device_status.insertMany([
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../examples/array-manipulations/array-manipulations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../examples/array-manipulations/array-manipulations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

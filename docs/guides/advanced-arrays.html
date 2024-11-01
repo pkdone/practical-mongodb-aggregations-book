@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../guides/advanced-arrays.html" class="active"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -177,15 +184,15 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="advanced-use-of-expressions-for-array-processing"><a class="header" href="#advanced-use-of-expressions-for-array-processing">Advanced Use Of Expressions For Array Processing</a></h1>
-<p>One of the most compelling aspects of MongoDB is the ability to embed arrays within documents. Unlike relational databases, this characteristic typically allows each entity's entire data structure to exist in one place as a document. Documents better represent &quot;real-world&quot; objects and how developers think about such entities. When writing code to interact with the stored data, this intuitive data representation reduces the cognitive load on developers, enabling them to deliver new application capabilities quicker.</p>
-<p>The Aggregation Framework provides a <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators">rich set of aggregation operator expressions</a> for analysing and manipulating arrays. When <a href="performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimising for performance</a>, these array expressions are critical to avoid unwinding and regrouping documents where you only need to process each document's array in isolation. For most situations when you need to manipulate an array, there is usually a single <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators">array operator expression</a> that you can turn to solve your requirement. </p>
-<p>Occasionally, you may still need to assemble a composite of multiple lower-level expressions to handle a challenging array manipulation task. These situations are the most difficult aspect for anyone using the Aggregation Framework. As a result, this chapter endeavours to bootstrap the knowledge you will require to fulfil such undertakings. Like aggregation pipelines in general, a large part of the challenge relates to adapting your mindset to a <a href="https://en.wikipedia.org/wiki/Functional_programming">Functional programming</a> paradigm rather than a <a href="https://en.wikipedia.org/wiki/Procedural_programming">Procedural</a> one. As this book discusses in its <a href="../intro/introducing-aggregations.html#what-is-mongodbs-aggregations-language">introductory chapter</a>, the functional aspect of aggregations is essential for the database's aggregation engine to process data at scale efficiently. </p>
+<p>One of the most compelling aspects of MongoDB is the ability to embed arrays within documents. Unlike relational databases, this characteristic typically allows each entity's entire data structure to exist in one place as a document. Documents better represent "real-world" objects and how developers think about such entities. When writing code to interact with the stored data, this intuitive data representation reduces the cognitive load on developers, enabling them to deliver new application capabilities quicker.</p>
+<p>The Aggregation Framework provides a <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators">rich set of aggregation operator expressions</a> for analysing and manipulating arrays. When <a href="performance.html#2-avoid-unwinding--regrouping-documents-just-to-process-array-elements">optimising for performance</a>, these array expressions are critical to avoid unwinding and regrouping documents where you only need to process each document's array in isolation. For most situations when you need to manipulate an array, there is usually a single <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#array-expression-operators">array operator expression</a> that you can turn to solve your requirement.</p>
+<p>Occasionally, you may still need to assemble a composite of multiple lower-level expressions to handle a challenging array manipulation task. These situations are the most difficult aspect for anyone using the Aggregation Framework. As a result, this chapter endeavours to bootstrap the knowledge you will require to fulfil such undertakings. Like aggregation pipelines in general, a large part of the challenge relates to adapting your mindset to a <a href="https://en.wikipedia.org/wiki/Functional_programming">Functional programming</a> paradigm rather than a <a href="https://en.wikipedia.org/wiki/Procedural_programming">Procedural</a> one. As this book discusses in its <a href="../intro/introducing-aggregations.html#what-is-mongodbs-aggregations-language">introductory chapter</a>, the functional aspect of aggregations is essential for the database's aggregation engine to process data at scale efficiently.</p>
 <p>Comparing with procedural approaches can help to bring clarity when describing array manipulation pipeline logic. Therefore, the first few explanations in this chapter include examples of equivalent JavaScript code snippets you would use to achieve comparable outcomes in regular client-side applications.</p>
 <p>Lastly, if you haven't read this book's <a href="expressions.html">Expressions Explained chapter</a> yet, you should do so before continuing with this chapter.</p>
-<h2 id="if-else-conditional-comparison"><a class="header" href="#if-else-conditional-comparison">&quot;If-Else&quot; Conditional Comparison</a></h2>
+<h2 id="if-else-conditional-comparison"><a class="header" href="#if-else-conditional-comparison">"If-Else" Conditional Comparison</a></h2>
 <p>Even though performing conditional comparisons is more of a general principle than specific to array manipulation, it is first worth touching upon it to introduce the topic of advanced expressions. Consider the trivialised scenario of a retailer wanting to calculate the total cost of a customer’s shopping order. The customer might order multiple of the same product, and the vendor applies a discount if more than 5 of the product items are in the order.</p>
 <p>In a procedural style of JavaScript, you might write the following code to calculate the total order cost:</p>
-<pre><code class="language-javascript">let order = {&quot;product&quot; : &quot;WizzyWidget&quot;, &quot;price&quot;: 25.99, &quot;qty&quot;: 8};
+<pre><code class="language-javascript">let order = {"product" : "WizzyWidget", "price": 25.99, "qty": 8};
 
 // Procedural style JavaScript
 if (order.qty &gt; 5) {
@@ -201,12 +208,12 @@ if (order.qty &gt; 5) {
 <pre><code class="language-javascript">db.customer_orders.insertOne(order);
 
 var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;cost&quot;: {
-      &quot;$cond&quot;: { 
-        &quot;if&quot;:   {&quot;$gte&quot;: [&quot;$qty&quot;, 5]}, 
-        &quot;then&quot;: {&quot;$multiply&quot;: [&quot;$price&quot;, &quot;$qty&quot;, 0.9]},
-        &quot;else&quot;: {&quot;$multiply&quot;: [&quot;$price&quot;, &quot;$qty&quot;]},
+  {"$set": {
+    "cost": {
+      "$cond": { 
+        "if":   {"$gte": ["$qty", 5]}, 
+        "then": {"$multiply": ["$price", "$qty", 0.9]},
+        "else": {"$multiply": ["$price", "$qty"]},
       }    
     },
   }},
@@ -227,19 +234,19 @@ order.cost = (
 </code></pre>
 <p>Here, you can see that the JavaScript code's construction in a functional style more closely resembles the aggregation pipeline's structure. This comparison highlights why some people may find composing aggregation expressions foreboding. The challenge is predominantly due to the less familiar paradigm of functional programming rather than the intricacies of MongoDB's aggregation language per se.</p>
 <p>The other difference in this comparison and the rest of the comparisons in this chapter is the pipeline will work unchanged when run against a collection of many records, which could feasibly be many billions. The sample JavaScript code only works against one document at a time and would need to be modified to loop through a list of records. This JavaScript code would need to fetch each document from the database back to a client, apply the modifications and then write the result back to the database. Instead, the aggregation pipeline’s logic operates against each document in-situ within the database for far superior performance and efficiency.</p>
-<h2 id="the-power-array-operators"><a class="header" href="#the-power-array-operators">The &quot;Power&quot; Array Operators</a></h2>
-<p>When you want to transform or extract data from an array field, and a single high-level array operator (e.g. <code>$avg</code>, <code>$max</code>, <code>$filter</code>) does not give you what you need, the tools to turn to are the <code>$map</code> and <code>$reduce</code> array operators. These two &quot;power&quot; operators enable you to iterate through an array, perform whatever complexity of logic you need against each array element and collect together the result for inclusion in a stage's output. </p>
-<p>The <code>$map</code> and <code>$reduce</code> operators are the &quot;swiss army knives&quot; of the Aggregation Framework. Do not confuse these two array operators with MongoDB's old <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce API</a>, which was essentially made redundant and obsolete by the <a href="../intro/history.html">emergence of the superior Aggregation Framework in MongoDB</a>. In the old Map-Reduce API, you combine a <code>map()</code> function and a <code>reduce()</code> function to generate a result. In the Aggregation Framework, the <code>$map</code> and <code>$reduce</code> operators are independent of each other. Depending on your specific requirements, you would use one or the other to process an array's field, but not necessarily both together. Here's an explanation of these two &quot;power&quot; operators:</p>
+<h2 id="the-power-array-operators"><a class="header" href="#the-power-array-operators">The "Power" Array Operators</a></h2>
+<p>When you want to transform or extract data from an array field, and a single high-level array operator (e.g. <code>$avg</code>, <code>$max</code>, <code>$filter</code>) does not give you what you need, the tools to turn to are the <code>$map</code> and <code>$reduce</code> array operators. These two "power" operators enable you to iterate through an array, perform whatever complexity of logic you need against each array element and collect together the result for inclusion in a stage's output.</p>
+<p>The <code>$map</code> and <code>$reduce</code> operators are the "swiss army knives" of the Aggregation Framework. Do not confuse these two array operators with MongoDB's old <a href="https://docs.mongodb.com/manual/core/map-reduce/">Map-Reduce API</a>, which was essentially made redundant and obsolete by the <a href="../intro/history.html">emergence of the superior Aggregation Framework in MongoDB</a>. In the old Map-Reduce API, you combine a <code>map()</code> function and a <code>reduce()</code> function to generate a result. In the Aggregation Framework, the <code>$map</code> and <code>$reduce</code> operators are independent of each other. Depending on your specific requirements, you would use one or the other to process an array's field, but not necessarily both together. Here's an explanation of these two "power" operators:</p>
 <ul>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/map/"><code>$map</code></a>. Allows you to specify some logic to perform against each element in the array that the operator iterates, returning an array as the final result. Typically you use <code>$map</code> to mutate each array member and then return this transformed array. The <code>$map</code> operator exposes the current array element's content to your logic via a special variable, with the default name of <code>$$this</code>.</li>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/reduce/"><code>$reduce</code></a>. Similarly, you can specify some logic to execute for each element in an array that the operator iterates but instead returning a single value (rather than an array) as the final result. You typically use <code>$reduce</code> to compute a summary having analysed each array element. For example, you might want to return a number by multiplying together a specific field value from each element in the array. Like the <code>$map</code> operator, the <code>$reduce</code> operator provides your logic with access to the current array element via the variable <code>$$this</code>. The operator also provides a second variable, called <code>$$value</code>, for your logic to update when accumulating the single result (e.g. the multiplication result).</li>
 </ul>
-<p>The rest of this chapter explores how these two &quot;power&quot; operators are used to manipulate arrays.</p>
-<h2 id="for-each-looping-to-transform-an-array"><a class="header" href="#for-each-looping-to-transform-an-array">&quot;For-Each&quot; Looping To Transform An Array</a></h2>
+<p>The rest of this chapter explores how these two "power" operators are used to manipulate arrays.</p>
+<h2 id="for-each-looping-to-transform-an-array"><a class="header" href="#for-each-looping-to-transform-an-array">"For-Each" Looping To Transform An Array</a></h2>
 <p>Imagine you wanted to process a list of the products ordered by a customer and convert the array of product names to uppercase. In a procedural style of JavaScript, you might write the following code to loop through each product in the array and convert its name to uppercase:</p>
 <pre><code class="language-javascript">let order = {
-  &quot;orderId&quot;: &quot;AB12345&quot;,
-  &quot;products&quot;: [&quot;Laptop&quot;, &quot;Kettle&quot;, &quot;Phone&quot;, &quot;Microwave&quot;]
+  "orderId": "AB12345",
+  "products": ["Laptop", "Kettle", "Phone", "Microwave"]
 };
  
 // Procedural style JavaScript
@@ -254,12 +261,12 @@ for (let pos in order.products) {
 <pre><code class="language-javascript">db.orders.insertOne(order);
 
 var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;products&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: &quot;$products&quot;,
-        &quot;as&quot;: &quot;product&quot;,
-        &quot;in&quot;: {&quot;$toUpper&quot;: &quot;$$product&quot;}
+  {"$set": {
+    "products": {
+      "$map": {
+        "input": "$products",
+        "as": "product",
+        "in": {"$toUpper": "$$product"}
       }
     }
   }}
@@ -280,18 +287,18 @@ order.products = order.products.map(
 );
 </code></pre>
 <p>Comparing an aggregation <code>$map</code> operator expression to a JavaScript <code>map()</code> array function is far more illuminating to help explain how the operator works.</p>
-<h2 id="for-each-looping-to-compute-a-summary-value-from-an-array"><a class="header" href="#for-each-looping-to-compute-a-summary-value-from-an-array">&quot;For-Each&quot; Looping To Compute A Summary Value From An Array</a></h2>
+<h2 id="for-each-looping-to-compute-a-summary-value-from-an-array"><a class="header" href="#for-each-looping-to-compute-a-summary-value-from-an-array">"For-Each" Looping To Compute A Summary Value From An Array</a></h2>
 <p>Suppose you wanted to process a list of the products ordered by a customer but produce a single summary string field from this array by concatenating all the product names from the array. In a procedural JavaScript style, you could code the following to produce the product names summary field:</p>
 <pre><code class="language-javascript">let order = {
-  &quot;orderId&quot;: &quot;AB12345&quot;,
-  &quot;products&quot;: [&quot;Laptop&quot;, &quot;Kettle&quot;, &quot;Phone&quot;, &quot;Microwave&quot;]
+  "orderId": "AB12345",
+  "products": ["Laptop", "Kettle", "Phone", "Microwave"]
 };
  
-order.productList = &quot;&quot;;
+order.productList = "";
 
 // Procedural style JavaScript
 for (const pos in order.products) {
-  order.productList += order.products[pos] + &quot;; &quot;;
+  order.productList += order.products[pos] + "; ";
 }
 </code></pre>
 <p>This code yields the following output with a new <code>productList</code> string field produced, which contains the names of all the products in the order, delimited by semicolons:</p>
@@ -305,13 +312,13 @@ for (const pos in order.products) {
 <pre><code class="language-javascript">db.orders.insertOne(order);
 
 var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;productList&quot;: {
-      &quot;$reduce&quot;: {
-        &quot;input&quot;: &quot;$products&quot;,
-        &quot;initialValue&quot;: &quot;&quot;,
-        &quot;in&quot;: {
-          &quot;$concat&quot;: [&quot;$$value&quot;, &quot;$$this&quot;, &quot;; &quot;]
+  {"$set": {
+    "productList": {
+      "$reduce": {
+        "input": "$products",
+        "initialValue": "",
+        "in": {
+          "$concat": ["$$value", "$$this", "; "]
         }            
       }
     }
@@ -332,21 +339,21 @@ db.orders.aggregate(pipeline);
 <pre><code class="language-javascript">// Functional style JavaScript
 order.productList = order.products.reduce(
   (previousValue, currentValue) =&gt; {
-    return previousValue + currentValue + &quot;; &quot;;
+    return previousValue + currentValue + "; ";
   },
-  &quot;&quot;
+  ""
 );
 </code></pre>
 <p>Once more, by comparing the use of the aggregation operator expression (<code>$reduce</code>) to the equivalent JavaScript array function (<code>reduce()</code>), the similarity is more pronounced.</p>
-<h2 id="for-each-looping-to-locate-an-array-element"><a class="header" href="#for-each-looping-to-locate-an-array-element">&quot;For-Each&quot; Looping To Locate An Array Element</a></h2>
+<h2 id="for-each-looping-to-locate-an-array-element"><a class="header" href="#for-each-looping-to-locate-an-array-element">"For-Each" Looping To Locate An Array Element</a></h2>
 <p>Imagine storing data about buildings on a campus where each building document contains an array of rooms with their sizes (width and length). A room reservation system may require finding the first room in the building with sufficient floor space for a particular number of meeting attendees. Below is an example of one building's data you might load into the database, with its array of rooms and their dimensions in metres:</p>
 <pre><code class="language-javascript">db.buildings.insertOne({
-  &quot;building&quot;: &quot;WestAnnex-1&quot;,
-  &quot;room_sizes&quot;: [
-    {&quot;width&quot;: 9, &quot;length&quot;: 5},
-    {&quot;width&quot;: 8, &quot;length&quot;: 7},
-    {&quot;width&quot;: 7, &quot;length&quot;: 9},
-    {&quot;width&quot;: 9, &quot;length&quot;: 8},
+  "building": "WestAnnex-1",
+  "room_sizes": [
+    {"width": 9, "length": 5},
+    {"width": 8, "length": 7},
+    {"width": 7, "length": 9},
+    {"width": 9, "length": 8},
   ]
 });
 </code></pre>
@@ -364,31 +371,31 @@ order.productList = order.products.reduce(
 </code></pre>
 <p>Below is a suitable pipeline that iterates through the room array elements capturing the position of the first one with a calculated area greater than 60m²:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;firstLargeEnoughRoomArrayIndex&quot;: {
-      &quot;$reduce&quot;: {
-        &quot;input&quot;: {&quot;$range&quot;: [0, {&quot;$size&quot;: &quot;$room_sizes&quot;}]},
-        &quot;initialValue&quot;: -1,
-        &quot;in&quot;: {
-          &quot;$cond&quot;: { 
-            &quot;if&quot;: {
-              &quot;$and&quot;: [
+  {"$set": {
+    "firstLargeEnoughRoomArrayIndex": {
+      "$reduce": {
+        "input": {"$range": [0, {"$size": "$room_sizes"}]},
+        "initialValue": -1,
+        "in": {
+          "$cond": { 
+            "if": {
+              "$and": [
                 // IF ALREADY FOUND DON'T CONSIDER SUBSEQUENT ELEMENTS
-                {&quot;$lt&quot;: [&quot;$$value&quot;, 0]}, 
+                {"$lt": ["$$value", 0]}, 
                 // IF WIDTH x LENGTH &gt; 60
-                {&quot;$gt&quot;: [
-                  {&quot;$multiply&quot;: [
-                    {&quot;$getField&quot;: {&quot;input&quot;: {&quot;$arrayElemAt&quot;: [&quot;$room_sizes&quot;, &quot;$$this&quot;]}, &quot;field&quot;: &quot;width&quot;}},
-                    {&quot;$getField&quot;: {&quot;input&quot;: {&quot;$arrayElemAt&quot;: [&quot;$room_sizes&quot;, &quot;$$this&quot;]}, &quot;field&quot;: &quot;length&quot;}},
+                {"$gt": [
+                  {"$multiply": [
+                    {"$getField": {"input": {"$arrayElemAt": ["$room_sizes", "$$this"]}, "field": "width"}},
+                    {"$getField": {"input": {"$arrayElemAt": ["$room_sizes", "$$this"]}, "field": "length"}},
                   ]},
                   60
                 ]}
               ]
             }, 
             // IF ROOM SIZE IS BIG ENOUGH CAPTURE ITS ARRAY POSITION
-            &quot;then&quot;: &quot;$$this&quot;,  
+            "then": "$$this",  
             // IF ROOM SIZE NOT BIG ENOUGH RETAIN EXISTING VALUE (-1)
-            &quot;else&quot;: &quot;$$value&quot;  
+            "else": "$$value"  
           }            
         }            
       }
@@ -399,18 +406,18 @@ order.productList = order.products.reduce(
 db.buildings.aggregate(pipeline);
 </code></pre>
 <p>Here the <code>$reduce</code> operator is again used to loop and eventually return a single value. However, the pipeline uses a generated sequence of incrementing numbers for its input rather than the existing array field in each source document. The <code>$range</code> operator is used to create this sequence which has the same size as the rooms array field of each document. The pipeline uses this approach to track the array position of the matching room using the <code>$$this</code> variable. For each iteration, the pipeline calculates the array room element's area. If the size is greater than 60, the pipeline assigns the current array position (represented by <code>$$this</code>) to the final result (represented by<code> $$value</code>).</p>
-<p>The &quot;iterator&quot; array expressions have no concept of a <em>break</em> command that procedural programming languages typically provide. Therefore, even though the executing logic may have already located a room of sufficient size, the looping process will continue through the remaining array elements. Consequently, the pipeline logic must include a check during each iteration to avoid overriding the final value (the <code>$$value</code> variable) if it already has a value. Naturally, for massive arrays containing a few hundred or more elements, an aggregation pipeline will incur a noticeable latency impact when iterating the remaining array members even though the logic has already identified the required element. </p>
+<p>The "iterator" array expressions have no concept of a <em>break</em> command that procedural programming languages typically provide. Therefore, even though the executing logic may have already located a room of sufficient size, the looping process will continue through the remaining array elements. Consequently, the pipeline logic must include a check during each iteration to avoid overriding the final value (the <code>$$value</code> variable) if it already has a value. Naturally, for massive arrays containing a few hundred or more elements, an aggregation pipeline will incur a noticeable latency impact when iterating the remaining array members even though the logic has already identified the required element.</p>
 <p>Suppose you just wanted to return the first matching array element for a room with sufficient floor space, not its index. In that case, the pipeline can be more straightforward, using <code>$filter</code> to trim the array elements to only those with sufficient space and then the <code>$first</code> operator to grab just the first element from the filter. You would use a pipeline similar to the following:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;firstLargeEnoughRoom&quot;: {
-      &quot;$first&quot;: {
-        &quot;$filter&quot;: { 
-          &quot;input&quot;: &quot;$room_sizes&quot;, 
-          &quot;as&quot;: &quot;room&quot;,
-          &quot;cond&quot;: {
-            &quot;$gt&quot;: [
-              {&quot;$multiply&quot;: [&quot;$$room.width&quot;, &quot;$$room.length&quot;]},
+  {"$set": {
+    "firstLargeEnoughRoom": {
+      "$first": {
+        "$filter": { 
+          "input": "$room_sizes", 
+          "as": "room",
+          "cond": {
+            "$gt": [
+              {"$multiply": ["$$room.width", "$$room.length"]},
               60
             ]
           } 
@@ -425,7 +432,7 @@ db.buildings.aggregate(pipeline);
 <p>This pipeline produces the following output:</p>
 <pre><code class="language-javascript">[
   {
-    _id: ObjectId(&quot;637b4b8a86fac07908ef98b3&quot;),
+    _id: ObjectId("637b4b8a86fac07908ef98b3"),
     building: 'WestAnnex-1',
     room_sizes: [
       { width: 9, length: 5 },
@@ -438,20 +445,20 @@ db.buildings.aggregate(pipeline);
 ]
 </code></pre>
 <p>In reality, the array of rooms would be likely to also include an ID for each building's room, for example:</p>
-<pre><code class="language-javascript">&quot;room_sizes&quot;: [
-  {&quot;roomId&quot;: &quot;Mercury&quot;, &quot;width&quot;: 9, &quot;length&quot;: 5},
-  {&quot;roomId&quot;: &quot;Venus&quot;, &quot;width&quot;: 8, &quot;length&quot;: 7},
-  {&quot;roomId&quot;: &quot;Jupiter&quot;, &quot;width&quot;: 7, &quot;length&quot;: 9},
-  {&quot;roomId&quot;: &quot;Saturn&quot;, &quot;width&quot;: 9, &quot;length&quot;: 8},
+<pre><code class="language-javascript">"room_sizes": [
+  {"roomId": "Mercury", "width": 9, "length": 5},
+  {"roomId": "Venus", "width": 8, "length": 7},
+  {"roomId": "Jupiter", "width": 7, "length": 9},
+  {"roomId": "Saturn", "width": 9, "length": 8},
 ]
 </code></pre>
-<p>Consequently, <code>firstLargeEnoughRoom: { roomId: &quot;Jupiter&quot;, width: 7, length: 9 }</code> would be the first element returned from the filtering pipeline stage, giving you the room's ID, so there would be no need to obtain the array's index for this particular use case.  However, the previous example, using the <code>$reduce</code> based pipeline, is helpful for more complicated situations where you do need the index of the matching array element.</p>
+<p>Consequently, <code>firstLargeEnoughRoom: { roomId: "Jupiter", width: 7, length: 9 }</code> would be the first element returned from the filtering pipeline stage, giving you the room's ID, so there would be no need to obtain the array's index for this particular use case.  However, the previous example, using the <code>$reduce</code> based pipeline, is helpful for more complicated situations where you do need the index of the matching array element.</p>
 <h2 id="reproducing-map-behaviour-using-reduce"><a class="header" href="#reproducing-map-behaviour-using-reduce">Reproducing <em>$map</em> Behaviour Using <em>$reduce</em></a></h2>
-<p>It is possible to implement the <code>$map</code> behaviour using <code>$reduce</code> to transform an array. This method is more complex, but you may need to use it in some rare circumstances. Before looking at an example of why let's first compare a more basic example of using <code>$map</code> and then <code>$reduce</code> to achieve the same thing. </p>
+<p>It is possible to implement the <code>$map</code> behaviour using <code>$reduce</code> to transform an array. This method is more complex, but you may need to use it in some rare circumstances. Before looking at an example of why let's first compare a more basic example of using <code>$map</code> and then <code>$reduce</code> to achieve the same thing.</p>
 <p>Suppose you have captured some sensor readings for a device:</p>
 <pre><code class="language-javascript">db.deviceReadings.insertOne({
-  &quot;device&quot;: &quot;A1&quot;,
-  &quot;readings&quot;: [27, 282, 38, -1, 187]
+  "device": "A1",
+  "readings": [27, 282, 38, -1, 187]
 });
 </code></pre>
 <p>Imagine you want to produce a transformed version of the <code>readings</code> array, with the device’s ID concatenated with each reading in the array. You want the pipeline to produce an output similar to the following, with the newly included array field:</p>
@@ -463,13 +470,13 @@ db.buildings.aggregate(pipeline);
 </code></pre>
 <p>You can achieve this using the <code>$map</code> operator expression in the following pipeline:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;deviceReadings&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: &quot;$readings&quot;,
-        &quot;as&quot;: &quot;reading&quot;,
-        &quot;in&quot;: {
-          &quot;$concat&quot;: [&quot;$device&quot;, &quot;:&quot;, {&quot;$toString&quot;: &quot;$$reading&quot;}]
+  {"$set": {
+    "deviceReadings": {
+      "$map": {
+        "input": "$readings",
+        "as": "reading",
+        "in": {
+          "$concat": ["$device", ":", {"$toString": "$$reading"}]
         }
       }
     }
@@ -480,15 +487,15 @@ db.deviceReadings.aggregate(pipeline);
 </code></pre>
 <p>You can also accomplish the same with the <code>$reduce</code> operator expression in the following pipeline:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;deviceReadings&quot;: {
-      &quot;$reduce&quot;: {
-        &quot;input&quot;: &quot;$readings&quot;,
-        &quot;initialValue&quot;: [],
-        &quot;in&quot;: {
-          &quot;$concatArrays&quot;: [
-            &quot;$$value&quot;,
-            [{&quot;$concat&quot;: [&quot;$device&quot;, &quot;:&quot;, {&quot;$toString&quot;: &quot;$$this&quot;}]}]
+  {"$set": {
+    "deviceReadings": {
+      "$reduce": {
+        "input": "$readings",
+        "initialValue": [],
+        "in": {
+          "$concatArrays": [
+            "$$value",
+            [{"$concat": ["$device", ":", {"$toString": "$$this"}]}]
           ]
         }
       }
@@ -498,21 +505,21 @@ db.deviceReadings.aggregate(pipeline);
 
 db.deviceReadings.aggregate(pipeline);
 </code></pre>
-<p>You will see the pipeline has to do more work here, holding the transformed element in a new array and then concatenating this with the &quot;final value&quot; array the logic is accumulating in the <code>$$value</code> variable. </p>
+<p>You will see the pipeline has to do more work here, holding the transformed element in a new array and then concatenating this with the "final value" array the logic is accumulating in the <code>$$value</code> variable.</p>
 <p>So why would you ever want to use <code>$reduce</code> for this requirement and take on this extra complexity? Suppose the mapping code in the stage needs to include a condition to omit outlier readings that signify a device sensor faulty reading (i.e., a <code>-1</code> reading value). The challenge here when using <code>$map</code> is that for 5 input array elements, 5 array elements will need to be output. However, using <code>$reduce</code>, for an input of 5 array elements, 4 array elements can be output using a pipeline similar to the following:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;deviceReadings&quot;: {
-      &quot;$reduce&quot;: {
-        &quot;input&quot;: &quot;$readings&quot;,
-        &quot;initialValue&quot;: [],
-        &quot;in&quot;: {
-          &quot;$concatArrays&quot;: [
-            &quot;$$value&quot;,
-            {&quot;$cond&quot;: { 
-              &quot;if&quot;: {&quot;$gte&quot;: [&quot;$$this&quot;, 0]},
-              &quot;then&quot;: [{&quot;$concat&quot;: [&quot;$device&quot;, &quot;:&quot;, {&quot;$toString&quot;: &quot;$$this&quot;}]}],  
-              &quot;else&quot;: []
+  {"$set": {
+    "deviceReadings": {
+      "$reduce": {
+        "input": "$readings",
+        "initialValue": [],
+        "in": {
+          "$concatArrays": [
+            "$$value",
+            {"$cond": { 
+              "if": {"$gte": ["$$this", 0]},
+              "then": [{"$concat": ["$device", ":", {"$toString": "$$this"}]}],  
+              "else": []
             }}                                    
           ]
         }
@@ -531,37 +538,37 @@ db.deviceReadings.aggregate(pipeline);
 ]
 </code></pre>
 <p>Of course, this being the aggregation framework, multiple ways exist to solve the same problem. Another approach could be to continue with the <code>$map</code> based pipeline and, using the <code>$cond</code> operator, return an empty string (<code>''</code>) for each faulty reading. You would then need to wrap the <code>$map</code> stage in a <code>$filter</code> stage with logic to filter out elements where the element's string length is zero.</p>
-<p>In summary, you typically use a <code>$map</code> stage when the ratio of input elements to output elements is the same (i.e. many-to-many or <em>M:M</em>). You employ a <code>$reduce</code> stage when the ratio of input elements to output elements is many-to-one (i.e. <em>M:1</em>). For situations where the ratio of input elements is many-to-few (i.e. <em>M:N</em>),  instead of <code>$map</code>, you will invariably reach for <code>$reduce</code> with its &quot;null array concatenation&quot; trick when <code>$filter</code> does not suffice.</p>
+<p>In summary, you typically use a <code>$map</code> stage when the ratio of input elements to output elements is the same (i.e. many-to-many or <em>M:M</em>). You employ a <code>$reduce</code> stage when the ratio of input elements to output elements is many-to-one (i.e. <em>M:1</em>). For situations where the ratio of input elements is many-to-few (i.e. <em>M:N</em>),  instead of <code>$map</code>, you will invariably reach for <code>$reduce</code> with its "null array concatenation" trick when <code>$filter</code> does not suffice.</p>
 <h2 id="adding-new-fields-to-existing-objects-in-an-array"><a class="header" href="#adding-new-fields-to-existing-objects-in-an-array">Adding New Fields To Existing Objects In An Array</a></h2>
 <p>One of the primary uses of the <code>$map</code> operator expression is to add more data to each existing object in an array. Suppose you've persisted a set of retail orders, where each order document contains an array of order items. Each order item in the array captures the product’s name, unit price, and quantity purchased, as shown in the example below:</p>
 <pre><code class="language-javascript">db.orders.insertOne({
-    &quot;custid&quot;: &quot;jdoe@acme.com&quot;,
-    &quot;items&quot;: [
+    "custid": "jdoe@acme.com",
+    "items": [
       {
-        &quot;product&quot; : &quot;WizzyWidget&quot;, 
-        &quot;unitPrice&quot;: 25.99,
-        &quot;qty&quot;: 8,
+        "product" : "WizzyWidget", 
+        "unitPrice": 25.99,
+        "qty": 8,
       },
       {
-        &quot;product&quot; : &quot;HighEndGizmo&quot;, 
-        &quot;unitPrice&quot;: 33.24,
-        &quot;qty&quot;: 3,
+        "product" : "HighEndGizmo", 
+        "unitPrice": 33.24,
+        "qty": 3,
       }
     ]
 });
 </code></pre>
 <p>You now need to calculate the total cost for each product item (<code>quantity</code> x <code>unitPrice</code>) and add that cost to the corresponding order item in the array. You can use a pipeline similar to the following to achieve this:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;items&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: &quot;$items&quot;,
-        &quot;as&quot;: &quot;item&quot;,
-        &quot;in&quot;: {
-          &quot;product&quot;: &quot;$$item.product&quot;,
-          &quot;unitPrice&quot;: &quot;$$item.unitPrice&quot;,
-          &quot;qty&quot;: &quot;$$item.qty&quot;,
-          &quot;cost&quot;: {&quot;$multiply&quot;: [&quot;$$item.unitPrice&quot;, &quot;$$item.qty&quot;]}},
+  {"$set": {
+    "items": {
+      "$map": {
+        "input": "$items",
+        "as": "item",
+        "in": {
+          "product": "$$item.product",
+          "unitPrice": "$$item.unitPrice",
+          "qty": "$$item.qty",
+          "cost": {"$multiply": ["$$item.unitPrice", "$$item.qty"]}},
         }
       }
     }
@@ -589,18 +596,18 @@ db.orders.aggregate(pipeline);
   ]
 }
 </code></pre>
-<p>Similar to the disadvantages of using a <code>$project</code> stage in a pipeline, <a href="project.html">outlined in an earlier chapter</a>, the <code>$map</code> code is burdened by explicitly naming every field in the array element to retain. You will find this tiresome if each array element has lots of fields. In addition, if your data model evolves and new types of fields appear in the array's items over time, you will be forced to return to your pipeline and refactor it each time to include these newly introduced fields. </p>
+<p>Similar to the disadvantages of using a <code>$project</code> stage in a pipeline, <a href="project.html">outlined in an earlier chapter</a>, the <code>$map</code> code is burdened by explicitly naming every field in the array element to retain. You will find this tiresome if each array element has lots of fields. In addition, if your data model evolves and new types of fields appear in the array's items over time, you will be forced to return to your pipeline and refactor it each time to include these newly introduced fields.</p>
 <p>Just like using <code>$set</code> instead of <code>$project</code> for a pipeline stage, there is a better solution to allow you to retain all existing array item fields and add new ones when you process arrays. A good solution is to employ the <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/merge/"><code>$mergeObjects</code></a> operator expression to combine all existing fields plus the newly computed fields into each new array element. <code>$mergeObjects</code> takes an array of objects and combines the fields from all the array's objects into one single object. To use <code>$mergeObjects</code> in this situation, you provide the current array element as the first parameter to <code>$mergeObjects</code>. The second parameter you provide is a new object containing each computed field. In the example below, the code adds only one generated field, but if you require it, you can include multiple generated fields in this new object:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;items&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: &quot;$items&quot;,
-        &quot;as&quot;: &quot;item&quot;,
-        &quot;in&quot;: {
-          &quot;$mergeObjects&quot;: [
-            &quot;$$item&quot;,            
-            {&quot;cost&quot;: {&quot;$multiply&quot;: [&quot;$$item.unitPrice&quot;, &quot;$$item.qty&quot;]}},
+  {"$set": {
+    "items": {
+      "$map": {
+        "input": "$items",
+        "as": "item",
+        "in": {
+          "$mergeObjects": [
+            "$$item",            
+            {"cost": {"$multiply": ["$$item.unitPrice", "$$item.qty"]}},
           ]
         }
       }
@@ -610,7 +617,7 @@ db.orders.aggregate(pipeline);
 
 db.orders.aggregate(pipeline);
 </code></pre>
-<p>This pipeline produces the same output as the previous &quot;hardcoded field names&quot; pipeline, but with the advantage of being sympathetic to new types of fields appearing in the source array in the future.</p>
+<p>This pipeline produces the same output as the previous "hardcoded field names" pipeline, but with the advantage of being sympathetic to new types of fields appearing in the source array in the future.</p>
 <p>Instead of using <code>$mergeObjects</code>, there is an alternative and slightly more verbose combination of three different array operator expressions that you can similarly employ to retain all existing array item fields and add new ones. These three operators are:</p>
 <ul>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/aggregation/objectToArray/"><code>$objectToArray</code></a>. This converts an object containing different field key/value pairs into an array of objects where each object has two fields: <code>k</code>, holding the field's name, and <code>v</code>, holding the field's value. For example: <code>{height: 170, weight: 60}</code> becomes <code>[{k: 'height', v: 170}, {k: 'weight', v: 60}]</code></li>
@@ -619,18 +626,18 @@ db.orders.aggregate(pipeline);
 </ul>
 <p>The pipeline below shows the combination in action for the same retail orders data set as before, adding the newly computed total cost for each product:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;items&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: &quot;$items&quot;,
-        &quot;as&quot;: &quot;item&quot;,
-        &quot;in&quot;: {
-          &quot;$arrayToObject&quot;: {
-            &quot;$concatArrays&quot;: [
-              {&quot;$objectToArray&quot;: &quot;$$item&quot;},            
+  {"$set": {
+    "items": {
+      "$map": {
+        "input": "$items",
+        "as": "item",
+        "in": {
+          "$arrayToObject": {
+            "$concatArrays": [
+              {"$objectToArray": "$$item"},            
               [{
-                &quot;k&quot;: &quot;cost&quot;,
-                &quot;v&quot;: {&quot;$multiply&quot;: [&quot;$$item.unitPrice&quot;, &quot;$$item.qty&quot;]},
+                "k": "cost",
+                "v": {"$multiply": ["$$item.unitPrice", "$$item.qty"]},
               }]              
             ]
           }
@@ -644,18 +651,18 @@ db.orders.aggregate(pipeline);
 </code></pre>
 <p>If this achieves the same as using <code>$mergeObjects</code> but is more verbose, why bother using this pattern? Well, in most cases, you wouldn't. One situation where you would use the more verbose combination is if you need to dynamically set the name of an array item's field, in addition to its value. Rather than naming the computed total field as <code>cost</code>, suppose you want the field's name also to reflect the product's name (e.g. <code>costForWizzyWidget</code>, <code>costForHighEndGizmo</code>). You can achieve this by using the <code>$arrayToObject</code>/<code>$concatArrays</code>/<code>$objectToArray</code> approach rather than the <code>$mergeObjects</code> method, as follows:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$set&quot;: {
-    &quot;items&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: &quot;$items&quot;,
-        &quot;as&quot;: &quot;item&quot;,
-        &quot;in&quot;: {
-          &quot;$arrayToObject&quot;: {
-            &quot;$concatArrays&quot;: [
-              {&quot;$objectToArray&quot;: &quot;$$item&quot;},            
+  {"$set": {
+    "items": {
+      "$map": {
+        "input": "$items",
+        "as": "item",
+        "in": {
+          "$arrayToObject": {
+            "$concatArrays": [
+              {"$objectToArray": "$$item"},            
               [{
-                &quot;k&quot;: {&quot;$concat&quot;: [&quot;costFor&quot;, &quot;$$item.product&quot;]},
-                &quot;v&quot;: {&quot;$multiply&quot;: [&quot;$$item.unitPrice&quot;, &quot;$$item.qty&quot;]},
+                "k": {"$concat": ["costFor", "$$item.product"]},
+                "v": {"$multiply": ["$$item.unitPrice", "$$item.qty"]},
               }]              
             ]
           }
@@ -688,45 +695,45 @@ db.orders.aggregate(pipeline);
 </code></pre>
 <p>When retaining existing items from an array, plus adding new fields, you can use either approach to override an existing item's field with a new value. For example, you may want to modify the current <code>unitPrice</code> field to incorporate a discount. For both <code>$mergeObjects</code> and <code>$arrayToObject</code> expressions, to achieve this, you provide a re-definition of the field as a subsequent parameter after first providing the reference to the source array item. This tactic works because the last definition wins if the same field is defined more than once with different values.</p>
 <h2 id="rudimentary-schema-reflection-using-arrays"><a class="header" href="#rudimentary-schema-reflection-using-arrays">Rudimentary Schema Reflection Using Arrays</a></h2>
-<p>As a final &quot;fun&quot; example, let's see how to employ an <code>$objectToArray</code> operator expression to use <a href="https://en.wikipedia.org/wiki/Reflective_programming">reflection</a> to analyse the shape of a collection of documents as part of a custom schema analysis tool. Such reflection capabilities are vital in databases that provide a flexible data model, such as MongoDB, where the included fields may vary from document to document. </p>
+<p>As a final "fun" example, let's see how to employ an <code>$objectToArray</code> operator expression to use <a href="https://en.wikipedia.org/wiki/Reflective_programming">reflection</a> to analyse the shape of a collection of documents as part of a custom schema analysis tool. Such reflection capabilities are vital in databases that provide a flexible data model, such as MongoDB, where the included fields may vary from document to document.</p>
 <p>Imagine you have a collection of customer documents, similar to the following:</p>
 <pre><code class="language-javascript">db.customers.insertMany([
   {
-    &quot;_id&quot;: ObjectId('6064381b7aa89666258201fd'),
-    &quot;email&quot;: 'elsie_smith@myemail.com',
-    &quot;dateOfBirth&quot;: ISODate('1991-05-30T08:35:52.000Z'),
-    &quot;accNnumber&quot;: 123456,
-    &quot;balance&quot;: NumberDecimal(&quot;9.99&quot;),
-    &quot;address&quot;: {
-      &quot;firstLine&quot;: &quot;1 High Street&quot;,
-      &quot;city&quot;: &quot;Newtown&quot;,
-      &quot;postcode&quot;: &quot;NW1 1AB&quot;,
+    "_id": ObjectId('6064381b7aa89666258201fd'),
+    "email": 'elsie_smith@myemail.com',
+    "dateOfBirth": ISODate('1991-05-30T08:35:52.000Z'),
+    "accNnumber": 123456,
+    "balance": NumberDecimal("9.99"),
+    "address": {
+      "firstLine": "1 High Street",
+      "city": "Newtown",
+      "postcode": "NW1 1AB",
     },
-    &quot;telNums&quot;: [&quot;07664883721&quot;, &quot;01027483028&quot;],
-    &quot;optedOutOfMarketing&quot;: true,
+    "telNums": ["07664883721", "01027483028"],
+    "optedOutOfMarketing": true,
   },
   {
-    &quot;_id&quot;: ObjectId('734947394bb73732923293ed'),
-    &quot;email&quot;: 'jon.jones@coolemail.com',
-    &quot;dateOfBirth&quot;: ISODate('1993-07-11T22:01:47.000Z'),
-    &quot;accNnumber&quot;: 567890,
-    &quot;balance&quot;: NumberDecimal(&quot;299.22&quot;),
-    &quot;telNums&quot;: &quot;07836226281&quot;,
-    &quot;contactPrefernece&quot;: &quot;email&quot;,
+    "_id": ObjectId('734947394bb73732923293ed'),
+    "email": 'jon.jones@coolemail.com',
+    "dateOfBirth": ISODate('1993-07-11T22:01:47.000Z'),
+    "accNnumber": 567890,
+    "balance": NumberDecimal("299.22"),
+    "telNums": "07836226281",
+    "contactPrefernece": "email",
   },
 ]);
 </code></pre>
 <p>In your schema analysis pipeline, you use <code>$objectToArray</code> to capture the name and type of each top-level field in the document as follows:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$project&quot;: {
-    &quot;_id&quot;: 0,
-    &quot;schema&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: {&quot;$objectToArray&quot;: &quot;$$ROOT&quot;},
-        &quot;as&quot;: &quot;field&quot;,
-        &quot;in&quot;: {
-          &quot;fieldname&quot;: &quot;$$field.k&quot;,
-          &quot;type&quot;: {&quot;$type&quot;: &quot;$$field.v&quot;},          
+  {"$project": {
+    "_id": 0,
+    "schema": {
+      "$map": {
+        "input": {"$objectToArray": "$$ROOT"},
+        "as": "field",
+        "in": {
+          "fieldname": "$$field.k",
+          "type": {"$type": "$$field.v"},          
         }
       }
     }
@@ -761,30 +768,30 @@ db.customers.aggregate(pipeline);
 </code></pre>
 <p>The difficulty with this basic pipeline approach is once there are many documents in the collection, the output will be too lengthy and complex for you to detect common schema patterns. Instead, you will want to add an <code>$unwind</code> and <code>$group</code> stage combination to accumulate recurring fields that match. The generated result should also highlight if the same field name appears in multiple documents but with different data types. Here is the improved pipeline:</p>
 <pre><code class="language-javascript">var pipeline = [
-  {&quot;$project&quot;: {
-    &quot;_id&quot;: 0,
-    &quot;schema&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: {&quot;$objectToArray&quot;: &quot;$$ROOT&quot;},
-        &quot;as&quot;: &quot;field&quot;,
-        &quot;in&quot;: {
-          &quot;fieldname&quot;: &quot;$$field.k&quot;,
-          &quot;type&quot;: {&quot;$type&quot;: &quot;$$field.v&quot;},          
+  {"$project": {
+    "_id": 0,
+    "schema": {
+      "$map": {
+        "input": {"$objectToArray": "$$ROOT"},
+        "as": "field",
+        "in": {
+          "fieldname": "$$field.k",
+          "type": {"$type": "$$field.v"},          
         }
       }
     }
   }},
   
-  {&quot;$unwind&quot;: &quot;$schema&quot;},
+  {"$unwind": "$schema"},
 
-  {&quot;$group&quot;: {
-    &quot;_id&quot;: &quot;$schema.fieldname&quot;,
-    &quot;types&quot;: {&quot;$addToSet&quot;: &quot;$schema.type&quot;},
+  {"$group": {
+    "_id": "$schema.fieldname",
+    "types": {"$addToSet": "$schema.type"},
   }},
   
-  {&quot;$set&quot;: {
-    &quot;fieldname&quot;: &quot;$_id&quot;,
-    &quot;_id&quot;: &quot;$$REMOVE&quot;,
+  {"$set": {
+    "fieldname": "$_id",
+    "_id": "$$REMOVE",
   }},
 ];
 
@@ -802,7 +809,7 @@ db.customers.aggregate(pipeline);
 {fieldname: 'optedOutOfMarketing', types: ['bool']}
 </code></pre>
 <p>This result highlights that the <code>telNums</code> field can have one of two different data types within documents.</p>
-<p>The main drawback of this rudimentary schema analysis pipeline is its inability to descend through layers of arrays and sub-documents hanging off each top-level document. This challenge is indeed solvable using a pure aggregation pipeline, but the code involved is far more complex and beyond the scope of this chapter. If you are interested in exploring this further, the <a href="https://github.com/pkdone/mongo-agg-schema-analyzer">&quot;mongo-agg-schema-analyzer&quot; GitHub project</a> solves this problem. That project shows you how to traverse through hierarchically structured documents using a single aggregation pipeline to infer the schema.</p>
+<p>The main drawback of this rudimentary schema analysis pipeline is its inability to descend through layers of arrays and sub-documents hanging off each top-level document. This challenge is indeed solvable using a pure aggregation pipeline, but the code involved is far more complex and beyond the scope of this chapter. If you are interested in exploring this further, the <a href="https://github.com/pkdone/mongo-agg-schema-analyzer">"mongo-agg-schema-analyzer" GitHub project</a> solves this problem. That project shows you how to traverse through hierarchically structured documents using a single aggregation pipeline to infer the schema.</p>
 <h2 id="further-array-manipulation-examples"><a class="header" href="#further-array-manipulation-examples">Further Array Manipulation Examples</a></h2>
 <p>This book's <a href="../examples/array-manipulations/array-manipulations.html">Array Manipulation Examples</a> section contains more examples of using expressions to process arrays.</p>
 
@@ -814,7 +821,7 @@ db.customers.aggregate(pipeline);
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../examples/examples.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/examples.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -828,7 +835,7 @@ db.customers.aggregate(pipeline);
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../examples/examples.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/examples.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

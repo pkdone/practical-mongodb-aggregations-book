@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../appendices/cheatsheet-source.html" class="active"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -182,33 +189,33 @@
 <pre><code class="language-javascript">// DB configuration
 use cheatsheet;
 db.dropDatabase();
-db.places.createIndex({&quot;loc&quot;: &quot;2dsphere&quot;});
+db.places.createIndex({"loc": "2dsphere"});
 
 // 'shapes' collection
 db.shapes.insertMany([
-  {&quot;_id&quot;: &quot;◐&quot;, &quot;x&quot;: &quot;■&quot;, &quot;y&quot;: &quot;▲&quot;, &quot;val&quot;: 10, &quot;ord&quot;: 0},
-  {&quot;_id&quot;: &quot;◑&quot;, &quot;x&quot;: &quot;■&quot;, &quot;y&quot;: &quot;■&quot;, &quot;val&quot;: 60},
-  {&quot;_id&quot;: &quot;◒&quot;, &quot;x&quot;: &quot;●&quot;, &quot;y&quot;: &quot;■&quot;, &quot;val&quot;: 80},
-  {&quot;_id&quot;: &quot;◓&quot;, &quot;x&quot;: &quot;▲&quot;, &quot;y&quot;: &quot;▲&quot;, &quot;val&quot;: 85},
-  {&quot;_id&quot;: &quot;◔&quot;, &quot;x&quot;: &quot;■&quot;, &quot;y&quot;: &quot;▲&quot;, &quot;val&quot;: 90},
-  {&quot;_id&quot;: &quot;◕&quot;, &quot;x&quot;: &quot;●&quot;, &quot;y&quot;: &quot;■&quot;, &quot;val&quot;: 95, &quot;ord&quot;: 100},
+  {"_id": "◐", "x": "■", "y": "▲", "val": 10, "ord": 0},
+  {"_id": "◑", "x": "■", "y": "■", "val": 60},
+  {"_id": "◒", "x": "●", "y": "■", "val": 80},
+  {"_id": "◓", "x": "▲", "y": "▲", "val": 85},
+  {"_id": "◔", "x": "■", "y": "▲", "val": 90},
+  {"_id": "◕", "x": "●", "y": "■", "val": 95, "ord": 100},
 ]);
 
 // 'lists' collection
 db.lists.insertMany([
-  {&quot;_id&quot;: &quot;▤&quot;, &quot;a&quot;: &quot;●&quot;, &quot;b&quot;: [&quot;◰&quot;, &quot;◱&quot;]},
-  {&quot;_id&quot;: &quot;▥&quot;, &quot;a&quot;: &quot;▲&quot;, &quot;b&quot;: [&quot;◲&quot;]},
-  {&quot;_id&quot;: &quot;▦&quot;, &quot;a&quot;: &quot;▲&quot;, &quot;b&quot;: [&quot;◰&quot;, &quot;◳&quot;, &quot;◱&quot;]},
-  {&quot;_id&quot;: &quot;▧&quot;, &quot;a&quot;: &quot;●&quot;, &quot;b&quot;: [&quot;◰&quot;]},
-  {&quot;_id&quot;: &quot;▨&quot;, &quot;a&quot;: &quot;■&quot;, &quot;b&quot;: [&quot;◳&quot;, &quot;◱&quot;]},
+  {"_id": "▤", "a": "●", "b": ["◰", "◱"]},
+  {"_id": "▥", "a": "▲", "b": ["◲"]},
+  {"_id": "▦", "a": "▲", "b": ["◰", "◳", "◱"]},
+  {"_id": "▧", "a": "●", "b": ["◰"]},
+  {"_id": "▨", "a": "■", "b": ["◳", "◱"]},
 ]);
 
 // 'places' collection
 db.places.insertMany([
-  {&quot;_id&quot;: &quot;Bigtown&quot;, &quot;loc&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [1,1]}},
-  {&quot;_id&quot;: &quot;Smalltown&quot;, &quot;loc&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [3,3]}},
-  {&quot;_id&quot;: &quot;Happytown&quot;, &quot;loc&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [5,5]}},
-  {&quot;_id&quot;: &quot;Sadtown&quot;, &quot;loc&quot;: {&quot;type&quot;: &quot;LineString&quot;, &quot;coordinates&quot;: [[7,7],[8,8]]}},
+  {"_id": "Bigtown", "loc": {"type": "Point", "coordinates": [1,1]}},
+  {"_id": "Smalltown", "loc": {"type": "Point", "coordinates": [3,3]}},
+  {"_id": "Happytown", "loc": {"type": "Point", "coordinates": [5,5]}},
+  {"_id": "Sadtown", "loc": {"type": "LineString", "coordinates": [[7,7],[8,8]]}},
 ]);
 </code></pre>
 <h2 id="aggregation-stage-examples-execution"><a class="header" href="#aggregation-stage-examples-execution">Aggregation Stage Examples Execution</a></h2>
@@ -217,64 +224,64 @@ db.places.insertMany([
 </blockquote>
 <pre><code class="language-javascript">// $addFields  (v3.4)
 db.shapes.aggregate([
-  {&quot;$addFields&quot;: {&quot;z&quot;: &quot;●&quot;}}
+  {"$addFields": {"z": "●"}}
 ]);
 
 
 // $bucket  (v3.4)
 db.shapes.aggregate([
-  {&quot;$bucket&quot;: {
-    &quot;groupBy&quot;: &quot;$val&quot;, &quot;boundaries&quot;: [0, 25, 50, 75, 100], &quot;default&quot;: &quot;Other&quot;
+  {"$bucket": {
+    "groupBy": "$val", "boundaries": [0, 25, 50, 75, 100], "default": "Other"
   }}
 ]);
 
 
 // $bucketAuto  (v3.4)
 db.shapes.aggregate([
-  {&quot;$bucketAuto&quot;: {&quot;groupBy&quot;: &quot;$val&quot;, &quot;buckets&quot;: 3}}
+  {"$bucketAuto": {"groupBy": "$val", "buckets": 3}}
 ]);
 
 
 // $count  (v3.4)
 db.shapes.aggregate([
-  {&quot;$count&quot;: &quot;amount&quot;}
+  {"$count": "amount"}
 ]);
 
 
 // $densify  (v5.1)
 db.shapes.aggregate([
-  {&quot;$densify&quot;: {
-    &quot;field&quot;: &quot;val&quot;, 
-    &quot;partitionByFields&quot;: [&quot;x&quot;], 
-    &quot;range&quot;: {&quot;bounds&quot;: &quot;full&quot;, &quot;step&quot;: 25}
+  {"$densify": {
+    "field": "val", 
+    "partitionByFields": ["x"], 
+    "range": {"bounds": "full", "step": 25}
   }}
 ]);
 
 
 // $documents  (v5.1)
 db.aggregate([
-  {&quot;$documents&quot;: [
-    {&quot;p&quot;: &quot;▭&quot;, &quot;q&quot;: &quot;▯&quot;},
-    {&quot;p&quot;: &quot;▯&quot;, &quot;q&quot;: &quot;▭&quot;},
+  {"$documents": [
+    {"p": "▭", "q": "▯"},
+    {"p": "▯", "q": "▭"},
   ]}
 ]);
 
 
 // $facet  (v3.4)
 db.shapes.aggregate([
-  {&quot;$facet&quot;: {
-    &quot;X_CIRCLE_FACET&quot;: [{&quot;$match&quot;: {&quot;x&quot;: &quot;●&quot;}}],
-    &quot;FIRST_TWO_FACET&quot; : [{&quot;$limit&quot;: 2}],
+  {"$facet": {
+    "X_CIRCLE_FACET": [{"$match": {"x": "●"}}],
+    "FIRST_TWO_FACET" : [{"$limit": 2}],
   }}
 ]);
 
 
 // $fill  (v5.3)
 db.shapes.aggregate([
-  {&quot;$fill&quot;: {
-    &quot;sortBy&quot;: {&quot;val&quot;: 1},        
-    &quot;output&quot;: {
-      &quot;ord&quot;: {&quot;method&quot;: &quot;linear&quot;}
+  {"$fill": {
+    "sortBy": {"val": 1},        
+    "output": {
+      "ord": {"method": "linear"}
     }
   }}
 ]);
@@ -282,59 +289,59 @@ db.shapes.aggregate([
 
 // $geoNear  (v2.2)
 db.places.aggregate([
-  {&quot;$geoNear&quot;: {
-    &quot;near&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [9,9]}, &quot;distanceField&quot;: &quot;distance&quot;
+  {"$geoNear": {
+    "near": {"type": "Point", "coordinates": [9,9]}, "distanceField": "distance"
   }}
 ]);
 
 
 // $graphLookup  (v3.4)
 db.shapes.aggregate([
-  {&quot;$graphLookup&quot;: {
-    &quot;from&quot;: &quot;shapes&quot;,
-    &quot;startWith&quot;: &quot;$x&quot;,
-    &quot;connectFromField&quot;: &quot;x&quot;,
-    &quot;connectToField&quot;: &quot;y&quot;,
-    &quot;depthField&quot;: &quot;depth&quot;,
-    &quot;as&quot;: &quot;connections&quot;,
+  {"$graphLookup": {
+    "from": "shapes",
+    "startWith": "$x",
+    "connectFromField": "x",
+    "connectToField": "y",
+    "depthField": "depth",
+    "as": "connections",
   }},
-  {&quot;$project&quot;: {&quot;connections_count&quot;: {&quot;$size&quot;: &quot;$connections&quot;}}}
+  {"$project": {"connections_count": {"$size": "$connections"}}}
 ]);
 
 
 // $group  (v2.2)
 db.shapes.aggregate([
-  {&quot;$group&quot;: {&quot;_id&quot;: &quot;$x&quot;, &quot;ylist&quot;: {&quot;$push&quot;: &quot;$y&quot;}}}
+  {"$group": {"_id": "$x", "ylist": {"$push": "$y"}}}
 ]);
 
 
 // $limit  (v2.2)
 db.shapes.aggregate([
-  {&quot;$limit&quot;: 2}
+  {"$limit": 2}
 ]);
 
 
 // $lookup  (v3.2)
 db.shapes.aggregate([
-  {&quot;$lookup&quot;: {
-    &quot;from&quot;: &quot;lists&quot;,
-    &quot;localField&quot;: &quot;y&quot;,
-    &quot;foreignField&quot;: &quot;a&quot;,
-    &quot;as&quot;: &quot;refs&quot;,
+  {"$lookup": {
+    "from": "lists",
+    "localField": "y",
+    "foreignField": "a",
+    "as": "refs",
   }}
 ]);
 
 
 // $match  (v2.2)
 db.shapes.aggregate([
-  {&quot;$match&quot;: {&quot;y&quot;: &quot;▲&quot;}  
+  {"$match": {"y": "▲"}  
 }]);
 
 
 // $merge  (v4.2)
 db.results.drop();
 db.shapes.aggregate([
-  {&quot;$merge&quot;: {&quot;into&quot;: &quot;results&quot;}}
+  {"$merge": {"into": "results"}}
 ]);
 db.results.find();
 
@@ -342,51 +349,51 @@ db.results.find();
 // $out  (v2.6)
 db.results.drop();
 db.shapes.aggregate([
-  {&quot;$out&quot;: &quot;results&quot;}
+  {"$out": "results"}
 ]);
 db.results.find();
 
 
 // $project  (v2.2)
 db.shapes.aggregate([
-  {&quot;$project&quot;: {&quot;x&quot;: 1}}
+  {"$project": {"x": 1}}
 ]);
 
 
 // $redact  (v2.6)
 db.places.aggregate([
-  {&quot;$redact&quot;: {&quot;$cond&quot;: {
-    &quot;if&quot;  : {&quot;$eq&quot;: [&quot;$type&quot;, &quot;LineString&quot;]},
-    &quot;then&quot;: &quot;$$PRUNE&quot;,
-    &quot;else&quot;: &quot;$$DESCEND&quot;
+  {"$redact": {"$cond": {
+    "if"  : {"$eq": ["$type", "LineString"]},
+    "then": "$$PRUNE",
+    "else": "$$DESCEND"
   }}}
 ]);
 
 
 // $replaceRoot  (v3.4)
 db.lists.aggregate([
-  {&quot;$replaceRoot&quot;: {&quot;newRoot&quot;: {&quot;first&quot;: {&quot;$first&quot;: &quot;$b&quot;}, &quot;last&quot;: {&quot;$last&quot;: &quot;$b&quot;}}}}
+  {"$replaceRoot": {"newRoot": {"first": {"$first": "$b"}, "last": {"$last": "$b"}}}}
 ]);
 
 
 // $replaceWith  (v4.2)
 db.lists.aggregate([
-  {&quot;$replaceWith&quot;: {&quot;first&quot;: {&quot;$first&quot;: &quot;$b&quot;}, &quot;last&quot;: {&quot;$last&quot;: &quot;$b&quot;}}}
+  {"$replaceWith": {"first": {"$first": "$b"}, "last": {"$last": "$b"}}}
 ]);
 
 
 // $sample  (v3.2)
 db.shapes.aggregate([
-  {&quot;$sample&quot;: {&quot;size&quot;: 3}}
+  {"$sample": {"size": 3}}
 ]);
 
 
 // $search  (v4.2 - requires an Atlas Search index)
 db.places.aggregate([
-  {&quot;$search&quot;: {
-    &quot;text&quot;: {
-      &quot;path&quot;: &quot;_id&quot;,
-      &quot;query&quot;: &quot;Bigtown Happytown&quot;,
+  {"$search": {
+    "text": {
+      "path": "_id",
+      "query": "Bigtown Happytown",
     }
   }}
 ]);
@@ -394,18 +401,18 @@ db.places.aggregate([
 
 // $searchMeta  (v4.2 - requires an Atlas Search index)
 db.places.aggregate([
-  {&quot;$searchMeta&quot;: {
-   &quot;facet&quot;: {
-      &quot;operator&quot;: {
-        &quot;exists&quot;: {
-          &quot;path&quot;: &quot;_id&quot;
+  {"$searchMeta": {
+   "facet": {
+      "operator": {
+        "exists": {
+          "path": "_id"
         }      
       },   
-      &quot;facets&quot;: {        
-        &quot;geotypes&quot;: {
-          &quot;type&quot; : &quot;string&quot;,
-          &quot;path&quot; : &quot;loc.type&quot;,
-          &quot;numBuckets&quot; : 2,
+      "facets": {        
+        "geotypes": {
+          "type" : "string",
+          "path" : "loc.type",
+          "numBuckets" : 2,
         }            
       }        
     }             
@@ -415,20 +422,20 @@ db.places.aggregate([
 
 // $set  (v4.2)
 db.shapes.aggregate([
-  {&quot;$set&quot;: {&quot;y&quot;: &quot;▲&quot;}}
+  {"$set": {"y": "▲"}}
 ]);
 
 
 // $setWindowFields  (v5.0)
 db.shapes.aggregate([
-  {&quot;$setWindowFields&quot;: {
-    &quot;partitionBy&quot;: &quot;$x&quot;,
-    &quot;sortBy&quot;: {&quot;_id&quot;: 1},    
-    &quot;output&quot;: {
-      &quot;cumulativeValShapeX&quot;: {
-        &quot;$sum&quot;: &quot;$val&quot;,
-        &quot;window&quot;: {
-          &quot;documents&quot;: [&quot;unbounded&quot;, &quot;current&quot;]
+  {"$setWindowFields": {
+    "partitionBy": "$x",
+    "sortBy": {"_id": 1},    
+    "output": {
+      "cumulativeValShapeX": {
+        "$sum": "$val",
+        "window": {
+          "documents": ["unbounded", "current"]
         }
       }
     }
@@ -438,52 +445,52 @@ db.shapes.aggregate([
 
 // $skip  (v2.2)
 db.shapes.aggregate([
-  {&quot;$skip&quot;: 5}
+  {"$skip": 5}
 ]);
 
 
 // $sort  (v2.2)
 db.shapes.aggregate([
-  {&quot;$sort&quot;: {&quot;x&quot;: 1, &quot;y&quot;: 1}}
+  {"$sort": {"x": 1, "y": 1}}
 ]);
 
 
 // $sortByCount  (v3.4)
 db.shapes.aggregate([
-  {&quot;$sortByCount&quot;: &quot;$x&quot;}
+  {"$sortByCount": "$x"}
 ]);
 
 
 // $unionWith  (v4.4)
 db.shapes.aggregate([
-  {&quot;$unionWith&quot;: {&quot;coll&quot;: &quot;lists&quot;}}
+  {"$unionWith": {"coll": "lists"}}
 ]);
 
 
 // $unset  (v4.2)
 db.shapes.aggregate([
-  {&quot;$unset&quot;: [&quot;x&quot;]}
+  {"$unset": ["x"]}
 ]);
 
 
 // $unwind  (v2.2)
 db.lists.aggregate([
-  {&quot;$unwind&quot;: {&quot;path&quot;: &quot;$b&quot;}}
+  {"$unwind": {"path": "$b"}}
 ]);
 </code></pre>
 <h2 id="configuring-the-required-atlas-search-index"><a class="header" href="#configuring-the-required-atlas-search-index">Configuring The Required Atlas Search Index</a></h2>
 <p>The <code>$search</code> and <code>$searchMeta</code> stages require you to first configure an <a href="https://www.mongodb.com/docs/atlas/atlas-search/atlas-search-overview/">Atlas Search</a> index. Follow the procedure described in the <a href="./create-search-index.html">Create Atlas Search Index</a> appendix to define a search index for the collection <strong>cheatsheet.places</strong>, with the following JSON configuration:</p>
 <pre><code class="language-javascript">{
-  &quot;mappings&quot;: {
-    &quot;dynamic&quot;: true,
-    &quot;fields&quot;: {
-      &quot;loc&quot;: {
-        &quot;fields&quot;: {
-          &quot;type&quot;: {
-            &quot;type&quot;: &quot;stringFacet&quot;
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "loc": {
+        "fields": {
+          "type": {
+            "type": "stringFacet"
           }
         },
-        &quot;type&quot;: &quot;document&quot;
+        "type": "document"
       }
     }
   }
@@ -498,7 +505,7 @@ db.lists.aggregate([
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../appendices/create-search-index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../appendices/create-search-index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -512,7 +519,7 @@ db.lists.aggregate([
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../appendices/create-search-index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../appendices/create-search-index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html" class="active"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -179,51 +186,51 @@
                         <h1 id="array-fields-joining"><a class="header" href="#array-fields-joining">Array Fields Joining</a></h1>
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
-<p>You are developing a new dating website using a database to hold the profiles of all registered users. For each user profile, you will persist a set of the user's specified hobbies, each with a description of how the user says they conduct their pursuit. Each user's profile also captures what they prefer to do depending on their mood (e.g., &quot;happy&quot;, &quot;sad&quot;, &quot;chilling&quot;, etc.). When you show the user profiles on the website to a person searching for a date, you want to describe how each candidate user conducts their hobbies for each mood to help the person spot their ideal match.</p>
+<p>You are developing a new dating website using a database to hold the profiles of all registered users. For each user profile, you will persist a set of the user's specified hobbies, each with a description of how the user says they conduct their pursuit. Each user's profile also captures what they prefer to do depending on their mood (e.g., "happy", "sad", "chilling", etc.). When you show the user profiles on the website to a person searching for a date, you want to describe how each candidate user conducts their hobbies for each mood to help the person spot their ideal match.</p>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new user profiles collection:</p>
-<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-array-fields-joining&quot;);
+<pre><code class="language-javascript">db = db.getSiblingDB("book-array-fields-joining");
 db.dropDatabase();
 
 // Insert 2 records into the users collection
 db.users.insertMany([
   {
-    &quot;firstName&quot;: &quot;Alice&quot;,
-    &quot;lastName&quot;: &quot;Jones&quot;,
-    &quot;dateOfBirth&quot;: ISODate(&quot;1985-07-21T00:00:00Z&quot;),
-    &quot;hobbies&quot;: {
-      &quot;music&quot;: &quot;Playing the guitar&quot;,
-      &quot;reading&quot;: &quot;Science Fiction books&quot;,
-      &quot;gaming&quot;: &quot;Video games, especially RPGs&quot;,
-      &quot;sports&quot;: &quot;Long-distance running&quot;,
-      &quot;traveling&quot;: &quot;Visiting exotic places&quot;,
-      &quot;cooking&quot;: &quot;Trying out new recipes&quot;,
+    "firstName": "Alice",
+    "lastName": "Jones",
+    "dateOfBirth": ISODate("1985-07-21T00:00:00Z"),
+    "hobbies": {
+      "music": "Playing the guitar",
+      "reading": "Science Fiction books",
+      "gaming": "Video games, especially RPGs",
+      "sports": "Long-distance running",
+      "traveling": "Visiting exotic places",
+      "cooking": "Trying out new recipes",
     },      
-    &quot;moodFavourites&quot;: {
-      &quot;sad&quot;: [&quot;music&quot;],
-      &quot;happy&quot;: [&quot;sports&quot;],
-      &quot;chilling&quot;: [&quot;music&quot;, &quot;cooking&quot;],
+    "moodFavourites": {
+      "sad": ["music"],
+      "happy": ["sports"],
+      "chilling": ["music", "cooking"],
     },
   },
   {
-    &quot;firstName&quot;: &quot;Sam&quot;,
-    &quot;lastName&quot;: &quot;Brown&quot;,
-    &quot;dateOfBirth&quot;: ISODate(&quot;1993-12-01T00:00:00Z&quot;),
-    &quot;hobbies&quot;: {
-      &quot;cycling&quot;: &quot;Mountain biking&quot;,
-      &quot;writing&quot;: &quot;Poetry and short stories&quot;,
-      &quot;knitting&quot;: &quot;Knitting scarves and hats&quot;,
-      &quot;hiking&quot;: &quot;Hiking in the mountains&quot;,
-      &quot;volunteering&quot;: &quot;Helping at the local animal shelter&quot;,
-      &quot;music&quot;: &quot;Listening to Jazz&quot;,
-      &quot;photography&quot;: &quot;Nature photography&quot;,
-      &quot;gardening&quot;: &quot;Growing herbs and vegetables&quot;,
-      &quot;yoga&quot;: &quot;Practicing Hatha Yoga&quot;,
-      &quot;cinema&quot;: &quot;Watching classic movies&quot;,
+    "firstName": "Sam",
+    "lastName": "Brown",
+    "dateOfBirth": ISODate("1993-12-01T00:00:00Z"),
+    "hobbies": {
+      "cycling": "Mountain biking",
+      "writing": "Poetry and short stories",
+      "knitting": "Knitting scarves and hats",
+      "hiking": "Hiking in the mountains",
+      "volunteering": "Helping at the local animal shelter",
+      "music": "Listening to Jazz",
+      "photography": "Nature photography",
+      "gardening": "Growing herbs and vegetables",
+      "yoga": "Practicing Hatha Yoga",
+      "cinema": "Watching classic movies",
     },
-    &quot;moodFavourites&quot;: {
-      &quot;happy&quot;: [&quot;gardening&quot;, &quot;cycling&quot;],
-      &quot;sad&quot;: [&quot;knitting&quot;],
+    "moodFavourites": {
+      "happy": ["gardening", "cycling"],
+      "sad": ["knitting"],
     },
   },
 ]);
@@ -234,15 +241,15 @@ db.users.insertMany([
 // named fields in a sub-document where each field's name is only known at runtime 
 function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
   return {
-    &quot;$map&quot;: { 
-      &quot;input&quot;: {
-        &quot;$filter&quot;: { 
-          &quot;input&quot;: {&quot;$objectToArray&quot;: obj}, 
-          &quot;as&quot;: &quot;currElem&quot;,
-          &quot;cond&quot;: {&quot;$in&quot;: [&quot;$$currElem.k&quot;, fieldnames]},
+    "$map": { 
+      "input": {
+        "$filter": { 
+          "input": {"$objectToArray": obj}, 
+          "as": "currElem",
+          "cond": {"$in": ["$$currElem.k", fieldnames]},
         }
       }, 
-      &quot;in&quot;: &quot;$$this.v&quot; 
+      "in": "$$this.v" 
     }, 
   };
 }
@@ -250,14 +257,14 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
 <p>Define the pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Set a field with activities each user likes doing according to their mood
-  {&quot;$set&quot;: {
-    &quot;moodActivities&quot;: {      
-      &quot;$arrayToObject&quot;: {
-        &quot;$map&quot;: { 
-          &quot;input&quot;: {&quot;$objectToArray&quot;: &quot;$moodFavourites&quot;},
-          &quot;in&quot;: {              
-            &quot;k&quot;: &quot;$$this.k&quot;,
-            &quot;v&quot;: getValuesOfNamedFieldsAsArray(&quot;$hobbies&quot;, &quot;$$this.v&quot;),
+  {"$set": {
+    "moodActivities": {      
+      "$arrayToObject": {
+        "$map": { 
+          "input": {"$objectToArray": "$moodFavourites"},
+          "in": {              
+            "k": "$$this.k",
+            "v": getValuesOfNamedFieldsAsArray("$hobbies", "$$this.v"),
           }
         }, 
       }
@@ -265,10 +272,10 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
   }},
 
   // Remove unwanted fields  
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
-    &quot;hobbies&quot;,
-    &quot;moodFavourites&quot;,
+  {"$unset": [
+    "_id",
+    "hobbies",
+    "moodFavourites",
   ]},  
 ]
 </code></pre>
@@ -276,7 +283,7 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.users.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.users.explain(&quot;executionStats&quot;).aggregate(pipeline);
+<pre><code class="language-javascript">db.users.explain("executionStats").aggregate(pipeline);
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>Two documents should be returned, each showing a new <code>moodActivities</code> array field containing descriptions of how a user conducts their preferred hobby for each mood, as shown below:</p>
@@ -284,7 +291,7 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
   {
     firstName: 'Alice',
     lastName: 'Jones',
-    dateOfBirth: ISODate(&quot;1985-07-21T00:00:00.000Z&quot;),
+    dateOfBirth: ISODate("1985-07-21T00:00:00.000Z"),
     moodActivities: {
       sad: [ 'Playing the guitar' ],
       happy: [ 'Long-distance running' ],
@@ -294,7 +301,7 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
   {
     firstName: 'Sam',
     lastName: 'Brown',
-    dateOfBirth: ISODate(&quot;1993-12-01T00:00:00.000Z&quot;),
+    dateOfBirth: ISODate("1993-12-01T00:00:00.000Z"),
     moodActivities: {
       happy: [ 'Mountain biking', 'Growing herbs and vegetables' ],
       sad: [ 'Knitting scarves and hats' ]
@@ -323,7 +330,7 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../examples/array-manipulations/comparison-of-two-arrays.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../examples/array-manipulations/comparison-of-two-arrays.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -337,7 +344,7 @@ function getValuesOfNamedFieldsAsArray(obj, fieldnames) {
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../examples/array-manipulations/comparison-of-two-arrays.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../examples/array-manipulations/comparison-of-two-arrays.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

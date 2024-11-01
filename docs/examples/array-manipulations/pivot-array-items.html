@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html" class="active"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -185,59 +192,59 @@
 </blockquote>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate the new hourly weather station measurements collection:</p>
-<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-pivot-array-by-key&quot;);
+<pre><code class="language-javascript">db = db.getSiblingDB("book-pivot-array-by-key");
 db.dropDatabase();
 
 // Inserts records into the weather_measurements collection
 db.weather_measurements.insertMany([
   {
-    &quot;weatherStationsZone&quot;: &quot;FieldZone-ABCD&quot;,
-    &quot;dayHour&quot;: ISODate(&quot;2021-07-05T15:00:00.000Z&quot;),
-    &quot;readings&quot;: [
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;tempCelsius&quot;: 18},        
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;pressureMBar&quot;: 1004},        
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;humidityPercent&quot;: 31},        
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;tempCelsius&quot;: 19},        
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;pressureMBar&quot;: 1005},        
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;humidityPercent&quot;: 31},        
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;humidityPercent&quot;: 30},        
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;tempCelsius&quot;: 20},        
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;pressureMBar&quot;: 1003},        
+    "weatherStationsZone": "FieldZone-ABCD",
+    "dayHour": ISODate("2021-07-05T15:00:00.000Z"),
+    "readings": [
+      {"device": "ABCD-Device-123", "tempCelsius": 18},        
+      {"device": "ABCD-Device-789", "pressureMBar": 1004},        
+      {"device": "ABCD-Device-123", "humidityPercent": 31},        
+      {"device": "ABCD-Device-123", "tempCelsius": 19},        
+      {"device": "ABCD-Device-123", "pressureMBar": 1005},        
+      {"device": "ABCD-Device-789", "humidityPercent": 31},        
+      {"device": "ABCD-Device-123", "humidityPercent": 30},        
+      {"device": "ABCD-Device-789", "tempCelsius": 20},        
+      {"device": "ABCD-Device-789", "pressureMBar": 1003},        
     ],
   },
   {
-    &quot;weatherStationsZone&quot;: &quot;FieldZone-ABCD&quot;,
-    &quot;dayHour&quot;: ISODate(&quot;2021-07-05T16:00:00.000Z&quot;),
-    &quot;readings&quot;: [
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;humidityPercent&quot;: 33},        
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;humidityPercent&quot;: 32},        
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;tempCelsius&quot;: 22},        
-      {&quot;device&quot;: &quot;ABCD-Device-123&quot;, &quot;pressureMBar&quot;: 1007},        
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;pressureMBar&quot;: 1008},        
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;tempCelsius&quot;: 22},        
-      {&quot;device&quot;: &quot;ABCD-Device-789&quot;, &quot;humidityPercent&quot;: 34},        
+    "weatherStationsZone": "FieldZone-ABCD",
+    "dayHour": ISODate("2021-07-05T16:00:00.000Z"),
+    "readings": [
+      {"device": "ABCD-Device-789", "humidityPercent": 33},        
+      {"device": "ABCD-Device-123", "humidityPercent": 32},        
+      {"device": "ABCD-Device-123", "tempCelsius": 22},        
+      {"device": "ABCD-Device-123", "pressureMBar": 1007},        
+      {"device": "ABCD-Device-789", "pressureMBar": 1008},        
+      {"device": "ABCD-Device-789", "tempCelsius": 22},        
+      {"device": "ABCD-Device-789", "humidityPercent": 34},        
     ],
   },
 ]);
 </code></pre>
 <h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
-<p>Define a pipeline ready to perform the aggregation that groups the weather readings by device. </p>
+<p>Define a pipeline ready to perform the aggregation that groups the weather readings by device.</p>
 <pre><code class="language-javascript">var pipeline = [
   // Loop for each unique device, to accumulate an array of devices and their readings
-  {&quot;$set&quot;: {
-    &quot;readings_device_summary&quot;: {
-      &quot;$map&quot;: {
-        &quot;input&quot;: {
-          &quot;$setUnion&quot;: &quot;$readings.device&quot;  // Get only unique device ids from the array
+  {"$set": {
+    "readings_device_summary": {
+      "$map": {
+        "input": {
+          "$setUnion": "$readings.device"  // Get only unique device ids from the array
         },
-        &quot;as&quot;: &quot;device&quot;,
-        &quot;in&quot;: {
-          &quot;$mergeObjects&quot;: {  // Merge array of key:values elements into single object
-            &quot;$filter&quot;: {
-              &quot;input&quot;: &quot;$readings&quot;,  // Iterate the &quot;readings&quot; array field
-              &quot;as&quot;: &quot;reading&quot;,  // Name the current array element &quot;reading&quot;
-              &quot;cond&quot;: {  // Only include device properties matching the current device
-                &quot;$eq&quot;: [&quot;$$reading.device&quot;, &quot;$$device&quot;]
+        "as": "device",
+        "in": {
+          "$mergeObjects": {  // Merge array of key:values elements into single object
+            "$filter": {
+              "input": "$readings",  // Iterate the "readings" array field
+              "as": "reading",  // Name the current array element "reading"
+              "cond": {  // Only include device properties matching the current device
+                "$eq": ["$$reading.device", "$$device"]
               }
             }
           }
@@ -247,9 +254,9 @@ db.weather_measurements.insertMany([
   }},
   
   // Exclude unrequired fields from each record
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
-    &quot;readings&quot;,
+  {"$unset": [
+    "_id",
+    "readings",
   ]},  
 ];
 </code></pre>
@@ -257,14 +264,14 @@ db.weather_measurements.insertMany([
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.weather_measurements.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.weather_measurements.explain(&quot;executionStats&quot;).aggregate(pipeline);
+<pre><code class="language-javascript">db.weather_measurements.explain("executionStats").aggregate(pipeline);
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>Two documents should be returned, with the weather station hourly records containing a new array field of elements representing each device and its measurements, as shown below:</p>
 <pre><code class="language-javascript">[
   {
     weatherStationsZone: 'FieldZone-ABCD',
-    dayHour: ISODate(&quot;2021-07-05T15:00:00.000Z&quot;),
+    dayHour: ISODate("2021-07-05T15:00:00.000Z"),
     readings_device_summary: [
       {
         device: 'ABCD-Device-123',
@@ -282,7 +289,7 @@ db.weather_measurements.insertMany([
   },
   {
     weatherStationsZone: 'FieldZone-ABCD',
-    dayHour: ISODate(&quot;2021-07-05T16:00:00.000Z&quot;),
+    dayHour: ISODate("2021-07-05T16:00:00.000Z"),
     readings_device_summary: [
       {
         device: 'ABCD-Device-123',
@@ -321,7 +328,7 @@ db.weather_measurements.insertMany([
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../examples/array-manipulations/array-sort-percentiles.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../examples/array-manipulations/array-sort-percentiles.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -335,7 +342,7 @@ db.weather_measurements.insertMany([
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../examples/array-manipulations/array-sort-percentiles.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../examples/array-manipulations/array-sort-percentiles.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

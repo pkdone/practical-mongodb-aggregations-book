@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html" class="active"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -179,65 +186,65 @@
                         <h1 id="convert-incomplete-date-strings"><a class="header" href="#convert-incomplete-date-strings">Convert Incomplete Date Strings</a></h1>
 <p><strong>Minimum MongoDB Version:</strong> 4.2</p>
 <h2 id="scenario"><a class="header" href="#scenario">Scenario</a></h2>
-<p>An application is ingesting <em>payment</em> documents into a MongoDB collection where each document's <em>payment date</em> field contains a string looking vaguely like a date-time, such as <code>&quot;01-JAN-20 01.01.01.123000000&quot;</code>. You want to convert each <em>payment date</em> into a valid BSON date type when aggregating the payments. However, the payment date fields do not contain all the information required for you to determine the exact date-time accurately. Therefore you cannot use just the MongoDB's <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators">Date Operator Expressions</a> directly to perform the text-to-date conversion. Each of these text fields is missing the following information:</p>
+<p>An application is ingesting <em>payment</em> documents into a MongoDB collection where each document's <em>payment date</em> field contains a string looking vaguely like a date-time, such as <code>"01-JAN-20 01.01.01.123000000"</code>. You want to convert each <em>payment date</em> into a valid BSON date type when aggregating the payments. However, the payment date fields do not contain all the information required for you to determine the exact date-time accurately. Therefore you cannot use just the MongoDB's <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/#date-expression-operators">Date Operator Expressions</a> directly to perform the text-to-date conversion. Each of these text fields is missing the following information:</p>
 <ul>
 <li>The specific <strong>century</strong> (1900s?, 2000s, other?)</li>
-<li>The specific <strong>time-zone</strong> (GMT?, IST?, PST?, other?) </li>
-<li>The specific <strong>language</strong> that the three-letter month abbreviation represents (is &quot;JAN&quot; in French? in English? other?)</li>
+<li>The specific <strong>time-zone</strong> (GMT?, IST?, PST?, other?)</li>
+<li>The specific <strong>language</strong> that the three-letter month abbreviation represents (is "JAN" in French? in English? other?)</li>
 </ul>
 <p>You subsequently learn that all the payment records are for the <strong>21st century</strong> only, the time-zone used when ingesting the data is <strong>UTC</strong>, and the language used is <strong>English</strong>. Armed with this information, you build an aggregation pipeline to transform these text fields into date fields.</p>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <em>payments</em> collection with 12 sample payments documents, providing coverage across all 12 months for the year 2020, with random time elements.</p>
-<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-convert-incomplete-dates&quot;);
+<pre><code class="language-javascript">db = db.getSiblingDB("book-convert-incomplete-dates");
 db.dropDatabase();
 
 // Insert records into the payments collection
 db.payments.insertMany([
-  {&quot;account&quot;: &quot;010101&quot;, &quot;paymentDate&quot;: &quot;01-JAN-20 01.01.01.123000000&quot;, &quot;amount&quot;: 1.01},
-  {&quot;account&quot;: &quot;020202&quot;, &quot;paymentDate&quot;: &quot;02-FEB-20 02.02.02.456000000&quot;, &quot;amount&quot;: 2.02},
-  {&quot;account&quot;: &quot;030303&quot;, &quot;paymentDate&quot;: &quot;03-MAR-20 03.03.03.789000000&quot;, &quot;amount&quot;: 3.03},
-  {&quot;account&quot;: &quot;040404&quot;, &quot;paymentDate&quot;: &quot;04-APR-20 04.04.04.012000000&quot;, &quot;amount&quot;: 4.04},
-  {&quot;account&quot;: &quot;050505&quot;, &quot;paymentDate&quot;: &quot;05-MAY-20 05.05.05.345000000&quot;, &quot;amount&quot;: 5.05},
-  {&quot;account&quot;: &quot;060606&quot;, &quot;paymentDate&quot;: &quot;06-JUN-20 06.06.06.678000000&quot;, &quot;amount&quot;: 6.06},
-  {&quot;account&quot;: &quot;070707&quot;, &quot;paymentDate&quot;: &quot;07-JUL-20 07.07.07.901000000&quot;, &quot;amount&quot;: 7.07},
-  {&quot;account&quot;: &quot;080808&quot;, &quot;paymentDate&quot;: &quot;08-AUG-20 08.08.08.234000000&quot;, &quot;amount&quot;: 8.08},
-  {&quot;account&quot;: &quot;090909&quot;, &quot;paymentDate&quot;: &quot;09-SEP-20 09.09.09.567000000&quot;, &quot;amount&quot;: 9.09},
-  {&quot;account&quot;: &quot;101010&quot;, &quot;paymentDate&quot;: &quot;10-OCT-20 10.10.10.890000000&quot;, &quot;amount&quot;: 10.10},
-  {&quot;account&quot;: &quot;111111&quot;, &quot;paymentDate&quot;: &quot;11-NOV-20 11.11.11.111000000&quot;, &quot;amount&quot;: 11.11},
-  {&quot;account&quot;: &quot;121212&quot;, &quot;paymentDate&quot;: &quot;12-DEC-20 12.12.12.999000000&quot;, &quot;amount&quot;: 12.12}
+  {"account": "010101", "paymentDate": "01-JAN-20 01.01.01.123000000", "amount": 1.01},
+  {"account": "020202", "paymentDate": "02-FEB-20 02.02.02.456000000", "amount": 2.02},
+  {"account": "030303", "paymentDate": "03-MAR-20 03.03.03.789000000", "amount": 3.03},
+  {"account": "040404", "paymentDate": "04-APR-20 04.04.04.012000000", "amount": 4.04},
+  {"account": "050505", "paymentDate": "05-MAY-20 05.05.05.345000000", "amount": 5.05},
+  {"account": "060606", "paymentDate": "06-JUN-20 06.06.06.678000000", "amount": 6.06},
+  {"account": "070707", "paymentDate": "07-JUL-20 07.07.07.901000000", "amount": 7.07},
+  {"account": "080808", "paymentDate": "08-AUG-20 08.08.08.234000000", "amount": 8.08},
+  {"account": "090909", "paymentDate": "09-SEP-20 09.09.09.567000000", "amount": 9.09},
+  {"account": "101010", "paymentDate": "10-OCT-20 10.10.10.890000000", "amount": 10.10},
+  {"account": "111111", "paymentDate": "11-NOV-20 11.11.11.111000000", "amount": 11.11},
+  {"account": "121212", "paymentDate": "12-DEC-20 12.12.12.999000000", "amount": 12.12}
 ]);
 </code></pre>
 <h2 id="aggregation-pipeline"><a class="header" href="#aggregation-pipeline">Aggregation Pipeline</a></h2>
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Change field from a string to a date, filling in the gaps
-  {&quot;$set&quot;: {
-    &quot;paymentDate&quot;: {    
-      &quot;$let&quot;: {
-        &quot;vars&quot;: {
-          &quot;txt&quot;: &quot;$paymentDate&quot;,  // Assign &quot;paymentDate&quot; field to variable &quot;txt&quot;,
-          &quot;month&quot;: {&quot;$substrCP&quot;: [&quot;$paymentDate&quot;, 3, 3]},  // Extract month text
+  {"$set": {
+    "paymentDate": {    
+      "$let": {
+        "vars": {
+          "txt": "$paymentDate",  // Assign "paymentDate" field to variable "txt",
+          "month": {"$substrCP": ["$paymentDate", 3, 3]},  // Extract month text
         },
-        &quot;in&quot;: { 
-          &quot;$dateFromString&quot;: {&quot;format&quot;: &quot;%d-%m-%Y %H.%M.%S.%L&quot;, &quot;dateString&quot;:
-            {&quot;$concat&quot;: [
-              {&quot;$substrCP&quot;: [&quot;$$txt&quot;, 0, 3]},  // Use 1st 3 chars in string
-              {&quot;$switch&quot;: {&quot;branches&quot;: [  // Replace month 3 chars with month number
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;JAN&quot;]}, &quot;then&quot;: &quot;01&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;FEB&quot;]}, &quot;then&quot;: &quot;02&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;MAR&quot;]}, &quot;then&quot;: &quot;03&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;APR&quot;]}, &quot;then&quot;: &quot;04&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;MAY&quot;]}, &quot;then&quot;: &quot;05&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;JUN&quot;]}, &quot;then&quot;: &quot;06&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;JUL&quot;]}, &quot;then&quot;: &quot;07&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;AUG&quot;]}, &quot;then&quot;: &quot;08&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;SEP&quot;]}, &quot;then&quot;: &quot;09&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;OCT&quot;]}, &quot;then&quot;: &quot;10&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;NOV&quot;]}, &quot;then&quot;: &quot;11&quot;},
-                {&quot;case&quot;: {&quot;$eq&quot;: [&quot;$$month&quot;, &quot;DEC&quot;]}, &quot;then&quot;: &quot;12&quot;},
-               ], &quot;default&quot;: &quot;ERROR&quot;}},
-              &quot;-20&quot;,  // Add hyphen + hardcoded century 2 digits
-              {&quot;$substrCP&quot;: [&quot;$$txt&quot;, 7, 15]}  // Use time up to 3 millis (ignore last 6 nanosecs)
+        "in": { 
+          "$dateFromString": {"format": "%d-%m-%Y %H.%M.%S.%L", "dateString":
+            {"$concat": [
+              {"$substrCP": ["$$txt", 0, 3]},  // Use 1st 3 chars in string
+              {"$switch": {"branches": [  // Replace month 3 chars with month number
+                {"case": {"$eq": ["$$month", "JAN"]}, "then": "01"},
+                {"case": {"$eq": ["$$month", "FEB"]}, "then": "02"},
+                {"case": {"$eq": ["$$month", "MAR"]}, "then": "03"},
+                {"case": {"$eq": ["$$month", "APR"]}, "then": "04"},
+                {"case": {"$eq": ["$$month", "MAY"]}, "then": "05"},
+                {"case": {"$eq": ["$$month", "JUN"]}, "then": "06"},
+                {"case": {"$eq": ["$$month", "JUL"]}, "then": "07"},
+                {"case": {"$eq": ["$$month", "AUG"]}, "then": "08"},
+                {"case": {"$eq": ["$$month", "SEP"]}, "then": "09"},
+                {"case": {"$eq": ["$$month", "OCT"]}, "then": "10"},
+                {"case": {"$eq": ["$$month", "NOV"]}, "then": "11"},
+                {"case": {"$eq": ["$$month", "DEC"]}, "then": "12"},
+               ], "default": "ERROR"}},
+              "-20",  // Add hyphen + hardcoded century 2 digits
+              {"$substrCP": ["$$txt", 7, 15]}  // Use time up to 3 millis (ignore last 6 nanosecs)
             ]
           }}                  
         }
@@ -246,8 +253,8 @@ db.payments.insertMany([
   }},
 
   // Omit unwanted fields
-  {&quot;$unset&quot;: [
-    &quot;_id&quot;,
+  {"$unset": [
+    "_id",
   ]},         
 ];
 </code></pre>
@@ -255,7 +262,7 @@ db.payments.insertMany([
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.payments.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.payments.explain(&quot;executionStats&quot;).aggregate(pipeline);
+<pre><code class="language-javascript">db.payments.explain("executionStats").aggregate(pipeline);
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>Twelve documents should be returned, corresponding to the original twelve source documents, but this time with the <code>paymentDate</code> field converted from text values to proper date typed values, as shown below:</p>
@@ -334,7 +341,7 @@ db.payments.insertMany([
 </ul>
 </li>
 <li>
-<p><strong>Temporary Reusable Variables.</strong> The pipeline includes a <code>$let</code> operator to define two variables ready to be reused in multiple places in the central part of the data conversion logic belonging to the <code>$dateFromString</code> operator. The <code>txt</code> variable provides a minor convenience to ensure the main part of the expression logic works regardless of whether the referenced field path is currently named <code>$paymentDate</code> or changes in a future version of the source collection (e.g. to <code>$transactionDate</code>). The <code>month</code> variable is more valuable, ensuring that the pipeline does not have to repeat the same 'substring' logic in multiple places. </p>
+<p><strong>Temporary Reusable Variables.</strong> The pipeline includes a <code>$let</code> operator to define two variables ready to be reused in multiple places in the central part of the data conversion logic belonging to the <code>$dateFromString</code> operator. The <code>txt</code> variable provides a minor convenience to ensure the main part of the expression logic works regardless of whether the referenced field path is currently named <code>$paymentDate</code> or changes in a future version of the source collection (e.g. to <code>$transactionDate</code>). The <code>month</code> variable is more valuable, ensuring that the pipeline does not have to repeat the same 'substring' logic in multiple places.</p>
 </li>
 </ul>
 
@@ -346,7 +353,7 @@ db.payments.insertMany([
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../examples/trend-analysis/trend-analysis.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../examples/trend-analysis/trend-analysis.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -360,7 +367,7 @@ db.payments.insertMany([
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../examples/trend-analysis/trend-analysis.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../examples/trend-analysis/trend-analysis.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

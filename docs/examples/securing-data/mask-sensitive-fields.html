@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Learn about MongoDB Aggregations to develop effective and optimal data manipulation and analytics aggregation pipelines with this book, using the MongoDB Aggregation Framework (aggregate)">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../../favicon.svg">
         <link rel="shortcut icon" href="../../favicon.png">
@@ -41,7 +41,7 @@
           gtag('config', 'G-D0T2GQ8R19');
         </script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -71,31 +71,38 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../front-cover.html">Practical MongoDB Aggregations</a></li><li class="chapter-item expanded affix "><a href="../../credits.html">Credits</a></li><li class="chapter-item expanded affix "><a href="../../advert.html">Advert</a></li><li class="chapter-item expanded affix "><a href="../../foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="../../who-this-is-for.html">Who This Book Is For</a></li><li class="chapter-item expanded "><a href="../../intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../intro/introducing-aggregations.html"><strong aria-hidden="true">1.1.</strong> Introducing MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/history.html"><strong aria-hidden="true">1.2.</strong> History of MongoDB Aggregations</a></li><li class="chapter-item expanded "><a href="../../intro/getting-started.html"><strong aria-hidden="true">1.3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../../intro/getting-help.html"><strong aria-hidden="true">1.4.</strong> Getting Help</a></li></ol></li><li class="chapter-item expanded "><a href="../../guides/guides.html"><strong aria-hidden="true">2.</strong> Guiding Tips & Principles</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../guides/composibility.html"><strong aria-hidden="true">2.1.</strong> Embrace Composability For Increased Productivity</a></li><li class="chapter-item expanded "><a href="../../guides/project.html"><strong aria-hidden="true">2.2.</strong> Better Alternatives To A Project Stage</a></li><li class="chapter-item expanded "><a href="../../guides/explain.html"><strong aria-hidden="true">2.3.</strong> Using Explain Plans</a></li><li class="chapter-item expanded "><a href="../../guides/performance.html"><strong aria-hidden="true">2.4.</strong> Pipeline Performance Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/expressions.html"><strong aria-hidden="true">2.5.</strong> Expressions Explained</a></li><li class="chapter-item expanded "><a href="../../guides/sharding.html"><strong aria-hidden="true">2.6.</strong> Sharding Considerations</a></li><li class="chapter-item expanded "><a href="../../guides/advanced-arrays.html"><strong aria-hidden="true">2.7.</strong> Advanced Use Of Expressions For Array Processing</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/examples.html"><strong aria-hidden="true">3.</strong> Aggregations By Example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/foundational.html"><strong aria-hidden="true">3.1.</strong> Foundational Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/foundational/filtered-top-subset.html"><strong aria-hidden="true">3.1.1.</strong> Filtered Top Subset</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/group-and-total.html"><strong aria-hidden="true">3.1.2.</strong> Group & Total</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/unpack-array-group-differently.html"><strong aria-hidden="true">3.1.3.</strong> Unpack Arrays & Group Differently</a></li><li class="chapter-item expanded "><a href="../../examples/foundational/distinct-values.html"><strong aria-hidden="true">3.1.4.</strong> Distinct List Of Values</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/joining/joining.html"><strong aria-hidden="true">3.2.</strong> Joining Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/joining/one-to-one-join.html"><strong aria-hidden="true">3.2.1.</strong> One-to-One Join</a></li><li class="chapter-item expanded "><a href="../../examples/joining/multi-one-to-many.html"><strong aria-hidden="true">3.2.2.</strong> Multi-Field Join & One-to-Many</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/type-convert/type-convert.html"><strong aria-hidden="true">3.3.</strong> Data Types Conversion Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-to-strongly-typed.html"><strong aria-hidden="true">3.3.1.</strong> Strongly-Typed Conversion</a></li><li class="chapter-item expanded "><a href="../../examples/type-convert/convert-incomplete-dates.html"><strong aria-hidden="true">3.3.2.</strong> Convert Incomplete Date Strings</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/trend-analysis.html"><strong aria-hidden="true">3.4.</strong> Trend Analysis Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/trend-analysis/faceted-classifications.html"><strong aria-hidden="true">3.4.1.</strong> Faceted Classification</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/largest-graph-network.html"><strong aria-hidden="true">3.4.2.</strong> Largest Graph Network</a></li><li class="chapter-item expanded "><a href="../../examples/trend-analysis/incremental-analytics.html"><strong aria-hidden="true">3.4.3.</strong> Incremental Analytics</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/securing-data/securing-data.html"><strong aria-hidden="true">3.5.</strong> Securing Data Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/securing-data/redacted-view.html"><strong aria-hidden="true">3.5.1.</strong> Redacted View</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/mask-sensitive-fields.html" class="active"><strong aria-hidden="true">3.5.2.</strong> Mask Sensitive Fields</a></li><li class="chapter-item expanded "><a href="../../examples/securing-data/role-programmatic-restricted-view.html"><strong aria-hidden="true">3.5.3.</strong> Role Programmatic Restricted View</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/time-series/time-series.html"><strong aria-hidden="true">3.6.</strong> Time-Series Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/time-series/iot-power-consumption.html"><strong aria-hidden="true">3.6.1.</strong> IoT Power Consumption</a></li><li class="chapter-item expanded "><a href="../../examples/time-series/state-change-boundaries.html"><strong aria-hidden="true">3.6.2.</strong> State Change Boundaries</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-manipulations.html"><strong aria-hidden="true">3.7.</strong> Array Manipulation Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-high-low-avg.html"><strong aria-hidden="true">3.7.1.</strong> Summarising Arrays For First, Last, Min, Max & Average</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/pivot-array-items.html"><strong aria-hidden="true">3.7.2.</strong> Pivot Array Items By A Key</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-sort-percentiles.html"><strong aria-hidden="true">3.7.3.</strong> Array Sorting & Percentiles</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-element-grouping.html"><strong aria-hidden="true">3.7.4.</strong> Array Element Grouping</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/array-fields-joining.html"><strong aria-hidden="true">3.7.5.</strong> Array Fields Joining</a></li><li class="chapter-item expanded "><a href="../../examples/array-manipulations/comparison-of-two-arrays.html"><strong aria-hidden="true">3.7.6.</strong> Comparison Of Two Arrays</a></li></ol></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/full-text-search.html"><strong aria-hidden="true">3.8.</strong> Full Text Search Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../examples/full-text-search/compound-text-search.html"><strong aria-hidden="true">3.8.1.</strong> Compound Text Search Criteria</a></li><li class="chapter-item expanded "><a href="../../examples/full-text-search/facets-and-counts-text-search.html"><strong aria-hidden="true">3.8.2.</strong> Facets And Counts Text Search</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../appendices/appendices.html"><strong aria-hidden="true">4.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../appendices/cheatsheet.html"><strong aria-hidden="true">4.1.</strong> Appendix: Stages Cheatsheet</a></li><li class="chapter-item expanded "><a href="../../appendices/cheatsheet-source.html"><strong aria-hidden="true">4.2.</strong> Appendix: Stages Cheatsheet Source</a></li><li class="chapter-item expanded "><a href="../../appendices/create-search-index.html"><strong aria-hidden="true">4.3.</strong> Appendix: Create Atlas Search Index</a></li><li class="chapter-item expanded "><a href="../../appendices/book-history.html"><strong aria-hidden="true">4.4.</strong> Appendix: Book Version History</a></li></ol></li><li class="chapter-item expanded "><a href="../../back-cover.html"></a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -126,9 +133,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -191,41 +198,41 @@
 </ul>
 <h2 id="sample-data-population"><a class="header" href="#sample-data-population">Sample Data Population</a></h2>
 <p>Drop any old version of the database (if it exists) and then populate a new <code>payments</code> collection with 2 credit card payment documents, containing sensitive data:</p>
-<pre><code class="language-javascript">db = db.getSiblingDB(&quot;book-mask-sensitive-fields&quot;);
+<pre><code class="language-javascript">db = db.getSiblingDB("book-mask-sensitive-fields");
 db.dropDatabase();
 
 // Insert records into the payments collection
 db.payments.insertMany([
   {
-    &quot;card_name&quot;: &quot;Mrs. Jane A. Doe&quot;,
-    &quot;card_num&quot;: &quot;1234567890123456&quot;,
-    &quot;card_expiry&quot;: ISODate(&quot;2023-08-31T23:59:59Z&quot;),
-    &quot;card_sec_code&quot;: &quot;123&quot;,
-    &quot;card_type&quot;: &quot;CREDIT&quot;,        
-    &quot;transaction_id&quot;: &quot;eb1bd77836e8713656d9bf2debba8900&quot;,
-    &quot;transaction_date&quot;: ISODate(&quot;2021-01-13T09:32:07Z&quot;),
-    &quot;transaction_amount&quot;: NumberDecimal(&quot;501.98&quot;),
-    &quot;reported&quot;: false,
-    &quot;customer_info&quot;: {
-      &quot;category&quot;: &quot;RESTRICTED&quot;,
-      &quot;rating&quot;: 89,
-      &quot;risk&quot;: 3,
+    "card_name": "Mrs. Jane A. Doe",
+    "card_num": "1234567890123456",
+    "card_expiry": ISODate("2023-08-31T23:59:59Z"),
+    "card_sec_code": "123",
+    "card_type": "CREDIT",        
+    "transaction_id": "eb1bd77836e8713656d9bf2debba8900",
+    "transaction_date": ISODate("2021-01-13T09:32:07Z"),
+    "transaction_amount": NumberDecimal("501.98"),
+    "reported": false,
+    "customer_info": {
+      "category": "RESTRICTED",
+      "rating": 89,
+      "risk": 3,
     },
   },
   {
-    &quot;card_name&quot;: &quot;Jim Smith&quot;,
-    &quot;card_num&quot;: &quot;9876543210987654&quot;,
-    &quot;card_expiry&quot;: ISODate(&quot;2022-12-31T23:59:59Z&quot;),
-    &quot;card_sec_code&quot;: &quot;987&quot;,
-    &quot;card_type&quot;: &quot;DEBIT&quot;,        
-    &quot;transaction_id&quot;: &quot;634c416a6fbcf060bb0ba90c4ad94f60&quot;,
-    &quot;transaction_date&quot;: ISODate(&quot;2020-11-24T19:25:57Z&quot;),
-    &quot;transaction_amount&quot;: NumberDecimal(&quot;64.01&quot;),
-    &quot;reported&quot;: true,
-    &quot;customer_info&quot;: {
-      &quot;category&quot;: &quot;NORMAL&quot;,
-      &quot;rating&quot;: 78,
-      &quot;risk&quot;: 55,
+    "card_name": "Jim Smith",
+    "card_num": "9876543210987654",
+    "card_expiry": ISODate("2022-12-31T23:59:59Z"),
+    "card_sec_code": "987",
+    "card_type": "DEBIT",        
+    "transaction_id": "634c416a6fbcf060bb0ba90c4ad94f60",
+    "transaction_date": ISODate("2020-11-24T19:25:57Z"),
+    "transaction_amount": NumberDecimal("64.01"),
+    "reported": true,
+    "customer_info": {
+      "category": "NORMAL",
+      "rating": 78,
+      "risk": 55,
     },
   },
 ]);
@@ -234,56 +241,56 @@ db.payments.insertMany([
 <p>Define a pipeline ready to perform the aggregation:</p>
 <pre><code class="language-javascript">var pipeline = [
   // Replace a subset of fields with new values
-  {&quot;$set&quot;: {
+  {"$set": {
     // Extract the last word from the name , eg: 'Doe' from 'Mrs. Jane A. Doe'
-    &quot;card_name&quot;: {&quot;$regexFind&quot;: {&quot;input&quot;: &quot;$card_name&quot;, &quot;regex&quot;: /(\S+)$/}},
+    "card_name": {"$regexFind": {"input": "$card_name", "regex": /(\S+)$/}},
           
     // Mask card num 1st part retaining last 4 chars, eg: '1234567890123456' -&gt; 'XXXXXXXXXXXX3456'
-    &quot;card_num&quot;: {&quot;$concat&quot;: [
-                  &quot;XXXXXXXXXXXX&quot;,
-                  {&quot;$substrCP&quot;: [&quot;$card_num&quot;, 12, 4]},
+    "card_num": {"$concat": [
+                  "XXXXXXXXXXXX",
+                  {"$substrCP": ["$card_num", 12, 4]},
                 ]},                     
 
     // Add/subtract a random time amount of a maximum of 30 days (~1 month) each-way
-    &quot;card_expiry&quot;: {&quot;$add&quot;: [
-                     &quot;$card_expiry&quot;,
-                     {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$subtract&quot;: [{&quot;$rand&quot;: {}}, 0.5]}, 2*30*24*60*60*1000]}},
+    "card_expiry": {"$add": [
+                     "$card_expiry",
+                     {"$floor": {"$multiply": [{"$subtract": [{"$rand": {}}, 0.5]}, 2*30*24*60*60*1000]}},
                    ]},                     
 
     // Replace each digit with random digit, eg: '133' -&gt; '472'
-    &quot;card_sec_code&quot;: {&quot;$concat&quot;: [
-                       {&quot;$toString&quot;: {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$rand&quot;: {}}, 10]}}},
-                       {&quot;$toString&quot;: {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$rand&quot;: {}}, 10]}}},
-                       {&quot;$toString&quot;: {&quot;$floor&quot;: {&quot;$multiply&quot;: [{&quot;$rand&quot;: {}}, 10]}}},
+    "card_sec_code": {"$concat": [
+                       {"$toString": {"$floor": {"$multiply": [{"$rand": {}}, 10]}}},
+                       {"$toString": {"$floor": {"$multiply": [{"$rand": {}}, 10]}}},
+                       {"$toString": {"$floor": {"$multiply": [{"$rand": {}}, 10]}}},
                      ]},
                      
     // Add/subtract a random percent of the amount's value up to 10% maximum each-way
-    &quot;transaction_amount&quot;: {&quot;$add&quot;: [
-                            &quot;$transaction_amount&quot;,
-                            {&quot;$multiply&quot;: [{&quot;$subtract&quot;: [{&quot;$rand&quot;: {}}, 0.5]}, 0.2, &quot;$transaction_amount&quot;]},
+    "transaction_amount": {"$add": [
+                            "$transaction_amount",
+                            {"$multiply": [{"$subtract": [{"$rand": {}}, 0.5]}, 0.2, "$transaction_amount"]},
                           ]},
                           
     // Retain field's bool value 80% of time on average, setting to the opposite value 20% of time
-    &quot;reported&quot;: {&quot;$cond&quot;: {
-                   &quot;if&quot;:   {&quot;$lte&quot;: [{&quot;$rand&quot;: {}}, 0.8]},
-                   &quot;then&quot;: &quot;$reported&quot;,
-                   &quot;else&quot;: {&quot;$not&quot;: [&quot;$reported&quot;]},
+    "reported": {"$cond": {
+                   "if":   {"$lte": [{"$rand": {}}, 0.8]},
+                   "then": "$reported",
+                   "else": {"$not": ["$reported"]},
                 }},      
 
     // Exclude sub-doc if the sub-doc's category field's value is 'RESTRICTED'
-    &quot;customer_info&quot;: {&quot;$cond&quot;: {
-                        &quot;if&quot;:   {&quot;$eq&quot;: [&quot;$customer_info.category&quot;, &quot;RESTRICTED&quot;]}, 
-                        &quot;then&quot;: &quot;$$REMOVE&quot;,     
-                        &quot;else&quot;: &quot;$customer_info&quot;,
+    "customer_info": {"$cond": {
+                        "if":   {"$eq": ["$customer_info.category", "RESTRICTED"]}, 
+                        "then": "$$REMOVE",     
+                        "else": "$customer_info",
                      }},                                         
                 
     // Mark _id field to excluded from results
-    &quot;_id&quot;: &quot;$$REMOVE&quot;,                
+    "_id": "$$REMOVE",                
   }},
   
   // Take regex matched last word from the card name and prefix it with hardcoded value
-  {&quot;$set&quot;: {
-    &quot;card_name&quot;: {&quot;$concat&quot;: [&quot;Mx. Xxx &quot;, {&quot;$ifNull&quot;: [&quot;$card_name.match&quot;, &quot;Anonymous&quot;]}]},                       
+  {"$set": {
+    "card_name": {"$concat": ["Mx. Xxx ", {"$ifNull": ["$card_name.match", "Anonymous"]}]},                       
   }},
 ];
 </code></pre>
@@ -291,7 +298,7 @@ db.payments.insertMany([
 <p>Execute the aggregation using the defined pipeline and also view its explain plan:</p>
 <pre><code class="language-javascript">db.payments.aggregate(pipeline);
 </code></pre>
-<pre><code class="language-javascript">db.payments.explain(&quot;executionStats&quot;).aggregate(pipeline);
+<pre><code class="language-javascript">db.payments.explain("executionStats").aggregate(pipeline);
 </code></pre>
 <h2 id="expected-results"><a class="header" href="#expected-results">Expected Results</a></h2>
 <p>Two documents should be returned, corresponding to the original two source documents, but this time with many of their fields redacted and obfuscated, plus the <code>customer_info</code> embedded document omitted for one record due to it having been marked as <code>RESTRICTED</code>, as shown below:</p>
@@ -327,9 +334,9 @@ db.payments.insertMany([
 <p><strong>Targeted Redaction.</strong> The pipeline uses a <code>$cond</code> operator to return the <code>$$REMOVE</code> marker variable if the <code>category</code> field is equal to <code>RESTRICTED</code>. This informs the aggregation engine to exclude the whole <code>customer_info</code> sub-document from the stage's output for the record. Alternatively, the pipeline could have used a <code>$redact</code> stage to achieve the same. However, <code>$redact</code> typically has to perform more processing work due to needing to check every field in the document. Hence, if a pipeline is only to redact out one specific sub-document, use the approach outlined in this example.</p>
 </li>
 <li>
-<p><strong>Regular Expression.</strong> For masking the <code>card_name</code> field, a regular expression operator is used to extract the last word of the field's original value. <code>$regexFind</code> returns metadata into the stage's output records, indicating if the match succeeded and what the matched value is. Therefore, an additional <code>$set</code> stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hard-coded text. MongoDB version 5.0 introduced a new <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/getField/"><code>$getField</code></a> operator, which you can instead use to directly extract the &quot;regex&quot; result field (<code>match</code>). Consequently, if you are using MongoDB 5.0 or greater, you can eliminate the second <code>$set</code> stage from the end of your pipeline and then replace the line of code which sets the masked value of the <code>card_name</code> field to the following: </p>
+<p><strong>Regular Expression.</strong> For masking the <code>card_name</code> field, a regular expression operator is used to extract the last word of the field's original value. <code>$regexFind</code> returns metadata into the stage's output records, indicating if the match succeeded and what the matched value is. Therefore, an additional <code>$set</code> stage is required later in the pipeline to extract the actual matched word from this metadata and prefix it with some hard-coded text. MongoDB version 5.0 introduced a new <a href="https://www.mongodb.com/docs/manual/reference/operator/aggregation/getField/"><code>$getField</code></a> operator, which you can instead use to directly extract the "regex" result field (<code>match</code>). Consequently, if you are using MongoDB 5.0 or greater, you can eliminate the second <code>$set</code> stage from the end of your pipeline and then replace the line of code which sets the masked value of the <code>card_name</code> field to the following:</p>
 <pre><code class="language-javascript">// Prefix with a hard-coded value followed by the regex extracted last word of the card name
-&quot;card_name&quot;: {&quot;$concat&quot;: [&quot;Mx. Xxx &quot;, {&quot;$ifNull&quot;: [{&quot;$getField&quot;: {&quot;field&quot;: &quot;match&quot;, &quot;input&quot;: {&quot;$regexFind&quot;: {&quot;input&quot;: &quot;$card_name&quot;, &quot;regex&quot;: /(\S+)$/}}}}, &quot;Anonymous&quot;]}]},
+"card_name": {"$concat": ["Mx. Xxx ", {"$ifNull": [{"$getField": {"field": "match", "input": {"$regexFind": {"input": "$card_name", "regex": /(\S+)$/}}}}, "Anonymous"]}]},
 </code></pre>
 </li>
 <li>
@@ -345,7 +352,7 @@ db.payments.insertMany([
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../../examples/securing-data/role-programmatic-restricted-view.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../examples/securing-data/role-programmatic-restricted-view.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -359,7 +366,7 @@ db.payments.insertMany([
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../../examples/securing-data/role-programmatic-restricted-view.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../examples/securing-data/role-programmatic-restricted-view.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
