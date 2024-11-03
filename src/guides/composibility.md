@@ -38,7 +38,7 @@ var pipeline = [
   ]}, {"$match": {
     "dateofbirth": {"$gte": ISODate("1970-01-01T00:00:00Z")}
   }}//, {"$sort": {
-  //  "dateofbirth": -1
+  //  "dateofbirth": -1,
   //}}, {"$limit": 2}
 ];
 ```
