@@ -56,7 +56,7 @@ db.products.insertMany([
     "name": "Karcher Hose Set",
     "variation": "Full Monty",
     "category": "GARDEN",
-    "description": "Hose + nosels + winder for tidy storage",
+    "description": "Hose + nozzles + winder for tidy storage",
   },
 ]); 
 ```

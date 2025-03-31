@@ -8,5 +8,5 @@ As part of the official MongoDB Inc. series of books, called _MongoDB Press_, pa
 
 &nbsp;
 
-You can purchase the book from [Packt](https://www.packtpub.com/product/practical-mongodb-aggregations/9781835080641), [Amazon](https://www.amazon.com/Practical-MongoDB-Aggregations-developing-aggregation-ebook/dp/B0CGVKYGPT), and other book retailers. Be sure to use the 20% discount code shown on the [MongoDB Press page](https://www.mongodb.com/developer/books/).
+You can purchase the book from [Packt](https://www.packtpub.com/product/practical-mongodb-aggregations/9781835080641), [Amazon](https://www.amazon.com/Practical-MongoDB-Aggregations-developing-aggregation-ebook/dp/B0CGVKYGPT), and other book retailers. Be sure to use the discount code shown on the [MongoDB Press page](https://www.mongodb.com/developer/books/).
 

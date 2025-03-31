@@ -39,12 +39,12 @@ db.enquiries.insertMany([
   {
     "acountId": "9899216",
     "datetime": ISODate("2022-01-30T11:13:32Z"),
-    "summary": "Struggling financially this month hence requiring extended overdraft - increased limit to 500 for 2 monts",
+    "summary": "Struggling financially this month hence requiring extended overdraft - increased limit to 500 for 2 months",
   },  
   {
     "acountId": "1766583",
     "datetime": ISODate("2022-01-30T10:56:53Z"),
-    "summary": "Fraud reported - fradulent direct debit established 3 months ago - removed instruction and reported to crime team",
+    "summary": "Fraud reported - fraudulent direct debit established 3 months ago - removed instruction and reported to crime team",
   },
   {
     "acountId": "9310399",

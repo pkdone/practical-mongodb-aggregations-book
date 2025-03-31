@@ -111,7 +111,7 @@ var pipeline = [
                         "else": "$customer_info",
                      }},                                         
                 
-    // Mark _id field to excluded from results
+    // Mark _id field to exclude from results
     "_id": "$$REMOVE",                
   }},
   
