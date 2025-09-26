@@ -1,4 +1,4 @@
-# ADVERT: Book Version To Purchase
+# ADVERT: Hardcopy Available To Purchase
 
 As part of the official MongoDB Inc. series of books, called _MongoDB Press_, paper and downloadable versions of this book are published by [Packt](https://www.packtpub.com/). The Packt version of the book includes extra information on some topics and two additional example chapters. 
 
