@@ -4,8 +4,8 @@ No one can hold the names and syntax of all the different aggregation stages and
 
 The good news is there is no need for you to try to remember all the stages & operators. The MongoDB online documentation provides you with a set of excellent _references_ here:
 
- * MongoDB Aggregation Pipeline [Stages reference](https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/)
- * MongoDB Aggregation Pipeline [Operators reference](https://docs.mongodb.com/manual/reference/operator/aggregation/)
+ * MongoDB Aggregation Pipeline [Stages reference](https://www.mongodb.com/docs/manual/reference/mql/aggregation-stages/)
+ * MongoDB Aggregation Pipeline [Operators reference](https://www.mongodb.com/docs/manual/reference/mql/expressions/)
 
 To help you get started with the purpose of each stage in the MongoDB Framework, consult the "cheatsheets" in the appendix of this book:
 
